@@ -1,7 +1,7 @@
 "use strict";
 
 var apiList = [];
-//var http = require('http');
+var http = require('http');
 var https = require('https');
 var dateFormat = require('dateformat');
 var request = require('request');
@@ -15,7 +15,7 @@ function afvalapp(postcode, homenumber, country, callback) {
         country + '&postcode=' + postcode + '&straatId=0&huisnr=' + homenumber + '&huisnrtoev='
     };
 
-    var req = https.get(options, (res) => {
+    var req = http.get(options, (res) => {
         var dates = {};
         var curr = '';
         var data = '';
@@ -275,7 +275,7 @@ function twenteMilieu(postcode, housenumber, country, callback){
   var buffer1="";
   var buffer2="";
   //process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-  var post_req1 = https.request(post_options1, function(res1) {
+  var post_req1 = http.request(post_options1, function(res1) {
     if (res1.statusCode == 200){
       res1.on( "data", function( chunk1 ) { buffer1 = buffer1 + chunk1; } );
       res1.on( "end", function( chunk1 ) {
@@ -413,7 +413,8 @@ function gemeenteHellendoorn(postcode, housenumber, country, callback){
   var buffer1 = "";
   var uniqueID = "";
 
-  var req1 = https.request( postRequest1, function( res1 )    {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+  var req1 = http.request( postRequest1, function( res1 )    {
      if (res1.statusCode == 200) {
        // console.log( res1.statusCode );
        console.log("Aanroep Hellendoorn met: " + postcode + housenumber + country);
@@ -445,7 +446,7 @@ function gemeenteHellendoorn(postcode, housenumber, country, callback){
                    'Content-Length': Buffer.byteLength(body2)
                }
            };
-           var req2 = https.request( postRequest2, function( res2 )    {
+           var req2 = http.request( postRequest2, function( res2 )    {
               if (res2.statusCode == 200) {
                 // console.log( res2.statusCode );
                 var buffer2 = "";
@@ -536,7 +537,6 @@ function gemeenteHellendoorn(postcode, housenumber, country, callback){
   });
   req1.write( body1 );
   req1.end();
-
 }
 
 function recycleManager(postcode, housenumber, country, callback){
