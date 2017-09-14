@@ -1,10 +1,6 @@
 # Trashcan Reminder 2.0
 Homey will remind you to put the trash out! You can do this by providing a postal code, house number and country (NL/BE).
 
-**If you like this app, then consider to donate so that I can let somebody else renovate my attic and have time to make this app even better :)**
-
-[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/RobertRaaijmakers/3)
-
 ## Supported Cities
 Unfortunately not all cities work with the Trashcan Reminder, if you can find your house with one of the links below your house is supported:
 
