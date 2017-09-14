@@ -1,6 +1,10 @@
 # Trashcan Reminder 2.0
 Homey will remind you to put the trash out! You can do this by providing a postal code, house number and country (NL/BE).
 
+**If you like this app, then consider to donate so that I can let somebody else renovate my attic and have time to make this app even better :)**
+
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/RobertRaaijmakers/3)
+
 ## Supported Cities
 Unfortunately not all cities work with the Trashcan Reminder, if you can find your house with one of the links below your house is supported:
 
@@ -17,9 +21,12 @@ If your city is not supported you can always add your schedule manually. You can
 ## Supported Cards
 There is one card that you can place in the "then" column. The card let's you check if trash type X is collected << today, tomorrow, day after tomorrow >>.
 
-## Supported Speech
+## Supported Speech (currently broken due to upgrade to SDK v2)
 You can ask Homey four type of questions regarding your waste collection:
 - When is the green container collected?
 - What is collected next monday?
 - Is the residual waste collected this friday?
 - Which type of trash is collected next?
+
+## Tags (currently in beta, refresh makes the app crash sometimes)
+There is one global tag available that you can set dynamically via the settings. This tag will show the value belonging to the trash type that is collected on this day (or tomorrow/day after tomorrow, depending on your settings).

@@ -1,3 +1,7 @@
+"use strict";
+
+const Homey = require('homey');
+
 module.exports = [
     {
         description: 'Validate user data',
