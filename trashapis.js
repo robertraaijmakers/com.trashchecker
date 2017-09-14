@@ -110,50 +110,6 @@ function mijnAfvalWijzer(postcode, housenumber, country, callback) {
     });
 }
 
-function afvalwijzerArnhem(postcode, housenumber, country, callback) {
-    var fDates = {};
-    if (country !== "NL") {
-        callback(new Error('unsupported country'));
-        return;
-    }
-
-    var url = `http://www.afvalwijzer-arnhem.nl/applicatie?ZipCode=${postcode}&HouseNumber=${housenumber}&HouseNumberAddition=`;
-    // console.log(url);
-
-    request(url, function (err, res, body) {
-        if (!err && res.statusCode == 200) {
-            var $ = cheerio.load(res.body);
-            $('ul.ulPickupDates li').each((i, elem) => {
-                var dateStr = dateFormat(elem.children[2].data.trim());
-                switch (elem.attribs.class) {
-                    case 'gft':
-                        if (!fDates.GFT) fDates.GFT = [];
-                        fDates.GFT.push(dateStr);
-                        break;
-                    case 'papier':
-                        if (!fDates.PAPIER) fDates.PAPIER = [];
-                        fDates.PAPIER.push(dateStr);
-                        break;
-                    case 'restafval':
-                        if (!fDates.REST) fDates.REST = [];
-                        fDates.REST.push(dateStr);
-                        break;
-                    case 'kunststof':
-                        if (!fDates.PLASTIC) fDates.PLASTIC = [];
-                        fDates.PLASTIC.push(dateStr);
-                        break;
-                    default:
-                        console.log('defaulted', elem.attribs.class);
-                }
-            });
-            return callback(null, fDates);
-        } else {
-            return callback(new Error('Invalid location'));
-        }
-    });
-}
-
-
 function afvalwijzerArnhem(postcode, housenumber, country, callback){
   var fDates = {};
   if(country !== "NL"){
@@ -274,8 +230,7 @@ function twenteMilieu(postcode, housenumber, country, callback){
 
   var buffer1="";
   var buffer2="";
-  //process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-  var post_req1 = http.request(post_options1, function(res1) {
+  var post_req1 = https.request(post_options1, function(res1) {
     if (res1.statusCode == 200){
       res1.on( "data", function( chunk1 ) { buffer1 = buffer1 + chunk1; } );
       res1.on( "end", function( chunk1 ) {
