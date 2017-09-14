@@ -1,11 +1,11 @@
 {
-	"id": "com.athom.trashchecker2",
+	"id": "com.trashchecker",
 	"sdk": 2,
 	"name": {
 		"en": "Trashcan Reminder 2.0",
 		"nl": "Afval Herinnering 2.0"
 	},
-	"version": "2.0.2",
+	"version": "2.0.4",
 	"compatibility": ">=1.5",
 	"author": {
 		"name": "Robert Raaijmakers",

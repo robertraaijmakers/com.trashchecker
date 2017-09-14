@@ -15,6 +15,7 @@ class TrashcanReminder extends Homey.App
 		this.manualInput = false;
 		this.gdates = '';
 		this.trashToken = null;
+		this.intervalRefreshToken = null;
 				
 		// Update manual input dates when settings change.
 		Homey.ManagerSettings.on('set', this.onSettingsChanged.bind(this));
@@ -40,7 +41,9 @@ class TrashcanReminder extends Homey.App
 		this.onUpdateData();
 		
 		// Every 24 hours update API or manual dates
+		let msTillUpdateLabel = this.millisecondsTillMidnight();
 		setInterval(this.onUpdateData.bind(this), 86400000); // Every 24-hours
+		setTimeout(this.onUpdateLabel.bind(this), msTillUpdateLabel, true, true);
 		
 		// Make sure the label is updated every 24 hours at midnight
 		let trashCollectionToken = new Homey.FlowToken( 'trash_collection_token', {
@@ -52,13 +55,12 @@ class TrashcanReminder extends Homey.App
 			.register()
 			.then(() => {
 				this.trashToken = trashCollectionToken;
+				//this.intervalRefreshToken = setInterval( this.updateLabel( false , true ).bind(this), this.millisecondsTillMidnight());
 				return this.onUpdateLabel ( trashCollectionToken );
 			})
 			.catch( err => {
 				this.error( err );
 			});
-			
-		this.updateLabel ( false, true );
 		
 		this.log("App initialized");
 	}
@@ -412,7 +414,7 @@ class TrashcanReminder extends Homey.App
 			Homey.ManagerSettings.get('hnumber') &&
 			Homey.ManagerSettings.get('country'))
 		{
-			updateAPI(
+			this.updateAPI(
 				Homey.ManagerSettings.get('postcode'),
 				Homey.ManagerSettings.get('hnumber'),
 				Homey.ManagerSettings.get('country'),
@@ -420,11 +422,11 @@ class TrashcanReminder extends Homey.App
 				{
 					if(success)
 					{
-						Homey.log('retrieved house information');
+						console.log('retrieved house information');
 					} 
 					else 
 					{
-						Homey.log('house information has not been set');
+						console.log('house information has not been set');
 					}
 				}
 			);
@@ -494,7 +496,6 @@ class TrashcanReminder extends Homey.App
 		// Set global token with value found.
 		if(trashCollectionToken !== null)
 		{
-			console.log("Label is really updated!");
 			return trashCollectionToken.setValue(textLabel);
 		}
 		else
@@ -508,21 +509,25 @@ class TrashcanReminder extends Homey.App
 	********************/
 	updateLabel ( shouldExecute, shouldSetTimeout )
 	{	
-		console.log("Updating label");
-	
 		if( shouldExecute === true)
 		{
-			console.log("Executing update label");
-			
 			let result = this.onUpdateLabel ( this.trashToken );
-			if(typeof result !== 'undefined')
+			if(typeof result !== 'undefined' && result !== null)
 			{
-				console.log("yay a result?!");
 				result.resolve();
 			}
 		}
 	
 		// Make sure it is executed every day at midnight (+1 sec)
+		let msTillMidnight = this.millisecondsTillMidnight();		
+		if(shouldSetTimeout === true)
+		{
+			setTimeout(this.updateLabel.bind(this), msTillMidnight, true, true);
+		}
+	}
+	
+	millisecondsTillMidnight()
+	{
 		var now = new Date();
 		var night = new Date(
 			now.getFullYear(),
@@ -531,13 +536,9 @@ class TrashcanReminder extends Homey.App
 			0, 0, 1
 		);
 		
-		let msTillMidnight = night.getTime() - now.getTime();		
-		if(shouldSetTimeout === true)
-		{
-			//let timeout = setTimeout( (this.updateLabel( true , true ).bind(this)), msTillMidnight);
-		}
-		
-		//return timeout;
+		let msTillMidnight = night.getTime() - now.getTime();
+		console.log(msTillMidnight);
+		return msTillMidnight;
 	}
 	
 	pad(n, width, z)

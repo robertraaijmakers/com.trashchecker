@@ -446,7 +446,7 @@ function gemeenteHellendoorn(postcode, housenumber, country, callback){
                }
            };
            var req2 = http.request( postRequest2, function( res2 )    {
-              if (res2.statusCode == 200){
+              if (res2.statusCode == 200) {
                 // console.log( res2.statusCode );
                 var buffer2 = "";
                 // console.log("uniqueID is: ", uniqueID);
@@ -516,19 +516,21 @@ function gemeenteHellendoorn(postcode, housenumber, country, callback){
                   }
                 });
               } else {
-                console.log("Er is iets fout gegaan!");
+	            console.log(res2.statusCode);
+                console.log("Er is iets fout gegaan! (response code req2)");
                 return callback(new Error('Invalid location'));
               }
             });
            req2.write( body2 );
            req2.end();
          } else {
-           console.log("Er is iets fout gegaan!");
+           console.log("Er is iets fout gegaan! (parsen van doc 1)");
            return callback(new Error('Invalid location'));
          }
        });
      } else {
-       console.log("Er is iets fout gegaan!");
+	   console.log(res1.statusCode);
+       console.log("Er is iets fout gegaan! (response code req1)");
        return callback(new Error('Invalid location'));
      }
   });
