@@ -1,0 +1,740 @@
+<html>
+<head>
+	<script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+</head>
+
+<body>
+	<h2 data-i18n="settings.title"></h2>
+    <p style="display:block" data-i18n="settings.description"></p>
+	<fieldset>
+		<legend data-i18n="settings.title"></legend>
+        <div class="field row">
+            <label for="postcode" data-i18n="settings.postcode"></label>
+            <input placeholder="1234AB" id="postcode" maxlength="6" type="text" value=""/>
+        </div>
+        <div class="field row">
+            <label for="number" data-i18n="settings.hnumber"></label>
+            <input placeholder="42" id="number" type="text" value=""/>
+        </div>
+        <div class="field row">
+			<label style="float:left" for="country" data-i18n="settings.country"></label>
+			<div style="float:left">
+				<input  style="width:10px" checked="checked" id="NL" name="country" type="radio" value="NL"/><span class="name">NL</span><br>
+				<input  style="width:10px" id="BE" name="country" type="radio" value="NL"/><span class="name">BE</span>
+			</div>
+        </div>
+        <div class="field row" id="manual_input_field">
+			<label style="float:left" for="manual_input_set" data-i18n="settings.manualInputField"></label>
+			<div style="float:left">
+				<input style="width: 10px" id="manual_input_set" name="manualInput" type="checkbox"></input><label style="width: 200px;" for="manual_input_set" class="name" data-i18n="settings.manualInputFieldDescription"></label><br>
+			</div>
+        </div>
+        <span id="resp"></span>
+    </fieldset>
+    <button id="apiSave" class="left" style="display:block" data-i18n="settings.save" ></button>
+	<br /><br />
+	<fieldset id="manual_input">
+		<legend data-i18n="settings.titlemanualinput"></legend>
+
+		<!-- GFT -->
+		<div class="field row">
+			<label style="float:left" for="gft" data-i18n="settings.gft"></label>
+			<div style="float:left">
+				<select name="gft[option]" id="gft_option">
+					<option value="0" data-i18n="settings.interval.na"></option>
+					<option value="1" data-i18n="settings.interval.everyweek"></option>
+					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
+					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
+					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
+					<option value="5" data-i18n="settings.interval.everyfirst"></option>
+					<option value="6" data-i18n="settings.interval.everysecond"></option>
+					<option value="7" data-i18n="settings.interval.everythird"></option>
+					<option value="9" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="8" data-i18n="settings.interval.everylast"></option>
+				</select>
+			</div>
+			<div style="float:left" id="gft_day_div">
+				<select style="margin-left: 5px;" name="gft[day_of_week]" id="gft_dayofweek">
+					<option value="1" data-i18n="settings.dayofweek.mo"></option>
+					<option value="2" data-i18n="settings.dayofweek.tu"></option>
+					<option value="3" data-i18n="settings.dayofweek.we"></option>
+					<option value="4" data-i18n="settings.dayofweek.th"></option>
+					<option value="5" data-i18n="settings.dayofweek.fr"></option>
+					<option value="6" data-i18n="settings.dayofweek.sa"></option>
+					<option value="0" data-i18n="settings.dayofweek.su"></option>
+				</select>
+			</div>
+			<div style="float:left;">
+				<select style="display:none; margin-left: 5px;" name="gft[option_extension]" id="gft_option_extension">
+					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
+					<option value="12" data-i18n="settings.interval_extra.year"></option>
+				</select>
+			</div>
+			<div style="float: left;" id="gft_startdate_div">
+				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
+				<input style="display: inline; margin-left: 5px;" type="date" name="gft[startdate]" id="gft_startdate"></input>
+			</div>
+        </div>
+
+		<!-- REST -->
+		<div class="field row">
+			<label style="float:left" for="rest" data-i18n="settings.rest"></label>
+			<div style="float:left">
+				<select name="rest[option]" id="rest_option">
+					<option value="0" data-i18n="settings.interval.na"></option>
+					<option value="1" data-i18n="settings.interval.everyweek"></option>
+					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
+					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
+					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
+					<option value="5" data-i18n="settings.interval.everyfirst"></option>
+					<option value="6" data-i18n="settings.interval.everysecond"></option>
+					<option value="7" data-i18n="settings.interval.everythird"></option>
+					<option value="9" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="8" data-i18n="settings.interval.everylast"></option>
+				</select>
+			</div>
+			<div style="float:left" id="rest_day_div">
+				<select style="margin-left: 5px;" name="rest[day_of_week]" id="rest_dayofweek">
+					<option value="1" data-i18n="settings.dayofweek.mo"></option>
+					<option value="2" data-i18n="settings.dayofweek.tu"></option>
+					<option value="3" data-i18n="settings.dayofweek.we"></option>
+					<option value="4" data-i18n="settings.dayofweek.th"></option>
+					<option value="5" data-i18n="settings.dayofweek.fr"></option>
+					<option value="6" data-i18n="settings.dayofweek.sa"></option>
+					<option value="0" data-i18n="settings.dayofweek.su"></option>
+				</select>
+			</div>
+			<div style="float:left;">
+				<select style="display:none; margin-left: 5px;" name="rest[option_extension]" id="rest_option_extension">
+					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
+					<option value="12" data-i18n="settings.interval_extra.year"></option>
+				</select>
+			</div>
+			<div style="float: left;" id="rest_startdate_div">
+				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
+				<input style="display: inline; margin-left: 5px;" type="date" name="rest[startdate]" id="rest_startdate"></input>
+			</div>
+        </div>
+
+		<!-- PAPER -->
+		<div class="field row">
+			<label style="float:left" for="paper" data-i18n="settings.paper"></label>
+			<div style="float:left">
+				<select name="paper[option]" id="paper_option">
+					<option value="0" data-i18n="settings.interval.na"></option>
+					<option value="1" data-i18n="settings.interval.everyweek"></option>
+					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
+					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
+					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
+					<option value="5" data-i18n="settings.interval.everyfirst"></option>
+					<option value="6" data-i18n="settings.interval.everysecond"></option>
+					<option value="7" data-i18n="settings.interval.everythird"></option>
+					<option value="9" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="8" data-i18n="settings.interval.everylast"></option>
+				</select>
+			</div>
+			<div style="float:left" id="paper_day_div">
+				<select style="margin-left: 5px;" name="paper[day_of_week]" id="paper_dayofweek">
+					<option value="1" data-i18n="settings.dayofweek.mo"></option>
+					<option value="2" data-i18n="settings.dayofweek.tu"></option>
+					<option value="3" data-i18n="settings.dayofweek.we"></option>
+					<option value="4" data-i18n="settings.dayofweek.th"></option>
+					<option value="5" data-i18n="settings.dayofweek.fr"></option>
+					<option value="6" data-i18n="settings.dayofweek.sa"></option>
+					<option value="0" data-i18n="settings.dayofweek.su"></option>
+				</select>
+			</div>
+			<div style="float:left;">
+				<select style="display:none; margin-left: 5px;" name="paper[option_extension]" id="paper_option_extension">
+					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
+					<option value="12" data-i18n="settings.interval_extra.year"></option>
+				</select>
+			</div>
+			<div style="float: left;" id="paper_startdate_div">
+				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
+				<input style="display: inline; margin-left: 5px;" type="date" name="paper[startdate]" id="paper_startdate"></input>
+			</div>
+        </div>
+
+		<!-- PLASTIC -->
+		<div class="field row">
+			<label style="float:left" for="plastic" data-i18n="settings.plastic"></label>
+			<div style="float:left">
+				<select name="plastic[option]" id="plastic_option">
+					<option value="0" data-i18n="settings.interval.na"></option>
+					<option value="1" data-i18n="settings.interval.everyweek"></option>
+					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
+					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
+					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
+					<option value="5" data-i18n="settings.interval.everyfirst"></option>
+					<option value="6" data-i18n="settings.interval.everysecond"></option>
+					<option value="7" data-i18n="settings.interval.everythird"></option>
+					<option value="9" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="8" data-i18n="settings.interval.everylast"></option>
+				</select>
+			</div>
+			<div style="float:left" id="plastic_day_div">
+				<select style="margin-left: 5px;" name="plastic[day_of_week]" id="plastic_dayofweek">
+					<option value="1" data-i18n="settings.dayofweek.mo"></option>
+					<option value="2" data-i18n="settings.dayofweek.tu"></option>
+					<option value="3" data-i18n="settings.dayofweek.we"></option>
+					<option value="4" data-i18n="settings.dayofweek.th"></option>
+					<option value="5" data-i18n="settings.dayofweek.fr"></option>
+					<option value="6" data-i18n="settings.dayofweek.sa"></option>
+					<option value="0" data-i18n="settings.dayofweek.su"></option>
+				</select>
+			</div>
+			<div style="float:left;">
+				<select style="display:none; margin-left: 5px;" name="plastic[option_extension]" id="plastic_option_extension">
+					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
+					<option value="12" data-i18n="settings.interval_extra.year"></option>
+				</select>
+			</div>
+			<div style="float: left;" id="plastic_startdate_div">
+				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
+				<input style="display: inline; margin-left: 5px;" type="date" name="plastic[startdate]" id="plastic_startdate"></input>
+			</div>
+        </div>
+
+		<!-- PMD -->
+		<div class="field row">
+			<label style="float:left" for="pmd" data-i18n="settings.pmd"></label>
+			<div style="float:left">
+				<select name="pmd[option]" id="pmd_option">
+					<option value="0" data-i18n="settings.interval.na"></option>
+					<option value="1" data-i18n="settings.interval.everyweek"></option>
+					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
+					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
+					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
+					<option value="5" data-i18n="settings.interval.everyfirst"></option>
+					<option value="6" data-i18n="settings.interval.everysecond"></option>
+					<option value="7" data-i18n="settings.interval.everythird"></option>
+					<option value="9" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="8" data-i18n="settings.interval.everylast"></option>
+				</select>
+			</div>
+			<div style="float:left" id="pmd_day_div">
+				<select style="margin-left: 5px;" name="pmd[day_of_week]" id="pmd_dayofweek">
+					<option value="1" data-i18n="settings.dayofweek.mo"></option>
+					<option value="2" data-i18n="settings.dayofweek.tu"></option>
+					<option value="3" data-i18n="settings.dayofweek.we"></option>
+					<option value="4" data-i18n="settings.dayofweek.th"></option>
+					<option value="5" data-i18n="settings.dayofweek.fr"></option>
+					<option value="6" data-i18n="settings.dayofweek.sa"></option>
+					<option value="0" data-i18n="settings.dayofweek.su"></option>
+				</select>
+			</div>
+			<div style="float:left;">
+				<select style="display:none; margin-left: 5px;" name="pmd[option_extension]" id="pmd_option_extension">
+					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
+					<option value="12" data-i18n="settings.interval_extra.year"></option>
+				</select>
+			</div>
+			<div style="float: left;" id="pmd_startdate_div">
+				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
+				<input style="display: inline; margin-left: 5px;" type="date" name="pmd[startdate]" id="pmd_startdate"></input>
+			</div>
+        </div>
+
+		<!-- TEXTILE -->
+		<div class="field row">
+			<label style="float:left" for="textile" data-i18n="settings.textile"></label>
+			<div style="float:left">
+				<select name="textile[option]" id="textile_option">
+					<option value="0" data-i18n="settings.interval.na"></option>
+					<option value="1" data-i18n="settings.interval.everyweek"></option>
+					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
+					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
+					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
+					<option value="5" data-i18n="settings.interval.everyfirst"></option>
+					<option value="6" data-i18n="settings.interval.everysecond"></option>
+					<option value="7" data-i18n="settings.interval.everythird"></option>
+					<option value="9" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="8" data-i18n="settings.interval.everylast"></option>
+				</select>
+			</div>
+			<div style="float:left" id="textile_day_div">
+				<select style="margin-left: 5px;" name="textile[day_of_week]" id="textile_dayofweek">
+					<option value="1" data-i18n="settings.dayofweek.mo"></option>
+					<option value="2" data-i18n="settings.dayofweek.tu"></option>
+					<option value="3" data-i18n="settings.dayofweek.we"></option>
+					<option value="4" data-i18n="settings.dayofweek.th"></option>
+					<option value="5" data-i18n="settings.dayofweek.fr"></option>
+					<option value="6" data-i18n="settings.dayofweek.sa"></option>
+					<option value="0" data-i18n="settings.dayofweek.su"></option>
+				</select>
+			</div>
+			<div style="float:left;">
+				<select style="display:none; margin-left: 5px;" name="textile[option_extension]" id="textile_option_extension">
+					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
+					<option value="12" data-i18n="settings.interval_extra.year"></option>
+				</select>
+			</div>
+			<div style="float: left;" id="textile_startdate_div">
+				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
+				<input style="display: inline; margin-left: 5px;" type="date" name="textile[startdate]" id="textile_startdate"></input>
+			</div>
+        </div>
+    </fieldset>
+	<button id="manualInput" class="left" style="display:block" data-i18n="settings.saveManualInput" ></button>
+	<br /><br />
+	
+	<h2 data-i18n="settings.labeltitle"></h2>
+    <p style="display:block" data-i18n="settings.labeldescription"></p>
+	<fieldset id="label_input">
+		<div class="field row">
+			<label style="float:left" for="labelTimeIndicator" data-i18n="settings.timeindicator"></label>
+			<div style="float:left">
+				<select name="labelDay" id="labelTimeIndicator">
+					<option value="0" data-i18n="speech.output.timeindicator.t0"></option>
+					<option value="1" data-i18n="speech.output.timeindicator.t1"></option>
+					<option value="2" data-i18n="speech.output.timeindicator.t2"></option>
+				</select>
+			</div>
+        </div>
+		<div class="field row">
+			<label style="float:left" for="labelGft" data-i18n="settings.gft"></label>
+			<div style="float:left">
+				<input type="text" id="labelGft" name="label[gft]" />
+			</div>
+        </div>
+		<div class="field row">
+			<label style="float:left" for="labelRest" data-i18n="settings.rest"></label>
+			<div style="float:left">
+				<input type="text" id="labelRest" name="label[rest]" />
+			</div>
+        </div>
+		<div class="field row">
+			<label style="float:left" for="labelPapier" data-i18n="settings.paper"></label>
+			<div style="float:left">
+				<input type="text" id="labelPapier" name="label[papier]" />
+			</div>
+        </div>
+		<div class="field row">
+			<label style="float:left" for="labelPlastic" data-i18n="settings.plastic"></label>
+			<div style="float:left">
+				<input type="text" id="labelPlastic" name="label[plastic]" />
+			</div>
+        </div>
+		<div class="field row">
+			<label style="float:left" for="labelPmd" data-i18n="settings.pmd"></label>
+			<div style="float:left">
+				<input type="text" id="labelPmd" name="label[pmd]" />
+			</div>
+        </div>
+		<div class="field row">
+			<label style="float:left" for="labelTextiel" data-i18n="settings.textile"></label>
+			<div style="float:left">
+				<input type="text" id="labelTextiel" name="label[textiel]" />
+			</div>
+        </div>
+		<div class="field row">
+			<label style="float:left" for="labelNone" data-i18n="settings.none"></label>
+			<div style="float:left">
+				<input type="text" id="labelNone" name="label[none]" />
+			</div>
+        </div>
+	</fieldset>
+	<button id="labelInput" class="left" style="display:block" data-i18n="settings.saveLabelInput" ></button>
+	<br /><br />
+	
+	<script type="text/javascript">
+
+        function onHomeyReady( Homey )
+		{
+			// Register on change events of fields in settings page.
+			document.getElementById("manual_input_set").addEventListener("change", OnManualInputCheckboxChanged);
+			document.getElementById("apiSave").addEventListener("click", function(elem)
+			{
+				save( Homey );
+				return false; // cancels save event! (we don't need the real button event to be handled).
+			});
+			document.getElementById("manualInput").addEventListener("click", function(elem)
+			{
+				saveManualInput( Homey );
+				return false; // cancels save event! (we don't need the real button event to be handled).
+			});
+			document.getElementById("labelInput").addEventListener("click", function(elem)
+			{
+				saveLabelInput( Homey );
+				return false; // cancels save event! (we don't need the real button event to be handled).
+			});
+			document.getElementById("gft_option").addEventListener("change", function(elem) { ToggleManualInputFields("gft"); });
+			document.getElementById("paper_option").addEventListener("change",function(elem) { ToggleManualInputFields("paper"); });
+			document.getElementById("rest_option").addEventListener("change", function(elem) { ToggleManualInputFields("rest"); });
+			document.getElementById("plastic_option").addEventListener("change", function(elem) { ToggleManualInputFields("plastic"); });
+			document.getElementById("pmd_option").addEventListener("change", function(elem) { ToggleManualInputFields("pmd"); });
+			document.getElementById("textile_option").addEventListener("change", function(elem) { ToggleManualInputFields("textile"); });
+
+			// Set properties
+			OnManualInputCheckboxChanged();
+			ToggleManualInputFields("gft");
+			ToggleManualInputFields("paper");
+			ToggleManualInputFields("rest");
+			ToggleManualInputFields("plastic");
+			ToggleManualInputFields("pmd");
+			ToggleManualInputFields("textile");
+
+			// Retrieve values from Homey settings
+        	Homey.get('postcode', function(err, postcode)
+        	{
+        		if(err)
+        		{
+        			console.log("not working");
+        			return console.error(err);
+        		}
+        		document.getElementById('postcode').value = postcode;
+        	});
+
+			Homey.get('hnumber', function (err, houseNumber)
+			{
+				console.log('NUMBER', err, houseNumber);
+				if (err) {
+					console.log("not working");
+					return console.error(err);
+				}
+				document.getElementById('number').value = houseNumber;
+			});
+
+        	Homey.get('country',function(err, country)
+        	{
+        		console.log(country);
+        		if(err){
+        			return console.error(err);
+        		}
+
+        		if(country == 'NL' || country == 'BE') {
+        			document.getElementById(country).checked = true;
+        		}else{
+        			document.getElementById('NL').checked = true;
+        		}
+        	});
+
+        	Homey.get('manualInput',function(err, manualInput)
+        	{
+				console.log(manualInput);
+        		if(err) {
+        			return console.error(err);
+        		}
+
+				if(manualInput !== true)
+				{
+					console.log("manual input deactivated");
+					return;
+				}
+
+				document.getElementById('manual_input_set').checked = true;
+				OnManualInputCheckboxChanged();
+
+        		Homey.get('manualEntryData',function(err, manualEntryData)
+        		{
+					console.log(manualEntryData);
+					if(err) {
+						return console.error(err);
+					}
+
+					if(typeof manualEntryData.gft !== 'undefined')
+					{
+						SetManualEntryFormValues(manualEntryData.gft, "gft");
+					}
+
+					if(typeof manualEntryData.paper !== 'undefined')
+					{
+						SetManualEntryFormValues(manualEntryData.paper, "paper");
+					}
+
+					if(typeof manualEntryData.rest !== 'undefined')
+					{
+						SetManualEntryFormValues(manualEntryData.rest, "rest");
+					}
+
+					if(typeof manualEntryData.plastic !== 'undefined')
+					{
+						SetManualEntryFormValues(manualEntryData.plastic, "plastic");
+					}
+
+					if(typeof manualEntryData.pmd !== 'undefined')
+					{
+						SetManualEntryFormValues(manualEntryData.pmd, "pmd");
+					}
+
+					if(typeof manualEntryData.textile !== 'undefined')
+					{
+						SetManualEntryFormValues(manualEntryData.textile, "textile");
+					}
+				});
+			});
+
+			Homey.get('labelSettings', function(err, labelSettings)
+			{
+				console.log(labelSettings);
+				if(err) 
+				{
+						return console.error(err);
+				}
+				
+				if(typeof labelSettings.timeindicator !== 'undefined')
+				{
+					document.getElementById("labelTimeIndicator").value = labelSettings.timeindicator;
+				}
+				
+				if(typeof labelSettings.type.gft !== 'undefined')
+				{
+					SetLabelEntryFormValues(Homey, labelSettings.type.gft, "gft");
+				}
+				else
+				{
+					SetLabelEntryFormValues(Homey, Homey.__('settings.gft'), "gft");
+				}
+
+				if(typeof labelSettings.type.papier !== 'undefined')
+				{
+					SetLabelEntryFormValues(Homey, labelSettings.type.papier, "papier");
+				}
+				else
+				{
+					SetLabelEntryFormValues(Homey, Homey.__('settings.paper'), "papier");
+				}
+
+				if(typeof labelSettings.type.rest !== 'undefined')
+				{
+					SetLabelEntryFormValues(Homey, labelSettings.type.rest, "rest");
+				}
+				else
+				{
+					SetLabelEntryFormValues(Homey, Homey.__('settings.rest'), "rest");
+				}
+
+				if(typeof labelSettings.type.plastic !== 'undefined')
+				{
+					SetLabelEntryFormValues(Homey, labelSettings.type.plastic, "plastic");
+				}
+				else
+				{
+					SetLabelEntryFormValues(Homey.__('settings.plastic'), "plastic");
+				}
+
+				if(typeof labelSettings.type.pmd !== 'undefined')
+				{
+					SetLabelEntryFormValues(Homey, labelSettings.type.pmd, "pmd");
+				}
+				else
+				{
+					SetLabelEntryFormValues(Homey, Homey.__('settings.pmd'), "pmd");
+				}
+
+				if(typeof labelSettings.type.textiel !== 'undefined')
+				{
+					SetLabelEntryFormValues(Homey, labelSettings.type.textiel, "textiel");
+				}
+				else
+				{
+					SetLabelEntryFormValues(Homey, Homey.__('settings.textile'), "textiel");
+				}
+
+				if(typeof labelSettings.type.none !== 'undefined')
+				{
+					SetLabelEntryFormValues(Homey, labelSettings.type.none, "none");
+				}
+				else
+				{
+					SetLabelEntryFormValues(Homey, Homey.__('settings.none'), "none");
+				}
+			});
+			
+			Homey.ready();
+		}
+
+		// Save zipcode and housenumber to Homey Settings
+        function save( Homey )
+        {
+			var resp = document.getElementById("resp");
+				resp.style.color = 'black';
+				resp.innerHTML = Homey.__('settings.checking');
+        	var pc = document.getElementById('postcode').value;
+        	var num = document.getElementById('number').value;
+
+        	var country;
+        	if(document.getElementById('NL').checked) {
+            	country = 'NL';
+            }else if(document.getElementById('BE').checked) {
+            	country = 'BE';
+            }
+
+			var manualInput = false;
+			if(document.getElementById('manual_input_set').checked) {
+            	manualInput = true;
+            }
+
+        	Homey.api('POST', '/', {
+
+        		"postcode":pc,
+        		"housenumber":num,
+        		"country":country
+
+        	}, function(err,result) {
+        		if(err) return console.log(err);
+
+        		if(result) {
+					resp.style.color = 'green';
+					//resp.data-i18n = 'settings.update'
+					resp.innerHTML = Homey.__('settings.update') + pc + ', ' + num + ' in ' + country;
+		            Homey.set('postcode',pc);
+		            Homey.set('hnumber',num);
+		            Homey.set('country',country);
+	        	}
+				else
+				{
+					resp.innerHTML = Homey.__('settings.fail');
+					resp.style.color = 'red';
+	        	}
+
+				Homey.set('manualInput', manualInput);
+
+        		//Do stuff if true/false (kruis,vinkje)
+        		console.log(result);
+        	});
+        }
+
+		// Save manual input data to Homey Settings
+		function saveManualInput( Homey )
+		{
+			Homey.set('manualInput', true);
+
+			var data = {};
+			data = SetManualInputDataFor("gft", data);
+			data = SetManualInputDataFor("rest", data);
+			data = SetManualInputDataFor("pmd", data);
+			data = SetManualInputDataFor("plastic", data);
+			data = SetManualInputDataFor("paper", data);
+			data = SetManualInputDataFor("textile", data);
+
+			console.log(data);
+			Homey.set('manualEntryData', data);
+		}
+
+		// Saves label values into Homey settings
+		function saveLabelInput( Homey )
+		{
+			var data = {
+				timeindicator: document.getElementById("labelTimeIndicator").value,
+				type: {
+					gft: document.getElementById("labelGft").value,
+					rest: document.getElementById("labelRest").value,
+					pmd: document.getElementById("labelPmd").value,
+					plastic: document.getElementById("labelPlastic").value,
+					papier: document.getElementById("labelPapier").value,
+					textiel: document.getElementById("labelTextiel").value,
+					none: document.getElementById("labelNone").value
+				}
+			};
+
+			console.log(data);
+			Homey.set('labelSettings', data);
+		}
+		
+		// Sets values given in "values" to the given "type" on the form.
+		function SetManualEntryFormValues(values, type)
+		{
+			document.getElementById(type + "_option").value = values.option;
+			document.getElementById(type + "_dayofweek").value = values.day;
+			document.getElementById(type + "_option_extension").value = values.option_extension;
+
+			if(typeof values.startdate !== 'undefined' && values.startdate !== null)
+			{
+				document.getElementById(type + "_startdate").value = values.startdate.substring(0, 10);
+			}
+
+			ToggleManualInputFields(type);
+		}
+		
+		function capitalizeFirstLetter(string) {
+			return string.charAt(0).toUpperCase() + string.slice(1);
+		}
+		
+		// Sets values given in "values" to the given "type" on the form.
+		function SetLabelEntryFormValues(Homey, values, type)
+		{
+			var startText = Homey.__('speech.output.type.' + type.toUpperCase());
+			var endText = Homey.__('settings.labelplaceholder');
+			
+			document.getElementById("label" + capitalizeFirstLetter(type)).value = values;
+			document.getElementById("label" + capitalizeFirstLetter(type)).placeholder = startText + " " + endText;
+		}
+
+		// Retrieves all manual values from the form based on given "type" and adds them to the "data" element.
+		function SetManualInputDataFor(type, data)
+		{
+			// If not applicable, leave empty.
+			if(document.getElementById(type + "_option").value == 0)
+			{
+				return data;
+			}
+
+			data[type] = {};
+			data[type].option = document.getElementById(type + "_option").value;
+			data[type].startdate = document.getElementById(type + "_startdate").value;
+			data[type].day = document.getElementById(type + "_dayofweek").value;
+
+			if(data[type].option >= 4) {
+				data[type].option_extension = document.getElementById(type + "_option_extension").value;
+			}
+			else {
+				data[type].option_extension = -1;
+			}
+
+			return data;
+		}
+
+		// Toggles manual input fieldset based on "Manual Input" checkbox
+		function OnManualInputCheckboxChanged()
+		{
+			if(document.getElementById('manual_input_set').checked)
+			{
+				document.getElementById("manual_input").style.display = 'block';
+				document.getElementById("manualInput").style.display = 'block';
+			}
+			else
+			{
+				document.getElementById("manual_input").style.display = 'none';
+				document.getElementById("manualInput").style.display = 'none';
+			}
+		}
+
+		// Toggles fields on the form based on the given element
+		function ToggleManualInputFields(prefix)
+		{
+			var value = document.getElementById(prefix + "_option").value;
+
+			if(value >= 5) {
+				document.getElementById(prefix + "_option_extension").style.display = 'block';
+				document.getElementById(prefix + "_startdate_div").style.display = 'none';
+				document.getElementById(prefix + "_day_div").style.display = 'block';
+			}
+			else if(value == 1)
+			{
+				document.getElementById(prefix + "_option_extension").style.display = 'none';
+				document.getElementById(prefix + "_startdate_div").style.display = 'none';
+				document.getElementById(prefix + "_day_div").style.display = 'block';
+			}
+			else if(value == 0)
+			{
+				document.getElementById(prefix + "_option_extension").style.display = 'none';
+				document.getElementById(prefix + "_startdate_div").style.display = 'none';
+				document.getElementById(prefix + "_day_div").style.display = 'none';
+			}
+			else {
+				document.getElementById(prefix + "_option_extension").style.display = 'none';
+				document.getElementById(prefix + "_startdate_div").style.display = 'block';
+				document.getElementById(prefix + "_day_div").style.display = 'block';
+			}
+		}
+	</script>
+</body>
+</html>

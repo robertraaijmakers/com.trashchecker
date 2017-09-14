@@ -1,0 +1,142 @@
+{
+	"title": "Trash Checker",
+	"settings": {
+		"description":"Please note that not all cities are supported, take a look at the documentation to see whether your city is supported. If your city is not supported you have the option to enter the dates manually.",
+		"title": "Please enter your postal code and home number",
+		"postcode": "Postal code",
+		"hnumber": "House number",
+		"country": "Country",
+		"save": "Save changes",
+		"fail": "This address is not supported",
+		"update": "Address updated to ",
+		"checking": "checking address...",
+		"gft": "Organic",
+		"rest": "Residual",
+		"plastic": "Plastic",
+		"pmd": "PMD",
+		"paper": "Paper",
+		"textile": "Textile",
+		"none": "When nothing is collected",
+		"titlemanualinput": "Manual input",
+		"manualInputField": "Enter dates manually?",
+		"manualInputFieldDescription": "Yes, enter them manually",
+		"saveManualInput": "Save manual input",
+		"saveLabelInput": "Save label input",
+		"interval":
+		{
+			"na": "N/A",
+			"everyweek": "Every week on",
+			"everyotherweek": "Every other week on",
+			"everythreeweeks": "Once every three weeks on",
+			"everyfourweeks": "Once every four weeks on",
+			"everyfirst": "Every first",
+			"everysecond": "Every second",
+			"everythird": "Every third",
+			"everysecondlast": "Every second last",
+			"everylast": "Every last"
+		},
+		"dayofweek": {
+			"mo": "Monday",
+			"tu": "Tuesday",
+			"we": "Wednesday",
+			"th": "Thursday",
+			"fr": "Friday",
+			"sa": "Saturday",
+			"su": "Sunday"
+		},
+		"interval_extra":
+		{
+			"month": "of the month",
+			"quarter": "of the quarter",
+			"year": "of the year"
+		},
+		"startdate": "starting on",
+		"labeltitle": "Global tag settings",
+		"labeldescription": "These values are set in the global tag when a specific type of trash is collected today/tomorrow/the day after tomorrow.",
+		"labelplaceholder": "is collected today",
+		"timeindicator": "Type collected"
+	},
+	"speech":
+	{
+		"replacequestion": "do you know|can you tell me|can you tell|question",
+		"type":
+		{
+			"GFT": "organic",
+			"REST": "residual",
+			"PLASTIC": "plastic",
+			"PMD": "pmd",
+			"PAPIER": "paper",
+			"TEXTIEL": "textile"
+		},
+		"type_multipleother":
+		{
+			"GFT": "green|biological",
+			"REST": "black|residual|grey|gray",
+			"PLASTIC": "elastic|supple",
+			"PMD": "metal|drink carton",
+			"PAPIER": "cardboard|papery",
+			"TEXTIEL": "cloth|yarn|textile"
+		},
+		"questiontype":
+		{
+			"what": "what",
+			"when": "when",
+			"is": "is",
+			"which": "which"
+		},
+		"output":
+		{
+			"noknowntrashcollected": "As far as I know there is no trash collected in your neighbourhood.",
+			"notrashcollectedonx": "There is no trash collected __time__.",
+			"trashtypesycollectedonx": "__time__ __types__ are collected.",
+			"trashtypeycollectedonx": "__time__ __type__ is collected.",
+			"notrashcollectionforx": "__type__ is not collected in your area.",
+			"trashtypexcollectedony": "__type__ is collected __time__.",
+			"yesyiscollectedonx": "Yes, __type__ is collected __time__.",
+			"noyiscollectedonxbutonz": "No, __type__ is not collected __time__ but __time2__.",
+			"and": "and",
+			"next": "next",
+			"on": "on",
+			"days": "days",
+			"in": "in",
+			"type":
+			{
+				"GFT": "The organic waste",
+				"REST": "The residual waste",
+				"PLASTIC": "The plastic waste",
+				"PMD": "The plastics, metal and drinking carton",
+				"PAPIER": "The paper",
+				"TEXTIEL": "The textile",
+				"NONE": "Nothing"
+			},
+			"weekdays":
+			{
+				"d0": "Sunday",
+				"d1": "Monday",
+				"d2": "Tuesday",
+				"d3": "Wednesday",
+				"d4": "Thursday",
+				"d5": "Friday",
+				"d6": "Saturday"
+			},
+			"timeindicator":
+			{
+				"t0": "Today",
+				"t1": "Tomorrow",
+				"t2": "The day after tomorrow"
+			}
+		}
+	},
+	"error":
+	{
+		"typenotsupported":
+		{ 
+			"addviasettings": "No dates known for this type of trash. Add them manually via the settings page of the app.",
+			"onyouraddress": "This type of trash is not supported on your address."
+		}
+	},
+	"tokens":
+	{
+		"trashcollection": "Collected"
+	}
+}

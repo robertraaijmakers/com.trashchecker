@@ -1,0 +1,131 @@
+{
+	"title": "Trash Checker",
+	"settings": {
+		"description":"Helaas worden niet alle steden ondersteund, bekijk de documentatie om er achter te komen of uw stad wordt ondersteund",
+		"title": "Vul hier je postcode en huisnummer in",
+		"postcode": "Postcode",
+		"hnumber": "Huisnummer",
+		"country": "Land",
+		"save": "Opslaan",
+		"fail": "Dit adres wordt niet ondersteund",
+		"update": "Adres is aangepast naar ",
+		"checking": "adres checken...",
+		"gft": "GFT",
+		"rest": "Restafval",
+		"plastic": "Plastic",
+		"pmd": "PMD",
+		"paper": "Papier",
+		"textile": "Textiel",
+		"titlemanualinput": "Handmatige invoer",
+		"manualInputField": "Voer ophaaldata handmatig in?",
+		"manualInputFieldDescription": "Ja, handmatig invoeren",
+		"saveManualInput": "Sla handmatige invoer op",
+		"interval":
+		{
+			"na": "N.v.t.",
+			"everyweek": "Elke week op",
+			"everyotherweek": "Om de week op",
+			"everythreeweeks": "Eens in de drie weken op",
+			"everyfourweeks": "Eens in de vier weken op",
+			"everyfirst": "Elke eerste",
+			"everysecond": "Elke tweede",
+			"everythird": "Elke derde",
+			"everysecondlast": "Elke een na laatste",
+			"everylast": "Elke laatste"
+		},
+		"dayofweek": {
+			"mo": "maandag",
+			"tu": "dinsdag",
+			"we": "woensdag",
+			"th": "donderdag",
+			"fr": "vrijdag",
+			"sa": "zaterdag",
+			"su": "zondag"
+		},
+		"interval_extra":
+		{
+			"month": "van de maand",
+			"quarter": "van het kwartaal",
+			"year": "van het jaar"
+		},
+		"startdate": "startend op"
+	},
+	"speech":
+	{
+		"replacequestion": "weet je|kan je me vertellen|kan je me zeggen|kun je mij zeggen|kun je mij vertellen",
+		"type":
+		{
+			"GFT": "gft",
+			"REST": "rest",
+			"PLASTIC": "plastic",
+			"PMD": "pmd",
+			"PAPIER": "papier",
+			"TEXTIEL": "textiel"
+		},
+		"type_multipleother":
+		{
+			"GFT": "groen|tuinafval|groene|groente|fruit",
+			"REST": "zwart|grijs|grijze|restafval",
+			"PLASTIC": "plastic|oranje",
+			"PMD": "metaal|drinkpak|drink karton",
+			"PAPIER": "blauw|karton",
+			"TEXTIEL": "kleding|kledij"
+		},
+		"questiontype":
+		{
+			"what": "wat",
+			"when": "wanneer",
+			"is": "wordt",
+			"which": "welke"
+		},
+		"output":
+		{
+			"noknowntrashcollected": "Voor zover ik weet wordt er bij jou in de buurt geen afval opgehaald.",
+			"notrashcollectedonx": "Er wordt geen afval opgehaald __time__.",
+			"trashtypesycollectedonx": "__time__ worden __types__ opgehaald.",
+			"trashtypeycollectedonx": "__time__ wordt __type__ opgehaald.",
+			"notrashcollectionforx": "__type__ wordt niet opgehaald in jouw gebied.",
+			"trashtypexcollectedony": "__type__ wordt __time__ opgehaald.",
+			"yesyiscollectedonx": "Ja, __type__ wordt __time__ opgehaald.",
+			"noyiscollectedonxbutonz": "Nee, __type__ wordt niet __time__ opgehaald maar __time2__.",
+			"and": "en",
+			"next": "aanstaande",
+			"on": "op",
+			"days": "dagen",
+			"in": "over",
+			"type":
+			{
+				"GFT": "De groene container",
+				"REST": "De grijze container",
+				"PLASTIC": "De oranje container",
+				"PMD": "De plastic, metalen en drankcartons",
+				"PAPIER": "De blauwe container",
+				"TEXTIEL": "Het textiel"
+			},
+			"weekdays":
+			{
+				"d0": "Zondag",
+				"d1": "Maandag",
+				"d2": "Dinsdag",
+				"d3": "Woensdag",
+				"d4": "Donderdag",
+				"d5": "Vrijdag",
+				"d6": "Zaterdag"
+			},
+			"timeindicator":
+			{
+				"t0": "Vandaag",
+				"t1": "Morgen",
+				"t2": "Overmorgen"
+			}
+		}
+	},
+	"error":
+	{
+		"typenotsupported":
+		{
+			"addviasettings": "Geen ophaaldatum bekend voor dit type afval. Voeg deze handmatig toe via de instellingen pagina van de app.",
+			"onyouraddress": "Dit type afval wordt niet door de API ondersteund op jouw adres."
+		}
+	}
+}
