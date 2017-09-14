@@ -549,6 +549,8 @@ class TrashcanReminder extends Homey.App
 	
 	updateAPI(postcode, homenumber, country, callback)
 	{
+		let newDates = null;
+		
 		//postcode = '5301hBD';
 		//homenumber = '13';
 		//country = 'NL';
@@ -585,18 +587,23 @@ class TrashcanReminder extends Homey.App
 		}
 	
 		asyncLoop(apiArray.length, function(loop) {
-			apiArray[loop.iteration()](postcode,homenumber,country,(err,result)=> {
+			apiArray[loop.iteration()](postcode,homenumber,country,(err,result) => {
 				if(err) {
 					console.log('error while looping', err);
 					loop.next();
 				} else if(Object.keys(result).length > 0) {
-					this.gdates = result;
+					newDates = result;
 					callback(true);
 				} else if(Object.keys(result).length === 0) {
 					loop.next();
 				}
 			});
-		},()=> {
+		},
+		() => {
+			if(newDates !== null)
+			{
+				this.gdates = newDates;
+			}
 			console.log('Checked all APIs');
 			return callback(false);
 		});

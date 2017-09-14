@@ -7,7 +7,6 @@ var dateFormat = require('dateformat');
 var request = require('request');
 var cheerio = require('cheerio');
 var ical = require('ical');
-var DOMParser = require('xmldom').DOMParser;
 
 function afvalapp(postcode, homenumber, country, callback) {
     var options = {
@@ -379,7 +378,8 @@ function gemeenteHellendoorn(postcode, housenumber, country, callback){
     console.log('unsupported country');
     callback(new Error('unsupported country'));
   }
-  var DOMParser = new DOMParser();
+
+  var DOMParser = require('xmldom').DOMParser;
 
   var startDate = new Date();
   startDate = dateFormat(startDate.setDate(startDate.getDate() - 14), "yyyy-mm-dd");
@@ -421,7 +421,7 @@ function gemeenteHellendoorn(postcode, housenumber, country, callback){
        res1.on( "data", function( data1 ) { buffer1 = buffer1 + data1; } );
        res1.on( "end", function( data1 ) {
          // console.log( buffer1 );
-         var doc1 = DOMParser.parseFromString(buffer1,"text/xml");
+         var doc1 = new DOMParser().parseFromString(buffer1,"text/xml");
          // console.log("statusCode is: " + doc1.getElementsByTagName("StatusCode")[0].childNodes[0].data);
          if (doc1.getElementsByTagName("StatusCode")[0].childNodes[0].data == "Ok" && doc1.getElementsByTagName("Addresses")[0].childNodes.length > 0){
            var uniqueIDObject = doc1.getElementsByTagName("UniqueId");
@@ -452,7 +452,7 @@ function gemeenteHellendoorn(postcode, housenumber, country, callback){
                 // console.log("uniqueID is: ", uniqueID);
                 res2.on( "data", function( data2 ) {buffer2 = buffer2 + data2; });
                 res2.on( "end", function( data2 ) {
-                  var doc2 = DOMParser.parseFromString(buffer2,"text/xml");
+                  var doc2 = new DOMParser().parseFromString(buffer2,"text/xml");
                   if (doc2.getElementsByTagName("StatusCode")[0].childNodes[0].data == "Ok"){
                     var trashCodeObject = doc2.getElementsByTagName("Code");
                     var numberOfCodes = trashCodeObject.length;

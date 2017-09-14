@@ -7,9 +7,13 @@ module.exports = [
         description: 'Validate user data',
         method: 'POST',
         path: '/',
-        fn: function (callback, args) {
-            Homey.app.updateAPI(args.body.postcode, args.body.housenumber, args.body.country, function (isValid) {
-                console.log(args);
+        fn: function (args, callback) {
+	        console.log(args);
+	        console.log(callback);
+            Homey.app.updateAPI(args['body']['postcode'], args['body']['housenumber'], args['body']['country'], 
+            function (isValid)
+            {
+                console.log(callback);
                 callback(null, isValid);
             });
         }

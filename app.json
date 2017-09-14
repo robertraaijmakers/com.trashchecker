@@ -5,7 +5,7 @@
 		"en": "Trashcan Reminder 2.0",
 		"nl": "Afval Herinnering 2.0"
 	},
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"compatibility": ">=1.5",
 	"author": {
 		"name": "Robert Raaijmakers",
@@ -16,13 +16,14 @@
 		"homey:manager:speech-input"
 	],
 	"contributors": {
-		"developers": [{
-				"name": "Marcel Timmermans",
-				"email": "marcel@timmermans.us"
-			},
+		"developers": [
 			{
 				"name": "Robert Raaijmakers",
 				"email": "dutchfighter@live.nl"
+			},
+			{
+				"name": "Marcel Timmermans",
+				"email": "marcel@timmermans.us"
 			},
 			{
 				"name": "Remco Hannink",
