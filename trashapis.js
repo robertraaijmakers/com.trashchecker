@@ -156,7 +156,11 @@ function afvalwijzerArnhem(postcode, housenumber, country, callback){
     } else {
        return callback(new Error('Invalid location'));
     }
+   });
+}
 
+function afvalkalenderCyclus(postcode, housenumber, country, callback)
+{
     const r = request.defaults({jar: true});
     r.post({
         url: 'http://afvalkalender.cyclusnv.nl/login.php',
@@ -176,7 +180,6 @@ function afvalwijzerArnhem(postcode, housenumber, country, callback){
                     for (let i in entries) {
                         const entry = entries[i];
                         const dateStr = ('0' + entry.start.getDate()).slice(-2) + '-' + (('0' + (entry.start.getMonth() + 1)).slice(-2)) + '-' + entry.start.getFullYear();
-
                         if (entry.description.indexOf('GFT') !== -1) {
                             if (!dates.GFT) dates.GFT = [];
                             dates.GFT.push(dateStr);
@@ -198,7 +201,6 @@ function afvalwijzerArnhem(postcode, housenumber, country, callback){
             return callback(new Error('Unable to login'));
         }
     });
-  });
 }
 
 function twenteMilieu(postcode, housenumber, country, callback){
@@ -590,6 +592,7 @@ function parseDate(dateString) {
 apiList.push(afvalapp);
 apiList.push(mijnAfvalWijzer);
 apiList.push(afvalwijzerArnhem);
+apiList.push(afvalkalenderCyclus);
 apiList.push(twenteMilieu);
 apiList.push(gemeenteHellendoorn);
 apiList.push(recycleManager);

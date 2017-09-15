@@ -403,7 +403,6 @@ class TrashcanReminder extends Homey.App
 			this.GenerateNewDaysBasedOnManualInput();
 		}
 		
-		console.log("HELLO, IT'S ME?!");
 		this.updateLabel( true , false );
 	}
 	
@@ -418,11 +417,12 @@ class TrashcanReminder extends Homey.App
 				Homey.ManagerSettings.get('postcode'),
 				Homey.ManagerSettings.get('hnumber'),
 				Homey.ManagerSettings.get('country'),
-				function(success)
+				function(success, that)
 				{
 					if(success)
 					{
 						console.log('retrieved house information');
+						that.updateLabel( true, false);
 					} 
 					else 
 					{
@@ -512,16 +512,16 @@ class TrashcanReminder extends Homey.App
 		if( shouldExecute === true)
 		{
 			let result = this.onUpdateLabel ( this.trashToken );
-			if(typeof result !== 'undefined' && result !== null)
+			if(typeof result !== 'undefined' && result !== null && typeof result === 'function')
 			{
 				result.resolve();
 			}
 		}
 	
-		// Make sure it is executed every day at midnight (+1 sec)
-		let msTillMidnight = this.millisecondsTillMidnight();		
+		// Make sure it is executed every day at midnight (+1 sec)	
 		if(shouldSetTimeout === true)
 		{
+			let msTillMidnight = this.millisecondsTillMidnight();	
 			setTimeout(this.updateLabel.bind(this), msTillMidnight, true, true);
 		}
 	}
@@ -555,7 +555,7 @@ class TrashcanReminder extends Homey.App
 		//postcode = '5301hBD';
 		//homenumber = '13';
 		//country = 'NL';
-		function asyncLoop(iterations, func, callback) {
+		function asyncLoop(iterations, that, func, callback) {
 			var index = 0;
 			var done = false;
 			var loop = {
@@ -566,7 +566,7 @@ class TrashcanReminder extends Homey.App
 	
 					if (index < iterations) {
 						index++;
-						func(loop);
+						func(loop, that);
 	
 					} else {
 						done = true;
@@ -587,24 +587,23 @@ class TrashcanReminder extends Homey.App
 			return loop;
 		}
 	
-		asyncLoop(apiArray.length, function(loop) {
-			apiArray[loop.iteration()](postcode,homenumber,country,(err,result) => {
+		asyncLoop(apiArray.length, this, function(loop, that)
+		{
+			apiArray[loop.iteration()](postcode,homenumber,country,
+			(err,result) => {
 				if(err) {
 					console.log('error while looping', err);
 					loop.next();
 				} else if(Object.keys(result).length > 0) {
 					newDates = result;
-					callback(true);
+					that.gdates = newDates;
+					callback(true, that);
 				} else if(Object.keys(result).length === 0) {
 					loop.next();
 				}
 			});
 		},
 		() => {
-			if(newDates !== null)
-			{
-				this.gdates = newDates;
-			}
 			console.log('Checked all APIs');
 			return callback(false);
 		});
