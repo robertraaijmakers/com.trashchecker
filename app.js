@@ -428,7 +428,6 @@ class TrashcanReminder extends Homey.App
 						//that.updateLabel( true, false);
 						
 						// Save the API version
-						Homey.ManagerSettings.set('apiId', newApiId);
 						that.updateLabel(true, false);
 					} 
 					else 
@@ -559,6 +558,11 @@ class TrashcanReminder extends Homey.App
 	{
 		let newDates = null;
 		
+		if(typeof postcode !== 'undefined' && postcode !== null && postcode !== '')
+		{
+			postcode = postcode.toUpperCase();
+		}
+		
 		// check if we already know which API is chosen
 		if(typeof apiId !== 'undefined' && apiId !== null && apiId != "" && isNaN(apiId))
 		{
@@ -627,6 +631,7 @@ class TrashcanReminder extends Homey.App
 				} else if(Object.keys(result).length > 0) {
 					newDates = result;
 					that.gdates = newDates;
+					Homey.ManagerSettings.set('apiId', apiArray[loop.iteration()]['id']);
 					callback(true, that, apiArray[loop.iteration()]['id']);
 				} else if(Object.keys(result).length === 0) {
 					loop.next();
