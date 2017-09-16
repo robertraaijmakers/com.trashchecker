@@ -413,16 +413,23 @@ class TrashcanReminder extends Homey.App
 			Homey.ManagerSettings.get('hnumber') &&
 			Homey.ManagerSettings.get('country'))
 		{
+			var apiId = Homey.ManagerSettings.get('apiId');
+			
 			this.updateAPI(
 				Homey.ManagerSettings.get('postcode'),
 				Homey.ManagerSettings.get('hnumber'),
 				Homey.ManagerSettings.get('country'),
-				function(success, that)
+				apiId,
+				function(success, that, newApiId)
 				{
 					if(success)
 					{
 						console.log('retrieved house information');
-						that.updateLabel( true, false);
+						//that.updateLabel( true, false);
+						
+						// Save the API version
+						Homey.ManagerSettings.set('apiId', newApiId);
+						that.updateLabel(true, false);
 					} 
 					else 
 					{
@@ -548,13 +555,33 @@ class TrashcanReminder extends Homey.App
 	  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 	}
 	
-	updateAPI(postcode, homenumber, country, callback)
+	updateAPI(postcode, homenumber, country, apiId, callback)
 	{
 		let newDates = null;
 		
-		//postcode = '5301hBD';
-		//homenumber = '13';
-		//country = 'NL';
+		// check if we already know which API is chosen
+		if(typeof apiId !== 'undefined' && apiId !== null && apiId != "" && isNaN(apiId))
+		{
+			console.log("API ID Known: " + apiId);
+			var result = apiArray.find(o => o.id === apiId);
+			
+			// only load that API, this is so that we won't send requests to all data providers all the time.
+			result['execute'](postcode,homenumber,country,
+			(err,result) => {
+				if(err) {
+					console.log('Error in API', err);
+				} else if(Object.keys(result).length > 0) {
+					newDates = result;
+					this.gdates = newDates;
+					callback(true, this, apiId);
+				} else if(Object.keys(result).length === 0) {
+					console.log('No information found, go to settings to reset your API settings.');
+				}
+			});
+			
+			return;
+		}
+		
 		function asyncLoop(iterations, that, func, callback) {
 			var index = 0;
 			var done = false;
@@ -589,7 +616,10 @@ class TrashcanReminder extends Homey.App
 	
 		asyncLoop(apiArray.length, this, function(loop, that)
 		{
-			apiArray[loop.iteration()](postcode,homenumber,country,
+			console.log(loop.iteration());
+			console.log(apiArray[loop.iteration()]);
+			
+			apiArray[loop.iteration()]['execute'](postcode,homenumber,country,
 			(err,result) => {
 				if(err) {
 					console.log('error while looping', err);
@@ -597,7 +627,7 @@ class TrashcanReminder extends Homey.App
 				} else if(Object.keys(result).length > 0) {
 					newDates = result;
 					that.gdates = newDates;
-					callback(true, that);
+					callback(true, that, apiArray[loop.iteration()]['id']);
 				} else if(Object.keys(result).length === 0) {
 					loop.next();
 				}

@@ -29,5 +29,5 @@ You can ask Homey four type of questions regarding your waste collection:
 - Is the residual waste collected this friday?
 - Which type of trash is collected next?
 
-## Tags (currently in beta, refresh makes the app crash sometimes)
+## Tags (currently in beta, nightly refresh makes the app crash sometimes)
 There is one global tag available that you can set dynamically via the settings. This tag will show the value belonging to the trash type that is collected on this day (or tomorrow/day after tomorrow, depending on your settings).

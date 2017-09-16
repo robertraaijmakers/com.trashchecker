@@ -68,7 +68,8 @@ function afvalapp(postcode, homenumber, country, callback)
     });
 }
 
-function mijnAfvalWijzer(postcode, housenumber, country, callback) {
+function mijnAfvalWijzer(postcode, housenumber, country, callback)
+{
 	console.log("Checking Mijn Afval Wijzer");
 	
     var fDates = {};
@@ -122,7 +123,8 @@ function mijnAfvalWijzer(postcode, housenumber, country, callback) {
     });
 }
 
-function afvalwijzerArnhem(postcode, housenumber, country, callback){
+function afvalwijzerArnhem(postcode, housenumber, country, callback)
+{
   console.log("Checking Afvalwijzer Arnhem");
 	
   var fDates = {};
@@ -175,115 +177,44 @@ function afvalwijzerArnhem(postcode, housenumber, country, callback){
 
 function afvalkalenderCyclus(postcode, housenumber, country, callback)
 {
-	console.log("Checking Afvalkalender Cyclus");
-	
-	if(country !== "NL") {
-		console.log('unsupported country');
-		callback(new Error('unsupported country'));
-	}
-	
-	var body1 = 'postcode='+postcode+'&huisnummer='+housenumber;
-	var postRequest1 = {
-      host: "afvalkalender.cyclusnv.nl",
-      path: "/ajax/bag/postcode/huisnummer",
-      method: "POST",
-      headers: {
-	    'Host': 'afvalkalender.cyclusnv.nl',
-		'Accept': '*/*',
-		'Origin': 'https://afvalkalender.cyclusnv.nl',
-		'X-Requested-With': 'XMLHttpRequest',
-		'Content-Type': 'application/x-www-form-urlencoded'
-      }
-  };
-  
-  var req1 = https.request( postRequest1, function( res1 ) {
-	 console.log(res1.statusCode);
-	 console.log(res1);
-	 
-     if (res1.statusCode == 200)
-     {
-       var buffer1 = "";
-       res1.on( "data", function( data1 ) { buffer1 = buffer1 + data1; } );
-       res1.on( "end", function( data1 ) {
-	       			console.log(buffer1);
-	       			
-	       			var result = JSON.parse(buffer1);
-	       			console.log(result);
-	       			
-	       			if(result.length <= 0)
-	       			{
-		       			return callback(new Error('Invalid zipcode for RMN'));
-	       			}
-	       			
-	       			var identificatie = result[0].bag_identificatie;
-	       			console.log(identificatie);	
-	       				   			
-			        var url = 'https://afvalkalender.cyclusnv.nl/ical/' + identificatie;
-			        console.log(url);
-			        const r = request.defaults({jar: true});
-		            r.get(url, function (err, res, body) {
-		                if (!err && res.statusCode == 200) {
-		                    const dates = {};
-		                    const entries = ical.parseICS(body);
-		                    for (let i in entries) {
-		                        const entry = entries[i];
-		                        const dateStr = ('0' + entry.start.getDate()).slice(-2) + '-' + (('0' + (entry.start.getMonth() + 1)).slice(-2)) + '-' + entry.start.getFullYear();
-		                        if (entry.description.indexOf('Groente') !== -1 || entry.description.indexOf('GFT') !== -1) {
-		                            if (!dates.GFT) dates.GFT = [];
-		                            dates.GFT.push(dateStr);
-		                        } else if (entry.description.indexOf('Rest') !== -1) {
-		                            if (!dates.REST) dates.REST = [];
-		                            dates.REST.push(dateStr);
-		                        } else if (entry.description.indexOf('Plastic') !== -1) {
-		                            if (!dates.PLASTIC) dates.PLASTIC = [];
-		                            dates.PLASTIC.push(dateStr);
-		                        } else if (entry.description.indexOf('papier') !== -1) {
-		                            if (!dates.PAPIER) dates.PAPIER = [];
-		                            dates.PAPIER.push(dateStr);
-		                        }
-		                    }
-							console.log(dates);
-		                    return callback(null, dates);
-		                } else {
-		                    return callback(new Error('Unable to download ical file'));
-		                }
-		            });
-		});
-	 } else {
-		callback(new Error('Error in script'));
-	}
-  });
-  req1.write( body1 );
-  req1.end();
+	generalAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cyclusnv.nl', callback);
 }
 
 function afvalRmn(postcode, housenumber, country, callback)
 {
-	console.log("Checking Afval RMN");
+	generalAfvalkalendersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl', callback);
+}
+
+function afvalkalenderMeerlanden(postcode, housenumber, country, callback)
+{
+	generalAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.meerlanden.nl', callback);
+}
+
+function generalAfvalkalendersNederland(postcode, housenumber, country, baseUrl, callback)
+{
+	console.log("Checking general afvalkalenders nederland with URL: " + baseUrl);
 	
-	if(country !== "NL") {
+	if(country !== "NL")
+	{
 		console.log('unsupported country');
 		callback(new Error('unsupported country'));
 	}
 	
 	var body1 = 'postcode='+postcode+'&huisnummer='+housenumber;
 	var postRequest1 = {
-      host: "inzamelschema.rmn.nl",
+      host: baseUrl,
       path: "/ajax/bag/postcode/huisnummer",
       method: "POST",
       headers: {
-	    'Host': 'inzamelschema.rmn.nl',
+	    'Host': baseUrl,
 		'Accept': '*/*',
-		'Origin': 'https://inzamelschema.rmn.nl',
+		'Origin': 'https://'+baseUrl,
 		'X-Requested-With': 'XMLHttpRequest',
 		'Content-Type': 'application/x-www-form-urlencoded'
       }
   };
   
   var req1 = https.request( postRequest1, function( res1 ) {
-	 console.log(res1.statusCode);
-	 console.log(res1);
-	 
      if (res1.statusCode == 200)
      {
        var buffer1 = "";
@@ -294,13 +225,13 @@ function afvalRmn(postcode, housenumber, country, callback)
 	       			
 	       			if(result.length <= 0)
 	       			{
-		       			return callback(new Error('Invalid zipcode for RMN'));
+		       			return callback(new Error('Invalid zipcode for: ' + baseUrl));
 	       			}
 	       			
 	       			var identificatie = result[0].bag_identificatie;
 	       			console.log(identificatie);
 		   			
-			        var url = 'https://inzamelschema.rmn.nl/ical/' + identificatie;
+			        var url = 'https://' + baseUrl + '/ical/' + identificatie;
 			        console.log(url);
 			        const r = request.defaults({jar: true});
 		            r.get(url, function (err, res, body) {
@@ -310,16 +241,19 @@ function afvalRmn(postcode, housenumber, country, callback)
 		                    for (let i in entries) {
 		                        const entry = entries[i];
 		                        const dateStr = ('0' + entry.start.getDate()).slice(-2) + '-' + (('0' + (entry.start.getMonth() + 1)).slice(-2)) + '-' + entry.start.getFullYear();
-		                        if (entry.description.indexOf('Groente') !== -1 || entry.description.indexOf('GFT') !== -1) {
+		                        
+		                        var description = entry.description.toLowerCase();
+		                        
+		                        if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
 		                            if (!dates.GFT) dates.GFT = [];
 		                            dates.GFT.push(dateStr);
-		                        } else if (entry.description.indexOf('Rest') !== -1) {
+		                        } else if (description.indexOf('rest') !== -1) {
 		                            if (!dates.REST) dates.REST = [];
 		                            dates.REST.push(dateStr);
-		                        } else if (entry.description.indexOf('Plastic') !== -1 || entry.description.indexOf('PMD') !== -1) {
+		                        } else if (description.indexOf('plastic') !== -1 || description.indexOf('pmd') !== -1) {
 		                            if (!dates.PLASTIC) dates.PLASTIC = [];
 		                            dates.PLASTIC.push(dateStr);
-		                        } else if (entry.description.indexOf('papier') !== -1 || entry.description.indexOf('Papier') !== -1) {
+		                        } else if (description.indexOf('papier') !== -1) {
 		                            if (!dates.PAPIER) dates.PAPIER = [];
 		                            dates.PAPIER.push(dateStr);
 		                        }
@@ -696,12 +630,14 @@ function recycleManager(postcode, housenumber, country, callback)
   });
 }
 
-function dateFormat(date) {
+function dateFormat(date)
+{
     var ad = date.split('-');
     return ('0' + ad[0]).slice(-2) + '-' + ('0' + ad[1]).slice(-2) + '-' + ad[2];
 }
 
-function parseDate(dateString) {
+function parseDate(dateString)
+{
     var dateArray = dateString.split(" ");
     var fullString = dateArray[1] + '-'; //day of the month(already padded)
     var months = [
@@ -733,13 +669,14 @@ function parseDate(dateString) {
     return fullString;
 }
 
-apiList.push(afvalapp);
-apiList.push(mijnAfvalWijzer);
-apiList.push(afvalwijzerArnhem);
-apiList.push(afvalkalenderCyclus);
-apiList.push(afvalRmn);
-apiList.push(twenteMilieu);
-apiList.push(gemeenteHellendoorn);
-apiList.push(recycleManager);
+apiList.push({ name: "Afval App", id: "afa", execute: afvalapp });
+apiList.push({ name: "Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
+apiList.push({ name: "Arnhem", id: "arn", execute: afvalwijzerArnhem });
+apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCyclus });
+apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
+apiList.push({ name: "Twente Milieu", id: "twm", execute: twenteMilieu });
+apiList.push({ name: "Gemeente Hellendoorn", id: "geh", execute: gemeenteHellendoorn });
+apiList.push({ name: "Recyclemanager", id: "remg", execute: recycleManager });
+apiList.push({ name: "Afvalkalender Meerlanden", id: "akm", execute: afvalkalenderMeerlanden });
 
 module.exports = apiList;
