@@ -17,6 +17,7 @@ Unfortunately not all cities work with the Trashcan Reminder, if you can find yo
 - [Recyle Manager](http://www.recyclemanager.nl)
 - [RMN](https://inzamelschema.rmn.nl/) *NEW*
 - [Afvalkalender Meerlanden](https://afvalkalender.meerlanden.nl/form) *NEW*
+- [Afvalkalender Venray](https://afvalkalender.venray.nl/form) *NEW*
 
 If your city is not supported you can always add your schedule manually. You can add new cities yourself, but requests to add new cities aren't honoured. If you wish to contribute to the project (for example by adding support for a city). I would advise you to take a look at [this explanation](https://github.com/robertraaijmakers/com.trashchecker/tree/master/developers).
 

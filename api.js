@@ -10,10 +10,9 @@ module.exports = [
         fn: function (args, callback) {
 	        console.log(args);
 	        console.log(callback);
-            Homey.app.updateAPI(args['body']['postcode'], args['body']['housenumber'], args['body']['country'], null, 
-            function (isValid)
+            Homey.app.updateAPI(args['body']['postcode'], args['body']['housenumber'], args['body']['country'], args['body']['api'], 
+            function (isValid, obj, apiId)
             {
-                console.log(callback);
                 callback(null, isValid);
             });
         }

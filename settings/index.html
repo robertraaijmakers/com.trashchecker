@@ -23,13 +23,32 @@
 				<input  style="width:10px" id="BE" name="country" type="radio" value="NL"/><span class="name">BE</span>
 			</div>
         </div>
+        <div class="field row">
+			<label style="float:left" for="api" data-i18n="settings.api"></label>
+			<div style="float:left">
+				<select id="api">
+					<option value="" data-i18n="settings.unknown"></option>
+					<option value="afa">Afval App</option>
+					<option value="afw">Mijn Afvalwijzer</option>
+					<option value="arn">Afvalwijzer Arnhem</option>
+					<option value="afc">Afvalkalender Cyclus</option>
+					<option value="afrm">Afvalkalender RMN</option>
+					<option value="twm">Twente Milieu</option>
+					<option value="geh">Gemeente Hellendoorn</option>
+					<option value="remg">Recyclemanager</option>
+					<option value="akm">Afvalkalender Meerlanden</option>
+					<option value="akvr">Afvalkalender Venray</option>
+				</select>
+			</div>
+        </div>
         <div class="field row" id="manual_input_field">
 			<label style="float:left" for="manual_input_set" data-i18n="settings.manualInputField"></label>
 			<div style="float:left">
 				<input style="width: 10px" id="manual_input_set" name="manualInput" type="checkbox"></input><label style="width: 200px;" for="manual_input_set" class="name" data-i18n="settings.manualInputFieldDescription"></label><br>
 			</div>
         </div>
-        <span id="resp"></span>
+        <span id="resp" title="Details?" onclick="document.getElementById('respDates').style='display: block;'"></span>
+        <span id="respDates" style="display: none;"></span>
     </fieldset>
     <button id="apiSave" class="left" style="display:block" data-i18n="settings.save" ></button>
 	<br /><br />
@@ -415,7 +434,16 @@
         			document.getElementById('NL').checked = true;
         		}
         	});
+			
+        	Homey.get('apiId',function(err, apiId)
+        	{
+        		if(err){
+        			return console.error(err);
+        		}
 
+        		document.getElementById("api").value = apiId;
+        	});
+			
         	Homey.get('manualInput',function(err, manualInput)
         	{
 				console.log(manualInput);
@@ -557,8 +585,14 @@
 			var resp = document.getElementById("resp");
 				resp.style.color = 'black';
 				resp.innerHTML = Homey.__('settings.checking');
+				
+			var respDates = document.getElementById("respDates");
+				respDates.style.color = 'black';
+				respDates.innerHTML = "";
+				
         	var pc = document.getElementById('postcode').value;
         	var num = document.getElementById('number').value;
+			var apiSelected = document.getElementById('api').value;
 
         	var country;
         	if(document.getElementById('NL').checked) {
@@ -571,12 +605,15 @@
 			if(document.getElementById('manual_input_set').checked) {
             	manualInput = true;
             }
+			
+			if(apiSelected == "") { apiSelected = null; }
 
         	Homey.api('POST', '/', {
 
         		"postcode":pc,
         		"housenumber":num,
-        		"country":country
+        		"country":country,
+				"api": apiSelected
 
         	}, function(err,result) {
         		if(err) return console.log(err);
@@ -588,7 +625,29 @@
 		            Homey.set('postcode',pc);
 		            Homey.set('hnumber',num);
 		            Homey.set('country',country);
-	        	}
+										
+					// Retrieve API id & gdates from settings
+					Homey.get('apiId', function(err, apiId)
+					{
+						if(err)
+						{
+							return;
+						}
+						
+						document.getElementById("api").value = apiId;
+						respDates.innerHTML = "<br />API ID: " + apiId + respDates.innerHTML;
+					});
+					
+					Homey.get('collectingDays', function(err, collectingDays)
+					{
+						if(err)
+						{
+							return;
+						}
+						
+						respDates.innerHTML = respDates.innerHTML + "<br /><pre>" + JSON.stringify(collectingDays, null, 2) + "</pre>";
+					});
+				}
 				else
 				{
 					resp.innerHTML = Homey.__('settings.fail');

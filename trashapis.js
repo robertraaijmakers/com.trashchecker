@@ -121,6 +121,8 @@ function mijnAfvalWijzer(postcode, housenumber, country, callback)
             return callback(new Error('Invalid location'));
         }
     });
+	
+    return callback(new Error('Invalid data'));
 }
 
 function afvalwijzerArnhem(postcode, housenumber, country, callback)
@@ -188,6 +190,11 @@ function afvalRmn(postcode, housenumber, country, callback)
 function afvalkalenderMeerlanden(postcode, housenumber, country, callback)
 {
 	generalAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.meerlanden.nl', callback);
+}
+
+function afvalkalenderVenray(postcode, housenumber, country, callback)
+{
+	generalAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.venray.nl', callback);
 }
 
 function generalAfvalkalendersNederland(postcode, housenumber, country, baseUrl, callback)
@@ -669,14 +676,16 @@ function parseDate(dateString)
     return fullString;
 }
 
+// Don't forget to add the ID and name to the option set in settings/index.html page as well! :)
 apiList.push({ name: "Afval App", id: "afa", execute: afvalapp });
-apiList.push({ name: "Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
-apiList.push({ name: "Arnhem", id: "arn", execute: afvalwijzerArnhem });
+apiList.push({ name: "Mijn Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
+apiList.push({ name: "Afvalwijzer Arnhem", id: "arn", execute: afvalwijzerArnhem });
 apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCyclus });
 apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
 apiList.push({ name: "Twente Milieu", id: "twm", execute: twenteMilieu });
 apiList.push({ name: "Gemeente Hellendoorn", id: "geh", execute: gemeenteHellendoorn });
 apiList.push({ name: "Recyclemanager", id: "remg", execute: recycleManager });
 apiList.push({ name: "Afvalkalender Meerlanden", id: "akm", execute: afvalkalenderMeerlanden });
+apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderVenray });
 
 module.exports = apiList;

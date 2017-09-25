@@ -38,12 +38,13 @@ class TrashcanReminder extends Homey.App
 		}
 	
 		// Manually kick off data retrieval
-		this.onUpdateData();
+		this.onUpdateData(true, false);
 		
 		// Every 24 hours update API or manual dates
 		let msTillUpdateLabel = this.millisecondsTillMidnight();
-		setInterval(this.onUpdateData.bind(this), 86400000); // Every 24-hours
-		setTimeout(this.onUpdateLabel.bind(this), msTillUpdateLabel, true, true);
+		let msTillUpdateApi = this.millisecondsTillSaturdayNight();
+		setTimeout(this.onUpdateData.bind(this), msTillUpdateApi, true, true); // Every saturday night (and on refresh), but this prevents data from getting lost when it is retrieved through the week.
+		setTimeout(this.updateLabel.bind(this), msTillUpdateLabel, true, true); // Execute once at this midnight
 		
 		// Make sure the label is updated every 24 hours at midnight
 		let trashCollectionToken = new Homey.FlowToken( 'trash_collection_token', {
@@ -355,13 +356,13 @@ class TrashcanReminder extends Homey.App
 			{
 				var message = Homey.__('error.typenotsupported.addviasettings');
 				console.log(message);
-				return Promise.resolve(new Error(message));
+				return Promise.resolve(false);
 			}
 			else
 			{
 				var message = Homey.__('error.typenotsupported.onyouraddress');
 				console.log(message);
-				return Promise.resolve(new Error(message));
+				return Promise.resolve(false);
 			}
 		}
 	
@@ -398,20 +399,27 @@ class TrashcanReminder extends Homey.App
 	********************/
 	onSettingsChanged(parameterName)
 	{
+		console.log("Updating settings for: " + parameterName);
+		
 		if(parameterName === "manualEntryData")
 		{
 			this.GenerateNewDaysBasedOnManualInput();
 		}
 		
-		this.updateLabel( true , false );
+		if(parameterName === "collectingDays")
+		{
+			console.log("Updating label once");
+			this.updateLabel( true , false );
+		}
 	}
 	
-	onUpdateData()
+	onUpdateData(shouldExecute, shouldSetTimeout)
 	{
 		if (this.manualInput === false && 
 			Homey.ManagerSettings.get('postcode') &&
 			Homey.ManagerSettings.get('hnumber') &&
-			Homey.ManagerSettings.get('country'))
+			Homey.ManagerSettings.get('country') &&
+			shouldExecute === true)
 		{
 			var apiId = Homey.ManagerSettings.get('apiId');
 			
@@ -425,9 +433,8 @@ class TrashcanReminder extends Homey.App
 					if(success)
 					{
 						console.log('retrieved house information');
-						//that.updateLabel( true, false);
 						
-						// Save the API version
+						// Update label
 						that.updateLabel(true, false);
 					} 
 					else 
@@ -437,10 +444,18 @@ class TrashcanReminder extends Homey.App
 				}
 			);
 		}
-		else if (this.manualInput === true)
+		else if (this.manualInput === true && shouldExecute === true)
 		{
 			// Generate new days based on manual input
 			this.GenerateNewDaysBasedOnManualInput();
+		}
+		
+		
+		// Make sure it is executed every day at midnight (+1 sec)	
+		if(shouldSetTimeout === true)
+		{
+			let msTillSaturday = this.millisecondsTillSaturdayNight();	
+			setTimeout(this.onUpdateData.bind(this), msTillSaturday, true, true);
 		}
 	}
 	
@@ -544,7 +559,18 @@ class TrashcanReminder extends Homey.App
 		
 		let msTillMidnight = night.getTime() - now.getTime();
 		console.log(msTillMidnight);
-		return msTillMidnight;
+		return msTillMidnight <= 0 ? 1000 : msTillMidnight;
+	}
+	
+	millisecondsTillSaturdayNight()
+	{
+		var now = new Date();
+		var currentDay = now.getDay()%6 == 0 ? 6 : now.getDay()%6;
+		
+		var msTillMidnight = this.millisecondsTillMidnight();
+		var msTillSaturday = ((currentDay * 24 * 60 * 60 * 1000) + msTillMidnight) - (5 * 60 * 1000); // Execute 5 minutes earlier then the label refresh function.
+		console.log(msTillSaturday);
+		return msTillSaturday <= 0 ? 1000 : msTillMidnight;
 	}
 	
 	pad(n, width, z)
@@ -574,12 +600,27 @@ class TrashcanReminder extends Homey.App
 			(err,result) => {
 				if(err) {
 					console.log('Error in API', err);
-				} else if(Object.keys(result).length > 0) {
+					
+					callback(false, this, null);
+					return;
+				}
+				else if(Object.keys(result).length > 0) {
 					newDates = result;
+					
 					this.gdates = newDates;
+					Homey.ManagerSettings.set('apiId', apiId);
+					Homey.ManagerSettings.set('collectingDays', newDates);
+					
+					this.updateLabel(true, false);
+					
 					callback(true, this, apiId);
-				} else if(Object.keys(result).length === 0) {
+					return;
+				}
+				else if(Object.keys(result).length === 0) {
 					console.log('No information found, go to settings to reset your API settings.');
+					
+					callback(false, this, null);
+					return;
 				}
 			});
 			
@@ -631,7 +672,11 @@ class TrashcanReminder extends Homey.App
 				} else if(Object.keys(result).length > 0) {
 					newDates = result;
 					that.gdates = newDates;
+					
 					Homey.ManagerSettings.set('apiId', apiArray[loop.iteration()]['id']);
+					Homey.ManagerSettings.set('collectingDays', newDates);
+					that.updateLabel(true, false);
+					
 					callback(true, that, apiArray[loop.iteration()]['id']);
 				} else if(Object.keys(result).length === 0) {
 					loop.next();
@@ -692,6 +737,7 @@ class TrashcanReminder extends Homey.App
 		}
 		
 		// Push to gdates
+		Homey.ManagerSettings.set('collectingDays', dates);
 		this.gdates = dates;
 	}
 	
@@ -842,4 +888,3 @@ class TrashcanReminder extends Homey.App
 }
 
 module.exports = TrashcanReminder;
-//module.exports.updateAPI = updateAPI;
