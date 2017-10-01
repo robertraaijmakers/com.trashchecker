@@ -15,9 +15,9 @@ Unfortunately not all cities work with the Trashcan Reminder, if you can find yo
 - [Gemeente Hellendoorn](http://hellendoornafvalkalender.2go-mobile.com)
 - [Twentemilieu](https://www.twentemilieu.nl)
 - [Recyle Manager](http://www.recyclemanager.nl)
-- [RMN](https://inzamelschema.rmn.nl/) *NEW*
-- [Afvalkalender Meerlanden](https://afvalkalender.meerlanden.nl/form) *NEW*
-- [Afvalkalender Venray](https://afvalkalender.venray.nl/form) *NEW*
+- [RMN](https://inzamelschema.rmn.nl/)
+- [Afvalkalender Meerlanden](https://afvalkalender.meerlanden.nl/form)
+- [Afvalkalender Venray](https://afvalkalender.venray.nl/form)
 
 If your city is not supported you can always add your schedule manually. You can add new cities yourself, but requests to add new cities aren't honoured. If you wish to contribute to the project (for example by adding support for a city). I would advise you to take a look at [this explanation](https://github.com/robertraaijmakers/com.trashchecker/tree/master/developers).
 
@@ -25,7 +25,7 @@ If your city is not supported you can always add your schedule manually. You can
 There is one card that you can place in the "then" column. The card let's you check if trash type X is collected << today, tomorrow, day after tomorrow >>.
 
 ## Supported Speech (currently broken due to upgrade to SDK v2)
-Please upvote this issue https://github.com/athombv/homey/issues/1779, or provide some information on an app that has upgraded to SDK v2 and uses speech.
+Please upvote [this issue](https://github.com/athombv/homey/issues/1779), or provide some information on an app that has upgraded to SDK v2 and uses speech.
 
 You can ask Homey four type of questions regarding your waste collection:
 - When is the green container collected?
