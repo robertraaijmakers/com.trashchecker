@@ -604,14 +604,15 @@ class TrashcanReminder extends Homey.App
 					callback(false, this, null);
 					return;
 				}
-				else if(Object.keys(result).length > 0) {
+				else if(Object.keys(result).length > 0)
+				{
 					newDates = result;
 					
 					this.gdates = newDates;
 					Homey.ManagerSettings.set('apiId', apiId);
 					Homey.ManagerSettings.set('collectingDays', newDates);
 					
-					this.updateLabel(true, false);
+					//this.updateLabel(true, false);
 					
 					callback(true, this, apiId);
 					return;

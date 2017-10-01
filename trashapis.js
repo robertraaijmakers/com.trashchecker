@@ -121,8 +121,6 @@ function mijnAfvalWijzer(postcode, housenumber, country, callback)
             return callback(new Error('Invalid location'));
         }
     });
-	
-    return callback(new Error('Invalid data'));
 }
 
 function afvalwijzerArnhem(postcode, housenumber, country, callback)
