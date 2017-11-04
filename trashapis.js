@@ -635,6 +635,64 @@ function recycleManager(postcode, housenumber, country, callback)
   });
 }
 
+function extractDatesHVC(rubbishType) {
+    let dates = [];
+    for (let pickupDate of rubbishType.dateTime) {
+        let date = dateFormat(pickupDate.date, "dd-mm-yyyy");
+        dates.push(date);
+    }
+    return dates;
+}
+
+function inzamelkalenderHVC(postcode, housenumber, country, callback)
+{
+    if(country !== "NL") {
+        console.log('unsupported country');
+        callback(new Error('unsupported country'));
+    }
+
+    let fDates = {};
+    console.log("HVC inzamelkalender met: " + postcode + " " + housenumber);
+    const url = `https://inzamelkalender.hvcgroep.nl/push/calendar?postcode=${postcode}&huisnummer=${housenumber}&huisletter=&toevoeging=&number=`;
+
+    request(url, function(err, res, body){
+        if(!err && res.statusCode == 200){
+            const body = JSON.parse(res.body);
+            // console.log(body);
+            if (!body.error) {
+                for (let rubbishType of body) {
+                    console.log("Soort afval is: " + rubbishType.naam + "(" + rubbishType.code + ")");
+                    switch (rubbishType.code) {
+                        case 'GFT':
+                            fDates.GFT = extractDatesHVC(rubbishType, fDates);
+                            break;
+                        case 'PAPIER':
+                            fDates.PAPIER = extractDatesHVC(rubbishType, fDates);
+                            break;
+                        case 'REST':
+                            fDates.REST = extractDatesHVC(rubbishType, fDates);
+                            break;
+                        case 'PMD':
+                            fDates.PMD = extractDatesHVC(rubbishType, fDates);
+                            break;
+                        default:
+                            console.log('Something else', rubbishType);
+                            break;
+                    }
+                }
+                console.log(fDates);
+                return callback(null, fDates);
+            } else {
+                console.log("Postcode niet gevonden!");
+                return callback(new Error("Postcode niet gevonden!"));
+            }
+        } else {
+            console.log("Probleem met aanroep API!");
+            return callback(new Error("Probleem met aanroep API!"));
+        }
+    });
+}
+
 function dateFormat(date)
 {
     var ad = date.split('-');
@@ -685,5 +743,6 @@ apiList.push({ name: "Gemeente Hellendoorn", id: "geh", execute: gemeenteHellend
 apiList.push({ name: "Recyclemanager", id: "remg", execute: recycleManager });
 apiList.push({ name: "Afvalkalender Meerlanden", id: "akm", execute: afvalkalenderMeerlanden });
 apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderVenray });
+apiList.push({ name: "Inzamelkalender HVC", id: "hvc", execute: inzamelkalenderHVC });
 
 module.exports = apiList;
