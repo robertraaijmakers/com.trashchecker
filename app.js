@@ -56,7 +56,6 @@ class TrashcanReminder extends Homey.App
 			.register()
 			.then(() => {
 				this.trashToken = trashCollectionToken;
-				//this.intervalRefreshToken = setInterval( this.updateLabel( false , true ).bind(this), this.millisecondsTillMidnight());
 				return this.onUpdateLabel ( );
 			})
 			.catch( err => {
@@ -450,7 +449,6 @@ class TrashcanReminder extends Homey.App
 			this.GenerateNewDaysBasedOnManualInput();
 		}
 		
-		
 		// Make sure it is executed every day at midnight (+1 sec)	
 		if(shouldSetTimeout === true)
 		{
@@ -462,6 +460,7 @@ class TrashcanReminder extends Homey.App
 	onUpdateLabel( )
 	{
 		// Retrieve label settings
+		console.log("Updating label");
 		var labelSettings = Homey.ManagerSettings.get('labelSettings');
 		
 		if(labelSettings === 'undefined' || labelSettings == null)
@@ -517,6 +516,7 @@ class TrashcanReminder extends Homey.App
 		// Set global token with value found.
 		if(this.trashToken !== null)
 		{	
+			console.log("Label is updated");
 			return this.trashToken.setValue(textLabel);
 		}
 		else
@@ -606,13 +606,13 @@ class TrashcanReminder extends Homey.App
 				}
 				else if(Object.keys(result).length > 0)
 				{
-					newDates = result;
+					Homey.ManagerSettings.set('collectingDays', null);
 					
+					newDates = result;
 					this.gdates = newDates;
+					
 					Homey.ManagerSettings.set('apiId', apiId);
 					Homey.ManagerSettings.set('collectingDays', newDates);
-					
-					//this.updateLabel(true, false);
 					
 					callback(true, this, apiId);
 					return;
