@@ -16,6 +16,7 @@ class TrashcanReminder extends Homey.App
 		this.gdates = '';
 		this.trashToken = null;
 		this.intervalRefreshToken = null;
+		this.collectingDaysSet = false;
 				
 		// Update manual input dates when settings change.
 		Homey.ManagerSettings.on('set', this.onSettingsChanged.bind(this));
@@ -407,7 +408,14 @@ class TrashcanReminder extends Homey.App
 		
 		if(parameterName === "collectingDays")
 		{
+			this.collectingDaysSet = true;
 			console.log("Updating label once");
+			this.updateLabel( true , false );
+		}
+		
+		if(parameterName === "labelSettings" && this.collectingDaysSet == true)
+		{
+			console.log("Updating label because label settings changed.");
 			this.updateLabel( true , false );
 		}
 	}
