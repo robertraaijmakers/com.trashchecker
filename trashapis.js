@@ -134,14 +134,15 @@ function afvalwijzerArnhem(postcode, housenumber, country, callback)
   }
 
   var url = `http://www.afvalwijzer-arnhem.nl/applicatie?ZipCode=${postcode}&HouseNumber=${housenumber}&HouseNumberAddition=`;
- // console.log(url);
 
-  request(url, function(err, res, body){
-    if(!err && res.statusCode == 200){
+  request(url, function(err, res, body)
+  {
+    if(!err && res.statusCode == 200)
+    {
       //console.log(res);
        var $ = cheerio.load(res.body);
        $('ul.ulPickupDates li').each((i, elem)=>{
-         var dateStr =dateFormat(elem.children[2].data.trim());
+         var dateStr = customFormatDate(elem.children[2].data.trim());
          switch (elem.attribs.class) {
           case 'gft':
             if(!fDates.GFT) fDates.GFT = [];
@@ -162,14 +163,13 @@ function afvalwijzerArnhem(postcode, housenumber, country, callback)
           default:
             console.log('defaulted', elem.attribs.class);
         }
-        // console.log(i);
-        //  console.log(elem);
-        //  console.log(elem.attribs.class);
-        // console.log(`${elem.attribs.class}:\t\t${elem.children[2].data.trim()}`);
+        
       });
       console.log(fDates);
       return callback(null, fDates);
-    } else {
+    } 
+    else 
+    {
        return callback(new Error('Invalid location'));
     }
    });
@@ -718,7 +718,8 @@ function recycleManager(postcode, housenumber, country, callback)
   });
 }
 
-function extractDatesHVC(rubbishType) {
+function extractDatesHVC(rubbishType)
+{
     let dates = [];
     for (let pickupDate of rubbishType.dateTime) {
         let date = dateFormat(pickupDate.date, "dd-mm-yyyy");
@@ -776,7 +777,7 @@ function inzamelkalenderHVC(postcode, housenumber, country, callback)
     });
 }
 
-function dateFormat(date)
+function customFormatDate(date)
 {
     var ad = date.split('-');
     return ('0' + ad[0]).slice(-2) + '-' + ('0' + ad[1]).slice(-2) + '-' + ad[2];
