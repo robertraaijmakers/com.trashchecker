@@ -47,9 +47,7 @@
 	"credits": {
 		"icon": "Pham Thi Dieu Linh"
 	},
-	"speech": [{
-		"id": "trash_collected",
-		"importance": 0.8,
+	"speech": {
 		"en": {
 			"element": {
 				"actionWords": {
@@ -115,7 +113,7 @@
 				"vuilnisbak"
 			]
 		}
-	}],
+	},
 	"speechExamples": {
 		"en": ["When is the paper trash collected?", "What type of trash is collected next?", "What is collected next monday?", "Is the green container collected this friday?"],
 		"nl": ["Wanneer wordt het afval opgehaald?", "Welk type afwal wordt als eerste opgehaald?", "Wat wordt er volgende week maandag opgehaald?", "Wordt de groene container deze vrijdag opgehaald?"]
