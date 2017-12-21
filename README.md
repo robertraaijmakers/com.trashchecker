@@ -4,7 +4,6 @@ Homey will remind you to put the trash out! You can do this by providing a posta
 ## Supported Cities
 Unfortunately not all cities work with the Trashcan Reminder, if you can find your house with one of the links below your house is supported:
 
-- [Mijn Afval Wijzer](http://www.mijnafvalwijzer.nl) Please note that only when the text becomes green your city is supported!
 - [De Afval App](http://www.deafvalapp.nl/calendar/kalender_start.jsp)
 - [Cyclus](http://afvalkalender.cyclusnv.nl/)
 - [Afvalwijzer Arnhen](https://www.afvalwijzer-arnhem.nl)
