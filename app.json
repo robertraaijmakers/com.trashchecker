@@ -94,22 +94,6 @@
 					"value": "[\\s\\S]+"
 				}
 			}
-		},
-		"triggers": {
-			"en": [
-				"trash collected",
-				"collected",
-				"trash",
-				"container",
-				"residual waste",
-				"organic waste"
-			],
-			"nl": [
-				"opgehaald",
-				"container",
-				"afvalbak",
-				"vuilnisbak"
-			]
 		}
 	},
 	"speechExamples": {
