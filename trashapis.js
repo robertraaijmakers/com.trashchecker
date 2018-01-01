@@ -670,7 +670,7 @@ function recycleManager(postcode, housenumber, country, callback)
   var fDates = {};
   console.log("Recyclemanager met: " + postcode + " " + housenumber);
   var url = `https://vpn-wec-api.recyclemanager.nl/v2/calendars?postalcode=${postcode}&number=${housenumber}`;
-
+  
   request(url, function(err, res, body){
     if(!err && res.statusCode == 200){
       // console.log(res);
@@ -678,32 +678,35 @@ function recycleManager(postcode, housenumber, country, callback)
       if (obj1.status == "success"){
         for (var i=0; i < 2; i++){
           // console.log("Maand is: " + dateFormat(obj1.data[i].title));
-          for (var j=0; j < obj1.data[i].occurrences.length; j++){
-            var dateStr = dateFormat(obj1.data[i].occurrences[j].from.date, "dd-mm-yyyy");
-            console.log("Soort afval is: " + obj1.data[i].occurrences[j].title);
-            switch (obj1.data[i].occurrences[j].title) {
-              case 'Groente en fruit':
-	            case 'GFT':
-                if(!fDates.GFT) fDates.GFT = [];
-                fDates.GFT.push(dateStr);
-                break;
-              case 'Papier':
-                if(!fDates.PAPIER) fDates.PAPIER = [];
-                fDates.PAPIER.push(dateStr);
-                break;
-              case 'Restafval':
-                if(!fDates.REST) fDates.REST = [];
-                fDates.REST.push(dateStr);
-              break;
-              case 'PMD':
-	            case 'Plastic verpakkingen':
-                if(!fDates.PLASTIC) fDates.PLASTIC = [];
-                fDates.PLASTIC.push(dateStr);
-              break;
-              default:
-                console.log('defaulted', obj1.data[i].occurrences[j]);
-            }
-          }
+		  if(typeof obj1.data[i].occurrences !== 'undefined')
+		  {
+			  for (var j=0; j < obj1.data[i].occurrences.length; j++){
+				var dateStr = dateFormat(obj1.data[i].occurrences[j].from.date, "dd-mm-yyyy");
+				console.log("Soort afval is: " + obj1.data[i].occurrences[j].title);
+				switch (obj1.data[i].occurrences[j].title) {
+				  case 'Groente en fruit':
+					case 'GFT':
+					if(!fDates.GFT) fDates.GFT = [];
+					fDates.GFT.push(dateStr);
+					break;
+				  case 'Papier':
+					if(!fDates.PAPIER) fDates.PAPIER = [];
+					fDates.PAPIER.push(dateStr);
+					break;
+				  case 'Restafval':
+					if(!fDates.REST) fDates.REST = [];
+					fDates.REST.push(dateStr);
+				  break;
+				  case 'PMD':
+					case 'Plastic verpakkingen':
+					if(!fDates.PLASTIC) fDates.PLASTIC = [];
+					fDates.PLASTIC.push(dateStr);
+				  break;
+				  default:
+					console.log('defaulted', obj1.data[i].occurrences[j]);
+				}
+			  }
+		  }
         }
         console.log(fDates);
         return callback(null, fDates);

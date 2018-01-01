@@ -44,8 +44,8 @@ class TrashcanReminder extends Homey.App
 		// Every 24 hours update API or manual dates
 		let msTillUpdateLabel = this.millisecondsTillMidnight();
 		let msTillUpdateApi = this.millisecondsTillSaturdayNight();
-		setTimeout(this.onUpdateData.bind(this), msTillUpdateApi, true, true); // Every saturday night (and on refresh), but this prevents data from getting lost when it is retrieved through the week.
-		setTimeout(this.updateLabel.bind(this), msTillUpdateLabel, true, true); // Execute once at this midnight
+		setTimeout(this.onUpdateData.bind(this), msTillUpdateApi, true, true); // Every Saturday night (and on refresh), but this prevents data from getting lost when it is retrieved through the week.
+		setInterval(this.onUpdateLabel.bind(this), 1000); // Update label every 10 minutes.
 		
 		// Make sure the label is updated every 24 hours at midnight
 		let trashCollectionToken = new Homey.FlowToken( 'trash_collection_token', {
@@ -71,6 +71,8 @@ class TrashcanReminder extends Homey.App
 	********************/
 	speechEvalExecute(speech, callback)
 	{
+		console.log("speechEvalExecute");
+		
 		callback ( null, true)
 		return;
 		
@@ -108,8 +110,11 @@ class TrashcanReminder extends Homey.App
 	
 	parseSpeech(speech, gdates)
 	{
-		let trigger = speech.triggers[0];
+		console.log(speech);
+		console.log(trigger);
 		
+		let trigger = speech.triggers[0];
+				
 	    switch (trigger.id)
 	    {
 	      case 'trash_collected' :
@@ -117,7 +122,7 @@ class TrashcanReminder extends Homey.App
 			// TYPE OF QUESTIONS
 			// WHAT type of trash is collected << TODAY | TOMORROW | DAY AFTER TOMORROW >>
 			// WHEN is <<TYPE>> collected?
-			// IS <<TYn38PE>> colllected << TODAY | TOMORROW | DAY AFTER TOMORROW >>
+			// IS <<TYn38PE>> collected << TODAY | TOMORROW | DAY AFTER TOMORROW >>
 			// WHICH type will be collected << TODAY | TOMORROW | DAY AFTER TOMORROW >>
 			
 			var regexReplace = new RegExp("(" + Homey.__('speech.replacequestion') + ")", 'gi');
@@ -409,14 +414,15 @@ class TrashcanReminder extends Homey.App
 		if(parameterName === "collectingDays")
 		{
 			this.collectingDaysSet = true;
-			console.log("Updating label once");
-			this.updateLabel( true , false );
+			
+			console.log("Updating label because collecting days changed.");
+			this.onUpdateLabel( );
 		}
 		
 		if(parameterName === "labelSettings" && this.collectingDaysSet == true)
 		{
 			console.log("Updating label because label settings changed.");
-			this.updateLabel( true , false );
+			this.onUpdateLabel( );
 		}
 	}
 	
@@ -470,6 +476,11 @@ class TrashcanReminder extends Homey.App
 		// Retrieve label settings
 		console.log("Updating label");
 		var labelSettings = Homey.ManagerSettings.get('labelSettings');
+		var dates = Homey.ManagerSettings.get('collectingDays');
+		
+		// DEBUG
+		console.log(dates);
+		console.log(labelSettings);
 		
 		if(labelSettings === 'undefined' || labelSettings == null)
 		{
@@ -501,9 +512,9 @@ class TrashcanReminder extends Homey.App
 		var typeCollected = null;
 		var textLabel = "";
 		for (var i = 0, len = supportedTypes.length; i < len; i++) {
-			if( typeof this.gdates[ supportedTypes[i] ] !== 'undefined' )
+			if( typeof dates[ supportedTypes[i] ] !== 'undefined' )
 			{
-				if(this.gdates[ supportedTypes[i] ].indexOf(this.dateToString(checkDate)) > -1)
+				if(dates[ supportedTypes[i] ].indexOf(this.dateToString(checkDate)) > -1)
 				{
 					typeCollected = supportedTypes[i];
 				}
@@ -535,25 +546,25 @@ class TrashcanReminder extends Homey.App
 	
 	/* ******************
 		COMMON FUNCTIONS
-	********************/
-	updateLabel ( shouldExecute, shouldSetTimeout )
-	{	
-		if( shouldExecute === true)
-		{
-			let result = this.onUpdateLabel();
-			if(typeof result !== 'undefined' && result !== null && typeof result === 'function')
-			{
-				result.resolve();
-			}
-		}
+	******************* */
+	// updateLabel ( shouldExecute, shouldSetTimeout )
+	// {	
+		// if( shouldExecute === true)
+		// {
+			// let result = this.onUpdateLabel();
+			// if(typeof result !== 'undefined' && result !== null && typeof result === 'function')
+			// {
+				// result.resolve();
+			// }
+		// }
 	
-		// Make sure it is executed every day at midnight (+1 sec)	
-		if(shouldSetTimeout === true)
-		{
-			let msTillMidnight = this.millisecondsTillMidnight();	
-			setTimeout(this.updateLabel.bind(this), msTillMidnight, true, true);
-		}
-	}
+		// // Make sure it is executed every day at midnight (+1 sec)	
+		// if(shouldSetTimeout === true)
+		// {
+			// let msTillMidnight = this.millisecondsTillMidnight();	
+			// setTimeout(this.updateLabel.bind(this), (msTillMidnight + (1000*60*60*2)), true, true);
+		// }
+	// }
 	
 	millisecondsTillMidnight()
 	{
@@ -636,7 +647,8 @@ class TrashcanReminder extends Homey.App
 			return;
 		}
 		
-		function asyncLoop(iterations, that, func, callback) {
+		function asyncLoop(iterations, that, func, callback)
+		{
 			var index = 0;
 			var done = false;
 			var loop = {
@@ -684,7 +696,6 @@ class TrashcanReminder extends Homey.App
 					
 					Homey.ManagerSettings.set('apiId', apiArray[loop.iteration()]['id']);
 					Homey.ManagerSettings.set('collectingDays', newDates);
-					that.updateLabel(true, false);
 					
 					callback(true, that, apiArray[loop.iteration()]['id']);
 				} else if(Object.keys(result).length === 0) {
@@ -714,33 +725,38 @@ class TrashcanReminder extends Homey.App
 		var manualSettings = Homey.ManagerSettings.get('manualEntryData');
 		var dates = {};
 		
+		if(typeof manualSettings === 'undefined')
+		{
+			return;
+		}
+		
 		// Parse dates per type
-		if(manualSettings.gft)
+		if(typeof manualSettings.gft !== 'undefined' && manualSettings.gft)
 		{
 			dates.GFT = this.CalculatePickupDates(manualSettings.gft);
 		}
 		
-		if(manualSettings.paper)
+		if(typeof manualSettings.paper !== 'undefined' && manualSettings.paper)
 		{
 			dates.PAPIER = this.CalculatePickupDates(manualSettings.paper);
 		}
 		
-		if(manualSettings.rest)
+		if(typeof manualSettings.rest !== 'undefined' && manualSettings.rest)
 		{
 			dates.REST = this.CalculatePickupDates(manualSettings.rest);
 		}
 		
-		if(manualSettings.pmd)
+		if(typeof manualSettings.pmd !== 'undefined' && manualSettings.pmd)
 		{
 			dates.PMD = this.CalculatePickupDates(manualSettings.pmd);
 		}
 		
-		if(manualSettings.plastic)
+		if(typeof manualSettings.plastic !== 'undefined' && manualSettings.plastic)
 		{
 			dates.PLASTIC = this.CalculatePickupDates(manualSettings.plastic);
 		}
 		
-		if(manualSettings.textile)
+		if(typeof manualSettings.textile !== 'undefined' && manualSettings.textile)
 		{
 			dates.TEXTIEL = this.CalculatePickupDates(manualSettings.textile);
 		}

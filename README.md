@@ -21,9 +21,7 @@ If your city is not supported you can always add your schedule manually. You can
 ## Supported Cards
 There is one card that you can place in the "then" column. The card let's you check if trash type X is collected << today, tomorrow, day after tomorrow >> or if any type of trash is collected << today, tomorrow, day after tomorrow >>.
 
-## Supported Speech (currently broken due to upgrade to SDK v2)
-Please upvote [this issue](https://github.com/athombv/homey/issues/1779), or provide some information on an app that has upgraded to SDK v2 and uses speech.
-
+## Supported Speech
 You can ask Homey four type of questions regarding your waste collection:
 - When is the green container collected?
 - What is collected next monday?

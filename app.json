@@ -16,8 +16,7 @@
 		"homey:manager:speech-input"
 	],
 	"contributors": {
-		"developers": [
-			{
+		"developers": [{
 				"name": "Robert Raaijmakers",
 				"email": "dutchfighter@live.nl"
 			},
@@ -54,8 +53,7 @@
 					"type": "regex",
 					"value": "(when|which|what|is)"
 				},
-				"trash":
-				{
+				"trash": {
 					"type": "regex",
 					"value": "(container|trash|waste|collected)"
 				},
