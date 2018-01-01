@@ -798,7 +798,7 @@ class TrashcanReminder extends Homey.App
 		var nextMonth = new Date(new Date(firstDayInCurrentMonth).setMonth(firstDayInCurrentMonth.getMonth()+1));
 		var afterNextMonth = new Date(new Date(firstDayInCurrentMonth).setMonth(firstDayInCurrentMonth.getMonth()+2));
 		
-		if(interval >= 5 && interval <= 7) // every x-th week of month/quarter/year
+		if(interval >= 5 && interval <= 8) // every x-th week of month/quarter/year
 		{
 			var nThWeek = interval-4;
 			var date1 = new Date();
@@ -847,9 +847,9 @@ class TrashcanReminder extends Homey.App
 			result.push(this.dateToString(date3));
 			result.push(this.dateToString(date4));
 		}
-		else if(interval >= 8 && interval <= 9) // every last, every second last
+		else if(interval >= 9 && interval <= 10) // every last, every second last
 		{
-			var nthLastWeekOf = interval-7;
+			var nthLastWeekOf = interval-8;
 			
 			var date1 = new Date();
 			var date2 = new Date();
