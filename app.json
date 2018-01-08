@@ -69,7 +69,7 @@
 			"group": {
 				"main": {
 					"set": "(actionWords) && (trashType) && trash && query",
-					"orderd": false,
+					"ordered": false,
 					"allowDisconnect": true,
 					"capturingGroup": true
 				}
@@ -92,6 +92,14 @@
 				"query": {
 					"type": "regex",
 					"value": "[\\s\\S]+"
+				}
+			},
+			"group": {
+				"main": {
+					"set": "(actionWords) && (trashType) && trash && query",
+					"ordered": false,
+					"allowDisconnect": true,
+					"capturingGroup": true
 				}
 			}
 		}

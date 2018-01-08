@@ -45,7 +45,7 @@ class TrashcanReminder extends Homey.App
 		let msTillUpdateLabel = this.millisecondsTillMidnight();
 		let msTillUpdateApi = this.millisecondsTillSaturdayNight();
 		setTimeout(this.onUpdateData.bind(this), msTillUpdateApi, true, true); // Every Saturday night (and on refresh), but this prevents data from getting lost when it is retrieved through the week.
-		setInterval(this.onUpdateLabel.bind(this), 1000); // Update label every 10 minutes.
+		setInterval(this.onUpdateLabel.bind(this), 10*60*1000); // Update label every 10 minutes.
 		
 		// Make sure the label is updated every 24 hours at midnight
 		let trashCollectionToken = new Homey.FlowToken( 'trash_collection_token', {
@@ -93,6 +93,7 @@ class TrashcanReminder extends Homey.App
 	parseSpeechExecute(speech, onSpeechEvalData)
 	{
 		console.log("parsing speech");
+		console.log(speech);
 		
 		var result = this.parseSpeech(speech, this.gdates);
 		if(result != null && result != "")
@@ -109,10 +110,9 @@ class TrashcanReminder extends Homey.App
 	}
 	
 	parseSpeech(speech, gdates)
-	{
-		console.log(speech);
-		console.log(trigger);
-		
+	{		
+		return "Sorry, not yet implemented yet";
+	
 		let trigger = speech.triggers[0];
 				
 	    switch (trigger.id)
@@ -511,16 +511,19 @@ class TrashcanReminder extends Homey.App
 		// Check trash type that is collected on x-day
 		var typeCollected = null;
 		var textLabel = "";
-		for (var i = 0, len = supportedTypes.length; i < len; i++) {
-			if( typeof dates[ supportedTypes[i] ] !== 'undefined' )
-			{
-				if(dates[ supportedTypes[i] ].indexOf(this.dateToString(checkDate)) > -1)
+		if(typeof dates !== 'undefined' && dates !== null)
+		{
+			for (var i = 0, len = supportedTypes.length; i < len; i++) {
+				if( typeof dates[ supportedTypes[i] ] !== 'undefined' )
 				{
-					typeCollected = supportedTypes[i];
+					if(dates[ supportedTypes[i] ].indexOf(this.dateToString(checkDate)) > -1)
+					{
+						typeCollected = supportedTypes[i];
+					}
 				}
 			}
 		}
-		
+			
 		if(typeof typeCollected === 'undefined' || typeCollected === null)
 		{
 			typeCollected = "NONE";
