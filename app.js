@@ -71,281 +71,251 @@ class TrashcanReminder extends Homey.App
 	********************/
 	speechEvalExecute(speech, callback)
 	{
-		console.log("speechEvalExecute");
-		
 		callback ( null, true)
 		return;
-		
-		var result = this.parseSpeech(speech, this.gdates);
-		if(result != null && result != "")
-		{
-			//speech.say( result );
-			
-			callback(null, true);
-			return true;
-		}
-
-        // Only execute 1 trigger
-		callback(null, false);
-        return false;
 	}
 	
 	parseSpeechExecute(speech, onSpeechEvalData)
-	{
-		console.log("parsing speech");
-		console.log(speech);
-		
-		var result = this.parseSpeech(speech, this.gdates);
+	{		
+		var result = this.parseSpeech(speech, Homey.ManagerSettings.get("collectingDays"));
 		if(result != null && result != "")
 		{
 			speech.say( result );
-			
-			callback(null, true);
 			return true;
 		}
 
         // Only execute 1 trigger
-		callback(null, false);
         return false;
 	}
 	
 	parseSpeech(speech, gdates)
-	{		
-		return "Sorry, not yet implemented yet";
-	
-		let trigger = speech.triggers[0];
-				
-	    switch (trigger.id)
-	    {
-	      case 'trash_collected' :
-	        
-			// TYPE OF QUESTIONS
-			// WHAT type of trash is collected << TODAY | TOMORROW | DAY AFTER TOMORROW >>
-			// WHEN is <<TYPE>> collected?
-			// IS <<TYn38PE>> collected << TODAY | TOMORROW | DAY AFTER TOMORROW >>
-			// WHICH type will be collected << TODAY | TOMORROW | DAY AFTER TOMORROW >>
+	{       
+		// TYPE OF QUESTIONS
+		// WHAT type of trash is collected << TODAY | TOMORROW | DAY AFTER TOMORROW >>
+		// WHEN is <<TYPE>> collected?
+		// IS <<TYn38PE>> collected << TODAY | TOMORROW | DAY AFTER TOMORROW >>
+		// WHICH type will be collected << TODAY | TOMORROW | DAY AFTER TOMORROW >>
+
+		var regexReplace = new RegExp("(" + Homey.__('speech.replacequestion') + ")", 'gi');
+		var newTranscript = speech.transcript.replace(regexReplace, "");
+		
+		console.log(speech);
+		
+		/* ******************
+			FIND TRASH TYPE INDICATOR
+		********************/
+		var foundType = null;
+		var differenceInDaysForType = null;
+		for (var i = 0, len = supportedTypes.length; i < len; i++) {
+			if (newTranscript.indexOf(Homey.__('speech.type.' + supportedTypes[i])) > -1)
+			{
+				foundType = supportedTypes[i];
+				break; // stop loop after first match.
+			}
 			
-			var regexReplace = new RegExp("(" + Homey.__('speech.replacequestion') + ")", 'gi');
-			var newTranscript = speech.transcript.replace(regexReplace, "");
+			// Other words for types (search via regex)
+			var regex = new RegExp("(" +Homey.__('speech.type_multipleother.' + supportedTypes[i])+ ")", 'gi');
+			if (newTranscript.match(regex) !== null)
+			{
+				foundType = supportedTypes[i];
+				break; // stop loop after first match.
+			}
+		}
 			
-			/* ******************
-				FIND TRASH TYPE INDICATOR
-			********************/
-			var foundType = null;
-			var differenceInDaysForType = null;
+		// Find first collection date for this type of trash
+		if(foundType != null && gdates != null && typeof gdates !== 'undefined' && typeof gdates[ foundType ] !== 'undefined')
+		{
+			var today = new Date();
+			for (var i = 0, len = gdates[foundType].length; i < len; i++)
+			{				
+				var date = new Date(gdates[foundType][i].substring(6,10), (parseInt(gdates[foundType][i].substring(3,5))-1), gdates[foundType][i].substring(0,2));
+								
+				if(DateTimeHelper.daysBetween(today, date) >= 0)
+				{
+					differenceInDaysForType = DateTimeHelper.daysBetween(today, date);
+					break;
+				}				
+			}
+		}
+		
+		//console.log("type and difference in days");
+		//console.log(foundType);
+		//console.log(differenceInDaysForType);
+		
+		/* ******************
+			FIND TIME INDICATOR
+		********************/
+		var checkDate = null;
+		var typeCollectedOnThisDay = [];
+		var matchesWithGivenType = false;
+		// If bigger then one, someone probably asked something like 'is the container picked up tomorrow or the day after tomorrow'
+		if(speech.times != null && speech.times !== false && speech.times.length == 1) 
+		{
+			var dateInput = null;
+			try {
+				dateInput = new Date(speech.times[0].time.year, speech.times[0].time.month, speech.times[0].time.day);
+			} catch(e) { console.log(e); }
+			
+			//console.log("given date via speech");
+			//console.log(dateInput);
+			checkDate = dateInput;
+		}
+		
+		if(checkDate != null)
+		{
+			// Go through types
 			for (var i = 0, len = supportedTypes.length; i < len; i++) {
-				if (newTranscript.indexOf(Homey.__('speech.type.' + supportedTypes[i])) > -1)
+				if( typeof gdates[ supportedTypes[i] ] !== 'undefined' )
 				{
-					foundType = supportedTypes[i];
-					break; // stop loop after first match.
-				}
-				
-				// Other words for types (search via regex)
-				var regex = new RegExp("(" +Homey.__('speech.type_multipleother.' + supportedTypes[i])+ ")", 'gi');
-				if (newTranscript.match(regex) !== null)
-				{
-					foundType = supportedTypes[i];
-					break; // stop loop after first match.
-				}
-			}
-				
-			// Find first collection date for this type of trash
-			if(foundType != null && typeof gdates[ foundType ] !== 'undefined')
-			{
-				var today = new Date();
-				for (var i = 0, len = gdates[foundType].length; i < len; i++)
-				{				
-					var date = new Date(gdates[foundType][i].substring(6,10), (parseInt(gdates[foundType][i].substring(3,5))-1), gdates[foundType][i].substring(0,2));
-									
-					if(DateTimeHelper.daysBetween(today, date) >= 0)
+					if(gdates[ supportedTypes[i] ].indexOf(this.dateToString(checkDate)) > -1 && typeCollectedOnThisDay.indexOf(Homey.__('speech.type.' + supportedTypes[i])) <= -1)
 					{
-						differenceInDaysForType = DateTimeHelper.daysBetween(today, date);
-						break;
-					}				
+						typeCollectedOnThisDay.push(Homey.__('speech.output.type.' + supportedTypes[i]));
+						if(!matchesWithGivenType)
+						{
+							matchesWithGivenType = supportedTypes[i] == foundType;
+						}
+					}
 				}
 			}
 			
-			//console.log("type and difference in days");
-			//console.log(foundType);
-			//console.log(differenceInDaysForType);
-			
-			/* ******************
-				FIND TIME INDICATOR
-			********************/
-			var checkDate = null;
-			var typeCollectedOnThisDay = [];
-			var matchesWithGivenType = false;
-			// If bigger then one, someone probably asked something like 'is the container picked up tomorrow or the day after tomorrow'
-			if(speech.time != null && speech.time !== false && speech.time.length == 1) 
+			//console.log("types collected on this day");
+			//console.log(typeCollectedOnThisDay);
+		}
+		
+		/* ******************
+			FIND TYPE OF QUESTION (sentence starting with WHAT, IS, WHEN)
+		********************/
+		var questionType = 0;
+		if(newTranscript.toLowerCase().startsWith(Homey.__('speech.questiontype.what')) || 
+			newTranscript.toLowerCase().startsWith(Homey.__('speech.questiontype.which')))
+		{
+			questionType = 1;
+		}
+		else if(newTranscript.toLowerCase().startsWith(Homey.__('speech.questiontype.when')))
+		{
+			questionType = 2;
+		}
+		else if(newTranscript.toLowerCase().startsWith(Homey.__('speech.questiontype.is')))
+		{
+			questionType = 3;
+		}
+		
+		//console.log("defined question type");
+		//console.log(questionType);
+
+		var responseText = "";
+		try {
+			// which, what type of trash is collected <<time>>
+			if(questionType == 1 && checkDate != null)
 			{
-				var dateInput = null;
-				try {
-					dateInput = new Date(speech.time[0].time.year, speech.time[0].time.month, speech.time[0].time.day);
-				} catch(e) { console.log(e); }
-				
-				//console.log("given date via speech");
-				//console.log(dateInput);
-				checkDate = dateInput;
+				if(typeCollectedOnThisDay.length == 0)
+				{
+					responseText = Homey.__('speech.output.notrashcollectedonx', { time: speech.times[0].transcript });
+				}
+				else if(typeCollectedOnThisDay.length > 1)
+				{
+					var multiTypeString = "";				
+					for (var i = 0, len = multiTypeString.length; i < len; i++) {
+						multiTypeString += typeCollectedOnThisDay[i] + (i < (len-2) ? ", " : (i == (len-2) ? " " + Homey.__('speech.output.and') + " " : ""));
+					}
+					
+					responseText = Homey.__('speech.output.trashtypesycollectedonx', { time: speech.times[0].transcript, types: multiTypeString.toLowerCase() });
+				}
+				else
+				{
+					responseText = Homey.__('speech.output.trashtypeycollectedonx', { time: speech.times[0].transcript, type: typeCollectedOnThisDay[0] });
+				}
 			}
-			
-			if(checkDate != null)
+			// when is <<type>> collected?
+			else if(questionType == 2 && foundType != null)
 			{
-				// Go through types
+				if(differenceInDaysForType === null)
+				{
+					responseText = Homey.__('speech.output.notrashcollectionforx', { type: Homey.__('speech.output.type.' + foundType) });
+				}
+				else
+				{
+					responseText = Homey.__('speech.output.trashtypexcollectedony', { type: Homey.__('speech.output.type.' + foundType), time: TrashcanReminder.toDateOutputString(differenceInDaysForType).toLowerCase() });
+				}
+			}
+			// is <<type>> collected on <<date>>
+			else if(questionType == 3 && foundType != null && checkDate != null)
+			{
+				if(differenceInDaysForType === null)
+				{
+					responseText = Homey.__('speech.output.notrashcollectionforx', { type: Homey.__('speech.output.type.' + foundType) });
+				}
+				else if(matchesWithGivenType)
+				{
+					responseText = Homey.__('speech.output.yesyiscollectedonx', { time: speech.times[0].transcript.toLowerCase(), type: Homey.__('speech.output.type.' + foundType).toLowerCase() });
+				}
+				else 
+				{
+					responseText = Homey.__('speech.output.noyiscollectedonxbutonz', { time: speech.times[0].transcript.toLowerCase(), type: Homey.__('speech.output.type.' + foundType).toLowerCase(), time2: TrashcanReminder.toDateOutputString(differenceInDaysForType).toLowerCase() });
+				}
+			}
+			else if(questionType == 1) // what|which type is collected next?
+			{
+				// Find the container that is picked up next
+				var nextContainerNotBefore = new Date();
+				var containerDateNext = new Date();
+				containerDateNext.setDate(containerDateNext.getDate() + 366);
+				var containerTypesNext = [];
+				
 				for (var i = 0, len = supportedTypes.length; i < len; i++) {
 					if( typeof gdates[ supportedTypes[i] ] !== 'undefined' )
-					{
-						if(gdates[ supportedTypes[i] ].indexOf(this.dateToString(checkDate)) > -1 && typeCollectedOnThisDay.indexOf(Homey.__('speech.type.' + supportedTypes[i])) <= -1)
-						{
-							typeCollectedOnThisDay.push(Homey.__('speech.output.type.' + supportedTypes[i]));
-							if(!matchesWithGivenType)
+					{						
+						for (var y = 0, len = gdates[supportedTypes[i]].length; y < len; y++)
+						{				
+							var date = new Date(gdates[supportedTypes[i]][y].substring(6,10), (parseInt(gdates[supportedTypes[i]][y].substring(3,5))-1), gdates[supportedTypes[i]][y].substring(0,2));
+							
+							if(DateTimeHelper.daysBetween(nextContainerNotBefore, date) >= 0 && DateTimeHelper.daysBetween(containerDateNext, date) <= 0)
 							{
-								matchesWithGivenType = supportedTypes[i] == foundType;
-							}
+								var diff = DateTimeHelper.daysBetween(containerDateNext, date);
+								if(diff === 0)
+								{
+									containerTypesNext.push(Homey.__('speech.output.type.' + supportedTypes[i]));
+								}
+								else
+								{
+									containerDateNext = date;
+									containerTypesNext = [];
+									containerTypesNext.push(Homey.__('speech.output.type.' + supportedTypes[i]));
+								}
+							}			
 						}
 					}
 				}
 				
-				//console.log("types collected on this day");
-				//console.log(typeCollectedOnThisDay);
-			}
-			
-			/* ******************
-				FIND TYPE OF QUESTION (sentence starting with WHAT, IS, WHEN)
-			********************/
-			var questionType = 0;
-			if(newTranscript.toLowerCase().startsWith(Homey.__('speech.questiontype.what')) || 
-				newTranscript.toLowerCase().startsWith(Homey.__('speech.questiontype.which')))
-			{
-				questionType = 1;
-			}
-			else if(newTranscript.toLowerCase().startsWith(Homey.__('speech.questiontype.when')))
-			{
-				questionType = 2;
-			}
-			else if(newTranscript.toLowerCase().startsWith(Homey.__('speech.questiontype.is')))
-			{
-				questionType = 3;
-			}
-			
-			//console.log("defined question type");
-			//console.log(questionType);
-	
-			var responseText = "";
-			try {
-				// which, what type of trash is collected <<time>>
-				if(questionType == 1 && checkDate != null)
+				//console.log(containerTypesNext);
+				var differenceInDaysForNextCollection = DateTimeHelper.daysBetween(nextContainerNotBefore, containerDateNext);
+				
+				if(containerTypesNext.length == 0)
 				{
-					if(typeCollectedOnThisDay.length == 0)
-					{
-						responseText = Homey.__('speech.output.notrashcollectedonx', { time: speech.time[0].transcript });
-					}
-					else if(typeCollectedOnThisDay.length > 1)
-					{
-						var multiTypeString = "";				
-						for (var i = 0, len = multiTypeString.length; i < len; i++) {
-							multiTypeString += typeCollectedOnThisDay[i] + (i < (len-2) ? ", " : (i == (len-2) ? " " + Homey.__('speech.output.and') + " " : ""));
-						}
-						
-						responseText = Homey.__('speech.output.trashtypesycollectedonx', { time: speech.time[0].transcript, types: multiTypeString.toLowerCase() });
-					}
-					else
-					{
-						responseText = Homey.__('speech.output.trashtypeycollectedonx', { time: speech.time[0].transcript, type: typeCollectedOnThisDay[0] });
-					}
+					responseText = Homey.__('speech.output.noknowntrashcollected');
 				}
-				// when is <<type>> collected?
-				else if(questionType == 2 && foundType != null)
+				else if(containerTypesNext.length > 1)
 				{
-					if(differenceInDaysForType === null)
-					{
-						responseText = Homey.__('speech.output.notrashcollectionforx', { type: Homey.__('speech.output.type.' + foundType) });
-					}
-					else
-					{
-						responseText = Homey.__('speech.output.trashtypexcollectedony', { type: Homey.__('speech.output.type.' + foundType), time: TrashcanReminder.toDateOutputString(differenceInDaysForType).toLowerCase() });
-					}
-				}
-				// is <<type>> collected on <<date>>
-				else if(questionType == 3 && foundType != null && checkDate != null)
-				{
-					if(differenceInDaysForType === null)
-					{
-						responseText = Homey.__('speech.output.notrashcollectionforx', { type: Homey.__('speech.output.type.' + foundType) });
-					}
-					else if(matchesWithGivenType)
-					{
-						responseText = Homey.__('speech.output.yesyiscollectedonx', { time: speech.time[0].transcript.toLowerCase(), type: Homey.__('speech.output.type.' + foundType).toLowerCase() });
-					}
-					else 
-					{
-						responseText = Homey.__('speech.output.noyiscollectedonxbutonz', { time: speech.time[0].transcript.toLowerCase(), type: Homey.__('speech.output.type.' + foundType).toLowerCase(), time2: TrashcanReminder.toDateOutputString(differenceInDaysForType).toLowerCase() });
-					}
-				}
-				else if(questionType == 1) // what|which type is collected next?
-				{
-					// Find the container that is picked up next
-					var nextContainerNotBefore = new Date();
-					var containerDateNext = new Date();
-					containerDateNext.setDate(containerDateNext.getDate() + 366);
-					var containerTypesNext = [];
-					
-					for (var i = 0, len = supportedTypes.length; i < len; i++) {
-						if( typeof gdates[ supportedTypes[i] ] !== 'undefined' )
-						{						
-							for (var y = 0, len = gdates[supportedTypes[i]].length; y < len; y++)
-							{				
-								var date = new Date(gdates[supportedTypes[i]][y].substring(6,10), (parseInt(gdates[supportedTypes[i]][y].substring(3,5))-1), gdates[supportedTypes[i]][y].substring(0,2));
-								
-								if(DateTimeHelper.daysBetween(nextContainerNotBefore, date) >= 0 && DateTimeHelper.daysBetween(containerDateNext, date) <= 0)
-								{
-									var diff = DateTimeHelper.daysBetween(containerDateNext, date);
-									if(diff === 0)
-									{
-										containerTypesNext.push(Homey.__('speech.output.type.' + supportedTypes[i]));
-									}
-									else
-									{
-										containerDateNext = date;
-										containerTypesNext = [];
-										containerTypesNext.push(Homey.__('speech.output.type.' + supportedTypes[i]));
-									}
-								}			
-							}
-						}
+					var multiTypeString = "";				
+					for (var i = 0, len = multiTypeString.length; i < len; i++) {
+						multiTypeString += containerTypesNext[i] + (i < (len-2) ? ", " : (i == (len-2) ? " " + Homey.__('speech.output.and') + " " : ""));
 					}
 					
-					//console.log(containerTypesNext);
-					var differenceInDaysForNextCollection = DateTimeHelper.daysBetween(nextContainerNotBefore, containerDateNext);
-					
-					if(containerTypesNext.length == 0)
-					{
-						responseText = Homey.__('speech.output.noknowntrashcollected');
-					}
-					else if(containerTypesNext.length > 1)
-					{
-						var multiTypeString = "";				
-						for (var i = 0, len = multiTypeString.length; i < len; i++) {
-							multiTypeString += containerTypesNext[i] + (i < (len-2) ? ", " : (i == (len-2) ? " " + Homey.__('speech.output.and') + " " : ""));
-						}
-						
-						responseText = Homey.__('speech.output.trashtypesycollectedonx', { time: TrashcanReminder.toDateOutputString(differenceInDaysForNextCollection), types: multiTypeString.toLowerCase() });
-					}
-					else
-					{
-						responseText = Homey.__('speech.output.trashtypeycollectedonx', { time: TrashcanReminder.toDateOutputString(differenceInDaysForNextCollection), type: containerTypesNext[0].toLowerCase() });
-					}				
+					responseText = Homey.__('speech.output.trashtypesycollectedonx', { time: TrashcanReminder.toDateOutputString(differenceInDaysForNextCollection), types: multiTypeString.toLowerCase() });
 				}
+				else
+				{
+					responseText = Homey.__('speech.output.trashtypeycollectedonx', { time: TrashcanReminder.toDateOutputString(differenceInDaysForNextCollection), type: containerTypesNext[0].toLowerCase() });
+				}				
 			}
-			catch(e)
-			{
-				console.log(e);
-			}
-			
-			console.log(responseText);
-			return responseText;
-	    }
-	
-	  return null;
+		}
+		catch(e)
+		{
+			console.log(e);
+		}
+		
+		console.log(responseText);
+		return responseText;
 	}
 	
 	/* ******************
@@ -448,7 +418,7 @@ class TrashcanReminder extends Homey.App
 						console.log('retrieved house information');
 						
 						// Update label
-						that.updateLabel(true, false);
+						that.onUpdateLabel();
 					} 
 					else 
 					{

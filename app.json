@@ -5,7 +5,7 @@
 		"en": "Trashcan Reminder 2.0",
 		"nl": "Afval Herinnering 2.0"
 	},
-	"version": "2.2.1",
+	"version": "2.3.0",
 	"compatibility": ">=1.5",
 	"author": {
 		"name": "Robert Raaijmakers",
@@ -59,7 +59,7 @@
 				},
 				"trashType": {
 					"type": "regex",
-					"value": "(green|biological|black|residual|grey|gray|elastic|supple|metal|drink carton|cardboard|papery|textile|cloth|yarn)"
+					"value": "(green|biological|black|residual|grey|gray|elastic|supple|metal|drink carton|cardboard|paper|papery|textile|cloth|yarn)"
 				},
 				"query": {
 					"type": "regex",
@@ -68,7 +68,7 @@
 			},
 			"group": {
 				"main": {
-					"set": "(actionWords) && (trashType) && trash && query",
+					"set": "(actionWords) && (trashType) && trash && (query)",
 					"ordered": false,
 					"allowDisconnect": true,
 					"capturingGroup": true
