@@ -42,7 +42,6 @@ class TrashcanReminder extends Homey.App
 		this.onUpdateData(true, false);
 		
 		// Every 24 hours update API or manual dates
-		let msTillUpdateLabel = this.millisecondsTillMidnight();
 		let msTillUpdateApi = this.millisecondsTillSaturdayNight();
 		setTimeout(this.onUpdateData.bind(this), msTillUpdateApi, true, true); // Every Saturday night (and on refresh), but this prevents data from getting lost when it is retrieved through the week.
 		setInterval(this.onUpdateLabel.bind(this), 10*60*1000); // Update label every 10 minutes.
@@ -560,9 +559,10 @@ class TrashcanReminder extends Homey.App
 		var currentDay = now.getDay()%6 == 0 ? 6 : now.getDay()%6;
 		
 		var msTillMidnight = this.millisecondsTillMidnight();
-		var msTillSaturday = ((currentDay * 24 * 60 * 60 * 1000) + msTillMidnight) - (5 * 60 * 1000); // Execute 5 minutes earlier then the label refresh function.
+		var msTillSaturday = ((currentDay * 24 * 60 * 60 * 1000) + msTillMidnight);
+		console.log("ms till Saturday night");
 		console.log(msTillSaturday);
-		return msTillSaturday <= 0 ? 1000 : msTillMidnight;
+		return msTillSaturday <= 0 ? 1000 : msTillSaturday;
 	}
 	
 	pad(n, width, z)
