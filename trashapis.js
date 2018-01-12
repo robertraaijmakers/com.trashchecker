@@ -819,6 +819,21 @@ function parseDate(dateString)
     return fullString;
 }
 
+function afvalkalenderRD4(postcode, housenumber, country, callback) 
+{
+	console.log("Checking afvalkalender RD4");
+
+	var url = `https://rd4.syzygy.eu/${postcode}/${housenumber}/`;
+	
+    request(url, function (err, res, body) {
+        if (!err && res.statusCode == 200) {
+            return callback(null, res.body);
+        } else {
+            return callback(new Error('Invalid location'));
+        }
+    });
+}
+
 // Don't forget to add the ID and name to the option set in settings/index.html page as well! :)
 apiList.push({ name: "Afval App", id: "afa", execute: afvalapp });
 //apiList.push({ name: "Mijn Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
@@ -832,5 +847,6 @@ apiList.push({ name: "Afvalkalender Meerlanden", id: "akm", execute: afvalkalend
 apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderVenray });
 apiList.push({ name: "Inzamelkalender HVC", id: "hvc", execute: inzamelkalenderHVC });
 apiList.push({ name: "Dar Afvalkalender", id: "dar", execute: darAfvalkalender });
+apiList.push({ name: "Afvalkalender RD4", id: "rd4", execute: afvalkalenderRD4 });
 
 module.exports = apiList;
