@@ -836,7 +836,7 @@ function afvalkalenderRD4(postcode, housenumber, country, callback)
 
 // Don't forget to add the ID and name to the option set in settings/index.html page as well! :)
 apiList.push({ name: "Afval App", id: "afa", execute: afvalapp });
-//apiList.push({ name: "Mijn Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
+apiList.push({ name: "Mijn Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
 apiList.push({ name: "Afvalwijzer Arnhem", id: "arn", execute: afvalwijzerArnhem });
 apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCyclus });
 apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
