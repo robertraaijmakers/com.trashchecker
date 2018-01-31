@@ -586,6 +586,10 @@ class TrashcanReminder extends Homey.App
 		{
 			console.log("API ID Known: " + apiId);
 			var result = apiArray.find(o => o.id === apiId);
+			if(result == null || typeof result === 'undefined')
+			{
+				return;
+			}
 			
 			// only load that API, this is so that we won't send requests to all data providers all the time.
 			result['execute'](postcode,homenumber,country,
