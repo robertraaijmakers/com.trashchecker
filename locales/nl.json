@@ -18,10 +18,12 @@
 		"paper": "Papier",
 		"textile": "Textiel",
 		"unknown": "Onbekend",
+		"none": "Wanneer niets wordt opgehaald",
 		"titlemanualinput": "Handmatige invoer",
 		"manualInputField": "Voer ophaaldata handmatig in?",
 		"manualInputFieldDescription": "Ja, handmatig invoeren",
 		"saveManualInput": "Sla handmatige invoer op",
+		"saveLabelInput": "Sla label op",
 		"interval":
 		{
 			"na": "N.v.t.",
@@ -50,7 +52,11 @@
 			"quarter": "van het kwartaal",
 			"year": "van het jaar"
 		},
-		"startdate": "startend op"
+		"startdate": "startend op",
+		"labeltitle": "Globale tag instellingen",
+		"labeldescription": "Deze waarden worden ingesteld in de globale tag wanneer een specifiek type prullenbak wordt opgehaald vandaag/morgen/overmorgen.",
+		"labelplaceholder": "wordt vandaag opgehaald",
+		"timeindicator": "Ophaal type"
 	},
 	"speech":
 	{
@@ -102,7 +108,8 @@
 				"PLASTIC": "De oranje container",
 				"PMD": "De plastic, metalen en drankcartons",
 				"PAPIER": "De blauwe container",
-				"TEXTIEL": "Het textiel"
+				"TEXTIEL": "Het textiel",
+				"NONE": "Niets"
 			},
 			"weekdays":
 			{
@@ -129,5 +136,9 @@
 			"addviasettings": "Geen ophaaldatum bekend voor dit type afval. Voeg deze handmatig toe via de instellingen pagina van de app.",
 			"onyouraddress": "Dit type afval wordt niet door de API ondersteund op jouw adres."
 		}
+	},
+	"tokens":
+	{
+		"trashcollection": "Opgehaald"
 	}
 }
