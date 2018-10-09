@@ -11,13 +11,13 @@ var ical = require('ical');
 function afvalapp(postcode, homenumber, country, callback)
 {
 	console.log("Checking De Afval App");
-	
+
 	if (country !== "NL") {
     	console.log('unsupported country');
         callback(new Error('Unsupported country'));
         return;
     }
-	
+
     var options = {
         host: 'dataservice.deafvalapp.nl',
         path: '/dataservice/DataServiceServlet?type=ANDROID&service=OPHAALSCHEMA&land=' +
@@ -71,7 +71,7 @@ function afvalapp(postcode, homenumber, country, callback)
 function mijnAfvalWijzer(postcode, housenumber, country, callback)
 {
 	console.log("Checking Mijn Afval Wijzer");
-	
+
     var fDates = {};
     if (country !== "NL") {
     	console.log('unsupported country');
@@ -130,7 +130,7 @@ function mijnAfvalWijzer(postcode, housenumber, country, callback)
 function afvalwijzerArnhem(postcode, housenumber, country, callback)
 {
   console.log("Checking Afvalwijzer Arnhem");
-	
+
   var fDates = {};
   if(country !== "NL"){
     console.log('unsupported country');
@@ -167,12 +167,12 @@ function afvalwijzerArnhem(postcode, housenumber, country, callback)
           default:
             console.log('defaulted', elem.attribs.class);
         }
-        
+
       });
       console.log(fDates);
       return callback(null, fDates);
-    } 
-    else 
+    }
+    else
     {
        return callback(new Error('Invalid location'));
     }
@@ -285,13 +285,13 @@ function darAfvalkalender(postcode, housenumber, country, callback)
 function generalAfvalkalendersNederland(postcode, housenumber, country, baseUrl, callback)
 {
 	console.log("Checking general afvalkalenders nederland with URL: " + baseUrl);
-	
+
 	if(country !== "NL")
 	{
 		console.log('unsupported country');
 		callback(new Error('unsupported country'));
 	}
-	
+
 	var body1 = 'postcode='+postcode+'&huisnummer='+housenumber;
 	var postRequest1 = {
       host: baseUrl,
@@ -305,7 +305,7 @@ function generalAfvalkalendersNederland(postcode, housenumber, country, baseUrl,
 		'Content-Type': 'application/x-www-form-urlencoded'
       }
   };
-  
+
   var req1 = https.request( postRequest1, function( res1 ) {
      if (res1.statusCode == 200)
      {
@@ -314,15 +314,15 @@ function generalAfvalkalendersNederland(postcode, housenumber, country, baseUrl,
        res1.on( "end", function( data1 ) {
 	       			var result = JSON.parse(buffer1);
 	       			console.log(result);
-	       			
+
 	       			if(result.length <= 0)
 	       			{
 		       			return callback(new Error('Invalid zipcode for: ' + baseUrl));
 	       			}
-	       			
+
 	       			var identificatie = result[0].bag_identificatie;
 	       			console.log(identificatie);
-		   			
+
 			        var url = 'https://' + baseUrl + '/ical/' + identificatie;
 			        console.log(url);
 			        const r = request.defaults({jar: true});
@@ -333,9 +333,9 @@ function generalAfvalkalendersNederland(postcode, housenumber, country, baseUrl,
 		                    for (let i in entries) {
 		                        const entry = entries[i];
 		                        const dateStr = ('0' + entry.start.getDate()).slice(-2) + '-' + (('0' + (entry.start.getMonth() + 1)).slice(-2)) + '-' + entry.start.getFullYear();
-		                        
+
 		                        var description = entry.description.toLowerCase();
-		                        
+
 		                        if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
 		                            if (!dates.GFT) dates.GFT = [];
 		                            dates.GFT.push(dateStr);
@@ -368,7 +368,7 @@ function generalAfvalkalendersNederland(postcode, housenumber, country, baseUrl,
 function twenteMilieu(postcode, housenumber, country, callback)
 {
 	console.log("Checking Twente Milieu");
-	
+
   var fDates = {};
   if(country !== "NL"){
     console.log('unsupported country');
@@ -498,7 +498,7 @@ function twenteMilieu(postcode, housenumber, country, callback)
 function gemeenteHellendoorn(postcode, housenumber, country, callback)
 {
 	console.log("Checking Gemeente Hellendoorn");
-	
+
   if(country !== "NL"){
     console.log('unsupported country');
     callback(new Error('unsupported country'));
@@ -670,11 +670,11 @@ function recycleManager(postcode, housenumber, country, callback)
     console.log('unsupported country');
     callback(new Error('unsupported country'));
   }
-  
+
   var fDates = {};
   console.log("Recyclemanager met: " + postcode + " " + housenumber);
   var url = `https://vpn-wec-api.recyclemanager.nl/v2/calendars?postalcode=${postcode}&number=${housenumber}`;
-  
+
   request(url, function(err, res, body){
     if(!err && res.statusCode == 200){
       // console.log(res);
@@ -823,16 +823,89 @@ function parseDate(dateString)
     return fullString;
 }
 
-function afvalkalenderRD4(postcode, housenumber, country, callback) 
+function afvalkalenderRD4(postcode, housenumber, country, callback)
 {
 	console.log("Checking afvalkalender RD4");
 
 	var url = `https://rd4.syzygy.eu/${postcode}/${housenumber}/`;
-	
+
     request(url, function (err, res, body) {
         if (!err && res.statusCode == 200) {
             return callback(null, res.body);
         } else {
+            return callback(new Error('Invalid location'));
+        }
+    });
+}
+
+function rovaAfvalkalender(postcode, housenumber, country, callback)
+{
+    //console.log("Checking ROVA Afvalkalender");
+
+    var fDates = {};
+    if (country !== "NL") {
+        //console.log('unsupported country');
+        callback(new Error('unsupported country'));
+    }
+
+    var year = (new Date()).getFullYear();
+
+    // split c
+    var postCodeNumbers = postcode.substr(0, 4);
+    var postCodeChars = postcode.substr(4, 2);
+
+    var fullPath = `http://rova.quintor.nl/rest/afvalkalender/${year}/${postCodeNumbers}/${postCodeChars}/${housenumber}`;
+
+    //console.log(`requesting for ${fullPath}`)
+
+    var options = {
+        url: fullPath,
+        headers: {
+            'User-Agent': 'Android',
+            'Accept': 'application/json;version=1.6'
+        }
+    };
+
+    request(options, function (err, res, body) {
+        if (!err && res.statusCode == 200) {
+            var responseJson = JSON.parse(res.body);
+            //console.log(`response json ${responseJson}`)
+
+            // root has one afvalkalender with one array inzameldagen
+            var pickupDays = responseJson.afvalkalender.inzameldagen;
+
+            for (let i in pickupDays) {
+                var pickupDay = pickupDays[i];
+								var date = dateFormat(pickupDay["datum"], "dd-mm-yyyy"); // because pickupDay uses yyyy-mm-dd
+
+                // inzamelsoorten is an array with only one string
+                switch (pickupDay["inzamelsoorten"][0]) {
+                    case 'PLASTICPLUS':
+                        if (!fDates.PLASTIC) fDates.PLASTIC = [];
+                        fDates.PLASTIC.push(date);
+                        break;
+                    case 'REST':
+                        if (!fDates.REST) fDates.REST = [];
+                        fDates.REST.push(date);
+                        break;
+                    case 'GFT':
+                        if (!fDates.GFT) fDates.GFT = [];
+                        fDates.GFT.push(date);
+                        break;
+                    case 'PAPIER':
+                        if (!fDates.PAPIER) fDates.PAPIER = [];
+                        fDates.PAPIER.push(date);
+                        break;
+                    case 'GROF':
+                        // not supported
+                        break;
+                }
+            }
+
+            //console.log(fDates);
+            return callback(null, fDates);
+        }
+        else {
             return callback(new Error('Invalid location'));
         }
     });
@@ -852,5 +925,6 @@ apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderV
 apiList.push({ name: "Inzamelkalender HVC", id: "hvc", execute: inzamelkalenderHVC });
 apiList.push({ name: "Dar Afvalkalender", id: "dar", execute: darAfvalkalender });
 apiList.push({ name: "Afvalkalender RD4", id: "rd4", execute: afvalkalenderRD4 });
+apiList.push({ name: "ROVA Afvalkalender", id: "rov", execute: rovaAfvalkalender });
 
 module.exports = apiList;
