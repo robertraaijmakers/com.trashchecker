@@ -911,6 +911,91 @@ function rovaAfvalkalender(postcode, housenumber, country, callback)
     });
 }
 
+function circulusBerkel(postcode, homenumber, country, callback) {
+
+	if (country !== "NL") {
+	    callback(new Error('unsupported country'));
+	    return;
+	}
+	//if (!isDataValid(postcode, homenumber, country)) {
+	//    return callback(new Error('unsupported city'));
+	//}
+
+	try {
+	    //Get a session token
+	    request('https://mijn.circulus-berkel.nl/', (err, response, body) => {
+		let cookie = response.headers['set-cookie'];
+		let authenticityToken = null;                
+		for (var i = 0; i < cookie.length; i++) {
+		    if (cookie[i].startsWith('CB_SESSION')) { var j = cookie[i].indexOf('___AT='); var k = cookie[i].indexOf('&', j); authenticityToken = cookie[i].substring(j + 6, k); }
+		}
+		var headers = { 'Content-Type': 'application/json', 'Cookie': cookie };
+		var options = {
+		    url: 'https://mijn.circulus-berkel.nl/register/zipcode.json',
+		    method: 'POST',
+		    form: { authenticityToken: authenticityToken, zipCode: postcode, number: homenumber },
+		    headers: headers
+		};
+
+		var startDate = new Date(); //startDate.set
+		startDate = dateFormat(startDate.setDate(startDate.getDate() - 14), "yyyy-mm-dd");
+
+		var endDate = new Date();
+		endDate = dateFormat(endDate.setDate(endDate.getDate() + 90), "yyyy-mm-dd");
+
+		//Get a security token
+		request(options, function (err, res, body) {
+		    let cookie = res.headers['set-cookie'];
+		    var headers = { 'Content-Type': 'application/json', 'Cookie': cookie };
+		    var options = {
+			url: 'https://mijn.circulus-berkel.nl/afvalkalender.json?from='+ startDate + '&till=' + endDate,
+			method: 'GET',
+			headers: headers
+		    };
+		    //Execute the real trash request
+		    request(options, function (err, res, body) {
+			let dates = {}
+			var json_body = JSON.parse(body);
+			var o = json_body.customData.response.garbage;
+			for (var i = 0; i < o.length; i++) {
+			    var key = o[i].code;
+			    switch (key) {
+				case 'PMD':
+				case 'GFT':
+				case 'REST':
+				    break;
+				case 'PAP':
+				    key = 'PAPIER';
+				    break;
+				case 'BEST':
+				    key = 'TEXTIEL';
+				    break;
+				default:
+			    }
+			    addToDates(key, o[i].dates, dates);
+			}
+			return callback(null, dates);
+		    });
+		});
+	    });
+
+	} catch (ex) { 
+	    //res.write('Error: ' + ex);
+	}
+}
+
+function addToDates(key, datesToAdd, dates) {
+        for (var i = 0; i < datesToAdd.length; i++) {
+            var date = datesToAdd[i];
+            if (!date) continue;
+            if (dates[key] == null) dates[key] = [];
+            var arrDate = date.split('-');
+            var dutchDate = arrDate[2] + "-" + arrDate[1] + "-" + arrDate[0];
+            dates[key].push(dutchDate);
+        }
+    }
+
+
 // Don't forget to add the ID and name to the option set in settings/index.html page as well! :)
 apiList.push({ name: "Afval App", id: "afa", execute: afvalapp });
 apiList.push({ name: "Mijn Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
@@ -926,5 +1011,6 @@ apiList.push({ name: "Inzamelkalender HVC", id: "hvc", execute: inzamelkalenderH
 apiList.push({ name: "Dar Afvalkalender", id: "dar", execute: darAfvalkalender });
 apiList.push({ name: "Afvalkalender RD4", id: "rd4", execute: afvalkalenderRD4 });
 apiList.push({ name: "ROVA Afvalkalender", id: "rov", execute: rovaAfvalkalender });
+apiList.push({ name: "Afvalkalender Circulus-Berkel", id: "acb", execute: circulusBerkel });
 
 module.exports = apiList;
