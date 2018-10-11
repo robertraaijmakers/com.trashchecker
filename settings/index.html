@@ -49,7 +49,7 @@
         <div class="field row" id="manual_input_field">
 			<label style="float:left" for="manual_input_set" data-i18n="settings.manualInputField"></label>
 			<div style="float:left">
-				<input style="width: 10px" id="manual_input_set" name="manualInput" type="checkbox"></input><label style="width: 200px;" for="manual_input_set" class="name" data-i18n="settings.manualInputFieldDescription"></label><br>
+				<input style="width: 10px" id="manual_input_set" name="manualInput" type="checkbox" /><label style="width: 200px;" for="manual_input_set" class="name" data-i18n="settings.manualInputFieldDescription"></label><br>
 			</div>
         </div>
         <span id="resp" title="Details?" onclick="document.getElementById('respDates').style='display: block;'"></span>
@@ -309,6 +309,7 @@
     </fieldset>
 	<button id="manualInput" class="left" style="display:block" data-i18n="settings.saveManualInput" ></button>
 	<br /><br />
+	<br /><br />
 	
 	<h2 data-i18n="settings.labeltitle"></h2>
     <p style="display:block" data-i18n="settings.labeldescription"></p>
@@ -368,6 +369,15 @@
 	</fieldset>
 	<button id="labelInput" class="left" style="display:block" data-i18n="settings.saveLabelInput" ></button>
 	<br /><br />
+	<br /><br />
+
+	<h2 data-i18n="debug.labeltitle"></h2>
+    <p style="display:block" data-i18n="debug.labeldescription"></p>
+	<fieldset id="debug_settings">
+		<div class="field row" id="respDatesDebug">
+        </div>
+	</fieldset>
+	<br /><br />
 	
 	<script type="text/javascript">
 
@@ -396,6 +406,10 @@
 			document.getElementById("plastic_option").addEventListener("change", function(elem) { ToggleManualInputFields("plastic"); });
 			document.getElementById("pmd_option").addEventListener("change", function(elem) { ToggleManualInputFields("pmd"); });
 			document.getElementById("textile_option").addEventListener("change", function(elem) { ToggleManualInputFields("textile"); });
+
+			var respDates = document.getElementById("respDatesDebug");
+				respDates.style.color = 'black';
+				respDates.innerHTML = "Loading collection days...";
 
 			// Set properties
 			OnManualInputCheckboxChanged();
@@ -580,6 +594,17 @@
 				{
 					SetLabelEntryFormValues(Homey, Homey.__('settings.none'), "none");
 				}
+			});
+
+			Homey.get('collectingDays', function(err, collectingDays)
+			{
+				if(err)
+				{
+					respDates.innerHTML = "No collecting days found.";
+					return;
+				}
+				
+				respDates.innerHTML = "<pre>" + JSON.stringify(collectingDays, null, 2) + "</pre>";
 			});
 			
 			Homey.ready();

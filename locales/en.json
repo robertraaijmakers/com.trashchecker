@@ -129,6 +129,11 @@
 			}
 		}
 	},
+	"debug":
+	{
+		"labeltitle": "Debug",
+		"labeldescription": "These are the current known collection dates in the app."	
+	},
 	"error":
 	{
 		"typenotsupported":

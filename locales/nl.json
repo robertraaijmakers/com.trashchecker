@@ -129,6 +129,11 @@
 			}
 		}
 	},
+	"debug":
+	{
+		"labeltitle": "Debug",
+		"labeldescription": "Dit zijn de dagen die op dit moment bekend zijn in de app."	
+	},
 	"error":
 	{
 		"typenotsupported":
