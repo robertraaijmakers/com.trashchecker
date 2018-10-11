@@ -46,7 +46,7 @@ class TrashcanReminder extends Homey.App
 		setTimeout(this.onUpdateData.bind(this), msTillUpdateApi, true, true); // Every Saturday night (and on refresh), but this prevents data from getting lost when it is retrieved through the week.
 		setInterval(this.onUpdateLabel.bind(this), 10*60*1000); // Update label every 10 minutes.
 		
-		// Make sure the label is updated every 24 hours at midnight
+		// Make sure the label is updated every 10 minutes
 		let trashCollectionToken = new Homey.FlowToken( 'trash_collection_token', {
 			type: 'string',
 			title: Homey.__('tokens.trashcollection')
@@ -432,7 +432,7 @@ class TrashcanReminder extends Homey.App
 			this.GenerateNewDaysBasedOnManualInput();
 		}
 		
-		// Make sure it is executed every day at midnight (+1 sec)	
+		// Make sure it is executed every saturday around midnight (+1 sec)	
 		if(shouldSetTimeout === true)
 		{
 			let msTillSaturday = this.millisecondsTillSaturdayNight();	
@@ -538,14 +538,17 @@ class TrashcanReminder extends Homey.App
 		// }
 	// }
 	
+	// Exctualy calculates MS till 5 O clock
 	millisecondsTillMidnight()
 	{
 		var now = new Date();
+		var currentHour = now.getHours();
+
 		var night = new Date(
 			now.getFullYear(),
 			now.getMonth(),
-			now.getDate() + 1,
-			0, 0, 1
+			currentHour < 5 ? (now.getDate()) : (now.getDate() + 1),
+			5, 0, 1
 		);
 		
 		let msTillMidnight = night.getTime() - now.getTime();
