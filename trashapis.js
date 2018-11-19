@@ -186,7 +186,7 @@ function afvalkalenderCyclus(postcode, housenumber, country, callback)
 
 function afvalRmn(postcode, housenumber, country, callback)
 {
-	generalAfvalkalendersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl', callback);
+	newGeneralAfvalkalandersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl', callback);
 }
 
 function afvalkalenderMeerlanden(postcode, housenumber, country, callback)
@@ -363,6 +363,71 @@ function generalAfvalkalendersNederland(postcode, housenumber, country, baseUrl,
   });
   req1.write( body1 );
   req1.end();
+}
+
+function newGeneralAfvalkalandersNederland(postcode, housnumber, country, baseUrl, callback)
+{
+    console.log("Checking new general afvalkalenders with URL: " + baseUrl);
+
+    if (country !== "NL") {
+        console.log('unsupported country');
+        callback(new Error('unsupported country'));
+    }
+
+    var urlRequest = "https://" + baseUrl + "/adressen/" + postcode + ':' + housenumber;
+
+    request(urlRequest, function(err, res, body) {
+        if (!err && res.statusCode == 200) {
+            var result = JSON.parse(body);
+            console.log(result);
+
+            if (result.length <= 0) {
+                return callback(new Error('Invalid zipcode for: ' + baseUrl));
+            }
+
+            var identificatie = result[0].bagid;
+            console.log(identificatie);
+
+            var url = 'https://' + baseUrl + '/ical/' + identificatie;
+            console.log(url);
+            const r = request.defaults({
+                jar: true
+            });
+            r.get(url, function(err, res, body) {
+                if (!err && res.statusCode == 200) {
+                    const dates = {};
+                    const entries = ical.parseICS(body);
+                    for (let i in entries) {
+                        const entry = entries[i];
+                        const dateStr = ('0' + entry.start.getDate()).slice(-2) + '-' + (('0' + (entry.start.getMonth() + 1)).slice(-2)) + '-' + entry.start.getFullYear();
+
+                        var description = entry.description.toLowerCase();
+
+                        if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
+                            if (!dates.GFT) dates.GFT = [];
+                            dates.GFT.push(dateStr);
+                        } else if (description.indexOf('rest') !== -1) {
+                            if (!dates.REST) dates.REST = [];
+                            dates.REST.push(dateStr);
+                        } else if (description.indexOf('plastic') !== -1 || description.indexOf('pmd') !== -1) {
+                            if (!dates.PLASTIC) dates.PLASTIC = [];
+                            dates.PLASTIC.push(dateStr);
+                        } else if (description.indexOf('papier') !== -1) {
+                            if (!dates.PAPIER) dates.PAPIER = [];
+                            dates.PAPIER.push(dateStr);
+                        }
+                    }
+                    console.log(dates);
+                    return callback(null, dates);
+                } else {
+                    return callback(new Error('Unable to download ical file'));
+                }
+            });
+
+        } else {
+            return callback(new Error('Onbekende fout'));
+        }
+    });
 }
 
 function twenteMilieu(postcode, housenumber, country, callback)
@@ -737,69 +802,7 @@ function extractDatesHVC(rubbishType)
 
 function inzamelkalenderHVC(postcode, housenumber, country, callback)
 {
-    var baseUrl = "inzamelkalender.hvcgroep.nl";
-
-    console.log("Checking HVC afvalkalenders with URL: " + baseUrl);
-
-    if (country !== "NL") {
-        console.log('unsupported country');
-        callback(new Error('unsupported country'));
-    }
-
-    var urlRequest = "https://" + baseUrl + "/adressen/" + postcode + ':' + housenumber;
-
-    request(urlRequest, function(err, res, body) {
-        if (!err && res.statusCode == 200) {
-            var result = JSON.parse(body);
-            console.log(result);
-
-            if (result.length <= 0) {
-                return callback(new Error('Invalid zipcode for: ' + baseUrl));
-            }
-
-            var identificatie = result[0].bagid;
-            console.log(identificatie);
-
-            var url = 'https://' + baseUrl + '/ical/' + identificatie;
-            console.log(url);
-            const r = request.defaults({
-                jar: true
-            });
-            r.get(url, function(err, res, body) {
-                if (!err && res.statusCode == 200) {
-                    const dates = {};
-                    const entries = ical.parseICS(body);
-                    for (let i in entries) {
-                        const entry = entries[i];
-                        const dateStr = ('0' + entry.start.getDate()).slice(-2) + '-' + (('0' + (entry.start.getMonth() + 1)).slice(-2)) + '-' + entry.start.getFullYear();
-
-                        var description = entry.description.toLowerCase();
-
-                        if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
-                            if (!dates.GFT) dates.GFT = [];
-                            dates.GFT.push(dateStr);
-                        } else if (description.indexOf('rest') !== -1) {
-                            if (!dates.REST) dates.REST = [];
-                            dates.REST.push(dateStr);
-                        } else if (description.indexOf('plastic') !== -1 || description.indexOf('pmd') !== -1) {
-                            if (!dates.PLASTIC) dates.PLASTIC = [];
-                            dates.PLASTIC.push(dateStr);
-                        } else if (description.indexOf('papier') !== -1) {
-                            if (!dates.PAPIER) dates.PAPIER = [];
-                            dates.PAPIER.push(dateStr);
-                        }
-                    }
-                    console.log(dates);
-                    return callback(null, dates);
-                } else {
-                    return callback(new Error('Unable to download ical file'));
-                }
-            });
-
-        } else {
-            callback(new Error('Error in script'));
-        }
-    });
+	generalAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.hvcgroep.nl', callback);
 }
 
 function customFormatDate(date)
