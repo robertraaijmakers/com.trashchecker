@@ -287,7 +287,7 @@ function generalAfvalkalendersNederland(postcode, housenumber, country, baseUrl,
   req1.end();
 }
 
-function newGeneralAfvalkalandersNederland(postcode, housnumber, country, baseUrl, callback)
+function newGeneralAfvalkalandersNederland(postcode, housenumber, country, baseUrl, callback)
 {
     console.log("Checking new general afvalkalenders with URL: " + baseUrl);
 
@@ -296,7 +296,7 @@ function newGeneralAfvalkalandersNederland(postcode, housnumber, country, baseUr
         callback(new Error('unsupported country'));
     }
 
-    var urlRequest = "https://" + baseUrl + "/adressen/" + postcode + ':' + housenumber;
+    var urlRequest = "https://" + baseUrl + "/adressen/" + postcode + ":" + housenumber;
 
     request(urlRequest, function(err, res, body) {
         if (!err && res.statusCode == 200) {
@@ -764,7 +764,9 @@ function afvalkalenderRD4(postcode, housenumber, country, callback)
 
     request(url, function (err, res, body) {
         if (!err && res.statusCode == 200) {
-            return callback(null, res.body);
+        	var result = JSON.parse(res.body);
+	       	console.log(result);
+            return callback(null, result);
         } else {
             return callback(new Error('Invalid location'));
         }
