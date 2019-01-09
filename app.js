@@ -358,12 +358,11 @@ class TrashcanReminder extends Homey.App
 				if(result === false && typeof(this.gdates[supportedTypes[i].toUpperCase()]) !== 'undefined') {
 					result = this.gdates[ supportedTypes[i].toUpperCase() ].indexOf(dateString) > -1;
 				}
-			}		
+			}
 			
 			return Promise.resolve( result );
 		}	
 	
-		var dateString = this.dateToString(now);
 		//Homey.log(dateString);
 		return Promise.resolve( this.gdates[ args.trash_type.toUpperCase() ].indexOf(dateString) > -1 );
 	}
@@ -705,7 +704,7 @@ class TrashcanReminder extends Homey.App
 		var manualSettings = Homey.ManagerSettings.get('manualEntryData');
 		var dates = {};
 		
-		if(typeof manualSettings === 'undefined')
+		if(typeof manualSettings === 'undefined' || manualSettings == null)
 		{
 			return;
 		}

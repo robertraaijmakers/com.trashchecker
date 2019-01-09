@@ -72,63 +72,7 @@ function mijnAfvalWijzer(postcode, housenumber, country, callback)
 {
 	console.log("Checking Mijn Afval Wijzer");
 
-    var fDates = {};
-    if (country !== "NL") {
-    	console.log('unsupported country');
-        callback(new Error('unsupported country'));
-        return;
-    }
-
-    request(`http://www.mijnafvalwijzer.nl/nl/${postcode}/${housenumber}/`, function (err, res, body) {
-        if (!err && res.statusCode == 200) {
-            var $ = cheerio.load(res.body);
-
-            $('a.wasteInfoIcon p').each((i, elem) => {
-                var dateStr = parseDate(elem.children[0].data);
-                //console.log(elem.attribs.class);
-                switch (elem.attribs.class) {
-                    case 'gft':
-                        if (!fDates.GFT) fDates.GFT = [];
-                        fDates.GFT.push(dateStr);
-                        break;
-                    case 'papier':
-                        if (!fDates.PAPIER) fDates.PAPIER = [];
-                        fDates.PAPIER.push(dateStr);
-                        break;
-					case 'plastic':
-                        if (!fDates.PLASTIC) fDates.PLASTIC = [];
-                        fDates.PLASTIC.push(dateStr);
-                        break;
-                    case 'restafval':
-                        if (!fDates.REST) fDates.REST = [];
-                        fDates.REST.push(dateStr);
-                        break;
-                    case 'pmd':
-                        if (!fDates.PMD) fDates.PMD = [];
-                        fDates.PMD.push(dateStr);
-                        break;	
-                    case 'restgft':
-                        if (!fDates.REST) fDates.REST = [];
-                        if (!fDates.GFT) fDates.GFT = [];
-                        fDates.REST.push(dateStr);
-                        fDates.GFT.push(dateStr);
-                        break;
-                    case 'dhm':
-                        if (!fDates.PAPIER) fDates.PAPIER = [];
-                        if (!fDates.PMD) fDates.PMD = [];
-                        fDates.PAPIER.push(dateStr);
-                        fDates.PMD.push(dateStr);
-                        break;
-                    default:
-                        console.log('defaulted', elem.attribs.class);
-                }
-            });
-            console.log(fDates);
-            return callback(null, fDates);
-        } else {
-            return callback(new Error('Invalid location'));
-        }
-    });
+    generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "http://www.mijnafvalwijzer.nl/nl/", callback);
 }
 
 function afvalwijzerArnhem(postcode, housenumber, country, callback)
@@ -185,7 +129,7 @@ function afvalwijzerArnhem(postcode, housenumber, country, callback)
 
 function afvalkalenderCyclus(postcode, housenumber, country, callback)
 {
-	generalAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cyclusnv.nl', callback);
+	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cyclusnv.nl', callback);
 }
 
 function afvalRmn(postcode, housenumber, country, callback)
@@ -195,7 +139,7 @@ function afvalRmn(postcode, housenumber, country, callback)
 
 function afvalkalenderMeerlanden(postcode, housenumber, country, callback)
 {
-	generalAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.meerlanden.nl', callback);
+	newGeneralAfvalkalandersNederland(postcode, housenumber, country, 'afvalkalender.meerlanden.nl', callback);
 }
 
 function afvalkalenderVenray(postcode, housenumber, country, callback)
@@ -350,8 +294,70 @@ function newGeneralAfvalkalandersNederland(postcode, housenumber, country, baseU
                 }
             });
 
-        } else {
+        }
+		else {
             return callback(new Error('Onbekende fout'));
+        }
+    });
+}
+
+function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, baseUrl, callback)
+{
+	var fDates = {};
+    if (country !== "NL") {
+    	console.log('unsupported country');
+        callback(new Error('unsupported country'));
+        return;
+    }
+
+    request(`${baseUrl}${postcode}/${housenumber}/`, function (err, res, body) {
+        if (!err && res.statusCode == 200) {
+            var $ = cheerio.load(res.body);
+
+            $('a.wasteInfoIcon p').each((i, elem) => {
+                var dateStr = parseDate(elem.children[0].data);
+                //console.log(elem.attribs.class);
+                switch (elem.attribs.class) {
+                    case 'gft':
+                        if (!fDates.GFT) fDates.GFT = [];
+                        fDates.GFT.push(dateStr);
+                        break;
+                    case 'papier':
+                        if (!fDates.PAPIER) fDates.PAPIER = [];
+                        fDates.PAPIER.push(dateStr);
+                        break;
+					case 'plastic':
+                        if (!fDates.PLASTIC) fDates.PLASTIC = [];
+                        fDates.PLASTIC.push(dateStr);
+                        break;
+                    case 'restafval':
+                        if (!fDates.REST) fDates.REST = [];
+                        fDates.REST.push(dateStr);
+                        break;
+                    case 'pmd':
+                        if (!fDates.PMD) fDates.PMD = [];
+                        fDates.PMD.push(dateStr);
+                        break;	
+                    case 'restgft':
+                        if (!fDates.REST) fDates.REST = [];
+                        if (!fDates.GFT) fDates.GFT = [];
+                        fDates.REST.push(dateStr);
+                        fDates.GFT.push(dateStr);
+                        break;
+                    case 'dhm':
+                        if (!fDates.PAPIER) fDates.PAPIER = [];
+                        if (!fDates.PMD) fDates.PMD = [];
+                        fDates.PAPIER.push(dateStr);
+                        fDates.PMD.push(dateStr);
+                        break;
+                    default:
+                        console.log('defaulted', elem.attribs.class);
+                }
+            });
+            console.log(fDates);
+            return callback(null, fDates);
+        } else {
+            return callback(new Error('Invalid location'));
         }
     });
 }
@@ -721,6 +727,12 @@ function inzamelkalenderHVC(postcode, housenumber, country, callback)
 	newGeneralAfvalkalandersNederland(postcode, housenumber, country, 'inzamelkalender.hvcgroep.nl', callback);
 }
 
+function denBoschAfvalstoffendienstCalendar(postcode, housenumber, country, callback)
+{
+	console.log("Checking Mijn Afval Wijzer voor Den Bosch");
+	generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, 'http://denbosch.afvalstoffendienstkalender.nl/nl/', callback);
+}
+
 function customFormatDate(date)
 {
     var ad = date.split('-');
@@ -938,6 +950,7 @@ function addToDates(key, datesToAdd, dates) {
 // Don't forget to add the ID and name to the option set in settings/index.html page as well! :)
 apiList.push({ name: "Afval App", id: "afa", execute: afvalapp });
 apiList.push({ name: "Mijn Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
+apiList.push({ name: "Den Bosch Afvalstoffendienstkalender", id: "dbafw", execute: denBoschAfvalstoffendienstCalendar });
 apiList.push({ name: "Afvalwijzer Arnhem", id: "arn", execute: afvalwijzerArnhem });
 apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCyclus });
 apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
