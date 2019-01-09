@@ -95,7 +95,7 @@ function mijnAfvalWijzer(postcode, housenumber, country, callback)
                         if (!fDates.PAPIER) fDates.PAPIER = [];
                         fDates.PAPIER.push(dateStr);
                         break;
-		    case 'plastic':
+					case 'plastic':
                         if (!fDates.PLASTIC) fDates.PLASTIC = [];
                         fDates.PLASTIC.push(dateStr);
                         break;
@@ -103,6 +103,10 @@ function mijnAfvalWijzer(postcode, housenumber, country, callback)
                         if (!fDates.REST) fDates.REST = [];
                         fDates.REST.push(dateStr);
                         break;
+                    case 'pmd':
+                        if (!fDates.PMD) fDates.PMD = [];
+                        fDates.PMD.push(dateStr);
+                        break;	
                     case 'restgft':
                         if (!fDates.REST) fDates.REST = [];
                         if (!fDates.GFT) fDates.GFT = [];
