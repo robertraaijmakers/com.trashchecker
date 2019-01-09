@@ -129,7 +129,7 @@ function afvalwijzerArnhem(postcode, housenumber, country, callback)
 
 function afvalkalenderCyclus(postcode, housenumber, country, callback)
 {
-	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cyclusnv.nl', callback);
+	newGeneralAfvalkalandersNederland(postcode, housenumber, country, 'afvalkalender.cyclusnv.nl', callback);
 }
 
 function afvalRmn(postcode, housenumber, country, callback)
