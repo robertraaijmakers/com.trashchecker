@@ -144,7 +144,7 @@ function afvalkalenderMeerlanden(postcode, housenumber, country, callback)
 
 function afvalkalenderVenray(postcode, housenumber, country, callback)
 {
-	generalAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.venray.nl', callback);
+	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.venray.nl', callback);
 }
 
 function darAfvalkalender(postcode, housenumber, country, callback)
