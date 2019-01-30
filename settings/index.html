@@ -4,8 +4,8 @@
 </head>
 
 <body>
-	<h2 data-i18n="settings.title"></h2>
-    <p style="display:block" data-i18n="settings.description"></p>
+	<h1 data-i18n="settings.title"></h1>
+    <p data-i18n="settings.description"></p>
 	<fieldset>
 		<legend data-i18n="settings.title"></legend>
         <div class="field row">
@@ -17,68 +17,61 @@
             <input placeholder="42" id="number" type="text" value=""/>
         </div>
         <div class="field row">
-			<label style="float:left" for="country" data-i18n="settings.country"></label>
-			<div style="float:left">
-				<input  style="width:10px" checked="checked" id="NL" name="country" type="radio" value="NL"/><span class="name">NL</span><br>
-				<input  style="width:10px" id="BE" name="country" type="radio" value="NL"/><span class="name">BE</span>
-			</div>
+			<label for="country" data-i18n="settings.country"></label>
+			<input style="width:10px" checked="checked" id="NL" name="country" type="radio" value="NL"/><span class="name">NL</span>
+			<input style="width:10px" id="BE" name="country" type="radio" value="NL"/><span class="name">BE</span>
         </div>
         <div class="field row">
-			<label style="float:left" for="api" data-i18n="settings.api"></label>
-			<div style="float:left">
-				<select id="api">
-					<option value="" data-i18n="settings.unknown"></option>
-					<option value="afa">Afval App</option>
-					<option value="afw">Mijn Afvalwijzer</option>
-					<option value="arn">Afvalwijzer Arnhem</option>
-					<option value="afc">Afvalkalender Cyclus</option>
-					<option value="afrm">Afvalkalender RMN</option>
-					<option value="twm">Twente Milieu</option>
-					<option value="geh">Gemeente Hellendoorn</option>
-					<option value="remg">Recyclemanager</option>
-					<option value="akm">Afvalkalender Meerlanden</option>
-					<option value="akvr">Afvalkalender Venray</option>
-					<option value="hvc">Inzamelkalender HVC</option>
-					<option value="dar">Dar Afvalkalender</option>
-					<option value="rd4">Afvalkalender RD4</option>
-					<option value="rov">ROVA Afvalkalender</option>
-					<option value="acb">Afvalkalender Circulus-Berkel</option>
-					<option value="dbafw">Den Bosch Afvalstoffendienstkalender</option>
-				</select>
-			</div>
+			<label for="api" data-i18n="settings.api"></label>
+			<select id="api">
+				<option value="" data-i18n="settings.unknown"></option>
+				<option value="afa">Afval App</option>
+				<option value="afw">Mijn Afvalwijzer</option>
+				<option value="arn">Afvalwijzer Arnhem</option>
+				<option value="afc">Afvalkalender Cyclus</option>
+				<option value="afrm">Afvalkalender RMN</option>
+				<option value="twm">Twente Milieu</option>
+				<option value="geh">Gemeente Hellendoorn</option>
+				<option value="remg">Recyclemanager</option>
+				<option value="akm">Afvalkalender Meerlanden</option>
+				<option value="akvr">Afvalkalender Venray</option>
+				<option value="hvc">Inzamelkalender HVC</option>
+				<option value="dar">Dar Afvalkalender</option>
+				<option value="rd4">Afvalkalender RD4</option>
+				<option value="rov">ROVA Afvalkalender</option>
+				<option value="acb">Afvalkalender Circulus-Berkel</option>
+				<option value="dbafw">Den Bosch Afvalstoffendienstkalender</option>
+			</select>
         </div>
         <div class="field row" id="manual_input_field">
-			<label style="float:left" for="manual_input_set" data-i18n="settings.manualInputField"></label>
-			<div style="float:left">
-				<input style="width: 10px" id="manual_input_set" name="manualInput" type="checkbox" /><label style="width: 200px;" for="manual_input_set" class="name" data-i18n="settings.manualInputFieldDescription"></label><br>
-			</div>
+			<label for="manual_input_set" data-i18n="settings.manualInputField"></label>
+			<input style="width: 10px" id="manual_input_set" name="manualInput" type="checkbox" />
+			<label style="width: 200px;" for="manual_input_set" class="name" data-i18n="settings.manualInputFieldDescription"></label>
         </div>
         <span id="resp" title="Details?" onclick="document.getElementById('respDates').style='display: block;'"></span>
         <span id="respDates" style="display: none;"></span>
     </fieldset>
-    <button id="apiSave" class="left" style="display:block" data-i18n="settings.save" ></button>
+    <button id="apiSave" class="right" data-i18n="settings.save" ></button>
 	<br /><br />
 	<fieldset id="manual_input">
 		<legend data-i18n="settings.titlemanualinput"></legend>
 
 		<!-- GFT -->
 		<div class="field row">
-			<label style="float:left" for="gft" data-i18n="settings.gft"></label>
-			<div style="float:left">
-				<select name="gft[option]" id="gft_option">
-					<option value="0" data-i18n="settings.interval.na"></option>
-					<option value="1" data-i18n="settings.interval.everyweek"></option>
-					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
-					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
-					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
-					<option value="5" data-i18n="settings.interval.everyfirst"></option>
-					<option value="6" data-i18n="settings.interval.everysecond"></option>
-					<option value="7" data-i18n="settings.interval.everythird"></option>
-					<option value="9" data-i18n="settings.interval.everysecondlast"></option>
-					<option value="8" data-i18n="settings.interval.everylast"></option>
-				</select>
-			</div>
-			<div style="float:left" id="gft_day_div">
+			<label for="gft" data-i18n="settings.gft"></label>
+			<select name="gft[option]" id="gft_option">
+				<option value="0" data-i18n="settings.interval.na"></option>
+				<option value="1" data-i18n="settings.interval.everyweek"></option>
+				<option value="2" data-i18n="settings.interval.everyotherweek"></option>
+				<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
+				<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
+				<option value="5" data-i18n="settings.interval.everyfirst"></option>
+				<option value="6" data-i18n="settings.interval.everysecond"></option>
+				<option value="7" data-i18n="settings.interval.everythird"></option>
+				<option value="9" data-i18n="settings.interval.everysecondlast"></option>
+				<option value="8" data-i18n="settings.interval.everylast"></option>
+			</select>
+			<div id="gft_day_div">
 				<select style="margin-left: 5px;" name="gft[day_of_week]" id="gft_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
@@ -89,14 +82,14 @@
 					<option value="0" data-i18n="settings.dayofweek.su"></option>
 				</select>
 			</div>
-			<div style="float:left;">
+			<div>
 				<select style="display:none; margin-left: 5px;" name="gft[option_extension]" id="gft_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
 					<option value="12" data-i18n="settings.interval_extra.year"></option>
 				</select>
 			</div>
-			<div style="float: left;" id="gft_startdate_div">
+			<div id="gft_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
 				<input style="display: inline; margin-left: 5px;" type="date" name="gft[startdate]" id="gft_startdate"></input>
 			</div>
@@ -316,59 +309,43 @@
     <p style="display:block" data-i18n="settings.labeldescription"></p>
 	<fieldset id="label_input">
 		<div class="field row">
-			<label style="float:left" for="labelTimeIndicator" data-i18n="settings.timeindicator"></label>
-			<div style="float:left">
-				<select name="labelDay" id="labelTimeIndicator">
-					<option value="0" data-i18n="speech.output.timeindicator.t0"></option>
-					<option value="1" data-i18n="speech.output.timeindicator.t1"></option>
-					<option value="2" data-i18n="speech.output.timeindicator.t2"></option>
-				</select>
-			</div>
+			<label for="labelTimeIndicator" data-i18n="settings.timeindicator"></label>
+			<select name="labelDay" id="labelTimeIndicator">
+				<option value="0" data-i18n="speech.output.timeindicator.t0"></option>
+				<option value="1" data-i18n="speech.output.timeindicator.t1"></option>
+				<option value="2" data-i18n="speech.output.timeindicator.t2"></option>
+			</select>
         </div>
 		<div class="field row">
-			<label style="float:left" for="labelGft" data-i18n="settings.gft"></label>
-			<div style="float:left">
-				<input type="text" id="labelGft" name="label[gft]" />
-			</div>
+			<label for="labelGft" data-i18n="settings.gft"></label>
+			<input type="text" id="labelGft" name="label[gft]" />
         </div>
 		<div class="field row">
-			<label style="float:left" for="labelRest" data-i18n="settings.rest"></label>
-			<div style="float:left">
-				<input type="text" id="labelRest" name="label[rest]" />
-			</div>
+			<label for="labelRest" data-i18n="settings.rest"></label>
+			<input type="text" id="labelRest" name="label[rest]" />
         </div>
 		<div class="field row">
-			<label style="float:left" for="labelPapier" data-i18n="settings.paper"></label>
-			<div style="float:left">
-				<input type="text" id="labelPapier" name="label[papier]" />
-			</div>
+			<label for="labelPapier" data-i18n="settings.paper"></label>
+			<input type="text" id="labelPapier" name="label[papier]" />
         </div>
 		<div class="field row">
-			<label style="float:left" for="labelPlastic" data-i18n="settings.plastic"></label>
-			<div style="float:left">
-				<input type="text" id="labelPlastic" name="label[plastic]" />
-			</div>
+			<label for="labelPlastic" data-i18n="settings.plastic"></label>
+			<input type="text" id="labelPlastic" name="label[plastic]" />
         </div>
 		<div class="field row">
-			<label style="float:left" for="labelPmd" data-i18n="settings.pmd"></label>
-			<div style="float:left">
-				<input type="text" id="labelPmd" name="label[pmd]" />
-			</div>
+			<label for="labelPmd" data-i18n="settings.pmd"></label>
+			<input type="text" id="labelPmd" name="label[pmd]" />
         </div>
 		<div class="field row">
-			<label style="float:left" for="labelTextiel" data-i18n="settings.textile"></label>
-			<div style="float:left">
-				<input type="text" id="labelTextiel" name="label[textiel]" />
-			</div>
+			<label for="labelTextiel" data-i18n="settings.textile"></label>
+			<input type="text" id="labelTextiel" name="label[textiel]" />
         </div>
 		<div class="field row">
-			<label style="float:left" for="labelNone" data-i18n="settings.none"></label>
-			<div style="float:left">
-				<input type="text" id="labelNone" name="label[none]" />
-			</div>
+			<label for="labelNone" data-i18n="settings.none"></label>
+			<input type="text" id="labelNone" name="label[none]" />
         </div>
 	</fieldset>
-	<button id="labelInput" class="left" style="display:block" data-i18n="settings.saveLabelInput" ></button>
+	<button id="labelInput" class="right" style="display:block" data-i18n="settings.saveLabelInput" ></button>
 	<br /><br />
 	<br /><br />
 

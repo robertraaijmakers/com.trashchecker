@@ -129,17 +129,17 @@ function afvalwijzerArnhem(postcode, housenumber, country, callback)
 
 function afvalkalenderCyclus(postcode, housenumber, country, callback)
 {
-	newGeneralAfvalkalandersNederland(postcode, housenumber, country, 'afvalkalender.cyclusnv.nl', callback);
+	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cyclusnv.nl', callback);
 }
 
 function afvalRmn(postcode, housenumber, country, callback)
 {
-	newGeneralAfvalkalandersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl', callback);
+	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl', callback);
 }
 
 function afvalkalenderMeerlanden(postcode, housenumber, country, callback)
 {
-	newGeneralAfvalkalandersNederland(postcode, housenumber, country, 'afvalkalender.meerlanden.nl', callback);
+	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.meerlanden.nl', callback);
 }
 
 function afvalkalenderVenray(postcode, housenumber, country, callback)
@@ -235,7 +235,7 @@ function generalAfvalkalendersNederland(postcode, housenumber, country, baseUrl,
   req1.end();
 }
 
-function newGeneralAfvalkalandersNederland(postcode, housenumber, country, baseUrl, callback)
+function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseUrl, callback)
 {
     console.log("Checking new general afvalkalenders with URL: " + baseUrl);
 
@@ -401,6 +401,13 @@ function twenteMilieu(postcode, housenumber, country, callback)
         // console.log("Output fetchAddress is: " + buffer1);
         var obj1 = JSON.parse(buffer1);
         if(obj1.status){
+			
+			if(typeof obj1 === 'undefined' || typeof obj1.dataList === 'undefined' || typeof obj1.dataList[0] === 'undefined')
+			{
+				console.log("UniqueID couldn't be found in the respons.");
+				return callback(new Error('UniqueID could not be found in the response.'));
+			}
+			
           var uniqueID = obj1.dataList[0].UniqueId;
           // console.log("UniqueID: " + uniqueID);
           var post_data2 = `companyCode=8d97bb56-5afd-4cbc-a651-b4f7314264b4&uniqueAddressID=${uniqueID}&startDate=${startDate}&endDate=${endDate}`;
@@ -724,7 +731,7 @@ function recycleManager(postcode, housenumber, country, callback)
 
 function inzamelkalenderHVC(postcode, housenumber, country, callback)
 {
-	newGeneralAfvalkalandersNederland(postcode, housenumber, country, 'inzamelkalender.hvcgroep.nl', callback);
+	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.hvcgroep.nl', callback);
 }
 
 function denBoschAfvalstoffendienstCalendar(postcode, housenumber, country, callback)
