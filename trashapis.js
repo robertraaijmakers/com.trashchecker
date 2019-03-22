@@ -72,7 +72,7 @@ function mijnAfvalWijzer(postcode, housenumber, country, callback)
 {
 	console.log("Checking Mijn Afval Wijzer");
 
-    generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "http://www.mijnafvalwijzer.nl/nl/", callback);
+    generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "https://www.mijnafvalwijzer.nl/nl/", callback);
 }
 
 function afvalwijzerArnhem(postcode, housenumber, country, callback)
