@@ -317,20 +317,20 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
             $('a.wasteInfoIcon p').each((i, elem) => {
                 var dateStr = parseDate(elem.children[0].data);
                 //console.log(elem.attribs.class);
-                switch (elem.attribs.class) {
-                    case 'gft ':
+                switch (elem.attribs.class.trim()) {
+                    case 'gft':
                         if (!fDates.GFT) fDates.GFT = [];
                         fDates.GFT.push(dateStr);
                         break;
-                    case 'papier ':
+                    case 'papier':
                         if (!fDates.PAPIER) fDates.PAPIER = [];
                         fDates.PAPIER.push(dateStr);
                         break;
-                    case 'plastic ':
+                    case 'plastic':
                         if (!fDates.PLASTIC) fDates.PLASTIC = [];
                         fDates.PLASTIC.push(dateStr);
                         break;
-                    case 'restafval ':
+                    case 'restafval':
                         if (!fDates.REST) fDates.REST = [];
                         fDates.REST.push(dateStr);
                         break;
@@ -338,13 +338,13 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                         if (!fDates.PMD) fDates.PMD = [];
                         fDates.PMD.push(dateStr);
                         break;	
-                    case 'restgft ':
+                    case 'restgft':
                         if (!fDates.REST) fDates.REST = [];
                         if (!fDates.GFT) fDates.GFT = [];
                         fDates.REST.push(dateStr);
                         fDates.GFT.push(dateStr);
                         break;
-                    case 'dhm ':
+                    case 'dhm':
                         if (!fDates.PAPIER) fDates.PAPIER = [];
                         if (!fDates.PMD) fDates.PMD = [];
                         fDates.PAPIER.push(dateStr);
