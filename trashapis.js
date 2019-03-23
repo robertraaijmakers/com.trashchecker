@@ -72,7 +72,7 @@ function mijnAfvalWijzer(postcode, housenumber, country, callback)
 {
 	console.log("Checking Mijn Afval Wijzer");
 
-    generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "http://www.mijnafvalwijzer.nl/nl/", callback);
+    generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "https://www.mijnafvalwijzer.nl/nl/", callback);
 }
 
 function afvalwijzerArnhem(postcode, housenumber, country, callback)
@@ -317,7 +317,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
             $('a.wasteInfoIcon p').each((i, elem) => {
                 var dateStr = parseDate(elem.children[0].data);
                 //console.log(elem.attribs.class);
-                switch (elem.attribs.class) {
+                switch (elem.attribs.class.trim()) {
                     case 'gft':
                         if (!fDates.GFT) fDates.GFT = [];
                         fDates.GFT.push(dateStr);
@@ -326,7 +326,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                         if (!fDates.PAPIER) fDates.PAPIER = [];
                         fDates.PAPIER.push(dateStr);
                         break;
-					case 'plastic':
+                    case 'plastic':
                         if (!fDates.PLASTIC) fDates.PLASTIC = [];
                         fDates.PLASTIC.push(dateStr);
                         break;
@@ -351,7 +351,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                         fDates.PMD.push(dateStr);
                         break;
                     default:
-                        console.log('defaulted', elem.attribs.class);
+                        console.log('Defaulted. Element not found:', elem.attribs.class);
                 }
             });
             console.log(fDates);
