@@ -942,6 +942,87 @@ function circulusBerkel(postcode, homenumber, country, callback) {
 	}
 }
 
+function BlinkAfvalkalender(postcode, housenumber, country, callback) {
+    if (country !== "NL") {
+        callback(new Error('unsupported country'));
+        return;
+    }
+
+    var wasteTypeMap = {
+        rest: ["REST"],
+        gft: ["GFT"],
+        papier: ["PAPIER"],
+        kunststof : ["PLASTIC", "PMD"]
+    };
+
+    var addressUrl = `https://mijnblink.nl/rest/adressen/${postcode}-${housenumber}/`;
+
+    request(addressUrl, function (err, res) {
+        if (!err && res.statusCode == 200) {
+            var address = JSON.parse(res.body);
+            if(address.length == 1 && 'bagId' in address[0]) {
+                var bagId = address[0].bagId;
+                var wasteTypesUrl = `https://mijnblink.nl/rest/adressen/${bagId}/afvalstromen`;
+
+                var year = (new Date()).getFullYear();
+                // TODO: Maybe fetch next year as well to prevent missing dates for the next calendar year
+                var calendarUrl = `https://mijnblink.nl/rest/adressen/${bagId}/kalender/${year}`;
+
+                request(wasteTypesUrl, function (err, res) {
+                    if (!err && res.statusCode == 200) {
+                        var wasteType = JSON.parse(res.body);
+                        if (wasteType.length > 0) {
+                            var collection = {};
+
+                            wasteType.forEach(function (type) {
+                                if(type.slug in wasteTypeMap) {
+                                    wasteTypeMap[type.id] = wasteTypeMap[type.slug];
+                                }
+                            });
+
+                            request(calendarUrl, function (err, res) {
+                                if (!err && res.statusCode == 200) {
+                                    var calendar = JSON.parse(res.body);
+                                    if (Object.keys(calendar).length > 0) {
+                                        Object.keys(calendar).forEach(function(key) {
+                                            var day = calendar[key];
+                                            if(wasteTypeMap[day.afvalstroom_id]) {
+                                                if ('ophaaldatum' in day) {
+                                                    var date = day.ophaaldatum.split('-').reverse().join('-');
+                                                    wasteTypeMap[day.afvalstroom_id].forEach(function(type) {
+                                                        if(!collection[type]) {
+                                                            collection[type] = [];
+                                                        }
+                                                        collection[type].push(date);
+                                                    });
+                                                }
+                                            }
+                                        });
+
+                                        return callback(null, collection);
+                                    } else {
+                                        return callback(new Error('No collection dates returned for location'));
+                                    }
+                                } else {
+                                    return callback(new Error('Could not fetch collection dates for location'));
+                                }
+                            });
+                        } else {
+                            return callback(new Error('No waste types returned for location'));
+                        }
+                    } else {
+                        return callback(new Error('Could not fetch waste types for location'));
+                    }
+                });
+            } else {
+                return callback(new Error('Invalid location'));
+            }
+        } else {
+            return callback(new Error('Could not fetch location data'));
+        }
+    });
+}
+
 function addToDates(key, datesToAdd, dates) {
         for (var i = 0; i < datesToAdd.length; i++) {
             var date = datesToAdd[i];
@@ -971,5 +1052,6 @@ apiList.push({ name: "Dar Afvalkalender", id: "dar", execute: darAfvalkalender }
 apiList.push({ name: "Afvalkalender RD4", id: "rd4", execute: afvalkalenderRD4 });
 apiList.push({ name: "ROVA Afvalkalender", id: "rov", execute: rovaAfvalkalender });
 apiList.push({ name: "Afvalkalender Circulus-Berkel", id: "acb", execute: circulusBerkel });
+apiList.push({ name: "Mijn Blink Afvalkalender", id: "mba", execute: BlinkAfvalkalender });
 
 module.exports = apiList;
