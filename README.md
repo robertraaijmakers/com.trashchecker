@@ -20,6 +20,7 @@ Unfortunately not all cities work with the Trashcan Reminder, if you can find yo
 - [Rova](https://www.rova.nl)
 - [Afvalkalender Circulus-Berkel](https://mijn.circulus-berkel.nl)
 - [Den Bosch](http://denbosch.afvalstoffendienstkalender.nl)
+- [Mijn Blink](https://mijnblink.nl/)
 
 If your city is not supported you can always add your schedule manually. You can add new cities yourself, but requests to add new cities aren't honoured. If you wish to contribute to the project (for example by adding support for a city). I would advise you to take a look at [this explanation](https://github.com/robertraaijmakers/com.trashchecker/tree/master/developers).
 
