@@ -149,7 +149,7 @@ function afvalkalenderVenray(postcode, housenumber, country, callback)
 
 function darAfvalkalender(postcode, housenumber, country, callback)
 {
-	generalAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.dar.nl', callback);
+	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.dar.nl', callback);
 }
 
 function generalAfvalkalendersNederland(postcode, housenumber, country, baseUrl, callback)
