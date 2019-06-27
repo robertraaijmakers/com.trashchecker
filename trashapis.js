@@ -922,6 +922,9 @@ function circulusBerkel(postcode, homenumber, country, callback) {
 				case 'GFT':
 				case 'REST':
 				    break;
+				case 'ZWAKRA':
+				    key = "PMD";
+				    break;
 				case 'PAP':
 				    key = 'PAPIER';
 				    break;
