@@ -137,6 +137,11 @@ function afvalRmn(postcode, housenumber, country, callback)
 	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl', callback);
 }
 
+function afvalAvalex(postcode, housenumber, country, callback)
+{
+	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'avalex.nl', callback);
+}
+
 function afvalkalenderMeerlanden(postcode, housenumber, country, callback)
 {
 	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.meerlanden.nl', callback);
@@ -979,5 +984,6 @@ apiList.push({ name: "Afvalkalender RD4", id: "rd4", execute: afvalkalenderRD4 }
 apiList.push({ name: "ROVA Afvalkalender", id: "rov", execute: rovaAfvalkalender });
 apiList.push({ name: "Afvalkalender Circulus-Berkel", id: "acb", execute: circulusBerkel });
 apiList.push({ name: "Mijn Blink Afvalkalender", id: "mba", execute: BlinkAfvalkalender });
+apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
 
 module.exports = apiList;
