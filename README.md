@@ -7,7 +7,7 @@ Unfortunately not all cities work with the Trashcan Reminder, if you can find yo
 - [De Afval App](http://www.deafvalapp.nl/calendar/kalender_start.jsp)
 - [Cyclus](http://afvalkalender.cyclusnv.nl)
 - [Afvalwijzer Arnhen](https://www.afvalwijzer-arnhem.nl)
-- [Gemeente Hellendoorn](http://hellendoornafvalkalender.2go-mobile.com)
+- [Gemeente Hellendoorn](https://www.hellendoorn.nl/wonen-leven/publicatie/afval)
 - [Twentemilieu](https://www.twentemilieu.nl)
 - [Recyle Manager](http://www.recyclemanager.nl)
 - [RMN](https://inzamelschema.rmn.nl)
@@ -20,6 +20,8 @@ Unfortunately not all cities work with the Trashcan Reminder, if you can find yo
 - [Rova](https://www.rova.nl)
 - [Afvalkalender Circulus-Berkel](https://mijn.circulus-berkel.nl)
 - [Den Bosch](http://denbosch.afvalstoffendienstkalender.nl)
+- [Mijn Blink](https://mijnblink.nl/)
+- [Avalex](https://www.avalex.nl/)
 
 If your city is not supported you can always add your schedule manually. You can add new cities yourself, but requests to add new cities aren't honoured. If you wish to contribute to the project (for example by adding support for a city). I would advise you to take a look at [this explanation](https://github.com/robertraaijmakers/com.trashchecker/tree/master/developers).
 

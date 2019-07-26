@@ -137,6 +137,11 @@ function afvalRmn(postcode, housenumber, country, callback)
 	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl', callback);
 }
 
+function afvalAvalex(postcode, housenumber, country, callback)
+{
+	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'avalex.nl', callback);
+}
+
 function afvalkalenderMeerlanden(postcode, housenumber, country, callback)
 {
 	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.meerlanden.nl', callback);
@@ -149,7 +154,7 @@ function afvalkalenderVenray(postcode, housenumber, country, callback)
 
 function darAfvalkalender(postcode, housenumber, country, callback)
 {
-	generalAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.dar.nl', callback);
+	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.dar.nl', callback);
 }
 
 function generalAfvalkalendersNederland(postcode, housenumber, country, baseUrl, callback)
@@ -922,6 +927,9 @@ function circulusBerkel(postcode, homenumber, country, callback) {
 				case 'GFT':
 				case 'REST':
 				    break;
+				case 'ZWAKRA':
+				    key = "PMD";
+				    break;
 				case 'PAP':
 				    key = 'PAPIER';
 				    break;
@@ -940,6 +948,10 @@ function circulusBerkel(postcode, homenumber, country, callback) {
 	} catch (ex) { 
 	    //res.write('Error: ' + ex);
 	}
+}
+
+function BlinkAfvalkalender(postcode, housenumber, country, callback) {
+	newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'mijnblink.nl', callback);
 }
 
 function addToDates(key, datesToAdd, dates) {
@@ -971,5 +983,7 @@ apiList.push({ name: "Dar Afvalkalender", id: "dar", execute: darAfvalkalender }
 apiList.push({ name: "Afvalkalender RD4", id: "rd4", execute: afvalkalenderRD4 });
 apiList.push({ name: "ROVA Afvalkalender", id: "rov", execute: rovaAfvalkalender });
 apiList.push({ name: "Afvalkalender Circulus-Berkel", id: "acb", execute: circulusBerkel });
+apiList.push({ name: "Mijn Blink Afvalkalender", id: "mba", execute: BlinkAfvalkalender });
+apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
 
 module.exports = apiList;
