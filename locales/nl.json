@@ -17,6 +17,8 @@
 		"pmd": "PMD",
 		"paper": "Papier",
 		"textile": "Textiel",
+		"bulky": "Grof vuil",
+		"christmas": "Kerstboom",
 		"unknown": "Onbekend",
 		"none": "Wanneer niets wordt opgehaald",
 		"titlemanualinput": "Handmatige invoer",
@@ -68,7 +70,9 @@
 			"PLASTIC": "plastic",
 			"PMD": "pmd",
 			"PAPIER": "papier",
-			"TEXTIEL": "textiel"
+			"TEXTIEL": "textiel",
+			"GROF": "grof vuil",
+			"KERSTBOOM": "kerstboom"
 		},
 		"type_multipleother":
 		{
@@ -77,7 +81,9 @@
 			"PLASTIC": "plastic|oranje",
 			"PMD": "metaal|drinkpak|drink karton",
 			"PAPIER": "blauw|karton",
-			"TEXTIEL": "kleding|kledij"
+			"TEXTIEL": "kleding|kledij",
+			"GROF": "grof vuil",
+			"KERSTBOOM": "kerstboom"
 		},
 		"questiontype":
 		{
@@ -109,6 +115,8 @@
 				"PMD": "De plastic, metalen en drankcartons",
 				"PAPIER": "De blauwe container",
 				"TEXTIEL": "Het textiel",
+				"GROF": "Het grof vuil",
+				"KERSTBOOM": "kerstboom",
 				"NONE": "Niets"
 			},
 			"weekdays":

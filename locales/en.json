@@ -17,6 +17,8 @@
 		"pmd": "PMD",
 		"paper": "Paper",
 		"textile": "Textile",
+		"bulky": "Bulky waste",
+		"christmas": "Christmas tree",
 		"unknown": "Unknown",
 		"none": "When nothing is collected",
 		"titlemanualinput": "Manual input",
@@ -68,7 +70,9 @@
 			"PLASTIC": "plastic",
 			"PMD": "pmd",
 			"PAPIER": "paper",
-			"TEXTIEL": "textile"
+			"TEXTIEL": "textile",
+			"GROF": "bulky waste",
+			"KERSTBOOM": "christmas tree"
 		},
 		"type_multipleother":
 		{
@@ -77,7 +81,9 @@
 			"PLASTIC": "elastic|supple",
 			"PMD": "metal|drink carton",
 			"PAPIER": "cardboard|papery",
-			"TEXTIEL": "cloth|yarn|textile"
+			"TEXTIEL": "cloth|yarn|textile",
+			"GROF": "bulky waste",
+			"KERSTBOOM": "christmas tree"
 		},
 		"questiontype":
 		{
@@ -109,6 +115,8 @@
 				"PMD": "The plastics, metal and drinking carton",
 				"PAPIER": "The paper",
 				"TEXTIEL": "The textile",
+				"GROF": "The bulky waste",
+				"KERSTBOOM": "The christmas tree",
 				"NONE": "Nothing"
 			},
 			"weekdays":
