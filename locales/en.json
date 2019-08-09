@@ -33,6 +33,7 @@
 			"everyotherweek": "Every other week on",
 			"everythreeweeks": "Once every three weeks on",
 			"everyfourweeks": "Once every four weeks on",
+			"everyeighthweeks": "Once every eight weeks on",
 			"everyfirst": "Every first",
 			"everysecond": "Every second",
 			"everythird": "Every third",
@@ -51,6 +52,7 @@
 		"interval_extra":
 		{
 			"month": "of the month",
+			"othermonth": "every other month",
 			"quarter": "of the quarter",
 			"year": "of the year"
 		},

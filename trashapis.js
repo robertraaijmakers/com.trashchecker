@@ -105,6 +105,9 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                         } else if (description.indexOf('papier') !== -1) {
                             if (!dates.PAPIER) dates.PAPIER = [];
                             dates.PAPIER.push(dateStr);
+                        } else if (description.indexOf('textiel') !== -1) {
+                            if (!dates.TEXTIEL) dates.TEXTIEL = [];
+                            dates.TEXTIEL.push(dateStr);
                         } else if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
 							if (!dates.KERSTBOOM) dates.KERSTBOOM = [];
                             dates.KERSTBOOM.push(dateStr);

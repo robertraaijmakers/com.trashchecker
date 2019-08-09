@@ -786,9 +786,9 @@ class TrashcanReminder extends Homey.App
 		var nextMonth = new Date(new Date(firstDayInCurrentMonth).setMonth(firstDayInCurrentMonth.getMonth()+1));
 		var afterNextMonth = new Date(new Date(firstDayInCurrentMonth).setMonth(firstDayInCurrentMonth.getMonth()+2));
 		
-		if(interval >= 5 && interval <= 8) // every x-th week of month/quarter/year
+		if(interval >= 11 && interval <= 13) // every x-th week of month/quarter/year
 		{
-			var nThWeek = interval-4;
+			var nThWeek = interval-10;
 			var date1 = new Date();
 			var date2 = new Date();
 			var date3 = new Date();
@@ -810,6 +810,23 @@ class TrashcanReminder extends Homey.App
 				date2 = DateTimeHelper.nthDayInMonth(nThWeek, dayOfWeek, currentQuarterStart.getMonth(), currentQuarterStart.getFullYear());
 				date3 = DateTimeHelper.nthDayInMonth(nThWeek, dayOfWeek, nextQuarterStart.getMonth(), nextQuarterStart.getFullYear());
 			}
+			else if(intervalExtended == 2) // every x-th week of the other month
+			{
+				// We need to know the start date (if it's in an even or uneven month)
+				var oddOrEvenMonth = startDate.getMonth() % 2;
+				
+				// Then we calculate up to 6 months ahead
+				for (var i = -2, weekCounter = 6; i < weekCounter; i++) {
+					var monthToCalculateWith = new Date(new Date(firstDayInCurrentMonth).setMonth(firstDayInCurrentMonth.getMonth()+i));
+					var calculatedDate = DateTimeHelper.nthDayInMonth(nThWeek, dayOfWeek, monthToCalculateWith.getMonth(), monthToCalculateWith.getFullYear());
+					if(calculatedDate.getMonth() % 2 === oddOrEvenMonth)
+					{
+						result.push(this.dateToString(calculatedDate));
+					}
+				}
+				
+				return result;
+			}
 			else // every x-th week of the month
 			{		
 				date1 = DateTimeHelper.nthDayInMonth(nThWeek, dayOfWeek, previousMonth.getMonth(), previousMonth.getFullYear());
@@ -821,7 +838,7 @@ class TrashcanReminder extends Homey.App
 			result.push(this.dateToString(date2));
 			result.push(this.dateToString(date3));
 		}
-		else if(interval <= 4) // per week
+		else if(interval <= 8) // per week
 		{
 			var date0 = DateTimeHelper.everyNthWeek(interval, dayOfWeek, startDate, currentDate, -2);
 			var date1 = DateTimeHelper.everyNthWeek(interval, dayOfWeek, startDate, currentDate, -1);
@@ -835,9 +852,9 @@ class TrashcanReminder extends Homey.App
 			result.push(this.dateToString(date3));
 			result.push(this.dateToString(date4));
 		}
-		else if(interval >= 9 && interval <= 10) // every last, every second last
+		else if(interval >= 19 && interval <= 20) // every last, every second last
 		{
-			var nthLastWeekOf = interval-8;
+			var nthLastWeekOf = interval-18;
 			
 			var date1 = new Date();
 			var date2 = new Date();
