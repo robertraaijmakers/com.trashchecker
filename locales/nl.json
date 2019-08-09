@@ -84,8 +84,8 @@
 			"PMD": "metaal|drinkpak|drink karton",
 			"PAPIER": "blauw|karton",
 			"TEXTIEL": "kleding|kledij",
-			"GROF": "grof vuil",
-			"KERSTBOOM": "kerstboom"
+			"GROF": "grof vuil|grof|vuil",
+			"KERSTBOOM": "kerstboom|kerst"
 		},
 		"questiontype":
 		{

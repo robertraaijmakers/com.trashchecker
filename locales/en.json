@@ -84,8 +84,8 @@
 			"PMD": "metal|drink carton",
 			"PAPIER": "cardboard|papery",
 			"TEXTIEL": "cloth|yarn|textile",
-			"GROF": "bulky waste",
-			"KERSTBOOM": "christmas tree"
+			"GROF": "bulky waste|bulky",
+			"KERSTBOOM": "christmas tree|christmas"
 		},
 		"questiontype":
 		{
