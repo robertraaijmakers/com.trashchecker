@@ -9,7 +9,7 @@ var cheerio = require('cheerio');
 var ical = require('ical');
 
 /**
- * Different venders using the same two base API's
+ * Different vendors using the same two base API's
  */
 
 function mijnAfvalWijzer(postcode, housenumber, country, callback) {

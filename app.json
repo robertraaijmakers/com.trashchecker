@@ -59,7 +59,7 @@
 				},
 				"trashType": {
 					"type": "regex",
-					"value": "(green|biological|black|residual|grey|gray|elastic|supple|metal|drink carton|cardboard|paper|papery|textile|cloth|yarn|christmas|bulky)"
+					"value": "(green|biological|black|residual|grey|gray|elastic|supple|metal|drink carton|cardboard|paper|papery|textile|cloth|yarn|christmas|bulky|christmas tree)"
 				},
 				"query": {
 					"type": "regex",

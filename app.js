@@ -907,8 +907,8 @@ class TrashcanReminder extends Homey.App
 		else if(differenceInDaysForType <= 7)
 		{
 			var today = new Date();
-			var dayOfWeek = (today.getDay() + differenceInDaysForType) % 7;
-			return Homey.__('speech.output.next') + " " +Homey.__('speech.output.weekdays.d'+dayOfWeek);
+			var dayOfWeek = Math.floor((today.getDay() + differenceInDaysForType) % 7); // I don't know why, but modulo won't work without Floor...
+			return Homey.__('speech.output.next') + " " + Homey.__('speech.output.weekdays.d'+ dayOfWeek);
 		}
 		else
 		{
