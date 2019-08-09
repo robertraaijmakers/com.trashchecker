@@ -569,9 +569,14 @@ function afvalkalenderRD4(postcode, housenumber, country, callback) {
 
     request(url, function (err, res, body) {
         if (!err && res.statusCode == 200) {
-            var result = JSON.parse(res.body);
-            console.log(result);
-            return callback(null, result);
+			try {
+				var result = JSON.parse(res.body);
+				console.log(result);
+				return callback(null, result);
+			} catch (ex) {
+				//console.log('Error: ' + ex);
+				return callback(new Error('Error: ' + ex));
+			}
         } else {
             return callback(new Error('Invalid location'));
         }
