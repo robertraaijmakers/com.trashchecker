@@ -17,6 +17,8 @@
 		"pmd": "PMD",
 		"paper": "Paper",
 		"textile": "Textile",
+		"bulky": "Bulky waste",
+		"christmas": "Christmas tree",
 		"unknown": "Unknown",
 		"none": "When nothing is collected",
 		"titlemanualinput": "Manual input",
@@ -31,6 +33,7 @@
 			"everyotherweek": "Every other week on",
 			"everythreeweeks": "Once every three weeks on",
 			"everyfourweeks": "Once every four weeks on",
+			"everyeighthweeks": "Once every eight weeks on",
 			"everyfirst": "Every first",
 			"everysecond": "Every second",
 			"everythird": "Every third",
@@ -49,6 +52,7 @@
 		"interval_extra":
 		{
 			"month": "of the month",
+			"othermonth": "every other month",
 			"quarter": "of the quarter",
 			"year": "of the year"
 		},
@@ -68,7 +72,9 @@
 			"PLASTIC": "plastic",
 			"PMD": "pmd",
 			"PAPIER": "paper",
-			"TEXTIEL": "textile"
+			"TEXTIEL": "textile",
+			"GROF": "bulky waste",
+			"KERSTBOOM": "christmas tree"
 		},
 		"type_multipleother":
 		{
@@ -77,7 +83,9 @@
 			"PLASTIC": "elastic|supple",
 			"PMD": "metal|drink carton",
 			"PAPIER": "cardboard|papery",
-			"TEXTIEL": "cloth|yarn|textile"
+			"TEXTIEL": "cloth|yarn|textile",
+			"GROF": "bulky waste|bulky",
+			"KERSTBOOM": "christmas tree|christmas"
 		},
 		"questiontype":
 		{
@@ -109,6 +117,8 @@
 				"PMD": "The plastics, metal and drinking carton",
 				"PAPIER": "The paper",
 				"TEXTIEL": "The textile",
+				"GROF": "The bulky waste",
+				"KERSTBOOM": "The christmas tree",
 				"NONE": "Nothing"
 			},
 			"weekdays":

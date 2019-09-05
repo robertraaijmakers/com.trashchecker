@@ -5,7 +5,7 @@
 		"en": "Trashcan Reminder 2.0",
 		"nl": "Afval Herinnering 2.0"
 	},
-	"version": "2.5.7",
+	"version": "2.6.0",
 	"compatibility": ">=1.5",
 	"author": {
 		"name": "Robert Raaijmakers",
@@ -59,7 +59,7 @@
 				},
 				"trashType": {
 					"type": "regex",
-					"value": "(green|biological|black|residual|grey|gray|elastic|supple|metal|drink carton|cardboard|paper|papery|textile|cloth|yarn)"
+					"value": "(green|biological|black|residual|grey|gray|elastic|supple|metal|drink carton|cardboard|paper|papery|textile|cloth|yarn|christmas|bulky|christmas tree)"
 				},
 				"query": {
 					"type": "regex",
@@ -87,7 +87,7 @@
 				},
 				"trashType": {
 					"type": "regex",
-					"value": "(groen|tuinafval|groene|groente|fruit|zwart|grijs|grijze|restafval|plastic|oranje|metaal|drinkpak|drink karton|blauw|karton|kleding|kledij)"
+					"value": "(groen|tuinafval|groene|groente|fruit|zwart|grijs|grijze|restafval|plastic|oranje|metaal|drinkpak|drink karton|blauw|karton|kleding|kledij|kerstboom|grof)"
 				},
 				"query": {
 					"type": "regex",
@@ -152,17 +152,17 @@
 							}
 						},
 						{
-							"id": "REST",
-							"label": {
-								"en": "Residual",
-								"nl": "Rest"
-							}
-						},
-						{
 							"id": "GFT",
 							"label": {
 								"en": "Organic Waste",
 								"nl": "GFT"
+							}
+						},
+						{
+							"id": "GROF",
+							"label": {
+								"en": "Bulky waste",
+								"nl": "Grof afval"
 							}
 						},
 						{
@@ -187,10 +187,24 @@
 							}
 						},
 						{
+							"id": "REST",
+							"label": {
+								"en": "Residual",
+								"nl": "Rest"
+							}
+						},
+						{
 							"id": "TEXTIEL",
 							"label": {
 								"en": "Textiles",
 								"nl": "Textiel"
+							}
+						},
+						{
+							"id": "KERSTBOOM",
+							"label": {
+								"en": "Christmas tree",
+								"nl": "Kerstboom"
 							}
 						}
 					]

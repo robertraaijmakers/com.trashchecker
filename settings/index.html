@@ -26,23 +26,23 @@
 			<select id="api">
 				<option value="" data-i18n="settings.unknown"></option>
 				<option value="afa">Afval App</option>
-				<option value="afw">Mijn Afvalwijzer</option>
 				<option value="arn">Afvalwijzer Arnhem</option>
-				<option value="afc">Afvalkalender Cyclus</option>
-				<option value="afrm">Afvalkalender RMN</option>
-				<option value="twm">Twente Milieu</option>
-				<option value="geh">Gemeente Hellendoorn</option>
-				<option value="remg">Recyclemanager</option>
-				<option value="akm">Afvalkalender Meerlanden</option>
-				<option value="akvr">Afvalkalender Venray</option>
-				<option value="hvc">Inzamelkalender HVC</option>
-				<option value="dar">Dar Afvalkalender</option>
-				<option value="rd4">Afvalkalender RD4</option>
-				<option value="rov">ROVA Afvalkalender</option>
 				<option value="acb">Afvalkalender Circulus-Berkel</option>
-				<option value="dbafw">Den Bosch Afvalstoffendienstkalender</option>
-				<option value="mba">Mijn Blink</option>
+				<option value="afc">Afvalkalender Cyclus</option>
+				<option value="dar">Afvalkalender Dar</option>
+				<option value="akm">Afvalkalender Meerlanden</option>
+				<option value="rd4">Afvalkalender RD4</option>
+				<option value="afrm">Afvalkalender RMN</option>
+				<option value="rov">Afvalkalender ROVA</option>
+				<option value="akvr">Afvalkalender Venray</option>
 				<option value="avx">Avalex</option>
+				<option value="dbafw">Den Bosch Afvalstoffendienstkalender</option>
+				<option value="geh">Gemeente Hellendoorn</option>
+				<option value="hvc">Inzamelkalender HVC</option>
+				<option value="afw">Mijn Afvalwijzer</option>
+				<option value="mba">Mijn Blink</option>
+				<option value="remg">Recyclemanager</option>
+				<option value="twm">Twente Milieu</option>
 			</select>
         </div>
         <div class="field row" id="manual_input_field">
@@ -67,11 +67,12 @@
 				<option value="2" data-i18n="settings.interval.everyotherweek"></option>
 				<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
 				<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
-				<option value="5" data-i18n="settings.interval.everyfirst"></option>
-				<option value="6" data-i18n="settings.interval.everysecond"></option>
-				<option value="7" data-i18n="settings.interval.everythird"></option>
-				<option value="9" data-i18n="settings.interval.everysecondlast"></option>
-				<option value="8" data-i18n="settings.interval.everylast"></option>
+				<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
+				<option value="11" data-i18n="settings.interval.everyfirst"></option>
+				<option value="12" data-i18n="settings.interval.everysecond"></option>
+				<option value="13" data-i18n="settings.interval.everythird"></option>
+				<option value="19" data-i18n="settings.interval.everysecondlast"></option>
+				<option value="20" data-i18n="settings.interval.everylast"></option>
 			</select>
 			<div id="gft_day_div">
 				<select style="margin-left: 5px;" name="gft[day_of_week]" id="gft_dayofweek">
@@ -87,6 +88,7 @@
 			<div>
 				<select style="display:none; margin-left: 5px;" name="gft[option_extension]" id="gft_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
 					<option value="12" data-i18n="settings.interval_extra.year"></option>
 				</select>
@@ -99,22 +101,23 @@
 
 		<!-- REST -->
 		<div class="field row">
-			<label style="float:left" for="rest" data-i18n="settings.rest"></label>
-			<div style="float:left">
+			<label for="rest" data-i18n="settings.rest"></label>
+			<div>
 				<select name="rest[option]" id="rest_option">
 					<option value="0" data-i18n="settings.interval.na"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
 					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
 					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
 					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
-					<option value="5" data-i18n="settings.interval.everyfirst"></option>
-					<option value="6" data-i18n="settings.interval.everysecond"></option>
-					<option value="7" data-i18n="settings.interval.everythird"></option>
-					<option value="9" data-i18n="settings.interval.everysecondlast"></option>
-					<option value="8" data-i18n="settings.interval.everylast"></option>
+					<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
+					<option value="11" data-i18n="settings.interval.everyfirst"></option>
+					<option value="12" data-i18n="settings.interval.everysecond"></option>
+					<option value="13" data-i18n="settings.interval.everythird"></option>
+					<option value="19" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="20" data-i18n="settings.interval.everylast"></option>
 				</select>
 			</div>
-			<div style="float:left" id="rest_day_div">
+			<div id="rest_day_div">
 				<select style="margin-left: 5px;" name="rest[day_of_week]" id="rest_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
@@ -125,14 +128,15 @@
 					<option value="0" data-i18n="settings.dayofweek.su"></option>
 				</select>
 			</div>
-			<div style="float:left;">
+			<div>
 				<select style="display:none; margin-left: 5px;" name="rest[option_extension]" id="rest_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
 					<option value="12" data-i18n="settings.interval_extra.year"></option>
 				</select>
 			</div>
-			<div style="float: left;" id="rest_startdate_div">
+			<div id="rest_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
 				<input style="display: inline; margin-left: 5px;" type="date" name="rest[startdate]" id="rest_startdate"></input>
 			</div>
@@ -140,22 +144,23 @@
 
 		<!-- PAPER -->
 		<div class="field row">
-			<label style="float:left" for="paper" data-i18n="settings.paper"></label>
-			<div style="float:left">
+			<label for="paper" data-i18n="settings.paper"></label>
+			<div>
 				<select name="paper[option]" id="paper_option">
 					<option value="0" data-i18n="settings.interval.na"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
 					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
 					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
 					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
-					<option value="5" data-i18n="settings.interval.everyfirst"></option>
-					<option value="6" data-i18n="settings.interval.everysecond"></option>
-					<option value="7" data-i18n="settings.interval.everythird"></option>
-					<option value="9" data-i18n="settings.interval.everysecondlast"></option>
-					<option value="8" data-i18n="settings.interval.everylast"></option>
+					<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
+					<option value="11" data-i18n="settings.interval.everyfirst"></option>
+					<option value="12" data-i18n="settings.interval.everysecond"></option>
+					<option value="13" data-i18n="settings.interval.everythird"></option>
+					<option value="19" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="20" data-i18n="settings.interval.everylast"></option>
 				</select>
 			</div>
-			<div style="float:left" id="paper_day_div">
+			<div id="paper_day_div">
 				<select style="margin-left: 5px;" name="paper[day_of_week]" id="paper_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
@@ -166,14 +171,15 @@
 					<option value="0" data-i18n="settings.dayofweek.su"></option>
 				</select>
 			</div>
-			<div style="float:left;">
+			<div>
 				<select style="display:none; margin-left: 5px;" name="paper[option_extension]" id="paper_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
 					<option value="12" data-i18n="settings.interval_extra.year"></option>
 				</select>
 			</div>
-			<div style="float: left;" id="paper_startdate_div">
+			<div id="paper_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
 				<input style="display: inline; margin-left: 5px;" type="date" name="paper[startdate]" id="paper_startdate"></input>
 			</div>
@@ -181,22 +187,23 @@
 
 		<!-- PLASTIC -->
 		<div class="field row">
-			<label style="float:left" for="plastic" data-i18n="settings.plastic"></label>
-			<div style="float:left">
+			<label for="plastic" data-i18n="settings.plastic"></label>
+			<div>
 				<select name="plastic[option]" id="plastic_option">
 					<option value="0" data-i18n="settings.interval.na"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
 					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
 					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
 					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
-					<option value="5" data-i18n="settings.interval.everyfirst"></option>
-					<option value="6" data-i18n="settings.interval.everysecond"></option>
-					<option value="7" data-i18n="settings.interval.everythird"></option>
-					<option value="9" data-i18n="settings.interval.everysecondlast"></option>
-					<option value="8" data-i18n="settings.interval.everylast"></option>
+					<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
+					<option value="11" data-i18n="settings.interval.everyfirst"></option>
+					<option value="12" data-i18n="settings.interval.everysecond"></option>
+					<option value="13" data-i18n="settings.interval.everythird"></option>
+					<option value="19" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="20" data-i18n="settings.interval.everylast"></option>
 				</select>
 			</div>
-			<div style="float:left" id="plastic_day_div">
+			<div id="plastic_day_div">
 				<select style="margin-left: 5px;" name="plastic[day_of_week]" id="plastic_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
@@ -207,14 +214,15 @@
 					<option value="0" data-i18n="settings.dayofweek.su"></option>
 				</select>
 			</div>
-			<div style="float:left;">
+			<div>
 				<select style="display:none; margin-left: 5px;" name="plastic[option_extension]" id="plastic_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
 					<option value="12" data-i18n="settings.interval_extra.year"></option>
 				</select>
 			</div>
-			<div style="float: left;" id="plastic_startdate_div">
+			<div id="plastic_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
 				<input style="display: inline; margin-left: 5px;" type="date" name="plastic[startdate]" id="plastic_startdate"></input>
 			</div>
@@ -222,22 +230,23 @@
 
 		<!-- PMD -->
 		<div class="field row">
-			<label style="float:left" for="pmd" data-i18n="settings.pmd"></label>
-			<div style="float:left">
+			<label for="pmd" data-i18n="settings.pmd"></label>
+			<div>
 				<select name="pmd[option]" id="pmd_option">
 					<option value="0" data-i18n="settings.interval.na"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
 					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
 					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
 					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
-					<option value="5" data-i18n="settings.interval.everyfirst"></option>
-					<option value="6" data-i18n="settings.interval.everysecond"></option>
-					<option value="7" data-i18n="settings.interval.everythird"></option>
-					<option value="9" data-i18n="settings.interval.everysecondlast"></option>
-					<option value="8" data-i18n="settings.interval.everylast"></option>
+					<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
+					<option value="11" data-i18n="settings.interval.everyfirst"></option>
+					<option value="12" data-i18n="settings.interval.everysecond"></option>
+					<option value="13" data-i18n="settings.interval.everythird"></option>
+					<option value="19" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="20" data-i18n="settings.interval.everylast"></option>
 				</select>
 			</div>
-			<div style="float:left" id="pmd_day_div">
+			<div id="pmd_day_div">
 				<select style="margin-left: 5px;" name="pmd[day_of_week]" id="pmd_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
@@ -248,9 +257,10 @@
 					<option value="0" data-i18n="settings.dayofweek.su"></option>
 				</select>
 			</div>
-			<div style="float:left;">
+			<div>
 				<select style="display:none; margin-left: 5px;" name="pmd[option_extension]" id="pmd_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
 					<option value="12" data-i18n="settings.interval_extra.year"></option>
 				</select>
@@ -263,23 +273,23 @@
 
 		<!-- TEXTILE -->
 		<div class="field row">
-			<label style="float:left" for="textile" data-i18n="settings.textile"></label>
-			<div style="float:left">
+			<label for="textile" data-i18n="settings.textile"></label>
+			<div>
 				<select name="textile[option]" id="textile_option">
 					<option value="0" data-i18n="settings.interval.na"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
 					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
 					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
 					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
-					<option value="5" data-i18n="settings.interval.everyfirst"></option>
-					<option value="6" data-i18n="settings.interval.everysecond"></option>
-					<option value="7" data-i18n="settings.interval.everythird"></option>
-					<option value="8" data-i18n="settings.interval.everyfourth"></option>
-					<option value="10" data-i18n="settings.interval.everysecondlast"></option>
-					<option value="9" data-i18n="settings.interval.everylast"></option>
+					<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
+					<option value="11" data-i18n="settings.interval.everyfirst"></option>
+					<option value="12" data-i18n="settings.interval.everysecond"></option>
+					<option value="13" data-i18n="settings.interval.everythird"></option>
+					<option value="19" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="20" data-i18n="settings.interval.everylast"></option>
 				</select>
 			</div>
-			<div style="float:left" id="textile_day_div">
+			<div id="textile_day_div">
 				<select style="margin-left: 5px;" name="textile[day_of_week]" id="textile_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
@@ -290,18 +300,61 @@
 					<option value="0" data-i18n="settings.dayofweek.su"></option>
 				</select>
 			</div>
-			<div style="float:left;">
+			<div>
 				<select style="display:none; margin-left: 5px;" name="textile[option_extension]" id="textile_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
 					<option value="12" data-i18n="settings.interval_extra.year"></option>
 				</select>
 			</div>
-			<div style="float: left;" id="textile_startdate_div">
+			<div id="textile_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
 				<input style="display: inline; margin-left: 5px;" type="date" name="textile[startdate]" id="textile_startdate"></input>
 			</div>
         </div>
+		
+		<!-- BULKY / GROF VUIL -->
+		<div class="field row">
+			<label for="bulky" data-i18n="settings.bulky"></label>
+			<select name="bulky[option]" id="bulky_option">
+				<option value="0" data-i18n="settings.interval.na"></option>
+				<option value="1" data-i18n="settings.interval.everyweek"></option>
+				<option value="2" data-i18n="settings.interval.everyotherweek"></option>
+				<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
+				<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
+				<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
+				<option value="11" data-i18n="settings.interval.everyfirst"></option>
+				<option value="12" data-i18n="settings.interval.everysecond"></option>
+				<option value="13" data-i18n="settings.interval.everythird"></option>
+				<option value="19" data-i18n="settings.interval.everysecondlast"></option>
+				<option value="20" data-i18n="settings.interval.everylast"></option>
+			</select>
+			<div id="bulky_day_div">
+				<select style="margin-left: 5px;" name="bulky[day_of_week]" id="bulky_dayofweek">
+					<option value="1" data-i18n="settings.dayofweek.mo"></option>
+					<option value="2" data-i18n="settings.dayofweek.tu"></option>
+					<option value="3" data-i18n="settings.dayofweek.we"></option>
+					<option value="4" data-i18n="settings.dayofweek.th"></option>
+					<option value="5" data-i18n="settings.dayofweek.fr"></option>
+					<option value="6" data-i18n="settings.dayofweek.sa"></option>
+					<option value="0" data-i18n="settings.dayofweek.su"></option>
+				</select>
+			</div>
+			<div>
+				<select style="display:none; margin-left: 5px;" name="bulky[option_extension]" id="bulky_option_extension">
+					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
+					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
+					<option value="12" data-i18n="settings.interval_extra.year"></option>
+				</select>
+			</div>
+			<div id="bulky_startdate_div">
+				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
+				<input style="display: inline; margin-left: 5px;" type="date" name="bulky[startdate]" id="bulky_startdate"></input>
+			</div>
+        </div>
+		
     </fieldset>
 	<button id="manualInput" class="left" style="display:block" data-i18n="settings.saveManualInput" ></button>
 	<br /><br />
@@ -343,6 +396,10 @@
 			<input type="text" id="labelTextiel" name="label[textiel]" />
         </div>
 		<div class="field row">
+			<label for="labelGrof" data-i18n="settings.bulky"></label>
+			<input type="text" id="labelGrof" name="label[grof]" />
+        </div>
+		<div class="field row">
 			<label for="labelNone" data-i18n="settings.none"></label>
 			<input type="text" id="labelNone" name="label[none]" />
         </div>
@@ -380,12 +437,22 @@
 				saveLabelInput( Homey );
 				return false; // cancels save event! (we don't need the real button event to be handled).
 			});
+			
 			document.getElementById("gft_option").addEventListener("change", function(elem) { ToggleManualInputFields("gft"); });
 			document.getElementById("paper_option").addEventListener("change",function(elem) { ToggleManualInputFields("paper"); });
 			document.getElementById("rest_option").addEventListener("change", function(elem) { ToggleManualInputFields("rest"); });
 			document.getElementById("plastic_option").addEventListener("change", function(elem) { ToggleManualInputFields("plastic"); });
 			document.getElementById("pmd_option").addEventListener("change", function(elem) { ToggleManualInputFields("pmd"); });
 			document.getElementById("textile_option").addEventListener("change", function(elem) { ToggleManualInputFields("textile"); });
+			document.getElementById("bulky_option").addEventListener("change", function(elem) { ToggleManualInputFields("bulky"); });
+
+			document.getElementById("gft_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("gft"); });
+			document.getElementById("paper_option_extension").addEventListener("change",function(elem) { ToggleManualInputFields("paper"); });
+			document.getElementById("rest_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("rest"); });
+			document.getElementById("plastic_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("plastic"); });
+			document.getElementById("pmd_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("pmd"); });
+			document.getElementById("textile_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("textile"); });
+			document.getElementById("bulky_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("bulky"); });
 
 			var respDates = document.getElementById("respDatesDebug");
 				respDates.style.color = 'black';
@@ -399,6 +466,7 @@
 			ToggleManualInputFields("plastic");
 			ToggleManualInputFields("pmd");
 			ToggleManualInputFields("textile");
+			ToggleManualInputFields("bulky");
 
 			// Retrieve values from Homey settings
         	Homey.get('postcode', function(err, postcode)
@@ -496,6 +564,11 @@
 					{
 						SetManualEntryFormValues(manualEntryData.textile, "textile");
 					}
+
+					if(typeof manualEntryData.bulky !== 'undefined')
+					{
+						SetManualEntryFormValues(manualEntryData.bulky, "bulky");
+					}
 				});
 			});
 
@@ -564,6 +637,15 @@
 				else
 				{
 					SetLabelEntryFormValues(Homey, Homey.__('settings.textile'), "textiel");
+				}
+
+				if(typeof labelSettings.type.grof !== 'undefined')
+				{
+					SetLabelEntryFormValues(Homey, labelSettings.type.grof, "grof");
+				}
+				else
+				{
+					SetLabelEntryFormValues(Homey, Homey.__('settings.bulky'), "grof");
 				}
 
 				if(typeof labelSettings.type.none !== 'undefined')
@@ -684,6 +766,7 @@
 			data = SetManualInputDataFor("plastic", data);
 			data = SetManualInputDataFor("paper", data);
 			data = SetManualInputDataFor("textile", data);
+			data = SetManualInputDataFor("bulky", data);
 
 			console.log(data);
 			Homey.set('manualEntryData', data);
@@ -701,6 +784,7 @@
 					plastic: document.getElementById("labelPlastic").value,
 					papier: document.getElementById("labelPapier").value,
 					textiel: document.getElementById("labelTextiel").value,
+					grof: document.getElementById("labelGrof").value,
 					none: document.getElementById("labelNone").value
 				}
 			};
@@ -752,7 +836,7 @@
 			data[type].startdate = document.getElementById(type + "_startdate").value;
 			data[type].day = document.getElementById(type + "_dayofweek").value;
 
-			if(data[type].option >= 4) {
+			if(data[type].option >= 10) {
 				data[type].option_extension = document.getElementById(type + "_option_extension").value;
 			}
 			else {
@@ -781,11 +865,20 @@
 		function ToggleManualInputFields(prefix)
 		{
 			var value = document.getElementById(prefix + "_option").value;
+			var optionExtensionValue = document.getElementById(prefix + "_option_extension").value;
 
-			if(value >= 5) {
+			if(value >= 11) {
 				document.getElementById(prefix + "_option_extension").style.display = 'block';
-				document.getElementById(prefix + "_startdate_div").style.display = 'none';
 				document.getElementById(prefix + "_day_div").style.display = 'block';
+				
+				if(optionExtensionValue == 2)
+				{
+					document.getElementById(prefix + "_startdate_div").style.display = 'block';
+				}
+				else
+				{
+					document.getElementById(prefix + "_startdate_div").style.display = 'none';
+				}
 			}
 			else if(value == 1)
 			{

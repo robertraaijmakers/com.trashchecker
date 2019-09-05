@@ -6,7 +6,7 @@ const DateTimeHelper = require('./lib/datetime.js');
 
 var http = require('http');
 var apiArray = require('./trashapis.js');
-var supportedTypes = ["GFT","PLASTIC","PAPIER","PMD","REST","TEXTIEL"];
+var supportedTypes = ["GFT","PLASTIC","PAPIER","PMD","REST","TEXTIEL","GROF","KERSTBOOM"];
 
 class TrashcanReminder extends Homey.App
 {
@@ -176,9 +176,6 @@ class TrashcanReminder extends Homey.App
 					}
 				}
 			}
-			
-			//console.log("types collected on this day");
-			//console.log(typeCollectedOnThisDay);
 		}
 		
 		/* ******************
@@ -214,7 +211,7 @@ class TrashcanReminder extends Homey.App
 				else if(typeCollectedOnThisDay.length > 1)
 				{
 					var multiTypeString = "";				
-					for (var i = 0, len = multiTypeString.length; i < len; i++) {
+					for (var i = 0, len = typeCollectedOnThisDay.length; i < len; i++) {
 						multiTypeString += typeCollectedOnThisDay[i] + (i < (len-2) ? ", " : (i == (len-2) ? " " + Homey.__('speech.output.and') + " " : ""));
 					}
 					
@@ -461,12 +458,21 @@ class TrashcanReminder extends Homey.App
 					plastic: Homey.__('speech.output.type.PLASTIC') + " " + Homey.__('settings.labelplaceholder'),
 					papier: Homey.__('speech.output.type.PAPIER') + " " + Homey.__('settings.labelplaceholder'),
 					textiel: Homey.__('speech.output.type.TEXTIEL') + " " + Homey.__('settings.labelplaceholder'),
+					grof: Homey.__('speech.output.type.GROF') + " " + Homey.__('settings.labelplaceholder'),
+					kerstboom: Homey.__('speech.output.type.KERSTBOOM') + " " + Homey.__('settings.labelplaceholder'),
 					none: Homey.__('speech.output.type.NONE') + " " + Homey.__('settings.labelplaceholder')
 				}
 			};
 			
 			// Fill default label settings
 			Homey.ManagerSettings.set('labelSettings', labelSettings);
+		}
+		
+		// For backwards compatibility, add the two new waste types default values when they don't exist in the settings yet.
+		if(labelSettings.type["kerstboom"] === 'undefined' || labelSettings.type["grof"] === 'undefined')
+		{
+			labelSettings.type["kerstboom"] = Homey.__('speech.output.type.KERSTBOOM') + " " + Homey.__('settings.labelplaceholder');
+			labelSettings.type["grof"] = Homey.__('speech.output.type.GROF') + " " + Homey.__('settings.labelplaceholder');
 		}
 		
 		var checkDate = new Date();
@@ -476,8 +482,8 @@ class TrashcanReminder extends Homey.App
 			checkDate.setDate(checkDate.getDate() + 2);
 		}
 		
-		// Check trash type that is collected on x-day
-		var typeCollected = null;
+		// Check trash type that is collected on x-day (TODO: support for multiple types on same day?! --> same as speech?)
+		var typesCollected = [];
 		var textLabel = "";
 		if(typeof dates !== 'undefined' && dates !== null)
 		{
@@ -486,23 +492,35 @@ class TrashcanReminder extends Homey.App
 				{
 					if(dates[ supportedTypes[i] ].indexOf(this.dateToString(checkDate)) > -1)
 					{
-						typeCollected = supportedTypes[i];
+						typesCollected.push(supportedTypes[i]);
 					}
 				}
 			}
 		}
+		
+		if(typesCollected.length == 0)
+		{
+			textLabel = labelSettings.type["none"];
+		}
+		else if(typesCollected.length == 1)
+		{
+			textLabel = labelSettings.type[typesCollected[0].toLowerCase()];
+		}
+		else
+		{
+			// When more then one type of trash is collected
+			var multiTypeString = "";				
+			for (var i = 0, len = typesCollected.length; i < len; i++) {
+				multiTypeString += Homey.__('speech.output.type.' + typesCollected[i]) + (i < (len-2) ? ", " : (i == (len-2) ? " " + Homey.__('speech.output.and') + " " : ""));
+			}
 			
-		if(typeof typeCollected === 'undefined' || typeCollected === null)
-		{
-			typeCollected = "NONE";
+			responseText = Homey.__('speech.output.trashtypesycollectedonx',
+					{ 
+						time: Homey.__('speech.output.timeindicator.t' + labelSettings.timeindicator),
+						types: multiTypeString.toLowerCase()
+					});
 		}
-		
-		// Find sentence
-		if(typeof labelSettings.type[typeCollected.toLowerCase()] !== 'undefined')
-		{
-			textLabel = labelSettings.type[typeCollected.toLowerCase()];
-		}
-		
+				
 		// Set global token with value found.
 		if(this.trashToken !== null)
 		{	
@@ -517,26 +535,7 @@ class TrashcanReminder extends Homey.App
 	
 	/* ******************
 		COMMON FUNCTIONS
-	******************* */
-	// updateLabel ( shouldExecute, shouldSetTimeout )
-	// {	
-		// if( shouldExecute === true)
-		// {
-			// let result = this.onUpdateLabel();
-			// if(typeof result !== 'undefined' && result !== null && typeof result === 'function')
-			// {
-				// result.resolve();
-			// }
-		// }
-	
-		// // Make sure it is executed every day at midnight (+1 sec)	
-		// if(shouldSetTimeout === true)
-		// {
-			// let msTillMidnight = this.millisecondsTillMidnight();	
-			// setTimeout(this.updateLabel.bind(this), (msTillMidnight + (1000*60*60*2)), true, true);
-		// }
-	// }
-	
+	******************* */	
 	// Exctualy calculates MS till 5 O clock
 	millisecondsTillMidnight()
 	{
@@ -740,6 +739,16 @@ class TrashcanReminder extends Homey.App
 			dates.TEXTIEL = this.CalculatePickupDates(manualSettings.textile);
 		}
 		
+		if(typeof manualSettings.bulky !== 'undefined' && manualSettings.bulky)
+		{
+			dates.GROF = this.CalculatePickupDates(manualSettings.bulky);
+		}
+		
+		if(typeof manualSettings.christmas !== 'undefined' && manualSettings.christmas)
+		{
+			dates.KERSTBOOM = this.CalculatePickupDates(manualSettings.christmas);
+		}
+		
 		// Push to gdates
 		Homey.ManagerSettings.set('collectingDays', dates);
 		this.gdates = dates;
@@ -777,9 +786,9 @@ class TrashcanReminder extends Homey.App
 		var nextMonth = new Date(new Date(firstDayInCurrentMonth).setMonth(firstDayInCurrentMonth.getMonth()+1));
 		var afterNextMonth = new Date(new Date(firstDayInCurrentMonth).setMonth(firstDayInCurrentMonth.getMonth()+2));
 		
-		if(interval >= 5 && interval <= 8) // every x-th week of month/quarter/year
+		if(interval >= 11 && interval <= 13) // every x-th week of month/quarter/year
 		{
-			var nThWeek = interval-4;
+			var nThWeek = interval-10;
 			var date1 = new Date();
 			var date2 = new Date();
 			var date3 = new Date();
@@ -801,6 +810,23 @@ class TrashcanReminder extends Homey.App
 				date2 = DateTimeHelper.nthDayInMonth(nThWeek, dayOfWeek, currentQuarterStart.getMonth(), currentQuarterStart.getFullYear());
 				date3 = DateTimeHelper.nthDayInMonth(nThWeek, dayOfWeek, nextQuarterStart.getMonth(), nextQuarterStart.getFullYear());
 			}
+			else if(intervalExtended == 2) // every x-th week of the other month
+			{
+				// We need to know the start date (if it's in an even or uneven month)
+				var oddOrEvenMonth = startDate.getMonth() % 2;
+				
+				// Then we calculate up to 6 months ahead
+				for (var i = -2, weekCounter = 6; i < weekCounter; i++) {
+					var monthToCalculateWith = new Date(new Date(firstDayInCurrentMonth).setMonth(firstDayInCurrentMonth.getMonth()+i));
+					var calculatedDate = DateTimeHelper.nthDayInMonth(nThWeek, dayOfWeek, monthToCalculateWith.getMonth(), monthToCalculateWith.getFullYear());
+					if(calculatedDate.getMonth() % 2 === oddOrEvenMonth)
+					{
+						result.push(this.dateToString(calculatedDate));
+					}
+				}
+				
+				return result;
+			}
 			else // every x-th week of the month
 			{		
 				date1 = DateTimeHelper.nthDayInMonth(nThWeek, dayOfWeek, previousMonth.getMonth(), previousMonth.getFullYear());
@@ -812,7 +838,7 @@ class TrashcanReminder extends Homey.App
 			result.push(this.dateToString(date2));
 			result.push(this.dateToString(date3));
 		}
-		else if(interval <= 4) // per week
+		else if(interval <= 8) // per week
 		{
 			var date0 = DateTimeHelper.everyNthWeek(interval, dayOfWeek, startDate, currentDate, -2);
 			var date1 = DateTimeHelper.everyNthWeek(interval, dayOfWeek, startDate, currentDate, -1);
@@ -826,9 +852,9 @@ class TrashcanReminder extends Homey.App
 			result.push(this.dateToString(date3));
 			result.push(this.dateToString(date4));
 		}
-		else if(interval >= 9 && interval <= 10) // every last, every second last
+		else if(interval >= 19 && interval <= 20) // every last, every second last
 		{
-			var nthLastWeekOf = interval-8;
+			var nthLastWeekOf = interval-18;
 			
 			var date1 = new Date();
 			var date2 = new Date();
@@ -881,8 +907,8 @@ class TrashcanReminder extends Homey.App
 		else if(differenceInDaysForType <= 7)
 		{
 			var today = new Date();
-			var dayOfWeek = (today.getDay() + differenceInDaysForType) % 7;
-			return Homey.__('speech.output.next') + " " +Homey.__('speech.output.weekdays.d'+dayOfWeek);
+			var dayOfWeek = Math.floor((today.getDay() + differenceInDaysForType) % 7); // I don't know why, but modulo won't work without Floor...
+			return Homey.__('speech.output.next') + " " + Homey.__('speech.output.weekdays.d'+ dayOfWeek);
 		}
 		else
 		{

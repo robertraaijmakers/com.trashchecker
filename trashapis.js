@@ -9,7 +9,7 @@ var cheerio = require('cheerio');
 var ical = require('ical');
 
 /**
- * Different venders using the same two base API's
+ * Different vendors using the same two base API's
  */
 
 function mijnAfvalWijzer(postcode, housenumber, country, callback) {
@@ -91,7 +91,7 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                         const entry = entries[i];
                         const dateStr = ('0' + entry.start.getDate()).slice(-2) + '-' + (('0' + (entry.start.getMonth() + 1)).slice(-2)) + '-' + entry.start.getFullYear();
 
-                        var description = entry.description.toLowerCase();
+                        var description = entry.description.toLowerCase().trim();
 
                         if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
                             if (!dates.GFT) dates.GFT = [];
@@ -105,7 +105,16 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                         } else if (description.indexOf('papier') !== -1) {
                             if (!dates.PAPIER) dates.PAPIER = [];
                             dates.PAPIER.push(dateStr);
-                        }
+                        } else if (description.indexOf('textiel') !== -1) {
+                            if (!dates.TEXTIEL) dates.TEXTIEL = [];
+                            dates.TEXTIEL.push(dateStr);
+                        } else if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
+							if (!dates.KERSTBOOM) dates.KERSTBOOM = [];
+                            dates.KERSTBOOM.push(dateStr);
+						} else if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
+							if (!dates.GROF) dates.GROF = [];
+                            dates.GROF.push(dateStr);
+						}
                     }
                     console.log(dates);
                     return callback(null, dates);
@@ -169,6 +178,18 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                         if (!fDates.PMD) fDates.PMD = [];
                         fDates.PAPIER.push(dateStr);
                         fDates.PMD.push(dateStr);
+                        break;
+					case 'grof':
+					case 'grof vuil':
+					case 'grofvuil':
+                        if (!fDates.GROF) fDates.GROF = [];
+                        fDates.GROF.push(dateStr);
+                        break;
+                    case 'kerst':
+					case 'kerstboom':
+					case 'kerstbomen':
+                        if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
+                        fDates.KERSTBOOM.push(dateStr);
                         break;
                     default:
                         console.log('Defaulted. Element not found:', elem.attribs.class);
@@ -551,9 +572,14 @@ function afvalkalenderRD4(postcode, housenumber, country, callback) {
 
     request(url, function (err, res, body) {
         if (!err && res.statusCode == 200) {
-            var result = JSON.parse(res.body);
-            console.log(result);
-            return callback(null, result);
+			try {
+				var result = JSON.parse(res.body);
+				console.log(result);
+				return callback(null, result);
+			} catch (ex) {
+				//console.log('Error: ' + ex);
+				return callback(new Error('Error: ' + ex));
+			}
         } else {
             return callback(new Error('Invalid location'));
         }
