@@ -5,7 +5,7 @@
 		"en": "Trashcan Reminder 2.0",
 		"nl": "Afval Herinnering 2.0"
 	},
-	"version": "2.6.0",
+	"version": "2.6.1",
 	"compatibility": ">=1.5",
 	"author": {
 		"name": "Robert Raaijmakers",
