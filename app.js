@@ -514,7 +514,7 @@ class TrashcanReminder extends Homey.App
 				multiTypeString += Homey.__('speech.output.type.' + typesCollected[i]) + (i < (len-2) ? ", " : (i == (len-2) ? " " + Homey.__('speech.output.and') + " " : ""));
 			}
 			
-			responseText = Homey.__('speech.output.trashtypesycollectedonx',
+			textLabel = Homey.__('speech.output.trashtypesycollectedonx',
 					{ 
 						time: Homey.__('speech.output.timeindicator.t' + labelSettings.timeindicator),
 						types: multiTypeString.toLowerCase()
