@@ -616,7 +616,7 @@ function rovaAfvalkalender(postcode, housenumber, country, callback) {
     request(options, function (err, res, body) {
         if (!err && res.statusCode == 200) {
             var responseJson = JSON.parse(res.body);
-            //console.log(`response json ${responseJson}`)
+            console.log('response json ${responseJson}');
 
             // root has one afvalkalender with one array inzameldagen
             var pickupDays = responseJson.afvalkalender.inzameldagen;
