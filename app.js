@@ -902,7 +902,7 @@ class TrashcanReminder extends Homey.App
 	{
 		if(differenceInDaysForType >= 0 && differenceInDaysForType <= 2)
 		{
-			return Homey.__('speech.output.timeindicator.t'+differenceInDaysForType);
+			return Homey.__('speech.output.timeindicator.t'+Math.ceil(differenceInDaysForType)); // Need ceil for rounding to int
 		}
 		else if(differenceInDaysForType <= 7)
 		{
