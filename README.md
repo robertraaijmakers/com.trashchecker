@@ -26,7 +26,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 ## Supported Cards
 There is one card that you can place in the "then" column. The card let's you check if trash type X is collected << today, tomorrow, day after tomorrow >> or if any type of trash is collected << today, tomorrow, day after tomorrow >>.
 
-## Supported Speech
+## Supported Speech / Chat
 You can ask Homey four type of questions regarding your waste collection:
 - When is the green container collected?
 - What is collected next monday?
