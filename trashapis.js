@@ -886,7 +886,15 @@ function parseDate(dateString) {
         console.log('This should not be possible...');
         return 'erroneous date';
     }
-    fullString += new Date().getFullYear();
+	
+	if(typeof dateArray[3] !== 'undefined')
+	{
+		fullString += dateArray[3];
+	}
+	else {
+		fullString += new Date().getFullYear();
+	}
+	
     return fullString;
 }
 
