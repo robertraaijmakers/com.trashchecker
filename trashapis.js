@@ -52,6 +52,10 @@ function BlinkAfvalkalender(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'mijnblink.nl', callback);
 }
 
+function GadGooiAndVechtstreek(postcode, housenumber, country, callback) {
+    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.gad.nl', callback);
+}
+
 function twenteMilieu(postcode, housenumber, country, callback) {
 	console.log("Checking Twente Milieu");
     generalImplementationWasteApi(postcode, housenumber, country, "8d97bb56-5afd-4cbc-a651-b4f7314264b4", callback);
@@ -756,5 +760,6 @@ apiList.push({ name: "Afvalkalender Circulus-Berkel", id: "acb", execute: circul
 apiList.push({ name: "Mijn Blink Afvalkalender", id: "mba", execute: BlinkAfvalkalender });
 apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
 apiList.push({ name: "ACV", id: "acv", execute: acvAfvalkalender });
+apiList.push({ name: "GAD Gooi en Vechtstreek", id: "gad", execute: GadGooiAndVechtstreek });
 
 module.exports = apiList;

@@ -14,6 +14,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Dar Afvalkalender](https://afvalkalender.dar.nl)
 - [De Afval App](http://www.deafvalapp.nl/calendar/kalender_start.jsp)
 - [Den Bosch](http://denbosch.afvalstoffendienstkalender.nl)
+- [GAD Gooi en Vechtstreek](https://inzamelkalender.gad.nl/)
 - [Gemeente Hellendoorn](https://www.hellendoorn.nl/wonen-leven/publicatie/afval)
 - [Inzamelkalender HVC](https://inzamelkalender.hvcgroep.nl)
 - [Mijn Afvalwijzer](http://www.mijnafvalwijzer.nl)
