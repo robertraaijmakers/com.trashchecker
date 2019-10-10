@@ -9,7 +9,7 @@ var cheerio = require('cheerio');
 var ical = require('ical');
 
 /**
- * Different vendors using the same two base API's
+ * Different vendors using the same three base API's
  */
 
 function mijnAfvalWijzer(postcode, housenumber, country, callback) {
@@ -50,6 +50,16 @@ function inzamelkalenderHVC(postcode, housenumber, country, callback) {
 
 function BlinkAfvalkalender(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'mijnblink.nl', callback);
+}
+
+function twenteMilieu(postcode, housenumber, country, callback) {
+	console.log("Checking Twente Milieu");
+    generalImplementationWasteApi(postcode, housenumber, country, "8d97bb56-5afd-4cbc-a651-b4f7314264b4", callback);
+}
+
+function gemeenteHellendoorn(postcode, housenumber, country, callback) {
+    console.log("Checking Gemeente Hellendoorn");
+    generalImplementationWasteApi(postcode, housenumber, country, "24434f5b-7244-412b-9306-3a2bd1e22bc1", callback);
 }
 
 /**
@@ -203,12 +213,9 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
     });
 }
 
-/**
- * Vendor specific API implementations
- */
-
-function twenteMilieu(postcode, housenumber, country, callback) {
-    console.log("Checking Twente Milieu");
+function generalImplementationWasteApi(postcode, housenumber, country, companyCode, callback)
+{
+	console.log("Checking company code ${companyCode}.");
 
     var fDates = {};
     if (country !== "NL") {
@@ -224,14 +231,14 @@ function twenteMilieu(postcode, housenumber, country, callback) {
     endDate = dateFormat(endDate.setDate(endDate.getDate() + 30), "yyyy-mm-dd");
     // console.log("endDate is: " + endDate);
 
-    var post_data1 = `companyCode=8d97bb56-5afd-4cbc-a651-b4f7314264b4&postCode=${postcode}&houseNumber=${housenumber}&houseLetter=&houseNumberAddition=`;
+    var post_data1 = `{companyCode:"${companyCode}",postCode:"${postcode}",houseNumber:"${housenumber}",houseLetter:""}`;
     var post_options1 = {
         host: 'wasteapi.2go-mobile.com',
         port: '443',
         path: '/api/FetchAdress',
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(post_data1)
         }
     };
@@ -253,14 +260,14 @@ function twenteMilieu(postcode, housenumber, country, callback) {
 
                     var uniqueID = obj1.dataList[0].UniqueId;
                     // console.log("UniqueID: " + uniqueID);
-                    var post_data2 = `companyCode=8d97bb56-5afd-4cbc-a651-b4f7314264b4&uniqueAddressID=${uniqueID}&startDate=${startDate}&endDate=${endDate}`;
+					var post_data2 = `{companyCode:"${companyCode}",uniqueAddressID:"${uniqueID}",startDate:"${startDate}",endDate:"${endDate}"}`;
                     var post_options2 = {
                         host: 'wasteapi.2go-mobile.com',
                         port: '443',
                         path: '/api/GetCalendar',
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Content-Type': 'application/json',
                             'Content-Length': Buffer.byteLength(post_data2)
                         }
                     };
@@ -271,24 +278,6 @@ function twenteMilieu(postcode, housenumber, country, callback) {
                             if (obj2.status) {
                                 for (var i = 0; i < Object.keys(obj2.dataList).length; i++) {
                                     // console.log("Type afval is: " + obj2.dataList[i]._pickupTypeText);
-                                    switch (obj2.dataList[i]._pickupTypeText) {
-                                        case "GREY":
-                                            // console.log("REST:");
-                                            if (!fDates.REST) fDates.REST = [];
-                                            break;
-                                        case "GREEN":
-                                            // console.log("GFT:");
-                                            if (!fDates.GFT) fDates.GFT = [];
-                                            break;
-                                        case "PAPER":
-                                            // console.log("PAPIER:");
-                                            if (!fDates.PAPIER) fDates.PAPIER = [];
-                                            break;
-                                        case "PACKAGES":
-                                            // console.log("PLASTIC:");
-                                            if (!fDates.PLASTIC) fDates.PLASTIC = [];
-                                            break;
-                                    }
                                     // console.log("Datum is: " + obj2.dataList[i].pickupDates[0]);
                                     //console.log("Aantal datums: " + Object.keys(obj2.dataList[i].pickupDates).length);
                                     for (var j = 0; j < Object.keys(obj2.dataList[i].pickupDates).length; j++) {
@@ -335,176 +324,15 @@ function twenteMilieu(postcode, housenumber, country, callback) {
             return callback(new Error('Invalid location'));
         }
     });
+	
     // post the data
     post_req1.write(post_data1);
     post_req1.end();
 }
 
-function gemeenteHellendoorn(postcode, housenumber, country, callback) {
-    console.log("Checking Gemeente Hellendoorn");
-
-    if (country !== "NL") {
-        console.log('unsupported country');
-        return callback(new Error('unsupported country'));
-    }
-
-    var DOMParser = require('xmldom').DOMParser;
-
-    var startDate = new Date();
-    startDate = dateFormat(startDate.setDate(startDate.getDate() - 14), "yyyy-mm-dd");
-    // console.log("startDate is: " + startDate);
-
-    var endDate = new Date();
-    endDate = dateFormat(endDate.setDate(endDate.getDate() + 90), "yyyy-mm-dd");
-    // console.log("endDate is: " + endDate);
-
-    var body1 = '<?xml version="1.0" encoding="utf-8"?>' +
-        '<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">' +
-        '<soap12:Body><GetAddresses xmlns="http://www.meurs-software.nl/afval-ris">' +
-        `<ZipCode>${postcode}</ZipCode>` +
-        `<HouseNumber>${housenumber}</HouseNumber>` +
-        '<HouseLetter></HouseLetter>' +
-        '</GetAddresses></soap12:Body></soap12:Envelope>';
-
-    var postRequest1 = {
-        host: "hellendoornportal-srvc.2go-mobile.com",
-        path: "/ReportService.asmx",
-        port: 80,
-        method: "POST",
-        headers: {
-            'Cookie': "cookie",
-            'Content-Type': 'text/xml',
-            'Content-Length': Buffer.byteLength(body1)
-        }
-    };
-    var result = "";
-    var fDates = {};
-    var buffer1 = "";
-    var uniqueID = "";
-
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-    var req1 = http.request(postRequest1, function (res1) {
-        if (res1.statusCode == 200) {
-            // console.log( res1.statusCode );
-            console.log("Aanroep Hellendoorn met: " + postcode + housenumber + country);
-            var buffer1 = "";
-            res1.on("data", function (data1) { buffer1 = buffer1 + data1; });
-            res1.on("end", function (data1) {
-                // console.log( buffer1 );
-                var doc1 = new DOMParser().parseFromString(buffer1, "text/xml");
-                // console.log("statusCode is: " + doc1.getElementsByTagName("StatusCode")[0].childNodes[0].data);
-                if (doc1.getElementsByTagName("StatusCode")[0].childNodes[0].data == "Ok" && doc1.getElementsByTagName("Addresses")[0].childNodes.length > 0) {
-                    var uniqueIDObject = doc1.getElementsByTagName("UniqueId");
-                    uniqueID = uniqueIDObject[0].childNodes[0].data;
-                    var body2 = '<?xml version="1.0" encoding="utf-8"?>' +
-                        '<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">' +
-                        '<soap12:Body><GetContainerDates xmlns="http://www.meurs-software.nl/afval-ris">' +
-                        `<UniqueAddressId>${uniqueID}</UniqueAddressId>` +
-                        `<Start>${startDate}</Start>` +
-                        `<End>${endDate}</End>` +
-                        '</GetContainerDates></soap12:Body></soap12:Envelope>';
-
-                    var postRequest2 = {
-                        host: "hellendoornportal-srvc.2go-mobile.com",
-                        path: "/ReportService.asmx",
-                        port: 80,
-                        method: "POST",
-                        headers: {
-                            'Cookie': "cookie",
-                            'Content-Type': 'text/xml',
-                            'Content-Length': Buffer.byteLength(body2)
-                        }
-                    };
-                    var req2 = http.request(postRequest2, function (res2) {
-                        if (res2.statusCode == 200) {
-                            // console.log( res2.statusCode );
-                            var buffer2 = "";
-                            // console.log("uniqueID is: ", uniqueID);
-                            res2.on("data", function (data2) { buffer2 = buffer2 + data2; });
-                            res2.on("end", function (data2) {
-                                var doc2 = new DOMParser().parseFromString(buffer2, "text/xml");
-                                if (doc2.getElementsByTagName("StatusCode")[0].childNodes[0].data == "Ok") {
-                                    var trashCodeObject = doc2.getElementsByTagName("Code");
-                                    var numberOfCodes = trashCodeObject.length;
-                                    // console.log("Code is: ", doc.getElementsByTagName("Code")[0].childNodes[0].data);
-                                    // console.log("Aantal gevonden Code velden: ", numberOfCodes);
-                                    for (var i = 0; i < numberOfCodes; i++) {
-                                        switch (trashCodeObject[i].childNodes[0].data) {
-                                            case "00":
-                                                // console.log("REST:");
-                                                if (!fDates.REST) fDates.REST = [];
-                                                break;
-                                            case "11":
-                                                // console.log("GFT:");
-                                                if (!fDates.GFT) fDates.GFT = [];
-                                                break;
-                                            case "22":
-                                                // console.log("PAPIER:");
-                                                if (!fDates.PAPIER) fDates.PAPIER = [];
-                                                break;
-                                            case "66":
-                                                // console.log("PLASTIC:");
-                                                if (!fDates.PLASTIC) fDates.PLASTIC = [];
-                                                break;
-                                        }
-
-                                        var numberOfDates = trashCodeObject[i].parentNode.lastChild.childNodes.length;
-                                        // console.log("Aantal gevonden Datums: ", numberOfDates);
-                                        for (var j = 0; j < numberOfDates; j++) {
-                                            var date = trashCodeObject[i].parentNode.lastChild.childNodes[j].childNodes[0].nodeValue;
-                                            // console.log(dateFormat(date, "dd-mm-yyyy"));
-                                            switch (trashCodeObject[i].childNodes[0].data) {
-                                                case "00":
-                                                    if (!fDates.REST) fDates.REST = [];
-                                                    fDates.REST.push(dateFormat(date, "dd-mm-yyyy"));
-                                                    break;
-                                                case "11":
-                                                    if (!fDates.GFT) fDates.GFT = [];
-                                                    fDates.GFT.push(dateFormat(date, "dd-mm-yyyy"));
-                                                    break;
-                                                case "22":
-                                                    if (!fDates.PAPIER) fDates.PAPIER = [];
-                                                    fDates.PAPIER.push(dateFormat(date, "dd-mm-yyyy"));
-                                                    break;
-                                                case "66":
-                                                    if (!fDates.PLASTIC) fDates.PLASTIC = [];
-                                                    fDates.PLASTIC.push(dateFormat(date, "dd-mm-yyyy"));
-                                                    break;
-                                            }
-                                            // console.log(dateFormat(date, "dd-mm-yyyy"));
-
-                                        }
-                                        // console.log(trashCodeObject[i].getElementsByTagName("string")[0]);
-                                    }
-                                    console.log(fDates);
-                                    return callback(null, fDates);
-                                } else {
-                                    console.log("Ophalen van ophaaldata is mislukt!");
-                                    return callback(new Error('Invalid location'));
-                                }
-                            });
-                        } else {
-                            console.log(res2.statusCode);
-                            console.log("Er is iets fout gegaan! (response code req2)");
-                            return callback(new Error('Invalid location'));
-                        }
-                    });
-                    req2.write(body2);
-                    req2.end();
-                } else {
-                    console.log("Er is iets fout gegaan! (parsen van doc 1)");
-                    return callback(new Error('Invalid location'));
-                }
-            });
-        } else {
-            console.log(res1.statusCode);
-            console.log("Er is iets fout gegaan! (response code req1)");
-            return callback(new Error('Invalid location'));
-        }
-    });
-    req1.write(body1);
-    req1.end();
-}
+/**
+ * Vendor specific API implementations
+ */
 
 function recycleManager(postcode, housenumber, country, callback) {
     if (country !== "NL") {

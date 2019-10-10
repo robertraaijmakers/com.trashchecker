@@ -446,9 +446,11 @@ class TrashcanReminder extends Homey.App
 		// DEBUG
 		console.log(dates);
 		console.log(labelSettings);
-		
+				
 		if(labelSettings === 'undefined' || labelSettings == null)
 		{
+			console.log("Updating label with default values");
+			
 			labelSettings = {
 				timeindicator: 0,
 				type: {
@@ -469,10 +471,15 @@ class TrashcanReminder extends Homey.App
 		}
 		
 		// For backwards compatibility, add the two new waste types default values when they don't exist in the settings yet.
-		if(labelSettings.type["kerstboom"] === 'undefined' || labelSettings.type["grof"] === 'undefined')
+		if(typeof labelSettings.type["kerstboom"] === 'undefined' || typeof labelSettings.type["grof"] === 'undefined')
 		{
+			console.log("Updating label with additional values for backwards compatibility");
+			
 			labelSettings.type["kerstboom"] = Homey.__('speech.output.type.KERSTBOOM') + " " + Homey.__('settings.labelplaceholder');
 			labelSettings.type["grof"] = Homey.__('speech.output.type.GROF') + " " + Homey.__('settings.labelplaceholder');
+			
+			// Update default label settings
+			Homey.ManagerSettings.set('labelSettings', labelSettings);
 		}
 		
 		var checkDate = new Date();
