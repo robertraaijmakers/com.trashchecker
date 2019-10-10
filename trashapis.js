@@ -62,6 +62,12 @@ function gemeenteHellendoorn(postcode, housenumber, country, callback) {
     generalImplementationWasteApi(postcode, housenumber, country, "24434f5b-7244-412b-9306-3a2bd1e22bc1", callback);
 }
 
+function acvAfvalkalender(postcode, housenumber, country, callback)
+{
+	console.log("Checking ACV afvalkalender");
+	generalImplementationWasteApi(postcode, housenumber, country, "f8e2844a-095e-48f9-9f98-71fceb51d2c3", callback);
+}
+
 /**
  * General implementation of the afvalkalender API used by a lot of different vendors.
  */
@@ -749,5 +755,6 @@ apiList.push({ name: "ROVA Afvalkalender", id: "rov", execute: rovaAfvalkalender
 apiList.push({ name: "Afvalkalender Circulus-Berkel", id: "acb", execute: circulusBerkel });
 apiList.push({ name: "Mijn Blink Afvalkalender", id: "mba", execute: BlinkAfvalkalender });
 apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
+apiList.push({ name: "ACV", id: "acv", execute: acvAfvalkalender });
 
 module.exports = apiList;
