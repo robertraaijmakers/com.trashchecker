@@ -10,6 +10,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Afvalkalender Meerlanden](https://afvalkalender.meerlanden.nl)
 - [Afvalkalender Venray](https://afvalkalender.venray.nl)
 - [Avalex](https://www.avalex.nl/)
+- [Cure](https://afvalkalender.cure-afvalbeheer.nl)
 - [Cyclus](http://afvalkalender.cyclusnv.nl)
 - [Dar Afvalkalender](https://afvalkalender.dar.nl)
 - [De Afval App](http://www.deafvalapp.nl/calendar/kalender_start.jsp)
@@ -26,7 +27,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Twentemilieu](https://www.twentemilieu.nl)
 
 ## Supported Cards
-There is one card that you can place in the "then" column. The card let's you check if trash type X is collected << today, tomorrow, day after tomorrow >> or if any type of trash is collected << today, tomorrow, day after tomorrow >>.
+There is one card that you can place in the "and" column. The card lets you check whether or not trash is collected either today, tomorrow or the day after tomorrow. The type of trash that is checked for can be set to a specific one, or to 'any' to include all types.
 
 ## Supported Speech / Chat
 You can ask Homey four type of questions regarding your waste collection:
