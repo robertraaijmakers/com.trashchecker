@@ -543,22 +543,25 @@ function circulusBerkel(postcode, homenumber, country, callback) {
                     var json_body = JSON.parse(body);
                     var o = json_body.customData.response.garbage;
                     for (var i = 0; i < o.length; i++) {
-                        var key = o[i].code;
+                        var key = o[i].code.toLowerCase();
                         switch (key) {
-                            case 'PMD':
-                            case 'GFT':
-                            case 'REST':
+                            case 'pmd':
+                            case 'gft':
+                            case 'rest':
                                 break;
-                            case 'ZWAKRA':
+			    case 'drocodev':
+                            case 'zwakra':
                                 key = "PMD";
                                 break;
-                            case 'PAP':
+                            case 'pap':
                                 key = 'PAPIER';
                                 break;
-                            case 'BEST':
+                            case 'best':
                                 key = 'TEXTIEL';
                                 break;
                             default:
+				key = key;
+				break;
                         }
                         addToDates(key, o[i].dates, dates);
                     }
