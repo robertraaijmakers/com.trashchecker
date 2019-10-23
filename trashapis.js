@@ -548,6 +548,7 @@ function circulusBerkel(postcode, homenumber, country, callback) {
                             case 'pmd':
                             case 'gft':
                             case 'rest':
+				key = key.toUpperCase();
                                 break;
 			    case 'drocodev':
                             case 'zwakra':
@@ -560,7 +561,7 @@ function circulusBerkel(postcode, homenumber, country, callback) {
                                 key = 'TEXTIEL';
                                 break;
                             default:
-				key = key;
+				key = key.toUpperCase();
 				break;
                         }
                         addToDates(key, o[i].dates, dates);
