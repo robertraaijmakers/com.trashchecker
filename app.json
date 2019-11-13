@@ -5,7 +5,7 @@
 		"en": "Trashcan Reminder 2.0",
 		"nl": "Afval Herinnering 2.0"
 	},
-	"version": "2.6.4",
+	"version": "2.6.5",
 	"compatibility": ">=1.5",
 	"author": {
 		"name": "Robert Raaijmakers",
@@ -50,6 +50,18 @@
 	"credits": {
 		"icon": "Pham Thi Dieu Linh"
 	},
+	"contributing": {
+	    "donate": {
+	      "paypal": {
+		"username": "RobertRaaijmakers"
+	      }
+	    }
+	  },
+	  "bugs": {
+	    "url": "https://github.com/robertraaijmakers/com.trashchecker/issues"
+	},
+	"homeyCommunityTopicId": 10410,
+  	"source": "https://github.com/robertraaijmakers/com.trashchecker",
 	"speech": {
 		"en": {
 			"element": {
