@@ -8,6 +8,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Afvalkalender ACV](https://www.acv-groep.nl/)
 - [Afvalkalender Circulus-Berkel](https://mijn.circulus-berkel.nl)
 - [Afvalkalender Meerlanden](https://afvalkalender.meerlanden.nl)
+- [Afvalkalender Peel en Maas](https://afvalkalender.peelenmaas.nl)
 - [Afvalkalender Venray](https://afvalkalender.venray.nl)
 - [Avalex](https://www.avalex.nl/)
 - [Cure](https://afvalkalender.cure-afvalbeheer.nl)

@@ -40,6 +40,10 @@ function afvalkalenderMeerlanden(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.meerlanden.nl', callback);
 }
 
+function afvalkalenderPeelEnMaas(postcode, housenumber, country, callback) {
+    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.peelenmaas.nl', callback);
+}
+
 function afvalkalenderVenray(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.venray.nl', callback);
 }
@@ -760,6 +764,7 @@ apiList.push({ name: "Twente Milieu", id: "twm", execute: twenteMilieu });
 apiList.push({ name: "Gemeente Hellendoorn", id: "geh", execute: gemeenteHellendoorn });
 apiList.push({ name: "Recyclemanager", id: "remg", execute: recycleManager });
 apiList.push({ name: "Afvalkalender Meerlanden", id: "akm", execute: afvalkalenderMeerlanden });
+apiList.push({ name: "Afvalkalender Peel en Maas", id: "akm", execute: afvalkalenderPeelEnMaas });
 apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderVenray });
 apiList.push({ name: "Inzamelkalender HVC", id: "hvc", execute: inzamelkalenderHVC });
 apiList.push({ name: "Dar Afvalkalender", id: "dar", execute: darAfvalkalender });
