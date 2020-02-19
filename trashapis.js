@@ -20,6 +20,10 @@ function denBoschAfvalstoffendienstCalendar(postcode, housenumber, country, call
     generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, 'http://denbosch.afvalstoffendienstkalender.nl/nl/', callback);
 }
 
+function rovaAfvalkalender(postcode, housenumber, country, callback) {
+	generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "https://inzamelkalender.rova.nl/nl/", callback);
+}
+
 function afvalkalenderCyclus(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cyclusnv.nl', callback);
 }
@@ -427,78 +431,6 @@ function afvalkalenderRD4(postcode, housenumber, country, callback) {
 				return callback(new Error('Error: ' + ex));
 			}
         } else {
-            return callback(new Error('Invalid location'));
-        }
-    });
-}
-
-function rovaAfvalkalender(postcode, housenumber, country, callback) {
-    //console.log("Checking ROVA Afvalkalender");
-
-    var fDates = {};
-    if (country !== "NL") {
-        //console.log('unsupported country');
-        return callback(new Error('unsupported country'));
-    }
-
-    var year = (new Date()).getFullYear();
-
-    // split c
-    var postCodeNumbers = postcode.substr(0, 4);
-    var postCodeChars = postcode.substr(4, 2);
-
-    var fullPath = `http://rova.quintor.nl/rest/afvalkalender/${year}/${postCodeNumbers}/${postCodeChars}/${housenumber}`;
-
-    //console.log(`requesting for ${fullPath}`)
-
-    var options = {
-        url: fullPath,
-        headers: {
-            'User-Agent': 'Android',
-            'Accept': 'application/json;version=1.6'
-        }
-    };
-
-    request(options, function (err, res, body) {
-        if (!err && res.statusCode == 200) {
-            var responseJson = JSON.parse(res.body);
-            console.log('response json ${responseJson}');
-
-            // root has one afvalkalender with one array inzameldagen
-            var pickupDays = responseJson.afvalkalender.inzameldagen;
-
-            for (let i in pickupDays) {
-                var pickupDay = pickupDays[i];
-                var date = dateFormat(pickupDay["datum"], "dd-mm-yyyy"); // because pickupDay uses yyyy-mm-dd
-
-                // inzamelsoorten is an array with only one string
-                switch (pickupDay["inzamelsoorten"][0]) {
-                    case 'PLASTICPLUS':
-                        if (!fDates.PLASTIC) fDates.PLASTIC = [];
-                        fDates.PLASTIC.push(date);
-                        break;
-                    case 'REST':
-                        if (!fDates.REST) fDates.REST = [];
-                        fDates.REST.push(date);
-                        break;
-                    case 'GFT':
-                        if (!fDates.GFT) fDates.GFT = [];
-                        fDates.GFT.push(date);
-                        break;
-                    case 'PAPIER':
-                        if (!fDates.PAPIER) fDates.PAPIER = [];
-                        fDates.PAPIER.push(date);
-                        break;
-                    case 'GROF':
-                        // not supported
-                        break;
-                }
-            }
-
-            //console.log(fDates);
-            return callback(null, fDates);
-        }
-        else {
             return callback(new Error('Invalid location'));
         }
     });
