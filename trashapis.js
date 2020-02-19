@@ -177,8 +177,8 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
 
             $('a.wasteInfoIcon p').each((i, elem) => {
                 console.log("Logging element");
-                console.log(elem.children[0].children[0]);
-                var dateStr = parseDate(elem.children[0].children[0].data);
+                console.log(elem.children[0].next);
+                var dateStr = parseDate(elem.children[0].next);
                 switch (elem.attribs.class.trim()) {
                     case 'gft':
                         if (!fDates.GFT) fDates.GFT = [];
@@ -248,11 +248,9 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
 
     var startDate = new Date();
     startDate = dateFormat(startDate.setDate(startDate.getDate() - 14), "yyyy-mm-dd");
-    // console.log("startDate is: " + startDate);
 
     var endDate = new Date();
     endDate = dateFormat(endDate.setDate(endDate.getDate() + 30), "yyyy-mm-dd");
-    // console.log("endDate is: " + endDate);
 
     var post_data1 = `{companyCode:"${companyCode}",postCode:"${postcode}",houseNumber:"${housenumber}",houseLetter:""}`;
     var post_options1 = {
@@ -272,7 +270,6 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
         if (res1.statusCode == 200) {
             res1.on("data", function (chunk1) { buffer1 = buffer1 + chunk1; });
             res1.on("end", function (chunk1) {
-                // console.log("Output fetchAddress is: " + buffer1);
                 var obj1 = JSON.parse(buffer1);
                 if (obj1.status) {
 
