@@ -177,8 +177,8 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
 
             $('a.wasteInfoIcon p').each((i, elem) => {
                 console.log("Logging element");
-                console.log(elem.children[0]);
-                var dateStr = null;// parseDate(elem.children[0].innerHTML);
+                console.log(elem.children[0].children[0]);
+                var dateStr = parseDate(elem.children[0].children[0].data);
                 switch (elem.attribs.class.trim()) {
                     case 'gft':
                         if (!fDates.GFT) fDates.GFT = [];

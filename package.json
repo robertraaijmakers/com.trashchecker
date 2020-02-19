@@ -8,12 +8,12 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
-    "dateformat": "^2.2.0",
+    "dateformat": "^3.0.3",
     "https": "^1.0.0",
     "request": "^2.88.2",
-    "ical": "^0.5.0",
+    "ical": "^0.6.0",
     "http": "^0.0.0",
-    "xmldom": "^0.1.31"
+    "xmldom": "^0.2.1"
   },
   "devDependencies": {},
   "scripts": {
