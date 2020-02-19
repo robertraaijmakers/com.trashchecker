@@ -673,10 +673,10 @@ function parseDate(dateString) {
         fullString += monthString + '-';
     } else {
         console.log('This should not be possible...');
-        return 'erroneous date';
+        return 'invalid month';
     }
 	
-	if(typeof dateArray[3] !== 'undefined')
+	if(typeof dateArray[3] !== 'undefined' && dateArray[3].length === 4)
 	{
 		fullString += dateArray[3];
 	}
