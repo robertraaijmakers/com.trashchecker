@@ -175,11 +175,9 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
         if (!err && res.statusCode == 200) {
             var $ = cheerio.load(res.body);
 
-            $('a.wasteInfoIcon p').each((i, elem) => {
-                console.log("Logging element");
-                console.log(elem.children[0].next);
-                var dateStr = parseDate(elem.children[0].next);
-                switch (elem.attribs.class.trim()) {
+            $('a.wasteInfoIcon p span.span-line-break').each((i, elem) => {
+                var dateStr = parseDate(elem.children[0].data);
+                switch (elem.parent.attribs.class.trim()) {
                     case 'gft':
                         if (!fDates.GFT) fDates.GFT = [];
                         fDates.GFT.push(dateStr);
