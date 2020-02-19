@@ -176,8 +176,9 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
             var $ = cheerio.load(res.body);
 
             $('a.wasteInfoIcon p').each((i, elem) => {
-                var dateStr = parseDate(elem.children[0].data);
-                //console.log(elem.attribs.class);
+                console.log("Logging element");
+                console.log(elem.children[0]);
+                var dateStr = null;// parseDate(elem.children[0].innerHTML);
                 switch (elem.attribs.class.trim()) {
                     case 'gft':
                         if (!fDates.GFT) fDates.GFT = [];
