@@ -1,0 +1,105 @@
+{
+  "id": "days_to_collect",
+  "title": {
+    "en": "Trash will !{{|not}} be collected",
+    "nl": "Afval wordt !{{|niet}} opgehaald"
+  },
+  "args": [
+    {
+      "name": "when",
+      "type": "dropdown",
+      "values": [
+        {
+          "id": "today",
+          "label": {
+            "en": "Today",
+            "nl": "Vandaag"
+          }
+        },
+        {
+          "id": "tomorrow",
+          "label": {
+            "en": "Tomorrow",
+            "nl": "Morgen"
+          }
+        },
+        {
+          "id": "datomorrow",
+          "label": {
+            "en": "Day after tomorrow",
+            "nl": "Overmorgen"
+          }
+        }
+      ]
+    },
+    {
+      "name": "trash_type",
+      "type": "dropdown",
+      "values": [
+        {
+          "id": "ANY",
+          "label": {
+            "en": "Any",
+            "nl": "Iets"
+          }
+        },
+        {
+          "id": "GFT",
+          "label": {
+            "en": "Organic Waste",
+            "nl": "GFT"
+          }
+        },
+        {
+          "id": "GROF",
+          "label": {
+            "en": "Bulky waste",
+            "nl": "Grof afval"
+          }
+        },
+        {
+          "id": "PAPIER",
+          "label": {
+            "en": "Paper",
+            "nl": "Papier"
+          }
+        },
+        {
+          "id": "PLASTIC",
+          "label": {
+            "en": "Plastic",
+            "nl": "Plastic"
+          }
+        },
+        {
+          "id": "PMD",
+          "label": {
+            "en": "PMD",
+            "nl": "PMD"
+          }
+        },
+        {
+          "id": "REST",
+          "label": {
+            "en": "Residual",
+            "nl": "Rest"
+          }
+        },
+        {
+          "id": "TEXTIEL",
+          "label": {
+            "en": "Textiles",
+            "nl": "Textiel"
+          }
+        },
+        {
+          "id": "KERSTBOOM",
+          "label": {
+            "en": "Christmas tree",
+            "nl": "Kerstboom"
+          }
+        }
+      ]
+    }
+  ]
+}
