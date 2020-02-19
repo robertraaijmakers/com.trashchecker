@@ -1,0 +1,38 @@
+{
+  "name": "com.trashchecker",
+  "version": "1.0.0",
+  "description": "Homey Trashcan Reminder 2.0",
+  "main": "app.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "dateformat": "^2.2.0",
+    "https": "^1.0.0",
+    "request": "^2.88.2",
+    "ical": "^0.5.0",
+    "http": "^0.0.0",
+    "xmldom": "^0.1.31"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "onInit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robertraaijmakers/com.trashchecker.git"
+  },
+  "keywords": [
+    "Homey",
+    "Athom",
+    "Trashcan",
+    "Reminder"
+  ],
+  "author": "Robert Raaijmakers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robertraaijmakers/com.trashchecker/issues"
+  },
+  "homepage": "https://github.com/robertraaijmakers/com.trashchecker#readme"
+}
