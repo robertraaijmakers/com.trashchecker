@@ -1,5 +1,8 @@
 {
   "2.6.8": {
     "en": "Fix for Afvalwijzer and Rova. For full list of changes see: https://github.com/robertraaijmakers/com.trashchecker/milestone/3."
+  },
+  "2.6.10": {
+    "en": "Fix for Rova and Mijn Afvalwijzer. Fixt some random crashes. Added support for Cure Afvalbeheer."
   }
 }
