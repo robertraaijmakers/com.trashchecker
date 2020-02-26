@@ -4,5 +4,8 @@
   },
   "2.6.10": {
     "en": "Fix for Rova and Mijn Afvalwijzer. Fixt some random crashes. Added support for Cure Afvalbeheer."
+  },
+  "2.6.11": {
+    "en": "Fix for Rova and Mijn Afvalwijzer. Fixt some random crashes. Added support for Cure Afvalbeheer. Updated app to latest Homey developer standards."
   }
 }
