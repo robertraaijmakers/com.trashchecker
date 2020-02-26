@@ -1,6 +1,6 @@
 {
   "name": "com.trashchecker",
-  "version": "1.0.0",
+  "version": "2.6.10",
   "description": "Homey Trashcan Reminder 2.0",
   "main": "app.js",
   "directories": {
