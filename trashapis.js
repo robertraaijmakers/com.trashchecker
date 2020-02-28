@@ -174,9 +174,13 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
     request(`${baseUrl}${postcode}/${housenumber}/`, function (err, res, body) {
         if (!err && res.statusCode == 200) {
             var $ = cheerio.load(res.body);
+			
+			console.log("Body received");
 
             $('a.wasteInfoIcon p span.span-line-break').each((i, elem) => {
                 var dateStr = parseDate(elem.children[0].data);
+				console.log("Parsing " + dateStr);
+				
                 switch (elem.parent.attribs.class.trim()) {
                     case 'gft':
                         if (!fDates.GFT) fDates.GFT = [];
@@ -644,43 +648,51 @@ function customFormatDate(date) {
 }
 
 function parseDate(dateString) {
-    var dateArray = dateString.split(" ");
-    var fullString = dateArray[1] + '-'; //day of the month(already padded)
-    var months = [
-        'januari',
-        'februari',
-        'maart',
-        'april',
-        'mei',
-        'juni',
-        'juli',
-        'augustus',
-        'september',
-        'oktober',
-        'november',
-        'december',
-    ];
-    var monthNum = months.indexOf(dateArray[2]) + 1;
-    if (monthNum > 0) {
-        var monthString = (monthNum).toString();
-        if (monthString.length === 1) {
-            monthString = '0' + monthString;
-        }
-        fullString += monthString + '-';
-    } else {
-        console.log('This should not be possible...');
-        return 'invalid month';
-    }
+	console.log(dateString);
 	
-	if(typeof dateArray[3] !== 'undefined' && dateArray[3].length === 4)
+	try {
+		var dateArray = dateString.split(" ");
+		var fullString = dateArray[1] + '-'; //day of the month(already padded)
+		var months = [
+			'januari',
+			'februari',
+			'maart',
+			'april',
+			'mei',
+			'juni',
+			'juli',
+			'augustus',
+			'september',
+			'oktober',
+			'november',
+			'december',
+		];
+		var monthNum = months.indexOf(dateArray[2]) + 1;
+		if (monthNum > 0) {
+			var monthString = (monthNum).toString();
+			if (monthString.length === 1) {
+				monthString = '0' + monthString;
+			}
+			fullString += monthString + '-';
+		} else {
+			console.log('This should not be possible...');
+			return 'invalid month';
+		}
+		
+		if(typeof dateArray[3] !== 'undefined' && dateArray[3].length === 4)
+		{
+			fullString += dateArray[3];
+		}
+		else {
+			fullString += new Date().getFullYear();
+		}
+		
+		return fullString;
+	}
+	catch(ex)
 	{
-		fullString += dateArray[3];
+		console.log(ex);
 	}
-	else {
-		fullString += new Date().getFullYear();
-	}
-	
-    return fullString;
 }
 
 /**
