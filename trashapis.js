@@ -174,12 +174,9 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
     request(`${baseUrl}${postcode}/${housenumber}/`, function (err, res, body) {
         if (!err && res.statusCode == 200) {
             var $ = cheerio.load(res.body);
-			
-			console.log("Body received");
-
+            
             $('a.wasteInfoIcon p span.span-line-break').each((i, elem) => {
                 var dateStr = parseDate(elem.children[0].data);
-				console.log("Parsing " + dateStr);
 				
                 switch (elem.parent.attribs.class.trim()) {
                     case 'gft':
@@ -230,6 +227,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                         console.log('Defaulted. Element not found:', elem.attribs.class);
                 }
             });
+
             console.log(fDates);
             return callback(null, fDates);
         } else {
@@ -592,7 +590,7 @@ function afvalwijzerArnhem(postcode, housenumber, country, callback) {
 
     request(url, function (err, res, body) {
         if (!err && res.statusCode == 200) {
-            //console.log(res);
+            
             var $ = cheerio.load(res.body);
             $('ul.ulPickupDates li').each((i, elem) => {
                 var dateStr = customFormatDate(elem.children[2].data.trim());
