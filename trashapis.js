@@ -175,10 +175,16 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
         if (!err && res.statusCode == 200) {
             var $ = cheerio.load(res.body);
             
-            $('a.wasteInfoIcon p span.span-line-break').each((i, elem) => {
-                var dateStr = parseDate(elem.children[0].data);
+            $('a.wasteInfoIcon p').each((i, elem) => {
+
+                if(elem == null || elem.children.length < 2 || elem.children[1].children == null || elem.children[1].children.length < 1)
+                {
+                    return;
+                }
+
+                var dateStr = parseDate(elem.children[1].children[0].data);
 				
-                switch (elem.parent.attribs.class.trim()) {
+                switch (elem.attribs.class.trim()) {
                     case 'gft':
                         if (!fDates.GFT) fDates.GFT = [];
                         fDates.GFT.push(dateStr);
@@ -226,6 +232,8 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                     default:
                         console.log('Defaulted. Element not found:', elem.attribs.class);
                 }
+
+                elem = null; // clear memory leak?
             });
 
             console.log(fDates);
