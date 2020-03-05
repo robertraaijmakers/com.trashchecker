@@ -3,8 +3,7 @@
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
 
-
-it('Main page content', function(done) {
+it('API - Afvalwijzer', function(done) {
     var postcode = "6191JM";
     var homenumber = 12;
     var country = "NL";
@@ -13,7 +12,7 @@ it('Main page content', function(done) {
     if(result == null || typeof result === 'undefined')
     {
         console.log("Test");
-        return;
+        done();
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.

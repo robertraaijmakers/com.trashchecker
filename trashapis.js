@@ -173,68 +173,78 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
 
     request(`${baseUrl}${postcode}/${housenumber}/`, function (err, res, body) {
         if (!err && res.statusCode == 200) {
-            var $ = cheerio.load(res.body);
-            
-            $('a.wasteInfoIcon p').each((i, elem) => {
 
-                if(elem == null || elem.children.length < 2 || elem.children[1].children == null || elem.children[1].children.length < 1)
-                {
-                    return;
-                }
+            // Stip lot of data from body to prevent memory overflow
+            var searchResultIndex = res.body.indexOf('<table width="100%" cellpadding="0" cellspacing="0" role=\'presentation\'>');
+            while(searchResultIndex >= 0)
+            {
+                var endString = res.body.indexOf('</table>', searchResultIndex);
+                var result = res.body.substr(searchResultIndex, endString-searchResultIndex+7);
+                var $ = cheerio.load(result);
+             
+                $('a.wasteInfoIcon p').each((i, elem) => {
 
-                var dateStr = parseDate(elem.children[1].children[0].data);
-				
-                switch (elem.attribs.class.trim()) {
-                    case 'gft':
-                        if (!fDates.GFT) fDates.GFT = [];
-                        fDates.GFT.push(dateStr);
-                        break;
-                    case 'papier':
-                        if (!fDates.PAPIER) fDates.PAPIER = [];
-                        fDates.PAPIER.push(dateStr);
-                        break;
-                    case 'plastic':
-                        if (!fDates.PLASTIC) fDates.PLASTIC = [];
-                        fDates.PLASTIC.push(dateStr);
-                        break;
-                    case 'restafval':
-                        if (!fDates.REST) fDates.REST = [];
-                        fDates.REST.push(dateStr);
-                        break;
-                    case 'pmd':
-                        if (!fDates.PMD) fDates.PMD = [];
-                        fDates.PMD.push(dateStr);
-                        break;
-                    case 'restgft':
-                        if (!fDates.REST) fDates.REST = [];
-                        if (!fDates.GFT) fDates.GFT = [];
-                        fDates.REST.push(dateStr);
-                        fDates.GFT.push(dateStr);
-                        break;
-                    case 'dhm':
-                        if (!fDates.PAPIER) fDates.PAPIER = [];
-                        if (!fDates.PMD) fDates.PMD = [];
-                        fDates.PAPIER.push(dateStr);
-                        fDates.PMD.push(dateStr);
-                        break;
-					case 'grof':
-					case 'grof vuil':
-					case 'grofvuil':
-                        if (!fDates.GROF) fDates.GROF = [];
-                        fDates.GROF.push(dateStr);
-                        break;
-                    case 'kerst':
-					case 'kerstboom':
-					case 'kerstbomen':
-                        if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
-                        fDates.KERSTBOOM.push(dateStr);
-                        break;
-                    default:
-                        console.log('Defaulted. Element not found:', elem.attribs.class);
-                }
+                    if(elem == null || elem.children.length < 2 || elem.children[1].children == null || elem.children[1].children.length < 1)
+                    {
+                        return;
+                    }
+    
+                    var dateStr = parseDate(elem.children[1].children[0].data);
+                    
+                    switch (elem.attribs.class.trim()) {
+                        case 'gft':
+                            if (!fDates.GFT) fDates.GFT = [];
+                            fDates.GFT.push(dateStr);
+                            break;
+                        case 'papier':
+                            if (!fDates.PAPIER) fDates.PAPIER = [];
+                            fDates.PAPIER.push(dateStr);
+                            break;
+                        case 'plastic':
+                            if (!fDates.PLASTIC) fDates.PLASTIC = [];
+                            fDates.PLASTIC.push(dateStr);
+                            break;
+                        case 'restafval':
+                            if (!fDates.REST) fDates.REST = [];
+                            fDates.REST.push(dateStr);
+                            break;
+                        case 'pmd':
+                            if (!fDates.PMD) fDates.PMD = [];
+                            fDates.PMD.push(dateStr);
+                            break;
+                        case 'restgft':
+                            if (!fDates.REST) fDates.REST = [];
+                            if (!fDates.GFT) fDates.GFT = [];
+                            fDates.REST.push(dateStr);
+                            fDates.GFT.push(dateStr);
+                            break;
+                        case 'dhm':
+                            if (!fDates.PAPIER) fDates.PAPIER = [];
+                            if (!fDates.PMD) fDates.PMD = [];
+                            fDates.PAPIER.push(dateStr);
+                            fDates.PMD.push(dateStr);
+                            break;
+                        case 'grof':
+                        case 'grof vuil':
+                        case 'grofvuil':
+                            if (!fDates.GROF) fDates.GROF = [];
+                            fDates.GROF.push(dateStr);
+                            break;
+                        case 'kerst':
+                        case 'kerstboom':
+                        case 'kerstbomen':
+                            if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
+                            fDates.KERSTBOOM.push(dateStr);
+                            break;
+                        default:
+                            console.log('Defaulted. Element not found:', elem.attribs.class);
+                    }
+    
+                    elem = null; // clear memory leak?
+                });
 
-                elem = null; // clear memory leak?
-            });
+                searchResultIndex = res.body.indexOf('<table width="100%" cellpadding="0" cellspacing="0" role=\'presentation\'>', (searchResultIndex+1));
+            }
 
             console.log(fDates);
             return callback(null, fDates);
