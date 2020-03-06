@@ -499,11 +499,11 @@ function circulusBerkel(postcode, homenumber, country, callback) {
                     let dates = {}
                     var json_body = JSON.parse(body);
 		
-		    if(json_body == null || typeof json_body.customData === 'undefined' || typeof json_body.customData.garbage === 'undefined')
-		    {
-			console.log(json_body);
-			return callback(new Error('Something went wrong while retrieving the data.'));
-		    }
+                    if(json_body == null || typeof json_body.customData === 'undefined' || typeof json_body.customData.response === "undefined" || typeof json_body.customData.response.garbage === 'undefined')
+                    {
+                        console.log(json_body);
+                        return callback(new Error('Something went wrong while retrieving the data.'));
+                    }
 			
                     var o = json_body.customData.response.garbage;
                     for (var i = 0; i < o.length; i++) {
@@ -512,9 +512,11 @@ function circulusBerkel(postcode, homenumber, country, callback) {
                             case 'pmd':
                             case 'gft':
                             case 'rest':
-				key = key.toUpperCase();
+				                key = key.toUpperCase();
                                 break;
-			    case 'drocodev':
+			                case 'drocodev':
+                                key = "PLASTIC";
+                                break;
                             case 'zwakra':
                                 key = "PMD";
                                 break;
