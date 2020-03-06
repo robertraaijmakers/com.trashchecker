@@ -725,10 +725,10 @@ class TrashcanReminder extends Homey.App
 		var manualSettings = Homey.ManagerSettings.get('manualEntryData');
 		var dates = this.gdates === '' ? [] : this.gdates;
 		
-		//if(typeof manualSettings === 'undefined' || manualSettings == null)
-		//{
-		//	return;
-		//}
+		if(typeof manualSettings === 'undefined' || manualSettings == null)
+		{
+			return;
+		}
 		
 		// Parse dates per type
 		if(typeof manualSettings.gft !== 'undefined' && manualSettings.gft && this.ParseManualOptionValue(manualSettings.gft) != 0)
