@@ -131,10 +131,13 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                         } else if (description.indexOf('rest') !== -1) {
                             if (!dates.REST) dates.REST = [];
                             dates.REST.push(dateStr);
-                        } else if (description.indexOf('plastic') !== -1 || description.indexOf('pmd') !== -1) {
+                        } else if (description.indexOf('plastic') !== -1) {
                             if (!dates.PLASTIC) dates.PLASTIC = [];
                             dates.PLASTIC.push(dateStr);
-                        } else if (description.indexOf('papier') !== -1) {
+                        } else if (description.indexOf('pmd') !== -1) {
+                            if (!dates.PMD) dates.PMD = [];
+                            dates.PMD.push(dateStr);
+                        }  else if (description.indexOf('papier') !== -1) {
                             if (!dates.PAPIER) dates.PAPIER = [];
                             dates.PAPIER.push(dateStr);
                         } else if (description.indexOf('textiel') !== -1) {
@@ -146,7 +149,9 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
 						} else if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
 							if (!dates.GROF) dates.GROF = [];
                             dates.GROF.push(dateStr);
-						}
+						} else {
+                            console.log("Unknown description: " + description);
+                        }
                     }
                     console.log(dates);
                     return callback(null, dates);
@@ -664,7 +669,7 @@ function customFormatDate(date) {
 }
 
 function parseDate(dateString) {
-	console.log(dateString);
+	//console.log(dateString);
 	
 	try {
 		var dateArray = dateString.split(" ");

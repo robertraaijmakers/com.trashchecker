@@ -29,6 +29,7 @@
 		"interval":
 		{
 			"na": "N.v.t.",
+			"automatic": "Op basis van API",
 			"everyweek": "Elke week op",
 			"everyotherweek": "Om de week op",
 			"everythreeweeks": "Eens in de drie weken op",
@@ -59,6 +60,8 @@
 		"startdate": "startend op",
 		"labeltitle": "Globale tag instellingen",
 		"labeldescription": "Deze waarden worden ingesteld in de globale tag wanneer een specifiek type prullenbak wordt opgehaald vandaag/morgen/overmorgen.",
+		"labelgeneric": "Zin in globale tag",
+		"genericlabelhelper": "Variabelen die in de globale tag zin gebruikt kunnen worden zijn __time__, __type__, __plural__.",
 		"labelplaceholder": "wordt vandaag opgehaald",
 		"timeindicator": "Ophaal type"
 	},
@@ -109,6 +112,8 @@
 			"on": "op",
 			"days": "dagen",
 			"in": "over",
+			"replacementsingle": "wordt",
+			"replacementplural": "worden",
 			"type":
 			{
 				"GFT": "De groene container",

@@ -29,6 +29,7 @@
 		"interval":
 		{
 			"na": "N/A",
+			"automatic": "Based on API",
 			"everyweek": "Every week on",
 			"everyotherweek": "Every other week on",
 			"everythreeweeks": "Once every three weeks on",
@@ -59,6 +60,8 @@
 		"startdate": "starting on",
 		"labeltitle": "Global tag settings",
 		"labeldescription": "These values are set in the global tag when a specific type of trash is collected today/tomorrow/the day after tomorrow.",
+		"labelgeneric": "Global tag sentence",
+		"genericlabelhelper": "Variables that can be used in the global tag sentence are __time__, __type__, __plural__.",
 		"labelplaceholder": "is collected today",
 		"timeindicator": "Type collected"
 	},
@@ -109,6 +112,8 @@
 			"on": "on",
 			"days": "days",
 			"in": "in",
+			"replacementsingle": "is",
+			"replacementplural": "are",
 			"type":
 			{
 				"GFT": "The organic waste",

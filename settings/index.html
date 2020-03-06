@@ -49,11 +49,11 @@
 				<option value="twm">Twente Milieu</option>
 			</select>
         </div>
-        <div class="field row" id="manual_input_field">
+        <!--<div class="field row" id="manual_input_field">
 			<label for="manual_input_set" data-i18n="settings.manualInputField"></label>
 			<input style="width: 10px" id="manual_input_set" name="manualInput" type="checkbox" />
 			<label style="width: 200px;" for="manual_input_set" class="name" data-i18n="settings.manualInputFieldDescription"></label>
-        </div>
+        </div>-->
         <span id="resp" title="Details?" onclick="document.getElementById('respDates').style='display: block;'"></span>
         <span id="respDates" style="display: none;"></span>
     </fieldset>
@@ -66,7 +66,8 @@
 		<div class="field row">
 			<label for="gft" data-i18n="settings.gft"></label>
 			<select name="gft[option]" id="gft_option">
-				<option value="0" data-i18n="settings.interval.na"></option>
+				<option value="-1" data-i18n="settings.interval.na"></option>
+				<option value="0" data-i18n="settings.interval.automatic"></option>
 				<option value="1" data-i18n="settings.interval.everyweek"></option>
 				<option value="2" data-i18n="settings.interval.everyotherweek"></option>
 				<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
@@ -108,7 +109,8 @@
 			<label for="rest" data-i18n="settings.rest"></label>
 			<div>
 				<select name="rest[option]" id="rest_option">
-					<option value="0" data-i18n="settings.interval.na"></option>
+					<option value="-1" data-i18n="settings.interval.na"></option>
+					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
 					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
 					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
@@ -151,7 +153,8 @@
 			<label for="paper" data-i18n="settings.paper"></label>
 			<div>
 				<select name="paper[option]" id="paper_option">
-					<option value="0" data-i18n="settings.interval.na"></option>
+					<option value="-1" data-i18n="settings.interval.na"></option>
+					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
 					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
 					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
@@ -194,7 +197,8 @@
 			<label for="plastic" data-i18n="settings.plastic"></label>
 			<div>
 				<select name="plastic[option]" id="plastic_option">
-					<option value="0" data-i18n="settings.interval.na"></option>
+					<option value="-1" data-i18n="settings.interval.na"></option>
+					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
 					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
 					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
@@ -237,7 +241,8 @@
 			<label for="pmd" data-i18n="settings.pmd"></label>
 			<div>
 				<select name="pmd[option]" id="pmd_option">
-					<option value="0" data-i18n="settings.interval.na"></option>
+					<option value="-1" data-i18n="settings.interval.na"></option>
+					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
 					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
 					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
@@ -280,7 +285,8 @@
 			<label for="textile" data-i18n="settings.textile"></label>
 			<div>
 				<select name="textile[option]" id="textile_option">
-					<option value="0" data-i18n="settings.interval.na"></option>
+					<option value="-1" data-i18n="settings.interval.na"></option>
+					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
 					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
 					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
@@ -322,7 +328,8 @@
 		<div class="field row">
 			<label for="bulky" data-i18n="settings.bulky"></label>
 			<select name="bulky[option]" id="bulky_option">
-				<option value="0" data-i18n="settings.interval.na"></option>
+				<option value="-1" data-i18n="settings.interval.na"></option>
+				<option value="0" data-i18n="settings.interval.automatic"></option>
 				<option value="1" data-i18n="settings.interval.everyweek"></option>
 				<option value="2" data-i18n="settings.interval.everyotherweek"></option>
 				<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
@@ -368,6 +375,12 @@
     <p style="display:block" data-i18n="settings.labeldescription"></p>
 	<fieldset id="label_input">
 		<div class="field row">
+			<label for="labelGeneric" data-i18n="settings.labelgeneric"></label>
+			<input type="text" id="labelGeneric" name="label[generic]" />
+			<p data-i18n="settings.genericlabelhelper"></p>
+			<p id="exampleMultiple"></p>
+        </div>
+		<div class="field row">
 			<label for="labelTimeIndicator" data-i18n="settings.timeindicator"></label>
 			<select name="labelDay" id="labelTimeIndicator">
 				<option value="0" data-i18n="speech.output.timeindicator.t0"></option>
@@ -376,36 +389,44 @@
 			</select>
         </div>
 		<div class="field row">
-			<label for="labelGft" data-i18n="settings.gft"></label>
+			<label for="labelsGft" data-i18n="settings.gft"></label>
 			<input type="text" id="labelGft" name="label[gft]" />
+			<p id="exampleGft"></p>
         </div>
 		<div class="field row">
 			<label for="labelRest" data-i18n="settings.rest"></label>
 			<input type="text" id="labelRest" name="label[rest]" />
+			<p id="exampleRest"></p>
         </div>
 		<div class="field row">
 			<label for="labelPapier" data-i18n="settings.paper"></label>
 			<input type="text" id="labelPapier" name="label[papier]" />
+			<p id="examplePapier"></p>
         </div>
 		<div class="field row">
 			<label for="labelPlastic" data-i18n="settings.plastic"></label>
 			<input type="text" id="labelPlastic" name="label[plastic]" />
+			<p id="examplePlastic"></p>
         </div>
 		<div class="field row">
 			<label for="labelPmd" data-i18n="settings.pmd"></label>
 			<input type="text" id="labelPmd" name="label[pmd]" />
+			<p id="examplePmd"></p>
         </div>
 		<div class="field row">
 			<label for="labelTextiel" data-i18n="settings.textile"></label>
 			<input type="text" id="labelTextiel" name="label[textiel]" />
+			<p id="exampleTextiel"></p>
         </div>
 		<div class="field row">
 			<label for="labelGrof" data-i18n="settings.bulky"></label>
 			<input type="text" id="labelGrof" name="label[grof]" />
+			<p id="exampleGrof"></p>
         </div>
 		<div class="field row">
 			<label for="labelNone" data-i18n="settings.none"></label>
 			<input type="text" id="labelNone" name="label[none]" />
+			<p id="exampleNone"></p>
         </div>
 	</fieldset>
 	<button id="labelInput" class="right" style="display:block" data-i18n="settings.saveLabelInput" ></button>
@@ -425,7 +446,7 @@
         function onHomeyReady( Homey )
 		{
 			// Register on change events of fields in settings page.
-			document.getElementById("manual_input_set").addEventListener("change", OnManualInputCheckboxChanged);
+			//document.getElementById("manual_input_set").addEventListener("change", OnManualInputCheckboxChanged);
 			document.getElementById("apiSave").addEventListener("click", function(elem)
 			{
 				save( Homey );
@@ -457,6 +478,16 @@
 			document.getElementById("pmd_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("pmd"); });
 			document.getElementById("textile_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("textile"); });
 			document.getElementById("bulky_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("bulky"); });
+
+			document.getElementById("labelGft").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
+			document.getElementById("labelRest").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
+			document.getElementById("labelPmd").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
+			document.getElementById("labelPlastic").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
+			document.getElementById("labelPapier").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
+			document.getElementById("labelTextiel").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
+			document.getElementById("labelGrof").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
+			document.getElementById("labelNone").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
+			document.getElementById("labelGeneric").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 
 			var respDates = document.getElementById("respDatesDebug");
 				respDates.style.color = 'black';
@@ -523,13 +554,13 @@
         			return console.error(err);
         		}
 
-				if(manualInput !== true)
-				{
-					console.log("manual input deactivated");
-					return;
-				}
+				//if(manualInput !== true)
+				//{
+				//	console.log("manual input deactivated");
+				//	return;
+				//}
 
-				document.getElementById('manual_input_set').checked = true;
+				//document.getElementById('manual_input_set').checked = true;
 				OnManualInputCheckboxChanged();
 
         		Homey.get('manualEntryData',function(err, manualEntryData)
@@ -542,36 +573,50 @@
 					if(typeof manualEntryData.gft !== 'undefined')
 					{
 						SetManualEntryFormValues(manualEntryData.gft, "gft");
+					} else {
+						document.getElementById("gft_option").value = 0;
 					}
 
 					if(typeof manualEntryData.paper !== 'undefined')
 					{
 						SetManualEntryFormValues(manualEntryData.paper, "paper");
+					} else {
+						document.getElementById("paper_option").value = 0;
 					}
 
 					if(typeof manualEntryData.rest !== 'undefined')
 					{
 						SetManualEntryFormValues(manualEntryData.rest, "rest");
+					} else {
+						document.getElementById("rest_option").value = 0;
 					}
 
 					if(typeof manualEntryData.plastic !== 'undefined')
 					{
 						SetManualEntryFormValues(manualEntryData.plastic, "plastic");
+					} else {
+						document.getElementById("plastic_option").value = 0;
 					}
 
 					if(typeof manualEntryData.pmd !== 'undefined')
 					{
 						SetManualEntryFormValues(manualEntryData.pmd, "pmd");
+					} else {
+						document.getElementById("pmd_option").value = 0;
 					}
 
 					if(typeof manualEntryData.textile !== 'undefined')
 					{
 						SetManualEntryFormValues(manualEntryData.textile, "textile");
+					} else {
+						document.getElementById("textile_option").value = 0;
 					}
 
 					if(typeof manualEntryData.bulky !== 'undefined')
 					{
 						SetManualEntryFormValues(manualEntryData.bulky, "bulky");
+					} else {
+						document.getElementById("bulky_option").value = 0;
 					}
 				});
 			});
@@ -587,6 +632,12 @@
 				if(typeof labelSettings.timeindicator !== 'undefined')
 				{
 					document.getElementById("labelTimeIndicator").value = labelSettings.timeindicator;
+				}
+
+				document.getElementById("labelGeneric").placeholder = Homey.__('speech.output.trashtypeycollectedonx');
+				if(typeof labelSettings.generic !== 'undefined')
+				{
+					document.getElementById("labelGeneric").value = labelSettings.generic;
 				}
 				
 				if(typeof labelSettings.type.gft !== 'undefined')
@@ -660,7 +711,18 @@
 				{
 					SetLabelEntryFormValues(Homey, Homey.__('settings.none'), "none");
 				}
+
+				renderGlobalLabel( Homey );
 			});
+
+			retrieveCollectionDaysDebug( Homey );
+			
+			Homey.ready();
+		}
+
+		function retrieveCollectionDaysDebug( Homey )
+		{
+			var respDates = document.getElementById("respDatesDebug");
 
 			Homey.get('collectingDays', function(err, collectingDays)
 			{
@@ -672,8 +734,6 @@
 				
 				respDates.innerHTML = "<pre>" + JSON.stringify(collectingDays, null, 2) + "</pre>";
 			});
-			
-			Homey.ready();
 		}
 
 		// Save zipcode and housenumber to Homey Settings
@@ -686,6 +746,9 @@
 			var respDates = document.getElementById("respDates");
 				respDates.style.color = 'black';
 				respDates.innerHTML = "";
+
+			var respDatesDebug = document.getElementById("respDatesDebug");
+				respDatesDebug.innerHTML = "Loading collection days...";
 				
         	var pc = document.getElementById('postcode').value;
         	var num = document.getElementById('number').value;
@@ -698,10 +761,10 @@
             	country = 'BE';
             }
 
-			var manualInput = false;
-			if(document.getElementById('manual_input_set').checked) {
-            	manualInput = true;
-            }
+			var manualInput = true;
+			//if(document.getElementById('manual_input_set').checked) {
+            //	manualInput = true;
+            //}
 			
 			if(apiSelected == "") { apiSelected = null; }
 
@@ -743,6 +806,7 @@
 						}
 						
 						respDates.innerHTML = respDates.innerHTML + "<br /><pre>" + JSON.stringify(collectingDays, null, 2) + "</pre>";
+						respDatesDebug.innerHTML = "<pre>" + JSON.stringify(collectingDays, null, 2) + "</pre>";
 					});
 				}
 				else
@@ -776,11 +840,30 @@
 			Homey.set('manualEntryData', data);
 		}
 
+		function renderGlobalLabel( Homey )
+		{
+			var sentence = "<i>Example: " + document.getElementById("labelGeneric").value + "</i>";
+			var timeReplacement = Homey.__("speech.output.timeindicator.t" + document.getElementById("labelTimeIndicator").value);
+			var types = ["gft","rest","pmd","plastic","papier","textiel","grof","none"];
+			var replacementSingle = Homey.__("speech.output.replacementsingle");
+			var replacementPlural = Homey.__("speech.output.replacementplural");
+
+			for(var i=0; i<types.length; i+=1)
+			{
+				var typeReplacement = document.getElementById("label"+capitalizeFirstLetter(types[i])).value;
+				document.getElementById("example"+capitalizeFirstLetter(types[i])).innerHTML = sentence.replace("__time__",timeReplacement).replace("__type__",typeReplacement).replace("__plural__",replacementSingle);
+			}
+			
+			var multipleTypesReplacement = document.getElementById("labelGft").value + ", " + document.getElementById("labelPlastic").value + " " + Homey.__("speech.output.and") + " " + document.getElementById("labelGrof").value;
+			document.getElementById("exampleMultiple").innerHTML = sentence.replace("__time__",timeReplacement).replace("__type__",multipleTypesReplacement).replace("__plural__",replacementPlural);
+		}
+
 		// Saves label values into Homey settings
 		function saveLabelInput( Homey )
 		{
 			var data = {
 				timeindicator: document.getElementById("labelTimeIndicator").value,
+				generic: document.getElementById("labelGeneric").value,
 				type: {
 					gft: document.getElementById("labelGft").value,
 					rest: document.getElementById("labelRest").value,
@@ -819,11 +902,11 @@
 		// Sets values given in "values" to the given "type" on the form.
 		function SetLabelEntryFormValues(Homey, values, type)
 		{
-			var startText = Homey.__('speech.output.type.' + type.toUpperCase());
-			var endText = Homey.__('settings.labelplaceholder');
+			//var startText = Homey.__('speech.output.type.' + type.toUpperCase());
+			//var endText = Homey.__('settings.labelplaceholder');
 			
 			document.getElementById("label" + capitalizeFirstLetter(type)).value = values;
-			document.getElementById("label" + capitalizeFirstLetter(type)).placeholder = startText + " " + endText;
+			document.getElementById("label" + capitalizeFirstLetter(type)).placeholder = values; //startText + " " + endText;
 		}
 
 		// Retrieves all manual values from the form based on given "type" and adds them to the "data" element.
@@ -853,16 +936,16 @@
 		// Toggles manual input fieldset based on "Manual Input" checkbox
 		function OnManualInputCheckboxChanged()
 		{
-			if(document.getElementById('manual_input_set').checked)
-			{
+			//if(document.getElementById('manual_input_set').checked)
+			//{
 				document.getElementById("manual_input").style.display = 'block';
 				document.getElementById("manualInput").style.display = 'block';
-			}
-			else
-			{
-				document.getElementById("manual_input").style.display = 'none';
-				document.getElementById("manualInput").style.display = 'none';
-			}
+			//}
+			//else
+			//{
+			//	document.getElementById("manual_input").style.display = 'none';
+			//	document.getElementById("manualInput").style.display = 'none';
+			//}
 		}
 
 		// Toggles fields on the form based on the given element
@@ -890,7 +973,7 @@
 				document.getElementById(prefix + "_startdate_div").style.display = 'none';
 				document.getElementById(prefix + "_day_div").style.display = 'block';
 			}
-			else if(value == 0)
+			else if(value == 0 || value == -1)
 			{
 				document.getElementById(prefix + "_option_extension").style.display = 'none';
 				document.getElementById(prefix + "_startdate_div").style.display = 'none';

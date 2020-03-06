@@ -32,11 +32,13 @@ class TrashcanReminder extends Homey.App
 		Homey.ManagerSpeechInput.on('speechMatch', this.parseSpeechExecute.bind(this));
 		
 		// Check if we have to handle manual input, or automatically.
-		if(Homey.ManagerSettings.get('manualInput'))
-		{
-			var manually = Homey.ManagerSettings.get('manualInput');
-			this.manualInput = Boolean(manually);
-		}
+		//if(Homey.ManagerSettings.get('manualInput'))
+		//{
+		//	var manually = Homey.ManagerSettings.get('manualInput');
+		//	this.manualInput = Boolean(manually);
+		//}
+
+		this.manualInput = true;
 	
 		// Manually kick off data retrieval
 		this.onUpdateData(true, false);
@@ -393,7 +395,7 @@ class TrashcanReminder extends Homey.App
 	
 	onUpdateData(shouldExecute, shouldSetTimeout)
 	{
-		if (this.manualInput === false && 
+		if (/*this.manualInput === false && */
 			Homey.ManagerSettings.get('postcode') &&
 			Homey.ManagerSettings.get('hnumber') &&
 			Homey.ManagerSettings.get('country') &&
@@ -422,7 +424,8 @@ class TrashcanReminder extends Homey.App
 				}
 			);
 		}
-		else if (this.manualInput === true && shouldExecute === true)
+		
+		if (shouldExecute === true)
 		{
 			// Generate new days based on manual input
 			this.GenerateNewDaysBasedOnManualInput();
@@ -442,10 +445,6 @@ class TrashcanReminder extends Homey.App
 		console.log("Updating label");
 		var labelSettings = Homey.ManagerSettings.get('labelSettings');
 		var dates = Homey.ManagerSettings.get('collectingDays');
-		
-		// DEBUG
-		console.log(dates);
-		console.log(labelSettings);
 				
 		if(labelSettings === 'undefined' || labelSettings == null)
 		{
@@ -453,16 +452,17 @@ class TrashcanReminder extends Homey.App
 			
 			labelSettings = {
 				timeindicator: 0,
+				generic: Homey.__('speech.output.trashtypeycollectedonx'),
 				type: {
-					gft: Homey.__('speech.output.type.GFT') + " " + Homey.__('settings.labelplaceholder'),
-					rest: Homey.__('speech.output.type.REST') + " " + Homey.__('settings.labelplaceholder'),
-					pmd: Homey.__('speech.output.type.PMD') + " " + Homey.__('settings.labelplaceholder'),
-					plastic: Homey.__('speech.output.type.PLASTIC') + " " + Homey.__('settings.labelplaceholder'),
-					papier: Homey.__('speech.output.type.PAPIER') + " " + Homey.__('settings.labelplaceholder'),
-					textiel: Homey.__('speech.output.type.TEXTIEL') + " " + Homey.__('settings.labelplaceholder'),
-					grof: Homey.__('speech.output.type.GROF') + " " + Homey.__('settings.labelplaceholder'),
-					kerstboom: Homey.__('speech.output.type.KERSTBOOM') + " " + Homey.__('settings.labelplaceholder'),
-					none: Homey.__('speech.output.type.NONE') + " " + Homey.__('settings.labelplaceholder')
+					gft: Homey.__('speech.output.type.GFT'),
+					rest: Homey.__('speech.output.type.REST'),
+					pmd: Homey.__('speech.output.type.PMD'),
+					plastic: Homey.__('speech.output.type.PLASTIC'),
+					papier: Homey.__('speech.output.type.PAPIER'),
+					textiel: Homey.__('speech.output.type.TEXTIEL'),
+					grof: Homey.__('speech.output.type.GROF'),
+					kerstboom: Homey.__('speech.output.type.KERSTBOOM'),
+					none: Homey.__('speech.output.type.NONE')
 				}
 			};
 			
@@ -475,8 +475,8 @@ class TrashcanReminder extends Homey.App
 		{
 			console.log("Updating label with additional values for backwards compatibility");
 			
-			labelSettings.type["kerstboom"] = Homey.__('speech.output.type.KERSTBOOM') + " " + Homey.__('settings.labelplaceholder');
-			labelSettings.type["grof"] = Homey.__('speech.output.type.GROF') + " " + Homey.__('settings.labelplaceholder');
+			labelSettings.type["kerstboom"] = Homey.__('speech.output.type.KERSTBOOM');
+			labelSettings.type["grof"] = Homey.__('speech.output.type.GROF');
 			
 			// Update default label settings
 			Homey.ManagerSettings.set('labelSettings', labelSettings);
@@ -489,7 +489,7 @@ class TrashcanReminder extends Homey.App
 			checkDate.setDate(checkDate.getDate() + 2);
 		}
 		
-		// Check trash type that is collected on x-day (TODO: support for multiple types on same day?! --> same as speech?)
+		// Check trash type that is collected on x-day
 		var typesCollected = [];
 		var textLabel = "";
 		if(typeof dates !== 'undefined' && dates !== null)
@@ -505,33 +505,47 @@ class TrashcanReminder extends Homey.App
 			}
 		}
 		
+		var timeReplacement = Homey.__('speech.output.timeindicator.t' + labelSettings.timeindicator);
+		var alternativeTextLabel = labelSettings.generic;
+
 		if(typesCollected.length == 0)
 		{
 			textLabel = labelSettings.type["none"];
+
+			if(typeof alternativeTextLabel !== 'undefined' && alternativeTextLabel !== null && alternativeTextLabel != "")
+			{
+				textLabel = alternativeTextLabel.replace("__time__",timeReplacement).replace("__type__",textLabel).replace("__plural__",Homey.__('speech.output.replacementsingle'));
+			}
 		}
 		else if(typesCollected.length == 1)
 		{
 			textLabel = labelSettings.type[typesCollected[0].toLowerCase()];
+
+			if(typeof alternativeTextLabel !== 'undefined' && alternativeTextLabel !== null && alternativeTextLabel != "")
+			{
+				textLabel = alternativeTextLabel.replace("__time__",timeReplacement).replace("__type__",textLabel).replace("__plural__",Homey.__('speech.output.replacementsingle'));
+			}
 		}
 		else
 		{
 			// When more then one type of trash is collected
 			var multiTypeString = "";				
 			for (var i = 0, len = typesCollected.length; i < len; i++) {
-				multiTypeString += Homey.__('speech.output.type.' + typesCollected[i]) + (i < (len-2) ? ", " : (i == (len-2) ? " " + Homey.__('speech.output.and') + " " : ""));
+				multiTypeString += labelSettings.type[typesCollected[i].toLowerCase()] + (i < (len-2) ? ", " : (i == (len-2) ? " " + Homey.__('speech.output.and') + " " : ""));
 			}
-			
-			textLabel = Homey.__('speech.output.trashtypesycollectedonx',
-					{ 
-						time: Homey.__('speech.output.timeindicator.t' + labelSettings.timeindicator),
-						types: multiTypeString.toLowerCase()
-					});
+
+			textLabel = multiTypeString;
+
+			if(typeof alternativeTextLabel !== 'undefined' && alternativeTextLabel !== null && alternativeTextLabel != "")
+			{
+				textLabel = alternativeTextLabel.replace("__time__",timeReplacement).replace("__type__",multiTypeString).replace("__plural__",Homey.__('speech.output.replacementplural'));
+			}
 		}
 				
 		// Set global token with value found.
 		if(this.trashToken !== null)
 		{	
-			console.log("Label is updated");
+			console.log("Label is updated: " + textLabel);
 			return this.trashToken.setValue(textLabel);
 		}
 		else
@@ -614,9 +628,10 @@ class TrashcanReminder extends Homey.App
 					
 					newDates = result;
 					this.gdates = newDates;
+					this.GenerateNewDaysBasedOnManualInput(); // Can add additional dates
 					
 					Homey.ManagerSettings.set('apiId', apiId);
-					Homey.ManagerSettings.set('collectingDays', newDates);
+					//Homey.ManagerSettings.set('collectingDays', newDates); now done by GenerateNewDaysBasedOnManualInput();
 					
 					callback(true, this, apiId);
 					return;
@@ -708,50 +723,50 @@ class TrashcanReminder extends Homey.App
 	{
 		// Retrieve settings
 		var manualSettings = Homey.ManagerSettings.get('manualEntryData');
-		var dates = {};
+		var dates = this.gdates === '' ? [] : this.gdates;
 		
-		if(typeof manualSettings === 'undefined' || manualSettings == null)
-		{
-			return;
-		}
+		//if(typeof manualSettings === 'undefined' || manualSettings == null)
+		//{
+		//	return;
+		//}
 		
 		// Parse dates per type
-		if(typeof manualSettings.gft !== 'undefined' && manualSettings.gft)
+		if(typeof manualSettings.gft !== 'undefined' && manualSettings.gft && this.ParseManualOptionValue(manualSettings.gft) != 0)
 		{
 			dates.GFT = this.CalculatePickupDates(manualSettings.gft);
 		}
 		
-		if(typeof manualSettings.paper !== 'undefined' && manualSettings.paper)
+		if(typeof manualSettings.paper !== 'undefined' && manualSettings.paper && this.ParseManualOptionValue(manualSettings.paper) != 0)
 		{
 			dates.PAPIER = this.CalculatePickupDates(manualSettings.paper);
 		}
 		
-		if(typeof manualSettings.rest !== 'undefined' && manualSettings.rest)
+		if(typeof manualSettings.rest !== 'undefined' && manualSettings.rest && this.ParseManualOptionValue(manualSettings.rest) != 0)
 		{
 			dates.REST = this.CalculatePickupDates(manualSettings.rest);
 		}
 		
-		if(typeof manualSettings.pmd !== 'undefined' && manualSettings.pmd)
+		if(typeof manualSettings.pmd !== 'undefined' && manualSettings.pmd && this.ParseManualOptionValue(manualSettings.pmd) != 0)
 		{
 			dates.PMD = this.CalculatePickupDates(manualSettings.pmd);
 		}
 		
-		if(typeof manualSettings.plastic !== 'undefined' && manualSettings.plastic)
+		if(typeof manualSettings.plastic !== 'undefined' && manualSettings.plastic && this.ParseManualOptionValue(manualSettings.plastic) != 0)
 		{
 			dates.PLASTIC = this.CalculatePickupDates(manualSettings.plastic);
 		}
 		
-		if(typeof manualSettings.textile !== 'undefined' && manualSettings.textile)
+		if(typeof manualSettings.textile !== 'undefined' && manualSettings.textile && this.ParseManualOptionValue(manualSettings.textile) != 0)
 		{
 			dates.TEXTIEL = this.CalculatePickupDates(manualSettings.textile);
 		}
 		
-		if(typeof manualSettings.bulky !== 'undefined' && manualSettings.bulky)
+		if(typeof manualSettings.bulky !== 'undefined' && manualSettings.bulky && this.ParseManualOptionValue(manualSettings.bulky) != 0)
 		{
 			dates.GROF = this.CalculatePickupDates(manualSettings.bulky);
 		}
 		
-		if(typeof manualSettings.christmas !== 'undefined' && manualSettings.christmas)
+		if(typeof manualSettings.christmas !== 'undefined' && manualSettings.christmas && this.ParseManualOptionValue(manualSettings.christmas) != 0)
 		{
 			dates.KERSTBOOM = this.CalculatePickupDates(manualSettings.christmas);
 		}
@@ -759,6 +774,15 @@ class TrashcanReminder extends Homey.App
 		// Push to gdates
 		Homey.ManagerSettings.set('collectingDays', dates);
 		this.gdates = dates;
+	}
+
+	ParseManualOptionValue(settings)
+	{
+		var interval = -1;
+		try { 
+			interval = parseInt(settings.option);
+		} catch(e) { console.log(e); }
+		return interval;
 	}
 	
 	CalculatePickupDates(settings)
@@ -769,6 +793,11 @@ class TrashcanReminder extends Homey.App
 		try { 
 			interval = parseInt(settings.option);
 		} catch(e) { console.log(e); }
+
+		if(interval <= 0)
+		{
+			return result;
+		}
 		
 		var intervalExtended = -1;
 		try { 
