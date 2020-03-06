@@ -26,6 +26,7 @@
 		"manualInputFieldDescription": "Ja, handmatig invoeren",
 		"saveManualInput": "Sla handmatige invoer op",
 		"saveLabelInput": "Sla label op",
+		"refreshDebugInformation": "Ververs debug informatie",
 		"interval":
 		{
 			"na": "N.v.t.",

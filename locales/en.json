@@ -26,6 +26,7 @@
 		"manualInputFieldDescription": "Yes, enter them manually",
 		"saveManualInput": "Save manual input",
 		"saveLabelInput": "Save label input",
+		"refreshDebugInformation": "Refresh debug information",
 		"interval":
 		{
 			"na": "N/A",

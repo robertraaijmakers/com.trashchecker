@@ -367,7 +367,7 @@
         </div>
 		
     </fieldset>
-	<button id="manualInput" class="left" style="display:block" data-i18n="settings.saveManualInput" ></button>
+	<button id="manualInput" class="right" style="display:block" data-i18n="settings.saveManualInput" ></button>
 	<br /><br />
 	<br /><br />
 	
@@ -434,7 +434,8 @@
 	<br /><br />
 
 	<h2 data-i18n="debug.labeltitle"></h2>
-    <p style="display:block" data-i18n="debug.labeldescription"></p>
+	<p style="display:block" data-i18n="debug.labeldescription"></p>
+	<button id="refreshDebugInformation" class="left" style="display:block" data-i18n="settings.refreshDebugInformation" ></button>
 	<fieldset id="debug_settings">
 		<div class="field row" id="respDatesDebug">
         </div>
@@ -462,6 +463,11 @@
 				saveLabelInput( Homey );
 				return false; // cancels save event! (we don't need the real button event to be handled).
 			});
+			document.getElementById("refreshDebugInformation").addEventListener("click", function(elem)
+			{
+				retrieveCollectionDaysDebug( Homey );
+				return false; // cancels save event! (we don't need the real button event to be handled).
+			});
 			
 			document.getElementById("gft_option").addEventListener("change", function(elem) { ToggleManualInputFields("gft"); });
 			document.getElementById("paper_option").addEventListener("change",function(elem) { ToggleManualInputFields("paper"); });
@@ -479,6 +485,7 @@
 			document.getElementById("textile_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("textile"); });
 			document.getElementById("bulky_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("bulky"); });
 
+			document.getElementById("labelTimeIndicator").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelGft").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelRest").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelPmd").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
