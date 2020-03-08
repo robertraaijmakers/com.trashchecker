@@ -49,11 +49,6 @@
 				<option value="twm">Twente Milieu</option>
 			</select>
         </div>
-        <!--<div class="field row" id="manual_input_field">
-			<label for="manual_input_set" data-i18n="settings.manualInputField"></label>
-			<input style="width: 10px" id="manual_input_set" name="manualInput" type="checkbox" />
-			<label style="width: 200px;" for="manual_input_set" class="name" data-i18n="settings.manualInputFieldDescription"></label>
-        </div>-->
         <span id="resp" title="Details?" onclick="document.getElementById('respDates').style='display: block;'"></span>
         <span id="respDates" style="display: none;"></span>
     </fieldset>
@@ -424,6 +419,11 @@
 			<p id="exampleGrof"></p>
         </div>
 		<div class="field row">
+			<label for="labelKerstboom" data-i18n="settings.christmas"></label>
+			<input type="text" id="labelKerstboom" name="label[kerstboom]" />
+			<p id="exampleKerstboom"></p>
+        </div>
+		<div class="field row">
 			<label for="labelNone" data-i18n="settings.none"></label>
 			<input type="text" id="labelNone" name="label[none]" />
 			<p id="exampleNone"></p>
@@ -447,7 +447,6 @@
         function onHomeyReady( Homey )
 		{
 			// Register on change events of fields in settings page.
-			//document.getElementById("manual_input_set").addEventListener("change", OnManualInputCheckboxChanged);
 			document.getElementById("apiSave").addEventListener("click", function(elem)
 			{
 				save( Homey );
@@ -493,6 +492,7 @@
 			document.getElementById("labelPapier").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelTextiel").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelGrof").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
+			document.getElementById("labelKerstboom").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelNone").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelGeneric").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 
@@ -501,7 +501,6 @@
 				respDates.innerHTML = "Loading collection days...";
 
 			// Set properties
-			OnManualInputCheckboxChanged();
 			ToggleManualInputFields("gft");
 			ToggleManualInputFields("paper");
 			ToggleManualInputFields("rest");
@@ -554,78 +553,61 @@
         		document.getElementById("api").value = apiId;
         	});
 			
-        	Homey.get('manualInput',function(err, manualInput)
-        	{
-				console.log(manualInput);
-        		if(err) {
-        			return console.error(err);
-        		}
+			Homey.get('manualEntryData',function(err, manualEntryData)
+			{
+				console.log(manualEntryData);
+				if(err) {
+					return console.error(err);
+				}
 
-				//if(manualInput !== true)
-				//{
-				//	console.log("manual input deactivated");
-				//	return;
-				//}
+				if(manualEntryData !== null && typeof manualEntryData.gft !== 'undefined')
+				{
+					SetManualEntryFormValues(manualEntryData.gft, "gft");
+				} else {
+					document.getElementById("gft_option").value = 0;
+				}
 
-				//document.getElementById('manual_input_set').checked = true;
-				OnManualInputCheckboxChanged();
+				if(manualEntryData !== null && typeof manualEntryData.paper !== 'undefined')
+				{
+					SetManualEntryFormValues(manualEntryData.paper, "paper");
+				} else {
+					document.getElementById("paper_option").value = 0;
+				}
 
-        		Homey.get('manualEntryData',function(err, manualEntryData)
-        		{
-					console.log(manualEntryData);
-					if(err) {
-						return console.error(err);
-					}
+				if(manualEntryData !== null && typeof manualEntryData.rest !== 'undefined')
+				{
+					SetManualEntryFormValues(manualEntryData.rest, "rest");
+				} else {
+					document.getElementById("rest_option").value = 0;
+				}
 
-					if(typeof manualEntryData.gft !== 'undefined')
-					{
-						SetManualEntryFormValues(manualEntryData.gft, "gft");
-					} else {
-						document.getElementById("gft_option").value = 0;
-					}
+				if(manualEntryData !== null && typeof manualEntryData.plastic !== 'undefined')
+				{
+					SetManualEntryFormValues(manualEntryData.plastic, "plastic");
+				} else {
+					document.getElementById("plastic_option").value = 0;
+				}
 
-					if(typeof manualEntryData.paper !== 'undefined')
-					{
-						SetManualEntryFormValues(manualEntryData.paper, "paper");
-					} else {
-						document.getElementById("paper_option").value = 0;
-					}
+				if(manualEntryData !== null && typeof manualEntryData.pmd !== 'undefined')
+				{
+					SetManualEntryFormValues(manualEntryData.pmd, "pmd");
+				} else {
+					document.getElementById("pmd_option").value = 0;
+				}
 
-					if(typeof manualEntryData.rest !== 'undefined')
-					{
-						SetManualEntryFormValues(manualEntryData.rest, "rest");
-					} else {
-						document.getElementById("rest_option").value = 0;
-					}
+				if(manualEntryData !== null && typeof manualEntryData.textile !== 'undefined')
+				{
+					SetManualEntryFormValues(manualEntryData.textile, "textile");
+				} else {
+					document.getElementById("textile_option").value = 0;
+				}
 
-					if(typeof manualEntryData.plastic !== 'undefined')
-					{
-						SetManualEntryFormValues(manualEntryData.plastic, "plastic");
-					} else {
-						document.getElementById("plastic_option").value = 0;
-					}
-
-					if(typeof manualEntryData.pmd !== 'undefined')
-					{
-						SetManualEntryFormValues(manualEntryData.pmd, "pmd");
-					} else {
-						document.getElementById("pmd_option").value = 0;
-					}
-
-					if(typeof manualEntryData.textile !== 'undefined')
-					{
-						SetManualEntryFormValues(manualEntryData.textile, "textile");
-					} else {
-						document.getElementById("textile_option").value = 0;
-					}
-
-					if(typeof manualEntryData.bulky !== 'undefined')
-					{
-						SetManualEntryFormValues(manualEntryData.bulky, "bulky");
-					} else {
-						document.getElementById("bulky_option").value = 0;
-					}
-				});
+				if(manualEntryData !== null && typeof manualEntryData.bulky !== 'undefined')
+				{
+					SetManualEntryFormValues(manualEntryData.bulky, "bulky");
+				} else {
+					document.getElementById("bulky_option").value = 0;
+				}
 			});
 
 			Homey.get('labelSettings', function(err, labelSettings)
@@ -710,6 +692,15 @@
 					SetLabelEntryFormValues(Homey, Homey.__('settings.bulky'), "grof");
 				}
 
+				if(typeof labelSettings.type.kerstboom !== 'undefined')
+				{
+					SetLabelEntryFormValues(Homey, labelSettings.type.kerstboom, "kerstboom");
+				}
+				else
+				{
+					SetLabelEntryFormValues(Homey, Homey.__('settings.christmas'), "kerstboom");
+				}
+
 				if(typeof labelSettings.type.none !== 'undefined')
 				{
 					SetLabelEntryFormValues(Homey, labelSettings.type.none, "none");
@@ -769,9 +760,6 @@
             }
 
 			var manualInput = true;
-			//if(document.getElementById('manual_input_set').checked) {
-            //	manualInput = true;
-            //}
 			
 			if(apiSelected == "") { apiSelected = null; }
 
@@ -787,7 +775,6 @@
 
         		if(result) {
 					resp.style.color = 'green';
-					//resp.data-i18n = 'settings.update'
 					resp.innerHTML = Homey.__('settings.update') + pc + ', ' + num + ' in ' + country;
 		            Homey.set('postcode',pc);
 		            Homey.set('hnumber',num);
@@ -879,6 +866,7 @@
 					papier: document.getElementById("labelPapier").value,
 					textiel: document.getElementById("labelTextiel").value,
 					grof: document.getElementById("labelGrof").value,
+					kerstboom: document.getElementById("labelKerstboom").value,
 					none: document.getElementById("labelNone").value
 				}
 			};
@@ -909,11 +897,8 @@
 		// Sets values given in "values" to the given "type" on the form.
 		function SetLabelEntryFormValues(Homey, values, type)
 		{
-			//var startText = Homey.__('speech.output.type.' + type.toUpperCase());
-			//var endText = Homey.__('settings.labelplaceholder');
-			
 			document.getElementById("label" + capitalizeFirstLetter(type)).value = values;
-			document.getElementById("label" + capitalizeFirstLetter(type)).placeholder = values; //startText + " " + endText;
+			document.getElementById("label" + capitalizeFirstLetter(type)).placeholder = values;
 		}
 
 		// Retrieves all manual values from the form based on given "type" and adds them to the "data" element.
@@ -938,21 +923,6 @@
 			}
 
 			return data;
-		}
-
-		// Toggles manual input fieldset based on "Manual Input" checkbox
-		function OnManualInputCheckboxChanged()
-		{
-			//if(document.getElementById('manual_input_set').checked)
-			//{
-				document.getElementById("manual_input").style.display = 'block';
-				document.getElementById("manualInput").style.display = 'block';
-			//}
-			//else
-			//{
-			//	document.getElementById("manual_input").style.display = 'none';
-			//	document.getElementById("manualInput").style.display = 'none';
-			//}
 		}
 
 		// Toggles fields on the form based on the given element

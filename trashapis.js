@@ -124,6 +124,7 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                         const dateStr = ('0' + entry.start.getDate()).slice(-2) + '-' + (('0' + (entry.start.getMonth() + 1)).slice(-2)) + '-' + entry.start.getFullYear();
 
                         var description = entry.description.toLowerCase().trim();
+                        console.log(description);
 
                         if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
                             if (!dates.GFT) dates.GFT = [];
@@ -131,12 +132,12 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                         } else if (description.indexOf('rest') !== -1) {
                             if (!dates.REST) dates.REST = [];
                             dates.REST.push(dateStr);
+                        } else if (description.indexOf('pmd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
+                            if (!dates.PMD) dates.PMD = [];
+                            dates.PMD.push(dateStr);
                         } else if (description.indexOf('plastic') !== -1) {
                             if (!dates.PLASTIC) dates.PLASTIC = [];
                             dates.PLASTIC.push(dateStr);
-                        } else if (description.indexOf('pmd') !== -1) {
-                            if (!dates.PMD) dates.PMD = [];
-                            dates.PMD.push(dateStr);
                         }  else if (description.indexOf('papier') !== -1) {
                             if (!dates.PAPIER) dates.PAPIER = [];
                             dates.PAPIER.push(dateStr);

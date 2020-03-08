@@ -30,13 +30,6 @@ class TrashcanReminder extends Homey.App
 		// Register speech events
 		Homey.ManagerSpeechInput.on('speechEval', this.speechEvalExecute.bind(this));
 		Homey.ManagerSpeechInput.on('speechMatch', this.parseSpeechExecute.bind(this));
-		
-		// Check if we have to handle manual input, or automatically.
-		//if(Homey.ManagerSettings.get('manualInput'))
-		//{
-		//	var manually = Homey.ManagerSettings.get('manualInput');
-		//	this.manualInput = Boolean(manually);
-		//}
 
 		this.manualInput = true;
 	
@@ -285,7 +278,6 @@ class TrashcanReminder extends Homey.App
 					}
 				}
 				
-				//console.log(containerTypesNext);
 				var differenceInDaysForNextCollection = DateTimeHelper.daysBetween(nextContainerNotBefore, containerDateNext);
 				
 				if(containerTypesNext.length == 0)
