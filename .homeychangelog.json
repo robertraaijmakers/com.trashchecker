@@ -11,7 +11,7 @@
   "2.6.12": {
     "en": "Fix for Rova and Mijn Afvalwijzer. Fixt some random crashes. Added support for Cure Afvalbeheer. Updated app to latest Homey developer standards."
   },
-  "2.7.3": {
-    "en": "Added new way of managing the global tag. Added possibility to add extra dates for types not retrieved trough an API. Fixt issue in Mijn Blink, Circulus Berkel and Afvalwijzer APIs. Full list see: https://github.com/robertraaijmakers/com.trashchecker/milestone/4?closed=1."
+  "2.7.4": {
+    "en": "Attention: Plastic can now be reported as PMD! (Issue #78). Added new way of managing the global tag (#71). Added possibility to add extra dates for types not retrieved trough an API (Issue #70). Fixt issue in Circulus Berkel (#68) and Afvalwijzer APIs (#77). Full list see: https://github.com/robertraaijmakers/com.trashchecker/milestone/4?closed=1."
   }
 }
