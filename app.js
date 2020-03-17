@@ -814,7 +814,7 @@ class TrashcanReminder extends Homey.App
 		var nextMonth = new Date(new Date(firstDayInCurrentMonth).setMonth(firstDayInCurrentMonth.getMonth()+1));
 		var afterNextMonth = new Date(new Date(firstDayInCurrentMonth).setMonth(firstDayInCurrentMonth.getMonth()+2));
 		
-		if(interval >= 11 && interval <= 13) // every x-th week of month/quarter/year
+		if(interval >= 11 && interval <= 14) // every x-th week of month/quarter/year
 		{
 			var nThWeek = interval-10;
 			var date1 = new Date();
