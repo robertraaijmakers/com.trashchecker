@@ -13,5 +13,8 @@
   },
   "2.7.4": {
     "en": "Attention: Plastic can now be reported as PMD! (Issue #78). Added new way of managing the global tag (#71). Added possibility to add extra dates for types not retrieved trough an API (Issue #70). Fixt issue in Circulus Berkel (#68) and Afvalwijzer APIs (#77). Full list see: https://github.com/robertraaijmakers/com.trashchecker/milestone/4?closed=1."
+  },
+  "2.7.5": {
+    "en": "Sorry, due to some large updates it was possible that the dates would stay empty. This should be resolved now."
   }
 }
