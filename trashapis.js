@@ -182,20 +182,47 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
 
             // Stip lot of data from body to prevent memory overflow
             var searchResultIndex = res.body.indexOf('<table width="100%" cellpadding="0" cellspacing="0" role=\'presentation\'>');
+            
+            var regex = /<a href="#waste-(.*) class="wasteInfoIcon/i;
+            var searchResultIndex = res.body.search(regex);
+
+
+            console.log(searchResultIndex);
+
             while(searchResultIndex >= 0)
             {
-                var endString = res.body.indexOf('</table>', searchResultIndex);
-                var result = res.body.substr(searchResultIndex, endString-searchResultIndex+7);
+                var endString = res.body.indexOf('</a>', searchResultIndex);
+                var result = res.body.substr(searchResultIndex, endString-searchResultIndex+4);
                 var $ = cheerio.load(result);
-             
+
                 $('a.wasteInfoIcon p').each((i, elem) => {
 
-                    if(elem == null || elem.children.length < 2 || elem.children[1].children == null || elem.children[1].children.length < 1)
+                    if(elem == null)
                     {
+                        console.log("shit not found");
                         return;
                     }
-    
-                    var dateStr = parseDate(elem.children[1].children[0].data);
+
+                    if(elem.children.length < 2)
+                    {
+                        console.log("shit not found 1");
+                        return;
+                    }
+
+                    if(elem.children[1].children == null)
+                    {
+                        console.log("shit not found 2");
+                        return;
+                    }
+
+                    var dateStr = "";
+                    if(elem.children[1].children.length < 1)
+                    {
+                        dateStr = parseDate(elem.children[0].data);
+                    } 
+                    else {
+                        dateStr = parseDate(elem.children[1].children[0].data);
+                    }
                     
                     switch (elem.attribs.class.trim()) {
                         case 'gft':
@@ -249,7 +276,15 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                     elem = null; // clear memory leak?
                 });
 
-                searchResultIndex = res.body.indexOf('<table width="100%" cellpadding="0" cellspacing="0" role=\'presentation\'>', (searchResultIndex+1));
+                var nextResult = res.body.substring(searchResultIndex+4).search(regex);
+                if(nextResult > 0)
+                {
+                    searchResultIndex = nextResult + searchResultIndex + 4;
+                } 
+                else 
+                {
+                    searchResultIndex = -1;
+                }
             }
 
             console.log(fDates);
