@@ -39,6 +39,7 @@
 			"everyfirst": "Elke eerste",
 			"everysecond": "Elke tweede",
 			"everythird": "Elke derde",
+			"everyfourth": "Elke vierde",
 			"everysecondlast": "Elke een na laatste",
 			"everylast": "Elke laatste"
 		},
@@ -120,7 +121,7 @@
 				"GFT": "De groene container",
 				"REST": "De grijze container",
 				"PLASTIC": "De oranje container",
-				"PMD": "De plastic, metalen en drankcartons",
+				"PMD": "Het plastic, de metalen en de drankcartons",
 				"PAPIER": "De blauwe container",
 				"TEXTIEL": "Het textiel",
 				"GROF": "Het grof vuil",

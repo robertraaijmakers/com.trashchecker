@@ -12,7 +12,6 @@ class TrashcanReminder extends Homey.App
 {
 	onInit()
 	{
-		this.manualInput = false;
 		this.gdates = '';
 		this.trashToken = null;
 		this.intervalRefreshToken = null;
@@ -30,8 +29,6 @@ class TrashcanReminder extends Homey.App
 		// Register speech events
 		Homey.ManagerSpeechInput.on('speechEval', this.speechEvalExecute.bind(this));
 		Homey.ManagerSpeechInput.on('speechMatch', this.parseSpeechExecute.bind(this));
-
-		this.manualInput = true;
 	
 		// Manually kick off data retrieval
 		this.onUpdateData(true, false);
@@ -317,18 +314,9 @@ class TrashcanReminder extends Homey.App
 		//Homey.log(Object.keys(gdates));
 		if( typeof this.gdates[ args.trash_type.toUpperCase() ] === 'undefined' && args.trash_type.toUpperCase() !== "ANY")
 		{
-			if(this.manualInput)
-			{
-				var message = Homey.__('error.typenotsupported.addviasettings');
-				console.log(message);
-				return Promise.resolve(false);
-			}
-			else
-			{
-				var message = Homey.__('error.typenotsupported.onyouraddress');
-				console.log(message);
-				return Promise.resolve(false);
-			}
+			var message = Homey.__('error.typenotsupported.addviasettings');
+			console.log(message);
+			return Promise.resolve(false);
 		}
 	
 		var now = new Date();
@@ -387,8 +375,7 @@ class TrashcanReminder extends Homey.App
 	
 	onUpdateData(shouldExecute, shouldSetTimeout)
 	{
-		if (/*this.manualInput === false && */
-			Homey.ManagerSettings.get('postcode') &&
+		if (Homey.ManagerSettings.get('postcode') &&
 			Homey.ManagerSettings.get('hnumber') &&
 			Homey.ManagerSettings.get('country') &&
 			shouldExecute === true)
@@ -622,9 +609,7 @@ class TrashcanReminder extends Homey.App
 					this.gdates = newDates;
 					this.GenerateNewDaysBasedOnManualInput(); // Can add additional dates
 					
-					Homey.ManagerSettings.set('apiId', apiId);
-					//Homey.ManagerSettings.set('collectingDays', newDates); now done by GenerateNewDaysBasedOnManualInput();
-					
+					Homey.ManagerSettings.set('apiId', apiId);					
 					callback(true, this, apiId);
 					return;
 				}
@@ -719,6 +704,7 @@ class TrashcanReminder extends Homey.App
 		
 		if(typeof manualSettings === 'undefined' || manualSettings == null)
 		{
+			Homey.ManagerSettings.set('collectingDays', dates);
 			return;
 		}
 		
@@ -814,7 +800,7 @@ class TrashcanReminder extends Homey.App
 		var nextMonth = new Date(new Date(firstDayInCurrentMonth).setMonth(firstDayInCurrentMonth.getMonth()+1));
 		var afterNextMonth = new Date(new Date(firstDayInCurrentMonth).setMonth(firstDayInCurrentMonth.getMonth()+2));
 		
-		if(interval >= 11 && interval <= 13) // every x-th week of month/quarter/year
+		if(interval >= 11 && interval <= 14) // every x-th week of month/quarter/year
 		{
 			var nThWeek = interval-10;
 			var date1 = new Date();
