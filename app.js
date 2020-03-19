@@ -320,8 +320,6 @@ class TrashcanReminder extends Homey.App
 		}
 	
 		var now = new Date();
-		//uncomment below to test on working date(or some other number)
-		//now.setDate(now.getDate() -1);
 		if(args.when == 'tomorrow') {
 			now.setDate(now.getDate() + 1);
 		} else if(args.when == 'datomorrow') {
@@ -333,14 +331,14 @@ class TrashcanReminder extends Homey.App
 			var result = false;
 			
 			for(var i=0; i<supportedTypes.length; i++)
-			{				
+			{
 				if(result === false && typeof(this.gdates[supportedTypes[i].toUpperCase()]) !== 'undefined') {
 					result = this.gdates[ supportedTypes[i].toUpperCase() ].indexOf(dateString) > -1;
 				}
 			}
 			
 			return Promise.resolve( result );
-		}	
+		}
 	
 		//Homey.log(dateString);
 		return Promise.resolve( this.gdates[ args.trash_type.toUpperCase() ].indexOf(dateString) > -1 );
