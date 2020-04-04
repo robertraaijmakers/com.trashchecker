@@ -621,7 +621,14 @@ class TrashcanReminder extends Homey.App
 			
 			return;
 		}
+
+		this.GenerateNewDaysBasedOnManualInput(); // When no API dates are known
 		
+		if(typeof postcode === 'undefined' || postcode === null || postcode === '')
+		{
+			return;
+		}
+
 		function asyncLoop(iterations, that, func, callback)
 		{
 			var index = 0;
