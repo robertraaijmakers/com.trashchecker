@@ -20,7 +20,7 @@
   "2.7.6": {
     "en": "Minor issues fixt"
   },
-  "2.7.7": {
+  "2.7.9": {
     "en": "Added some debug info to analyse random crash. If you experience a crash please report it via GitHub."
   }
 }

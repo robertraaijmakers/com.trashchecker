@@ -4,7 +4,6 @@
 const Homey = require('homey');
 const DateTimeHelper = require('./lib/datetime.js');
 
-var http = require('http');
 var apiArray = require('./trashapis.js');
 var supportedTypes = ["GFT","PLASTIC","PAPIER","PMD","REST","TEXTIEL","GROF","KERSTBOOM"];
 
@@ -390,12 +389,14 @@ class TrashcanReminder extends Homey.App
 					if(success)
 					{
 						console.log('retrieved house information');
+						that.GenerateNewDaysBasedOnManualInput(); // When postal is set, try to retrieve additional values
 						
 						// Update label
 						that.onUpdateLabel();
-					} 
+					}
 					else 
 					{
+						that.GenerateNewDaysBasedOnManualInput(); // When postal code is not set, and no API retrieval
 						console.log('house information has not been set');
 					}
 				}
@@ -578,10 +579,32 @@ class TrashcanReminder extends Homey.App
 		if(typeof postcode !== 'undefined' && postcode !== null && postcode !== '')
 		{
 			postcode = postcode.toUpperCase();
+		} 
+		else 
+		{
+			postcode = '';
+		}
+		
+		if(typeof homenumber !== 'undefined' && homenumber !== null && homenumber !== '')
+		{
+			homenumber = homenumber.toUpperCase();
+		} 
+		else 
+		{
+			homenumber = '';
+		}
+		
+		if(typeof apiId !== 'undefined' && apiId !== null && apiId !== '' && isNaN(apiId))
+		{
+			apiId = apiId.toLowerCase();
+		} 
+		else 
+		{
+			apiId = '';
 		}
 		
 		// check if we already know which API is chosen
-		if(typeof apiId !== 'undefined' && apiId !== null && apiId != "" && isNaN(apiId))
+		if(apiId != '' && postcode != '' && homenumber != '')
 		{
 			console.log("API ID Known: " + apiId);
 			var result = apiArray.find(o => o.id === apiId);
@@ -621,11 +644,11 @@ class TrashcanReminder extends Homey.App
 			
 			return;
 		}
-
-		this.GenerateNewDaysBasedOnManualInput(); // When no API dates are known
 		
-		if(typeof postcode === 'undefined' || postcode === null || postcode === '')
+		if(postcode === '' || homenumber === '')
 		{
+			this.GenerateNewDaysBasedOnManualInput(); // When postal code is not set, and no API retrieval
+			callback(false, this, null);
 			return;
 		}
 
@@ -678,7 +701,7 @@ class TrashcanReminder extends Homey.App
 					
 					Homey.ManagerSettings.set('apiId', apiArray[loop.iteration()]['id']);
 					Homey.ManagerSettings.set('collectingDays', newDates);
-					
+					that.GenerateNewDaysBasedOnManualInput();
 					callback(true, that, apiArray[loop.iteration()]['id']);
 				} else if(Object.keys(result).length === 0) {
 					loop.next();
@@ -703,15 +726,19 @@ class TrashcanReminder extends Homey.App
 	
 	GenerateNewDaysBasedOnManualInput()
 	{
+		console.log("Entering GenerateNewDaysBasedOnManualInput");
+
 		// Retrieve settings
 		var manualSettings = Homey.ManagerSettings.get('manualEntryData');
-		var dates = this.gdates === '' ? [] : this.gdates;
-		
+		var dates = this.gdates === '' ? {} : this.gdates;
+
 		if(typeof manualSettings === 'undefined' || manualSettings == null)
 		{
 			Homey.ManagerSettings.set('collectingDays', dates);
 			return;
 		}
+
+		console.log("Retrieving new days based on manual input");
 		
 		// Parse dates per type
 		if(typeof manualSettings.gft !== 'undefined' && manualSettings.gft && this.ParseManualOptionValue(manualSettings.gft) != 0)
@@ -755,8 +782,10 @@ class TrashcanReminder extends Homey.App
 		}
 		
 		// Push to gdates
-		Homey.ManagerSettings.set('collectingDays', dates);
+		console.log("Pushing new dates");
+		console.log(dates);
 		this.gdates = dates;
+		Homey.ManagerSettings.set('collectingDays', dates);
 	}
 
 	ParseManualOptionValue(settings)

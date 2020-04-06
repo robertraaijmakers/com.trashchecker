@@ -1,14 +1,15 @@
 {
 	"title": "Trash Checker",
 	"settings": {
-		"description":"Helaas worden niet alle steden ondersteund, bekijk de documentatie om er achter te komen of uw stad wordt ondersteund",
-		"title": "Vul hier je postcode en huisnummer in",
+		"title": "Trashcan Reminder 2.0 Settings",
+		"description":"Helaas worden niet alle postcodes ondersteund, voer hieronder je postcode en huisnummer in om te zien of ze ondersteund worden. Zo niet, dan kan je altijd de handmatige invoer toepassen waardoor je toch de volledige functionaliteit van de app kan gebruiken!",
 		"postcode": "Postcode",
 		"hnumber": "Huisnummer",
 		"country": "Land",
 		"api": "Bron",
 		"save": "Opslaan",
 		"fail": "Dit adres wordt niet ondersteund",
+		"manualonly": "De ophaaldata is ververst op basis van de handmatige invoer",
 		"update": "Adres is aangepast naar ",
 		"checking": "adres checken...",
 		"gft": "GFT",
@@ -22,10 +23,7 @@
 		"unknown": "Onbekend",
 		"none": "Wanneer niets wordt opgehaald",
 		"titlemanualinput": "Handmatige invoer",
-		"manualInputField": "Voer ophaaldata handmatig in?",
-		"manualInputFieldDescription": "Ja, handmatig invoeren",
-		"saveManualInput": "Sla handmatige invoer op",
-		"saveLabelInput": "Sla label op",
+		"saveLabelInput": "Global tag instellingen opslaan",
 		"refreshDebugInformation": "Ververs debug informatie",
 		"interval":
 		{

@@ -106,11 +106,11 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
             }
             catch(err)
             {
-                console.log("Exception parsing JSON: " + err);
-                throw baseUrl + ".." + postcode + ".." + err;
+                return callback(new Error("Exception parsing JSON: " + err + " for base url " + baseUrl + " and zip code " + postcode));
             }
 
-            if (result.length <= 0) {
+            if (result.length <= 0)
+            {
                 return callback(new Error('Invalid zipcode for: ' + baseUrl));
             }
 
