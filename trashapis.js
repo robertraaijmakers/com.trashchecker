@@ -139,7 +139,7 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                         } else if (description.indexOf('rest') !== -1) {
                             if (!dates.REST) dates.REST = [];
                             dates.REST.push(dateStr);
-                        } else if (description.indexOf('pmd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
+                        } else if (description.indexOf('pmd') !== -1 || description.indexOf('pd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
                             if (!dates.PMD) dates.PMD = [];
                             dates.PMD.push(dateStr);
                         } else if (description.indexOf('plastic') !== -1) {
@@ -249,6 +249,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                             fDates.REST.push(dateStr);
                             break;
                         case 'pmd':
+			case 'pd':
                             if (!fDates.PMD) fDates.PMD = [];
                             fDates.PMD.push(dateStr);
                             break;
