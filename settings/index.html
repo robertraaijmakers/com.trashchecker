@@ -443,6 +443,18 @@
 	<br /><br />
 	<br /><br />
 
+	<h2 data-i18n="settings.manualdata.title"></h2>
+	<p style="display:block" data-i18n="settings.manualdata.description"></p>
+	<fieldset id="debug_settings">
+		<div class="field row">
+			<label for="manualDataEntry" data-i18n="settings.manualdata.entryFieldLabel"></label>
+			<textarea id="manualDataEntry" name="manualDataEntry" width="100%" rows="10"></textarea>
+		</div>
+		<span id="respManualDataEntry"></span>
+	</fieldset>
+	<button id="saveManaulDataEntry" class="right" style="display:block" data-i18n="settings.manualdata.save" ></button>
+	<br /><br />
+
 	<h2 data-i18n="debug.labeltitle"></h2>
 	<p style="display:block" data-i18n="debug.labeldescription"></p>
 	<fieldset id="debug_settings">
@@ -470,6 +482,11 @@
 			document.getElementById("labelInput").addEventListener("click", function(elem)
 			{
 				saveLabelInput( Homey );
+				return false; // cancels save event! (we don't need the real button event to be handled).
+			});
+			document.getElementById("saveManaulDataEntry").addEventListener("click", function(elem)
+			{
+				saveManaulEntryData( Homey );
 				return false; // cancels save event! (we don't need the real button event to be handled).
 			});
 			document.getElementById("refreshDebugInformation").addEventListener("click", function(elem)
@@ -723,6 +740,8 @@
 				renderGlobalLabel( Homey );
 			});
 
+			
+			retrieveManualInputDays( Homey );
 			retrieveCollectionDaysDebug( Homey );
 			
 			Homey.ready();
@@ -742,6 +761,30 @@
 				
 				respDates.innerHTML = "<pre>" + JSON.stringify(collectingDays, null, 2) + "</pre>";
 			});
+		}
+
+		function retrieveManualInputDays( Homey )
+		{
+			Homey.get('manualAdditions', function(err, manualAdditions)
+        	{
+        		if(err || manualAdditions === null)
+        		{
+					console.log("No data yet.");
+					document.getElementById('manualDataEntry').value = "{"
+					+"\n\t\"GFT\": [],";
+					+"\n\t\"REST\": [],";
+					+"\n\t\"PAPIER\": [],";
+					+"\n\t\"GROF\": [],";
+					+"\n\t\"PLASTIC\": [],";
+					+"\n\t\"PMD\": [],";
+					+"\n\t\"TEXTIEL\": [],";
+					+"\n\t\"KERSTBOOM\": []";
+					+"\n}";
+        			return console.error(err);
+				}
+				
+        		document.getElementById('manualDataEntry').value = JSON.stringify(manualAdditions, null, 2);
+        	});
 		}
 
 		// Save zipcode and housenumber to Homey Settings
@@ -845,6 +888,121 @@
 
 			console.log(data);
 			Homey.set('manualEntryData', data);
+		}
+
+		// Save extra manual data entry
+		function saveManaulEntryData( Homey )
+		{
+			var data = {};
+			
+			var textualInput = {};
+			try
+			{
+				textualInput = JSON.parse(document.getElementById('manualDataEntry').value);
+			}
+			catch(err)
+			{
+				console.log(err);
+				document.getElementById('respManualDataEntry').innerHTML = err;
+				return;
+			}
+
+			document.getElementById('respManualDataEntry').innerHTML = "";
+
+			if(typeof textualInput.GFT !== 'undefined')
+			{
+				data.GFT = validateDates(textualInput.GFT);
+			}
+			else
+			{
+				data.GFT = [];
+			}
+
+			if(typeof textualInput.REST !== 'undefined')
+			{
+				data.REST = validateDates(textualInput.REST);
+			}
+			else
+			{
+				data.REST = [];
+			}
+
+			if(typeof textualInput.PAPIER !== 'undefined')
+			{
+				data.PAPIER = validateDates(textualInput.PAPIER);
+			}
+			else
+			{
+				data.PAPIER = [];
+			}
+
+			if(typeof textualInput.GROF !== 'undefined')
+			{
+				data.GROF = validateDates(textualInput.GROF);
+			}
+			else
+			{
+				data.GROF = [];
+			}
+			
+			if(typeof textualInput.PLASTIC !== 'undefined')
+			{
+				data.PLASTIC = validateDates(textualInput.PLASTIC);
+			}
+			else
+			{
+				data.PLASTIC = [];
+			}
+			
+			if(typeof textualInput.PMD !== 'undefined')
+			{
+				data.PMD = validateDates(textualInput.PMD);
+			}
+			else
+			{
+				data.PMD = [];
+			}
+
+			if(typeof textualInput.KERSTBOOM !== 'undefined')
+			{
+				data.KERSTBOOM = validateDates(textualInput.KERSTBOOM);
+			}
+			else
+			{
+				data.KERSTBOOM = [];
+			}
+
+			Homey.set('manualAdditions', data);
+
+			// We trigger a full save, to make sure everything is recalculated (a bit heavy, but this feature shouldn't be used that often)
+			save( Homey );
+			saveLabelInput( Homey );
+
+			// Retrieve them again & update field (for formatting & feedback purposes)
+			retrieveManualInputDays( Homey );
+		}
+
+		function validateDates(inputArray)
+		{
+			var output = [];
+
+			for(var i=0;i<inputArray.length; i++)
+			{
+				var validDate = new Date(inputArray[i]);
+
+				month = '' + (validDate.getMonth() + 1),
+				day = '' + validDate.getDate(),
+				year = validDate.getFullYear();
+
+				if (month.length < 2) 
+					month = '0' + month;
+				if (day.length < 2) 
+					day = '0' + day;
+
+				output.push([year, month, day].join('-'));
+			}
+
+			return output;
 		}
 
 		function renderGlobalLabel( Homey )
