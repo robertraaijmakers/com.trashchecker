@@ -40,10 +40,6 @@ function afvalkalenderCure(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cure-afvalbeheer.nl', callback);
 }
 
-function afvalkalenderMeerlanden(postcode, housenumber, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.meerlanden.nl', callback);
-}
-
 function afvalkalenderPeelEnMaas(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.peelenmaas.nl', callback);
 }
@@ -66,6 +62,11 @@ function BlinkAfvalkalender(postcode, housenumber, country, callback) {
 
 function GadGooiAndVechtstreek(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.gad.nl', callback);
+}
+
+function afvalkalenderMeerlanden(postcode, housenumber, country, callback) {
+    console.log("Checking Meerlanden");
+    generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45", callback);
 }
 
 function twenteMilieu(postcode, housenumber, country, callback) {
@@ -101,6 +102,7 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
     request(urlRequest, function (err, res, body) {
         if (!err && res.statusCode == 200) {
             var result = "{}";
+
             try {
                 result = JSON.parse(body);
             }
@@ -385,6 +387,10 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                                             case "PACKAGES":
                                                 if (!fDates.PLASTIC) fDates.PLASTIC = [];
                                                 fDates.PLASTIC.push(date);
+                                                break;
+                                            case "TEXTILE":
+                                                if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+                                                fDates.TEXTIEL.push(date);
                                                 break;
                                         }
                                     }
@@ -726,7 +732,7 @@ function parseDate(dateString) {
 			fullString += dateArray[3] + "-";
 		}
 		else {
-			fullString += new Date().getFullYear();
+			fullString += new Date().getFullYear() + "-";
 		}
 
 		var months = [
