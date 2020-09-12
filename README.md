@@ -4,7 +4,7 @@ Homey will remind you to put the trash out! You can do this by providing a posta
 ## Supported Cities
 A lot of cities are supported with this trashcan reminder. If your city is not supported you can always add your schedule manually. You can add new cities yourself, but requests to add new cities aren't honoured. If you wish to contribute to the project (for example by adding support for a city). I would advise you to take a look at [this explanation](https://github.com/robertraaijmakers/com.trashchecker/tree/master/developers).
 
-- [Afvalwijzer Arnhen](https://www.afvalwijzer-arnhem.nl)
+- [Afvalwijzer Suez](https://inzamelwijzer.suez.nl/)
 - [Afvalkalender ACV](https://www.acv-groep.nl/)
 - [Afvalkalender Circulus-Berkel](https://mijn.circulus-berkel.nl)
 - [Afvalkalender Meerlanden](https://afvalkalender.meerlanden.nl)

@@ -645,8 +645,8 @@ function afvalapp(postcode, homenumber, country, callback) {
     });
 }
 
-function afvalwijzerArnhem(postcode, housenumber, country, callback) {
-    console.log("Checking Afvalwijzer Arnhem");
+function afvalwijzerSuez(postcode, housenumber, country, callback) {
+    console.log("Checking Afvalwijzer Suez");
 
     var fDates = {};
     if (country !== "NL") {
@@ -654,35 +654,43 @@ function afvalwijzerArnhem(postcode, housenumber, country, callback) {
         return callback(new Error('unsupported country'));
     }
 
-    var url = `http://www.afvalwijzer-arnhem.nl/applicatie?ZipCode=${postcode}&HouseNumber=${housenumber}&HouseNumberAddition=`;
+    var url = `https://inzamelwijzer.suez.nl/adres/${postcode.replace(/ +/g, "")}:${housenumber}`;
 
     request(url, function (err, res, body) {
         if (!err && res.statusCode == 200) {
-            
+          
             var $ = cheerio.load(res.body);
-            $('ul.ulPickupDates li').each((i, elem) => {
-                var dateStr = customFormatDate(elem.children[2].data.trim());
-                switch (elem.attribs.class) {
-                    case 'gft':
-                        if (!fDates.GFT) fDates.GFT = [];
-                        fDates.GFT.push(dateStr);
-                        break;
-                    case 'papier':
-                        if (!fDates.PAPIER) fDates.PAPIER = [];
-                        fDates.PAPIER.push(dateStr);
-                        break;
-                    case 'restafval':
-                        if (!fDates.REST) fDates.REST = [];
-                        fDates.REST.push(dateStr);
-                        break;
-                    case 'kunststof':
-                        if (!fDates.PLASTIC) fDates.PLASTIC = [];
-                        fDates.PLASTIC.push(dateStr);
-                        break;
-                    default:
-                        console.log('defaulted', elem.attribs.class);
-                }
+            $('#ophaaldata li').each((i, elem) => {
+                try {
+                    //console.log(`datum:${elem.children[1].children[3].children[0].data.trim()}`);                   
+                    //console.log(`href: ${elem.children[1].attribs.href}`)
 
+                    var dateStr = customFormatDate(elem.children[1].children[3].children[0].data.trim());
+                    console.log(dateStr);
+
+                    switch (elem.children[1].attribs.href) {
+                        case '/afvalstroom/1':
+                            if (!fDates.GFT) fDates.GFT = [];
+                            fDates.GFT.push(dateStr);
+                            break;
+                        case '/afvalstroom/2':
+                            if (!fDates.PAPIER) fDates.PAPIER = [];
+                            fDates.PAPIER.push(dateStr);
+                            break;
+                        case '/afvalstroom/3':
+                            if (!fDates.REST) fDates.REST = [];
+                            fDates.REST.push(dateStr);
+                            break;
+                        case '/afvalstroom/4':
+                            if (!fDates.PLASTIC) fDates.PLASTIC = [];
+                            fDates.PLASTIC.push(dateStr);
+                            break;
+                        default:
+                            console.log('defaulted', elem.attribs.class);
+                    }
+                } catch (error) {
+                    return callback(new Error('Date format Error'));        
+                }
             });
             console.log(fDates);
             return callback(null, fDates);
@@ -709,8 +717,36 @@ function addToDates(key, datesToAdd, dates) {
 }
 
 function customFormatDate(date) {
-    var ad = date.split('-');
-    return ('0' + ad[0]).slice(-2) + '-' + ('0' + ad[1]).slice(-2) + '-' + ad[2];
+    try {
+        var ad = date.split(' ');
+        var fullString = ('0' + ad[1]).slice(-2) + '-';
+		var months = [
+			'jan',
+			'feb',
+			'mrt',
+			'apr',
+			'mei',
+			'jun',
+			'jul',
+			'aug',
+			'sep',
+			'okt',
+			'nov',
+			'dec',
+		];
+        var monthNum = months.indexOf(ad[2]) + 1;
+        if (monthNum > 0) {
+            fullString += ('0' + monthNum).slice(-2) + '-' + new Date().getFullYear();;
+		} else {
+			console.log('This should not be possible...');
+			return 'invalid month';
+		}
+        return fullString;
+    } catch (error) {
+        console.log('This should not be possible...');
+        return 'invalid date format';
+    }
+
 }
 
 function parseDate(dateString) {
@@ -769,7 +805,7 @@ function parseDate(dateString) {
 apiList.push({ name: "Afval App", id: "afa", execute: afvalapp });
 apiList.push({ name: "Mijn Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
 apiList.push({ name: "Den Bosch Afvalstoffendienstkalender", id: "dbafw", execute: denBoschAfvalstoffendienstCalendar });
-apiList.push({ name: "Afvalwijzer Arnhem", id: "arn", execute: afvalwijzerArnhem });
+apiList.push({ name: "Afvalwijzer Suez", id: "arn", execute: afvalwijzerSuez });
 apiList.push({ name: "Afvalkalender Cure", id: "acu", execute: afvalkalenderCure })
 apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCyclus });
 apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
