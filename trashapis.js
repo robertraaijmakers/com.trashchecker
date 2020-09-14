@@ -40,10 +40,6 @@ function afvalkalenderCure(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cure-afvalbeheer.nl', callback);
 }
 
-function afvalkalenderMeerlanden(postcode, housenumber, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.meerlanden.nl', callback);
-}
-
 function afvalkalenderPeelEnMaas(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.peelenmaas.nl', callback);
 }
@@ -66,6 +62,11 @@ function BlinkAfvalkalender(postcode, housenumber, country, callback) {
 
 function GadGooiAndVechtstreek(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.gad.nl', callback);
+}
+
+function afvalkalenderMeerlanden(postcode, housenumber, country, callback) {
+    console.log("Checking Meerlanden");
+    generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45", callback);
 }
 
 function twenteMilieu(postcode, housenumber, country, callback) {
@@ -101,6 +102,7 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
     request(urlRequest, function (err, res, body) {
         if (!err && res.statusCode == 200) {
             var result = "{}";
+
             try {
                 result = JSON.parse(body);
             }
@@ -128,10 +130,9 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                     const entries = ical.parseICS(body);
                     for (let i in entries) {
                         const entry = entries[i];
-                        const dateStr = ('0' + entry.start.getDate()).slice(-2) + '-' + (('0' + (entry.start.getMonth() + 1)).slice(-2)) + '-' + entry.start.getFullYear();
+                        const dateStr = entry.start.getFullYear() + '-' + (('0' + (entry.start.getMonth() + 1)).slice(-2)) + "-" + ('0' + entry.start.getDate()).slice(-2);
 
                         var description = entry.description.toLowerCase().trim();
-                        console.log(description);
 
                         if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
                             if (!dates.GFT) dates.GFT = [];
@@ -139,7 +140,7 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                         } else if (description.indexOf('rest') !== -1) {
                             if (!dates.REST) dates.REST = [];
                             dates.REST.push(dateStr);
-                        } else if (description.indexOf('pmd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
+                        } else if (description.indexOf('pmd') !== -1 || description.indexOf('pd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
                             if (!dates.PMD) dates.PMD = [];
                             dates.PMD.push(dateStr);
                         } else if (description.indexOf('plastic') !== -1) {
@@ -161,6 +162,7 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                             console.log("Unknown description: " + description);
                         }
                     }
+
                     console.log(dates);
                     return callback(null, dates);
                 } else {
@@ -249,6 +251,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                             fDates.REST.push(dateStr);
                             break;
                         case 'pmd':
+			            case 'pd':
                             if (!fDates.PMD) fDates.PMD = [];
                             fDates.PMD.push(dateStr);
                             break;
@@ -367,7 +370,7 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                                     // console.log("Datum is: " + obj2.dataList[i].pickupDates[0]);
                                     //console.log("Aantal datums: " + Object.keys(obj2.dataList[i].pickupDates).length);
                                     for (var j = 0; j < Object.keys(obj2.dataList[i].pickupDates).length; j++) {
-                                        var date = dateFormat(obj2.dataList[i].pickupDates[j], "dd-mm-yyyy");
+                                        var date = dateFormat(obj2.dataList[i].pickupDates[j], "yyyy-mm-dd");
                                         switch (obj2.dataList[i]._pickupTypeText) {
                                             case "GREY":
                                                 if (!fDates.REST) fDates.REST = [];
@@ -384,6 +387,10 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                                             case "PACKAGES":
                                                 if (!fDates.PLASTIC) fDates.PLASTIC = [];
                                                 fDates.PLASTIC.push(date);
+                                                break;
+                                            case "TEXTILE":
+                                                if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+                                                fDates.TEXTIEL.push(date);
                                                 break;
                                         }
                                     }
@@ -439,7 +446,7 @@ function recycleManager(postcode, housenumber, country, callback) {
                     // console.log("Maand is: " + dateFormat(obj1.data[i].title));
                     if (typeof obj1.data[i].occurrences !== 'undefined') {
                         for (var j = 0; j < obj1.data[i].occurrences.length; j++) {
-                            var dateStr = dateFormat(obj1.data[i].occurrences[j].from.date, "dd-mm-yyyy");
+                            var dateStr = dateFormat(obj1.data[i].occurrences[j].from.date, "yyyy-mm-dd");
                             console.log("Soort afval is: " + obj1.data[i].occurrences[j].title);
                             switch (obj1.data[i].occurrences[j].title) {
                                 case 'Groente en fruit':
@@ -491,7 +498,6 @@ function afvalkalenderRD4(postcode, housenumber, country, callback) {
 				console.log(result);
 				return callback(null, result);
 			} catch (ex) {
-				//console.log('Error: ' + ex);
 				return callback(new Error('Error: ' + ex));
 			}
         } else {
@@ -570,9 +576,10 @@ function circulusBerkel(postcode, homenumber, country, callback) {
                                 key = 'TEXTIEL';
                                 break;
                             default:
-				key = key.toUpperCase();
-				break;
+				                key = key.toUpperCase();
+				            break;
                         }
+                        
                         addToDates(key, o[i].dates, dates);
                     }
                     return callback(null, dates);
@@ -711,50 +718,31 @@ function addToDates(key, datesToAdd, dates) {
         if (!date) continue;
         if (dates[key] == null) dates[key] = [];
         var arrDate = date.split('-');
-        var dutchDate = arrDate[2] + "-" + arrDate[1] + "-" + arrDate[0];
+        var dutchDate = arrDate[0] + "-" + arrDate[1] + "-" + arrDate[2];
         dates[key].push(dutchDate);
     }
 }
 
 function customFormatDate(date) {
-    try {
-        var ad = date.split(' ');
-        var fullString = ('0' + ad[1]).slice(-2) + '-';
-		var months = [
-			'jan',
-			'feb',
-			'mrt',
-			'apr',
-			'mei',
-			'jun',
-			'jul',
-			'aug',
-			'sep',
-			'okt',
-			'nov',
-			'dec',
-		];
-        var monthNum = months.indexOf(ad[2]) + 1;
-        if (monthNum > 0) {
-            fullString += ('0' + monthNum).slice(-2) + '-' + new Date().getFullYear();;
-		} else {
-			console.log('This should not be possible...');
-			return 'invalid month';
-		}
-        return fullString;
-    } catch (error) {
-        console.log('This should not be possible...');
-        return 'invalid date format';
-    }
-
+    var ad = date.split('-');
+    return ad[2] + '-' + ('0' + ad[1]).slice(-2) + '-' + ('0' + ad[0]).slice(-2);
 }
 
 function parseDate(dateString) {
 	//console.log(dateString);
 	
 	try {
-		var dateArray = dateString.split(" ");
-		var fullString = dateArray[1] + '-'; //day of the month(already padded)
+        var dateArray = dateString.split(" ");
+        var fullString = "";
+
+		if(typeof dateArray[3] !== 'undefined' && dateArray[3].length === 4)
+		{
+			fullString += dateArray[3] + "-";
+		}
+		else {
+			fullString += new Date().getFullYear() + "-";
+		}
+
 		var months = [
 			'januari',
 			'februari',
@@ -779,15 +767,9 @@ function parseDate(dateString) {
 		} else {
 			console.log('This should not be possible...');
 			return 'invalid month';
-		}
-		
-		if(typeof dateArray[3] !== 'undefined' && dateArray[3].length === 4)
-		{
-			fullString += dateArray[3];
-		}
-		else {
-			fullString += new Date().getFullYear();
-		}
+        }
+        
+		fullString += dateArray[1]; //day of the month(already padded)
 		
 		return fullString;
 	}

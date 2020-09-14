@@ -57,6 +57,13 @@
 			"quarter": "van het kwartaal",
 			"year": "van het jaar"
 		},
+		"manualdata":
+		{
+			"title": "Geavanceerde afvaldata invoer",
+			"description": "Via deze instellingen kan je zelf (extra) ophaaldagen invoeren. Het wordt niet geadviseerd en is alleen voor geavanceerde gebruikers. De datums moeten in het formaat YYYY-mm-dd opgevoerd worden.",
+			"entryFieldLabel": "Geavanceerde afvaldata",
+			"save": "Sla alles op"
+		},
 		"startdate": "startend op",
 		"labeltitle": "Globale tag instellingen",
 		"labeldescription": "Deze waarden worden ingesteld in de globale tag wanneer een specifiek type prullenbak wordt opgehaald vandaag/morgen/overmorgen.",
@@ -159,6 +166,10 @@
 	},
 	"tokens":
 	{
-		"trashcollection": "Opgehaald"
+		"trashcollection": {
+			"today": "Vandaag opgehaald",
+			"tomorrow": "Morgen opgehaald",
+			"dayaftertomorrow": "Overmorgen opgehaald"
+		}
 	}
 }

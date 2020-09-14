@@ -57,6 +57,13 @@
 			"quarter": "of the quarter",
 			"year": "of the year"
 		},
+		"manualdata":
+		{
+			"title": "Advanced Date Entry",
+			"description": "Via this field you can add (extra) dates. This is not recommended, but for advanced users only. The dates should be entered in the format YYYY-mm-dd.",
+			"entryFieldLabel": "Advanced Date Input",
+			"save": "Save All Settings"
+		},
 		"startdate": "starting on",
 		"labeltitle": "Global tag settings",
 		"labeldescription": "These values are set in the global tag when a specific type of trash is collected today/tomorrow/the day after tomorrow.",
@@ -159,6 +166,10 @@
 	},
 	"tokens":
 	{
-		"trashcollection": "Collected"
+		"trashcollection": {
+			"today": "Collected Today",
+			"tomorrow": "Collected Tomorrow",
+			"dayaftertomorrow": "Collected Day After Tomorrow"
+		}
 	}
 }

@@ -12,7 +12,9 @@ class TrashcanReminder extends Homey.App
 	onInit()
 	{
 		this.gdates = '';
-		this.trashToken = null;
+		this.trashTokenToday = null;
+		this.trashTokenTomorrow = null;
+		this.trashTokenDayAfterTomorrow = null;
 		this.intervalRefreshToken = null;
 		this.collectingDaysSet = false;
 				
@@ -38,15 +40,45 @@ class TrashcanReminder extends Homey.App
 		setInterval(this.onUpdateLabel.bind(this), 10*60*1000); // Update label every 10 minutes.
 		
 		// Make sure the label is updated every 10 minutes
-		let trashCollectionToken = new Homey.FlowToken( 'trash_collection_token', {
+		let trashCollectionTokenToday = new Homey.FlowToken( 'trash_collection_token_today', {
 			type: 'string',
-			title: Homey.__('tokens.trashcollection')
+			title: Homey.__('tokens.trashcollection.today')
 		});
 		
-		trashCollectionToken
+		trashCollectionTokenToday
 			.register()
 			.then(() => {
-				this.trashToken = trashCollectionToken;
+				this.trashTokenToday = trashCollectionTokenToday;
+				return this.onUpdateLabel ( );
+			})
+			.catch( err => {
+				this.error( err );
+			});
+
+		let trashCollectionTokenTomorrow = new Homey.FlowToken( 'trash_collection_token_tomorrow', {
+			type: 'string',
+			title: Homey.__('tokens.trashcollection.tomorrow')
+		});
+		
+		trashCollectionTokenTomorrow
+			.register()
+			.then(() => {
+				this.trashTokenTomorrow = trashCollectionTokenTomorrow;
+				return this.onUpdateLabel ( );
+			})
+			.catch( err => {
+				this.error( err );
+		});
+
+		let trashCollectionTokenDayAfterTomorrow = new Homey.FlowToken( 'trash_collection_token_dayaftertomorrow', {
+			type: 'string',
+			title: Homey.__('tokens.trashcollection.dayaftertomorrow')
+		});
+		
+		trashCollectionTokenDayAfterTomorrow
+			.register()
+			.then(() => {
+				this.trashTokenDayAfterTomorrow = trashCollectionTokenDayAfterTomorrow;
 				return this.onUpdateLabel ( );
 			})
 			.catch( err => {
@@ -118,7 +150,7 @@ class TrashcanReminder extends Homey.App
 			var today = new Date();
 			for (var i = 0, len = gdates[foundType].length; i < len; i++)
 			{				
-				var date = new Date(gdates[foundType][i].substring(6,10), (parseInt(gdates[foundType][i].substring(3,5))-1), gdates[foundType][i].substring(0,2));
+				var date = new Date(gdates[foundType][i].substring(0,4), (parseInt(gdates[foundType][i].substring(6,8))-1), gdates[foundType][i].substring(9,11));
 								
 				if(DateTimeHelper.daysBetween(today, date) >= 0)
 				{
@@ -254,7 +286,7 @@ class TrashcanReminder extends Homey.App
 					{						
 						for (var y = 0, len = gdates[supportedTypes[i]].length; y < len; y++)
 						{				
-							var date = new Date(gdates[supportedTypes[i]][y].substring(6,10), (parseInt(gdates[supportedTypes[i]][y].substring(3,5))-1), gdates[supportedTypes[i]][y].substring(0,2));
+							var date = new Date(gdates[supportedTypes[i]][y].substring(0,4), (parseInt(gdates[supportedTypes[i]][y].substring(6,8))-1), gdates[supportedTypes[i]][y].substring(9,11));
 							
 							if(DateTimeHelper.daysBetween(nextContainerNotBefore, date) >= 0 && DateTimeHelper.daysBetween(containerDateNext, date) <= 0)
 							{
@@ -389,18 +421,18 @@ class TrashcanReminder extends Homey.App
 					if(success)
 					{
 						console.log('retrieved house information');
-						that.GenerateNewDaysBasedOnManualInput(); // When postal is set, try to retrieve additional values
-						
-						// Update label
-						that.onUpdateLabel();
+						//that.GenerateNewDaysBasedOnManualInput(); // When postal is set, try to retrieve additional values ; already done in updateAPI function
 					}
 					else 
 					{
-						that.GenerateNewDaysBasedOnManualInput(); // When postal code is not set, and no API retrieval
+						//that.GenerateNewDaysBasedOnManualInput(); // When postal code is not set, and no API retrieval ; already done in updateAPI function
 						console.log('house information has not been set');
 					}
 				}
 			);
+
+			// Make sure we are not updating everything to often.
+			shouldExecute = false;
 		}
 		
 		if (shouldExecute === true)
@@ -459,11 +491,51 @@ class TrashcanReminder extends Homey.App
 			// Update default label settings
 			Homey.ManagerSettings.set('labelSettings', labelSettings);
 		}
-		
+						
+		// Set global token with value found.
+		var result = null;
+		if(this.trashTokenToday !== null)
+		{	
+			var textLabel = this.getTextLabel(labelSettings, dates, 0);
+			console.log("Label today is updated: " + textLabel);
+			result = this.trashTokenToday.setValue(textLabel);
+		}
+		else
+		{
+			console.log("Trash token today is empty");
+		}
+
+		if(this.trashTokenTomorrow !== null)
+		{	
+			var textLabel = this.getTextLabel(labelSettings, dates, 1);
+			console.log("Label tomorrow is updated: " + textLabel);
+			result = this.trashTokenTomorrow.setValue(textLabel);
+		}
+		else
+		{
+			console.log("Trash token tomorrow is empty");
+		}
+
+		if(this.trashTokenDayAfterTomorrow !== null)
+		{	
+			var textLabel = this.getTextLabel(labelSettings, dates, 2);
+			console.log("Label day after tomorrow is updated: " + textLabel);
+			result = this.trashTokenDayAfterTomorrow.setValue(textLabel);
+		}
+		else
+		{
+			console.log("Trash token day after tomorrow is empty");
+		}
+
+		return result;
+	}
+
+	getTextLabel(labelSettings, dates, timeIndicator)
+	{
 		var checkDate = new Date();
-		if(labelSettings.timeindicator == 1) {
+		if(timeIndicator == 1) {
 			checkDate.setDate(checkDate.getDate() + 1);
-		} else if(labelSettings.timeindicator == 2) {
+		} else if(timeIndicator == 2) {
 			checkDate.setDate(checkDate.getDate() + 2);
 		}
 		
@@ -483,7 +555,7 @@ class TrashcanReminder extends Homey.App
 			}
 		}
 		
-		var timeReplacement = Homey.__('speech.output.timeindicator.t' + labelSettings.timeindicator);
+		var timeReplacement = Homey.__('speech.output.timeindicator.t' + timeIndicator);
 		var alternativeTextLabel = labelSettings.generic;
 
 		if(typesCollected.length == 0)
@@ -519,17 +591,8 @@ class TrashcanReminder extends Homey.App
 				textLabel = alternativeTextLabel.replace("__time__",timeReplacement).replace("__type__",multiTypeString).replace("__plural__",Homey.__('speech.output.replacementplural'));
 			}
 		}
-				
-		// Set global token with value found.
-		if(this.trashToken !== null)
-		{	
-			console.log("Label is updated: " + textLabel);
-			return this.trashToken.setValue(textLabel);
-		}
-		else
-		{
-			console.log("Trash token is empty");
-		}
+
+		return textLabel;
 	}
 	
 	/* ******************
@@ -716,11 +779,11 @@ class TrashcanReminder extends Homey.App
 	
 	dateToString(inputDate)
 	{
-		var dateString = this.pad( inputDate.getDate(), 2);
+		var dateString = inputDate.getFullYear();
 		dateString += '-';
 		dateString += this.pad( inputDate.getMonth()+1, 2);
 		dateString += '-';
-		dateString += inputDate.getFullYear();
+		dateString += this.pad( inputDate.getDate(), 2);
 		return dateString;
 	}
 	
@@ -730,10 +793,14 @@ class TrashcanReminder extends Homey.App
 
 		// Retrieve settings
 		var manualSettings = Homey.ManagerSettings.get('manualEntryData');
+		var manualAdditions = Homey.ManagerSettings.get('manualAdditions');
+
 		var dates = this.gdates === '' ? {} : this.gdates;
 
 		if(typeof manualSettings === 'undefined' || manualSettings == null)
 		{
+			dates = this.ParseManaualAdditions(dates, manualAdditions);
+			this.gdates = dates;
 			Homey.ManagerSettings.set('collectingDays', dates);
 			return;
 		}
@@ -781,6 +848,9 @@ class TrashcanReminder extends Homey.App
 			dates.KERSTBOOM = this.CalculatePickupDates(manualSettings.christmas);
 		}
 		
+		// Parse manual additions
+		dates = this.ParseManaualAdditions(dates, manualAdditions);
+
 		// Push to gdates
 		console.log("Pushing new dates");
 		console.log(dates);
@@ -795,6 +865,120 @@ class TrashcanReminder extends Homey.App
 			interval = parseInt(settings.option);
 		} catch(e) { console.log(e); }
 		return interval;
+	}
+
+	ParseManaualAdditions(dates, manualAdditions)
+	{
+		if(typeof manualAdditions === 'undefined' || manualAdditions == null)
+		{
+			return dates;
+		}
+
+		if(typeof manualAdditions.GFT !== 'undefined' && manualAdditions.GFT !== null && manualAdditions.GFT.length > 0)
+		{
+			if(typeof dates.GFT === 'undefined' || dates.GFT === null || dates.GFT.length <= 0)
+			{
+				dates.GFT = [];
+			}
+
+			for(var i=0; i<manualAdditions.GFT.length; i++)
+			{
+				dates.GFT.push(manualAdditions.GFT[i]);
+			}
+		}
+
+		if(typeof manualAdditions.PAPIER !== 'undefined' && manualAdditions.PAPIER !== null && manualAdditions.PAPIER.length > 0)
+		{
+			if(typeof dates.PAPIER === 'undefined' || dates.PAPIER === null || dates.PAPIER.length <= 0)
+			{
+				dates.PAPIER = [];
+			}
+
+			for(var i=0; i<manualAdditions.PAPIER.length; i++)
+			{
+				dates.PAPIER.push(manualAdditions.PAPIER[i]);
+			}
+		}
+
+		if(typeof manualAdditions.GROF !== 'undefined' && manualAdditions.GROF !== null && manualAdditions.GROF.length > 0)
+		{
+			if(typeof dates.GROF === 'undefined' || dates.GROF === null || dates.GROF.length <= 0)
+			{
+				dates.GROF = [];
+			}
+
+			for(var i=0; i<manualAdditions.GROF.length; i++)
+			{
+				dates.GROF.push(manualAdditions.GROF[i]);
+			}
+		}
+
+		if(typeof manualAdditions.REST !== 'undefined' && manualAdditions.REST !== null && manualAdditions.REST.length > 0)
+		{
+			if(typeof dates.REST === 'undefined' || dates.REST === null || dates.REST.length <= 0)
+			{
+				dates.REST = [];
+			}
+
+			for(var i=0; i<manualAdditions.REST.length; i++)
+			{
+				dates.REST.push(manualAdditions.REST[i]);
+			}
+		}
+
+		if(typeof manualAdditions.PLASTIC !== 'undefined' && manualAdditions.PLASTIC !== null && manualAdditions.PLASTIC.length > 0)
+		{
+			if(typeof dates.PLASTIC === 'undefined' || dates.PLASTIC === null || dates.PLASTIC.length <= 0)
+			{
+				dates.PLASTIC = [];
+			}
+
+			for(var i=0; i<manualAdditions.PLASTIC.length; i++)
+			{
+				dates.PLASTIC.push(manualAdditions.PLASTIC[i]);
+			}
+		}
+
+		if(typeof manualAdditions.PMD !== 'undefined' && manualAdditions.PMD !== null && manualAdditions.PMD.length > 0)
+		{
+			if(typeof dates.PMD === 'undefined' || dates.PMD === null || dates.PMD.length <= 0)
+			{
+				dates.PMD = [];
+			}
+
+			for(var i=0; i<manualAdditions.PMD.length; i++)
+			{
+				dates.PMD.push(manualAdditions.PMD[i]);
+			}
+		}
+
+		if(typeof manualAdditions.KERSTBOOM !== 'undefined' && manualAdditions.KERSTBOOM !== null && manualAdditions.KERSTBOOM.length > 0)
+		{
+			if(typeof dates.KERSTBOOM === 'undefined' || dates.KERSTBOOM === null || dates.KERSTBOOM.length <= 0)
+			{
+				dates.KERSTBOOM = [];
+			}
+
+			for(var i=0; i<manualAdditions.KERSTBOOM.length; i++)
+			{
+				dates.KERSTBOOM.push(manualAdditions.KERSTBOOM[i]);
+			}
+		}
+
+		if(typeof manualAdditions.TEXTIEL !== 'undefined' && manualAdditions.TEXTIEL !== null && manualAdditions.TEXTIEL.length > 0)
+		{
+			if(typeof dates.TEXTIEL === 'undefined' || dates.TEXTIEL === null || dates.TEXTIEL.length <= 0)
+			{
+				dates.TEXTIEL = [];
+			}
+
+			for(var i=0; i<manualAdditions.TEXTIEL.length; i++)
+			{
+				dates.TEXTIEL.push(manualAdditions.TEXTIEL[i]);
+			}
+		}
+
+		return dates;
 	}
 	
 	CalculatePickupDates(settings)

@@ -22,5 +22,9 @@
   },
   "2.7.9": {
     "en": "Added some debug info to analyse random crash. If you experience a crash please report it via GitHub."
+  },
+  "2.8.1": {
+    "en": "BREAKING CHANGE! The app now provides three global labels instead of one, please select the one you need for your flows. I try my best not to introduce breaking changes, but the request for multiple labels has been requested many times. So here it is!",
+    "nl": "BELANGRIJKE CHANGE! De app gebruikt nu 3 globale labels in plaats van 1, hierdoor moet je de juiste selecteren voor je flow om de juiste melding te krijgen. Ik doe mijn best om de updates zo soepel mogelijk te laten verlopen, maar het verzoek voor meerdere labels is zo vaak binnengekomen dat dit nodig was. Maak er goed gebruik van!"
   }
 }
