@@ -123,34 +123,6 @@
           "capturingGroup": true
         }
       }
-    },
-    "sv": {
-      "element": {
-        "actionWords": {
-          "type": "regex",
-          "value": "(vad|när|är|vilken)"
-        },
-        "trash": {
-          "type": "regex",
-          "value": "(avfall|avfallsbehållare|behållare|klickare|sopbehållare|insamlad)"
-        },
-        "trashType": {
-          "type": "regex",
-          "value": "(grönt|trädgårdsavfall|grönsaker|frukt|svart|grått|restavfall|plast|orange|metall|drickdräkt|dryckekartong|blå|kartong|kläder|julgran|grov)"
-        },
-        "query": {
-          "type": "regex",
-          "value": "[\\s\\S]+"
-        }
-      },
-      "group": {
-        "main": {
-          "set": "(actionWords) && (trashType) && trash && query",
-          "ordered": false,
-          "allowDisconnect": true,
-          "capturingGroup": true
-        }
-      }
     }
   },
   "speechExamples": {
@@ -173,8 +145,7 @@
         "id": "days_to_collect",
         "title": {
           "en": "Trash will !{{|not}} be collected",
-          "nl": "Afval wordt !{{|niet}} opgehaald",
-		  "sv": "Avfall !{{blir|är det inte}} plockade upp"
+          "nl": "Afval wordt !{{|niet}} opgehaald"
         },
         "args": [
           {
@@ -185,24 +156,21 @@
                 "id": "today",
                 "label": {
                   "en": "Today",
-                  "nl": "Vandaag",
-				  "sv": "Idag"
+                  "nl": "Vandaag"
                 }
               },
               {
                 "id": "tomorrow",
                 "label": {
                   "en": "Tomorrow",
-                  "nl": "Morgen",
-				  "sv": "Imorgen"
+                  "nl": "Morgen"
                 }
               },
               {
                 "id": "datomorrow",
                 "label": {
                   "en": "Day after tomorrow",
-                  "nl": "Overmorgen",
-				  "sv": "I övermorgon"
+                  "nl": "Overmorgen"
                 }
               }
             ]
@@ -215,72 +183,63 @@
                 "id": "ANY",
                 "label": {
                   "en": "Any",
-                  "nl": "Iets",
-				  "sv": "Något"
+                  "nl": "Iets"
                 }
               },
               {
                 "id": "GFT",
                 "label": {
                   "en": "Organic Waste",
-                  "nl": "GFT",
-				  "sv": "Kompost"
+                  "nl": "GFT"
                 }
               },
               {
                 "id": "GROF",
                 "label": {
                   "en": "Bulky waste",
-                  "nl": "Grof afval",
-				  "sv": "Grovsopor"
+                  "nl": "Grof afval"
                 }
               },
               {
                 "id": "PAPIER",
                 "label": {
                   "en": "Paper",
-                  "nl": "Papier",
-				  "sv": "Papper"
+                  "nl": "Papier"
                 }
               },
               {
                 "id": "PLASTIC",
                 "label": {
                   "en": "Plastic",
-                  "nl": "Plastic",
-				  "sv": "Plast"
+                  "nl": "Plastic"
                 }
               },
               {
                 "id": "PMD",
                 "label": {
                   "en": "PMD",
-                  "nl": "PMD",
-				  "sv": "Plast metall mjölkförpackningar"
+                  "nl": "PMD"
                 }
               },
               {
                 "id": "REST",
                 "label": {
                   "en": "Residual",
-                  "nl": "Rest",
-				  "sv": "Restavfall"
+                  "nl": "Rest"
                 }
               },
               {
                 "id": "TEXTIEL",
                 "label": {
                   "en": "Textiles",
-                  "nl": "Textiel",
-				  "sv": "Textilier"
+                  "nl": "Textiel"
                 }
               },
               {
                 "id": "KERSTBOOM",
                 "label": {
                   "en": "Christmas tree",
-                  "nl": "Kerstboom",
-				  "sv": "Julgran"
+                  "nl": "Kerstboom"
                 }
               }
             ]
