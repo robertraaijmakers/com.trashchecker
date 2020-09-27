@@ -54,27 +54,30 @@
     </fieldset>
     <button id="apiSave" class="right" data-i18n="settings.save" ></button>
 	<br /><br />
+
 	<fieldset id="manual_input">
 		<legend data-i18n="settings.titlemanualinput"></legend>
 
 		<!-- GFT -->
 		<div class="field row">
 			<label for="gft" data-i18n="settings.gft"></label>
-			<select name="gft[option]" id="gft_option">
-				<option value="-1" data-i18n="settings.interval.na"></option>
-				<option value="0" data-i18n="settings.interval.automatic"></option>
-				<option value="1" data-i18n="settings.interval.everyweek"></option>
-				<option value="2" data-i18n="settings.interval.everyotherweek"></option>
-				<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
-				<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
-				<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
-				<option value="11" data-i18n="settings.interval.everyfirst"></option>
-				<option value="12" data-i18n="settings.interval.everysecond"></option>
-				<option value="13" data-i18n="settings.interval.everythird"></option>
-				<option value="14" data-i18n="settings.interval.everyfourth"></option>
-				<option value="20" data-i18n="settings.interval.everysecondlast"></option>
-				<option value="19" data-i18n="settings.interval.everylast"></option>
-			</select>
+			<div>
+				<select name="gft[option]" id="gft_option">
+					<option value="-1" data-i18n="settings.interval.na"></option>
+					<option value="0" data-i18n="settings.interval.automatic"></option>
+					<option value="1" data-i18n="settings.interval.everyweek"></option>
+					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
+					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
+					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
+					<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
+					<option value="11" data-i18n="settings.interval.everyfirst"></option>
+					<option value="12" data-i18n="settings.interval.everysecond"></option>
+					<option value="13" data-i18n="settings.interval.everythird"></option>
+					<option value="14" data-i18n="settings.interval.everyfourth"></option>
+					<option value="20" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="19" data-i18n="settings.interval.everylast"></option>
+				</select>
+			</div>
 			<div id="gft_day_div">
 				<select style="margin-left: 5px;" name="gft[day_of_week]" id="gft_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
@@ -328,21 +331,23 @@
 		<!-- BULKY / GROF VUIL -->
 		<div class="field row">
 			<label for="bulky" data-i18n="settings.bulky"></label>
-			<select name="bulky[option]" id="bulky_option">
-				<option value="-1" data-i18n="settings.interval.na"></option>
-				<option value="0" data-i18n="settings.interval.automatic"></option>
-				<option value="1" data-i18n="settings.interval.everyweek"></option>
-				<option value="2" data-i18n="settings.interval.everyotherweek"></option>
-				<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
-				<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
-				<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
-				<option value="11" data-i18n="settings.interval.everyfirst"></option>
-				<option value="12" data-i18n="settings.interval.everysecond"></option>
-				<option value="13" data-i18n="settings.interval.everythird"></option>
-				<option value="14" data-i18n="settings.interval.everyfourth"></option>
-				<option value="20" data-i18n="settings.interval.everysecondlast"></option>
-				<option value="19" data-i18n="settings.interval.everylast"></option>
-			</select>
+			<div>
+				<select name="bulky[option]" id="bulky_option">
+					<option value="-1" data-i18n="settings.interval.na"></option>
+					<option value="0" data-i18n="settings.interval.automatic"></option>
+					<option value="1" data-i18n="settings.interval.everyweek"></option>
+					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
+					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
+					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
+					<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
+					<option value="11" data-i18n="settings.interval.everyfirst"></option>
+					<option value="12" data-i18n="settings.interval.everysecond"></option>
+					<option value="13" data-i18n="settings.interval.everythird"></option>
+					<option value="14" data-i18n="settings.interval.everyfourth"></option>
+					<option value="20" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="19" data-i18n="settings.interval.everylast"></option>
+				</select>
+			</div>
 			<div id="bulky_day_div">
 				<select style="margin-left: 5px;" name="bulky[day_of_week]" id="bulky_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
@@ -367,12 +372,10 @@
 				<input style="display: inline; margin-left: 5px;" type="date" name="bulky[startdate]" id="bulky_startdate"></input>
 			</div>
         </div>
-		
     </fieldset>
-	<button id="manualInput" class="right" style="display:block" data-i18n="settings.saveManualInput" ></button>
+    <button id="manualSettingsSave" class="right" data-i18n="settings.save" ></button>
 	<br /><br />
-	<br /><br />
-	
+
 	<h2 data-i18n="settings.labeltitle"></h2>
     <p style="display:block" data-i18n="settings.labeldescription"></p>
 	<fieldset id="label_input">
@@ -440,13 +443,25 @@
 	<br /><br />
 	<br /><br />
 
+	<h2 data-i18n="settings.manualdata.title"></h2>
+	<p style="display:block" data-i18n="settings.manualdata.description"></p>
+	<fieldset id="debug_settings">
+		<div class="field row">
+			<label for="manualDataEntry" data-i18n="settings.manualdata.entryFieldLabel"></label>
+			<textarea id="manualDataEntry" name="manualDataEntry" width="100%" rows="10"></textarea>
+		</div>
+		<span id="respManualDataEntry"></span>
+	</fieldset>
+	<button id="saveManaulDataEntry" class="right" style="display:block" data-i18n="settings.manualdata.save" ></button>
+	<br /><br />
+
 	<h2 data-i18n="debug.labeltitle"></h2>
 	<p style="display:block" data-i18n="debug.labeldescription"></p>
-	<button id="refreshDebugInformation" class="left" style="display:block" data-i18n="settings.refreshDebugInformation" ></button>
 	<fieldset id="debug_settings">
 		<div class="field row" id="respDatesDebug">
         </div>
 	</fieldset>
+	<button id="refreshDebugInformation" class="right" style="display:block" data-i18n="settings.refreshDebugInformation" ></button>
 	<br /><br />
 	
 	<script type="text/javascript">
@@ -459,14 +474,19 @@
 				save( Homey );
 				return false; // cancels save event! (we don't need the real button event to be handled).
 			});
-			document.getElementById("manualInput").addEventListener("click", function(elem)
+			document.getElementById("manualSettingsSave").addEventListener("click", function(elem)
 			{
-				saveManualInput( Homey );
+				save( Homey );
 				return false; // cancels save event! (we don't need the real button event to be handled).
 			});
 			document.getElementById("labelInput").addEventListener("click", function(elem)
 			{
 				saveLabelInput( Homey );
+				return false; // cancels save event! (we don't need the real button event to be handled).
+			});
+			document.getElementById("saveManaulDataEntry").addEventListener("click", function(elem)
+			{
+				saveManaulEntryData( Homey );
 				return false; // cancels save event! (we don't need the real button event to be handled).
 			});
 			document.getElementById("refreshDebugInformation").addEventListener("click", function(elem)
@@ -720,6 +740,8 @@
 				renderGlobalLabel( Homey );
 			});
 
+			
+			retrieveManualInputDays( Homey );
 			retrieveCollectionDaysDebug( Homey );
 			
 			Homey.ready();
@@ -741,6 +763,30 @@
 			});
 		}
 
+		function retrieveManualInputDays( Homey )
+		{
+			Homey.get('manualAdditions', function(err, manualAdditions)
+        	{
+        		if(err || manualAdditions === null)
+        		{
+					console.log("No data yet.");
+					document.getElementById('manualDataEntry').value = "{"
+					+"\n\t\"GFT\": [],";
+					+"\n\t\"REST\": [],";
+					+"\n\t\"PAPIER\": [],";
+					+"\n\t\"GROF\": [],";
+					+"\n\t\"PLASTIC\": [],";
+					+"\n\t\"PMD\": [],";
+					+"\n\t\"TEXTIEL\": [],";
+					+"\n\t\"KERSTBOOM\": []";
+					+"\n}";
+        			return console.error(err);
+				}
+				
+        		document.getElementById('manualDataEntry').value = JSON.stringify(manualAdditions, null, 2);
+        	});
+		}
+
 		// Save zipcode and housenumber to Homey Settings
         function save( Homey )
         {
@@ -754,38 +800,54 @@
 
 			var respDatesDebug = document.getElementById("respDatesDebug");
 				respDatesDebug.innerHTML = "Loading collection days...";
-				
+			
+			// Always save the manual input when save button is pressed
+			Homey.set('manualInput', true);
+			saveManualInput( Homey );
+
         	var pc = document.getElementById('postcode').value;
         	var num = document.getElementById('number').value;
 			var apiSelected = document.getElementById('api').value;
 
-        	var country;
+        	var country = null;
         	if(document.getElementById('NL').checked) {
             	country = 'NL';
-            }else if(document.getElementById('BE').checked) {
+            } else if(document.getElementById('BE').checked) {
             	country = 'BE';
             }
-
-			var manualInput = true;
 			
 			if(apiSelected == "") { apiSelected = null; }
+			if(pc == "") { pc = null; }
+			if(num == "") { num = null; }
+
+			if(pc == null || num == null)
+			{
+				Homey.set('postcode', '');
+				Homey.set('hnumber', '');
+				Homey.set('country', 'NL');
+				Homey.set('apiId', '');
+
+				resp.innerHTML = Homey.__('settings.manualonly');
+				resp.style.color = 'green';
+				retrieveCollectionDaysDebug( Homey );
+				return;
+			}
 
         	Homey.api('POST', '/', {
-
         		"postcode":pc,
         		"housenumber":num,
         		"country":country,
 				"api": apiSelected
-
         	}, function(err,result) {
-        		if(err) return console.log(err);
+        		if(err) { return console.log(err); }
 
-        		if(result) {
+				if(result)
+				{
 					resp.style.color = 'green';
 					resp.innerHTML = Homey.__('settings.update') + pc + ', ' + num + ' in ' + country;
-		            Homey.set('postcode',pc);
-		            Homey.set('hnumber',num);
-		            Homey.set('country',country);
+		            Homey.set('postcode', pc);
+		            Homey.set('hnumber', num);
+		            Homey.set('country', country);
 										
 					// Retrieve API id & gdates from settings
 					Homey.get('apiId', function(err, apiId)
@@ -798,27 +860,14 @@
 						document.getElementById("api").value = apiId;
 						respDates.innerHTML = "<br />API ID: " + apiId + respDates.innerHTML;
 					});
-					
-					Homey.get('collectingDays', function(err, collectingDays)
-					{
-						if(err)
-						{
-							return;
-						}
-						
-						respDates.innerHTML = respDates.innerHTML + "<br /><pre>" + JSON.stringify(collectingDays, null, 2) + "</pre>";
-						respDatesDebug.innerHTML = "<pre>" + JSON.stringify(collectingDays, null, 2) + "</pre>";
-					});
 				}
 				else
 				{
 					resp.innerHTML = Homey.__('settings.fail');
 					resp.style.color = 'red';
-	        	}
-
-				Homey.set('manualInput', manualInput);
-
-        		//Do stuff if true/false (kruis,vinkje)
+				}
+				
+				retrieveCollectionDaysDebug( Homey );
         		console.log(result);
         	});
         }
@@ -839,6 +888,121 @@
 
 			console.log(data);
 			Homey.set('manualEntryData', data);
+		}
+
+		// Save extra manual data entry
+		function saveManaulEntryData( Homey )
+		{
+			var data = {};
+			
+			var textualInput = {};
+			try
+			{
+				textualInput = JSON.parse(document.getElementById('manualDataEntry').value);
+			}
+			catch(err)
+			{
+				console.log(err);
+				document.getElementById('respManualDataEntry').innerHTML = err;
+				return;
+			}
+
+			document.getElementById('respManualDataEntry').innerHTML = "";
+
+			if(typeof textualInput.GFT !== 'undefined')
+			{
+				data.GFT = validateDates(textualInput.GFT);
+			}
+			else
+			{
+				data.GFT = [];
+			}
+
+			if(typeof textualInput.REST !== 'undefined')
+			{
+				data.REST = validateDates(textualInput.REST);
+			}
+			else
+			{
+				data.REST = [];
+			}
+
+			if(typeof textualInput.PAPIER !== 'undefined')
+			{
+				data.PAPIER = validateDates(textualInput.PAPIER);
+			}
+			else
+			{
+				data.PAPIER = [];
+			}
+
+			if(typeof textualInput.GROF !== 'undefined')
+			{
+				data.GROF = validateDates(textualInput.GROF);
+			}
+			else
+			{
+				data.GROF = [];
+			}
+			
+			if(typeof textualInput.PLASTIC !== 'undefined')
+			{
+				data.PLASTIC = validateDates(textualInput.PLASTIC);
+			}
+			else
+			{
+				data.PLASTIC = [];
+			}
+			
+			if(typeof textualInput.PMD !== 'undefined')
+			{
+				data.PMD = validateDates(textualInput.PMD);
+			}
+			else
+			{
+				data.PMD = [];
+			}
+
+			if(typeof textualInput.KERSTBOOM !== 'undefined')
+			{
+				data.KERSTBOOM = validateDates(textualInput.KERSTBOOM);
+			}
+			else
+			{
+				data.KERSTBOOM = [];
+			}
+
+			Homey.set('manualAdditions', data);
+
+			// We trigger a full save, to make sure everything is recalculated (a bit heavy, but this feature shouldn't be used that often)
+			save( Homey );
+			saveLabelInput( Homey );
+
+			// Retrieve them again & update field (for formatting & feedback purposes)
+			retrieveManualInputDays( Homey );
+		}
+
+		function validateDates(inputArray)
+		{
+			var output = [];
+
+			for(var i=0;i<inputArray.length; i++)
+			{
+				var validDate = new Date(inputArray[i]);
+
+				month = '' + (validDate.getMonth() + 1),
+				day = '' + validDate.getDate(),
+				year = validDate.getFullYear();
+
+				if (month.length < 2) 
+					month = '0' + month;
+				if (day.length < 2) 
+					day = '0' + day;
+
+				output.push([year, month, day].join('-'));
+			}
+
+			return output;
 		}
 
 		function renderGlobalLabel( Homey )

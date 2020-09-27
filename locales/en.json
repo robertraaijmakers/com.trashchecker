@@ -1,14 +1,15 @@
 {
 	"title": "Trash Checker",
 	"settings": {
-		"description":"Please note that not all cities are supported, take a look at the documentation to see whether your city is supported. If your city is not supported you have the option to enter the dates manually.",
-		"title": "Please enter your postal code and home number",
-		"postcode": "Postal code",
-		"hnumber": "House number",
+		"title": "Trashcan Reminder 2.0 Settings",
+		"description":"Please note that not all cities are supported. You can check availability by providing your postal code and house number to see if it's supported. If the address isn't supported, you can always add the pattern via the manual input settings below and still be able to use the full functionalities of the app!",
+		"postcode": "Postal Code",
+		"hnumber": "House Number",
 		"country": "Country",
 		"api": "Source",
-		"save": "Save changes",
+		"save": "Save Changes",
 		"fail": "This address is not supported",
+		"manualonly": "The data was refreshed based on the manual settings only",
 		"update": "Address updated to ",
 		"checking": "checking address...",
 		"gft": "Organic",
@@ -17,15 +18,12 @@
 		"pmd": "PMD",
 		"paper": "Paper",
 		"textile": "Textile",
-		"bulky": "Bulky waste",
-		"christmas": "Christmas tree",
+		"bulky": "Bulky Waste",
+		"christmas": "Christmas Tree",
 		"unknown": "Unknown",
 		"none": "When nothing is collected",
-		"titlemanualinput": "Manual input",
-		"manualInputField": "Enter dates manually?",
-		"manualInputFieldDescription": "Yes, enter them manually",
-		"saveManualInput": "Save manual input",
-		"saveLabelInput": "Save label input",
+		"titlemanualinput": "Manual Input",
+		"saveLabelInput": "Save Global Tag Settings",
 		"refreshDebugInformation": "Refresh debug information",
 		"interval":
 		{
@@ -58,6 +56,13 @@
 			"othermonth": "every other month",
 			"quarter": "of the quarter",
 			"year": "of the year"
+		},
+		"manualdata":
+		{
+			"title": "Advanced Date Entry",
+			"description": "Via this field you can add (extra) dates. This is not recommended, but for advanced users only. The dates should be entered in the format YYYY-mm-dd.",
+			"entryFieldLabel": "Advanced Date Input",
+			"save": "Save All Settings"
 		},
 		"startdate": "starting on",
 		"labeltitle": "Global tag settings",
@@ -161,6 +166,10 @@
 	},
 	"tokens":
 	{
-		"trashcollection": "Collected"
+		"trashcollection": {
+			"today": "Collected Today",
+			"tomorrow": "Collected Tomorrow",
+			"dayaftertomorrow": "Collected Day After Tomorrow"
+		}
 	}
 }
