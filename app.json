@@ -1,13 +1,13 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.trashchecker",
-  "sdk": 2,
+  "sdk": 3,
   "name": {
     "en": "Trashcan Reminder 2.0",
     "nl": "Afval Herinnering 2.0"
   },
-  "version": "2.8.2",
-  "compatibility": ">=1.5",
+  "version": "2.9.0",
+  "compatibility": ">=5.0",
   "author": {
     "name": "Robert Raaijmakers",
     "email": "dutchfighter@live.nl"
@@ -150,7 +150,8 @@
         "id": "days_to_collect",
         "title": {
           "en": "Trash will !{{|not}} be collected",
-          "nl": "Afval wordt !{{|niet}} opgehaald"
+          "nl": "Afval wordt !{{|niet}} opgehaald",
+          "sv": "Afval wordt !{{|niet}} opgehaald"
         },
         "args": [
           {
@@ -161,21 +162,24 @@
                 "id": "today",
                 "label": {
                   "en": "Today",
-                  "nl": "Vandaag"
+                  "nl": "Vandaag",
+                  "sv": "Hämtas idag"
                 }
               },
               {
                 "id": "tomorrow",
                 "label": {
                   "en": "Tomorrow",
-                  "nl": "Morgen"
+                  "nl": "Morgen",
+                  "sv": "Hämtas imorgon"
                 }
               },
               {
                 "id": "datomorrow",
                 "label": {
                   "en": "Day after tomorrow",
-                  "nl": "Overmorgen"
+                  "nl": "Overmorgen",
+                  "sv": "Hämtas i övermorgon"
                 }
               }
             ]
@@ -188,63 +192,72 @@
                 "id": "ANY",
                 "label": {
                   "en": "Any",
-                  "nl": "Iets"
+                  "nl": "Iets",
+                  "sv": "Några"
                 }
               },
               {
                 "id": "GFT",
                 "label": {
                   "en": "Organic Waste",
-                  "nl": "GFT"
+                  "nl": "GFT",
+                  "sv": "Kompost"
                 }
               },
               {
                 "id": "GROF",
                 "label": {
                   "en": "Bulky waste",
-                  "nl": "Grof afval"
+                  "nl": "Grof afval",
+                  "sv": "Grovsopor"
                 }
               },
               {
                 "id": "PAPIER",
                 "label": {
                   "en": "Paper",
-                  "nl": "Papier"
+                  "nl": "Papier",
+                  "sv": "Papper"
                 }
               },
               {
                 "id": "PLASTIC",
                 "label": {
                   "en": "Plastic",
-                  "nl": "Plastic"
+                  "nl": "Plastic",
+                  "sv": "Plast"
                 }
               },
               {
                 "id": "PMD",
                 "label": {
                   "en": "PMD",
-                  "nl": "PMD"
+                  "nl": "PMD",
+                  "sv": "PMD"
                 }
               },
               {
                 "id": "REST",
                 "label": {
                   "en": "Residual",
-                  "nl": "Rest"
+                  "nl": "Rest",
+                  "sv": "Restavfall"
                 }
               },
               {
                 "id": "TEXTIEL",
                 "label": {
                   "en": "Textiles",
-                  "nl": "Textiel"
+                  "nl": "Textiel",
+                  "sv": "Textilier"
                 }
               },
               {
                 "id": "KERSTBOOM",
                 "label": {
                   "en": "Christmas tree",
-                  "nl": "Kerstboom"
+                  "nl": "Kerstboom",
+                  "sv": "Julgran"
                 }
               }
             ]
