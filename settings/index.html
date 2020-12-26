@@ -38,6 +38,7 @@
 				<option value="afrm">Afvalkalender RMN</option>
 				<option value="rov">Afvalkalender ROVA</option>
 				<option value="akvr">Afvalkalender Venray</option>
+				<option value="areareiniging">Area Reiniging</option>
 				<option value="avx">Avalex</option>
 				<option value="dbafw">Den Bosch Afvalstoffendienstkalender</option>
 				<option value="gad">GAD Gooi en Vechtstreek</option>
@@ -327,7 +328,7 @@
 				<input style="display: inline; margin-left: 5px;" type="date" name="textile[startdate]" id="textile_startdate"></input>
 			</div>
         </div>
-		
+
 		<!-- BULKY / GROF VUIL -->
 		<div class="field row">
 			<label for="bulky" data-i18n="settings.bulky"></label>
@@ -463,7 +464,7 @@
 	</fieldset>
 	<button id="refreshDebugInformation" class="right" style="display:block" data-i18n="settings.refreshDebugInformation" ></button>
 	<br /><br />
-	
+
 	<script type="text/javascript">
 
         function onHomeyReady( Homey )
@@ -494,7 +495,7 @@
 				retrieveCollectionDaysDebug( Homey );
 				return false; // cancels save event! (we don't need the real button event to be handled).
 			});
-			
+
 			document.getElementById("gft_option").addEventListener("change", function(elem) { ToggleManualInputFields("gft"); });
 			document.getElementById("paper_option").addEventListener("change",function(elem) { ToggleManualInputFields("paper"); });
 			document.getElementById("rest_option").addEventListener("change", function(elem) { ToggleManualInputFields("rest"); });
@@ -570,7 +571,7 @@
         			document.getElementById('NL').checked = true;
         		}
         	});
-			
+
         	Homey.get('apiId',function(err, apiId)
         	{
         		if(err){
@@ -579,7 +580,7 @@
 
         		document.getElementById("api").value = apiId;
         	});
-			
+
 			Homey.get('manualEntryData',function(err, manualEntryData)
 			{
 				console.log(manualEntryData);
@@ -640,11 +641,11 @@
 			Homey.get('labelSettings', function(err, labelSettings)
 			{
 				console.log(labelSettings);
-				if(err) 
+				if(err)
 				{
 						return console.error(err);
 				}
-				
+
 				if(typeof labelSettings.timeindicator !== 'undefined')
 				{
 					document.getElementById("labelTimeIndicator").value = labelSettings.timeindicator;
@@ -655,7 +656,7 @@
 				{
 					document.getElementById("labelGeneric").value = labelSettings.generic;
 				}
-				
+
 				if(typeof labelSettings.type.gft !== 'undefined')
 				{
 					SetLabelEntryFormValues(Homey, labelSettings.type.gft, "gft");
@@ -740,10 +741,10 @@
 				renderGlobalLabel( Homey );
 			});
 
-			
+
 			retrieveManualInputDays( Homey );
 			retrieveCollectionDaysDebug( Homey );
-			
+
 			Homey.ready();
 		}
 
@@ -758,7 +759,7 @@
 					respDates.innerHTML = "No collecting days found.";
 					return;
 				}
-				
+
 				respDates.innerHTML = "<pre>" + JSON.stringify(collectingDays, null, 2) + "</pre>";
 			});
 		}
@@ -782,7 +783,7 @@
 					+"\n}";
         			return console.error(err);
 				}
-				
+
         		document.getElementById('manualDataEntry').value = JSON.stringify(manualAdditions, null, 2);
         	});
 		}
@@ -793,14 +794,14 @@
 			var resp = document.getElementById("resp");
 				resp.style.color = 'black';
 				resp.innerHTML = Homey.__('settings.checking');
-				
+
 			var respDates = document.getElementById("respDates");
 				respDates.style.color = 'black';
 				respDates.innerHTML = "";
 
 			var respDatesDebug = document.getElementById("respDatesDebug");
 				respDatesDebug.innerHTML = "Loading collection days...";
-			
+
 			// Always save the manual input when save button is pressed
 			Homey.set('manualInput', true);
 			saveManualInput( Homey );
@@ -815,7 +816,7 @@
             } else if(document.getElementById('BE').checked) {
             	country = 'BE';
             }
-			
+
 			if(apiSelected == "") { apiSelected = null; }
 			if(pc == "") { pc = null; }
 			if(num == "") { num = null; }
@@ -848,7 +849,7 @@
 		            Homey.set('postcode', pc);
 		            Homey.set('hnumber', num);
 		            Homey.set('country', country);
-										
+
 					// Retrieve API id & gdates from settings
 					Homey.get('apiId', function(err, apiId)
 					{
@@ -856,7 +857,7 @@
 						{
 							return;
 						}
-						
+
 						document.getElementById("api").value = apiId;
 						respDates.innerHTML = "<br />API ID: " + apiId + respDates.innerHTML;
 					});
@@ -866,7 +867,7 @@
 					resp.innerHTML = Homey.__('settings.fail');
 					resp.style.color = 'red';
 				}
-				
+
 				retrieveCollectionDaysDebug( Homey );
         		console.log(result);
         	});
@@ -894,7 +895,7 @@
 		function saveManaulEntryData( Homey )
 		{
 			var data = {};
-			
+
 			var textualInput = {};
 			try
 			{
@@ -944,7 +945,7 @@
 			{
 				data.GROF = [];
 			}
-			
+
 			if(typeof textualInput.PLASTIC !== 'undefined')
 			{
 				data.PLASTIC = validateDates(textualInput.PLASTIC);
@@ -953,7 +954,7 @@
 			{
 				data.PLASTIC = [];
 			}
-			
+
 			if(typeof textualInput.PMD !== 'undefined')
 			{
 				data.PMD = validateDates(textualInput.PMD);
@@ -994,9 +995,9 @@
 				day = '' + validDate.getDate(),
 				year = validDate.getFullYear();
 
-				if (month.length < 2) 
+				if (month.length < 2)
 					month = '0' + month;
-				if (day.length < 2) 
+				if (day.length < 2)
 					day = '0' + day;
 
 				output.push([year, month, day].join('-'));
@@ -1018,7 +1019,7 @@
 				var typeReplacement = document.getElementById("label"+capitalizeFirstLetter(types[i])).value;
 				document.getElementById("example"+capitalizeFirstLetter(types[i])).innerHTML = sentence.replace("__time__",timeReplacement).replace("__type__",typeReplacement).replace("__plural__",replacementSingle);
 			}
-			
+
 			var multipleTypesReplacement = document.getElementById("labelGft").value + ", " + document.getElementById("labelPlastic").value + " " + Homey.__("speech.output.and") + " " + document.getElementById("labelGrof").value;
 			document.getElementById("exampleMultiple").innerHTML = sentence.replace("__time__",timeReplacement).replace("__type__",multipleTypesReplacement).replace("__plural__",replacementPlural);
 		}
@@ -1045,7 +1046,7 @@
 			console.log(data);
 			Homey.set('labelSettings', data);
 		}
-		
+
 		// Sets values given in "values" to the given "type" on the form.
 		function SetManualEntryFormValues(values, type)
 		{
@@ -1060,11 +1061,11 @@
 
 			ToggleManualInputFields(type);
 		}
-		
+
 		function capitalizeFirstLetter(string) {
 			return string.charAt(0).toUpperCase() + string.slice(1);
 		}
-		
+
 		// Sets values given in "values" to the given "type" on the form.
 		function SetLabelEntryFormValues(Homey, values, type)
 		{
@@ -1105,7 +1106,7 @@
 			if(value >= 11) {
 				document.getElementById(prefix + "_option_extension").style.display = 'block';
 				document.getElementById(prefix + "_day_div").style.display = 'block';
-				
+
 				if(optionExtensionValue == 2)
 				{
 					document.getElementById(prefix + "_startdate_div").style.display = 'block';

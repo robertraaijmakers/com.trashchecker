@@ -21,7 +21,7 @@ function denBoschAfvalstoffendienstCalendar(postcode, housenumber, country, call
 }
 
 function rovaAfvalkalender(postcode, housenumber, country, callback) {
-	generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "https://inzamelkalender.rova.nl/nl/", callback);
+    generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "https://inzamelkalender.rova.nl/nl/", callback);
 }
 
 function afvalkalenderCyclus(postcode, housenumber, country, callback) {
@@ -70,7 +70,7 @@ function afvalkalenderMeerlanden(postcode, housenumber, country, callback) {
 }
 
 function twenteMilieu(postcode, housenumber, country, callback) {
-	console.log("Checking Twente Milieu");
+    console.log("Checking Twente Milieu");
     generalImplementationWasteApi(postcode, housenumber, country, "8d97bb56-5afd-4cbc-a651-b4f7314264b4", callback);
 }
 
@@ -81,8 +81,14 @@ function gemeenteHellendoorn(postcode, housenumber, country, callback) {
 
 function acvAfvalkalender(postcode, housenumber, country, callback)
 {
-	console.log("Checking ACV afvalkalender");
-	generalImplementationWasteApi(postcode, housenumber, country, "f8e2844a-095e-48f9-9f98-71fceb51d2c3", callback);
+    console.log("Checking ACV afvalkalender");
+    generalImplementationWasteApi(postcode, housenumber, country, "f8e2844a-095e-48f9-9f98-71fceb51d2c3", callback);
+}
+
+function areaReiniging(postcode, housenumber, country, callback)
+{
+    console.log("Checking Area Reiniging");
+    generalImplementationWasteApi(postcode, housenumber, country, "adc418da-d19b-11e5-ab30-625662870761", callback);
 }
 
 /**
@@ -153,12 +159,12 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                             if (!dates.TEXTIEL) dates.TEXTIEL = [];
                             dates.TEXTIEL.push(dateStr);
                         } else if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
-							if (!dates.KERSTBOOM) dates.KERSTBOOM = [];
+                            if (!dates.KERSTBOOM) dates.KERSTBOOM = [];
                             dates.KERSTBOOM.push(dateStr);
-						} else if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
-							if (!dates.GROF) dates.GROF = [];
+                        } else if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
+                            if (!dates.GROF) dates.GROF = [];
                             dates.GROF.push(dateStr);
-						} else {
+                        } else {
                             console.log("Unknown description: " + description);
                         }
                     }
@@ -191,7 +197,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
 
             // Stip lot of data from body to prevent memory overflow
             var searchResultIndex = res.body.indexOf('<table width="100%" cellpadding="0" cellspacing="0" role=\'presentation\'>');
-            
+
             var regex = /<a href="#waste-(.*) class="wasteInfoIcon/i;
             var searchResultIndex = res.body.search(regex);
 
@@ -228,11 +234,11 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                     if(elem.children[1].children.length < 1)
                     {
                         dateStr = parseDate(elem.children[0].data);
-                    } 
+                    }
                     else {
                         dateStr = parseDate(elem.children[1].children[0].data);
                     }
-                    
+
                     switch (elem.attribs.class.trim()) {
                         case 'gft':
                             if (!fDates.GFT) fDates.GFT = [];
@@ -251,7 +257,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                             fDates.REST.push(dateStr);
                             break;
                         case 'pmd':
-			            case 'pd':
+                        case 'pd':
                             if (!fDates.PMD) fDates.PMD = [];
                             fDates.PMD.push(dateStr);
                             break;
@@ -282,7 +288,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                         default:
                             console.log('Defaulted. Element not found:', elem.attribs.class);
                     }
-    
+
                     elem = null; // clear memory leak?
                 });
 
@@ -290,8 +296,8 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                 if(nextResult > 0)
                 {
                     searchResultIndex = nextResult + searchResultIndex + 4;
-                } 
-                else 
+                }
+                else
                 {
                     searchResultIndex = -1;
                 }
@@ -307,7 +313,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
 
 function generalImplementationWasteApi(postcode, housenumber, country, companyCode, callback)
 {
-	console.log("Checking company code ${companyCode}.");
+    console.log("Checking company code ${companyCode}.");
 
     var fDates = {};
     if (country !== "NL") {
@@ -349,7 +355,7 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
 
                     var uniqueID = obj1.dataList[0].UniqueId;
                     // console.log("UniqueID: " + uniqueID);
-					var post_data2 = `{companyCode:"${companyCode}",uniqueAddressID:"${uniqueID}",startDate:"${startDate}",endDate:"${endDate}"}`;
+                    var post_data2 = `{companyCode:"${companyCode}",uniqueAddressID:"${uniqueID}",startDate:"${startDate}",endDate:"${endDate}"}`;
                     var post_options2 = {
                         host: 'wasteapi.2go-mobile.com',
                         port: '443',
@@ -384,6 +390,7 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                                                 if (!fDates.PAPIER) fDates.PAPIER = [];
                                                 fDates.PAPIER.push(date);
                                                 break;
+                                            case "PLASTIC":
                                             case "PACKAGES":
                                                 if (!fDates.PLASTIC) fDates.PLASTIC = [];
                                                 fDates.PLASTIC.push(date);
@@ -417,7 +424,7 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
             return callback(new Error('Invalid location'));
         }
     });
-	
+
     // post the data
     post_req1.write(post_data1);
     post_req1.end();
@@ -493,22 +500,22 @@ function afvalkalenderRD4(postcode, housenumber, country, callback) {
 
     request(url, function (err, res, body) {
         if (!err && res.statusCode == 200) {
-			try {
-				var result = JSON.parse(res.body);
-                var transformedResult = {};
+          try {
+            var result = JSON.parse(res.body);
+                    var transformedResult = {};
 
-                for(var type in result) {
-                    transformedResult[type] = [];
-                    result[type].forEach(function(value) {
-                        var splitted = value.split('-');
-                        transformedResult[type].push(splitted[2] + '-' + splitted[1] + '-' + splitted[0]);
-                    });
-                }
+                    for(var type in result) {
+                        transformedResult[type] = [];
+                        result[type].forEach(function(value) {
+                            var splitted = value.split('-');
+                            transformedResult[type].push(splitted[2] + '-' + splitted[1] + '-' + splitted[0]);
+                        });
+                    }
 
-				return callback(null, transformedResult);
-			} catch (ex) {
-				return callback(new Error('Error: ' + ex));
-			}
+            return callback(null, transformedResult);
+          } catch (ex) {
+            return callback(new Error('Error: ' + ex));
+          }
         } else {
             return callback(new Error('Invalid location'));
         }
@@ -556,13 +563,13 @@ function circulusBerkel(postcode, homenumber, country, callback) {
                 request(options, function (err, res, body) {
                     let dates = {}
                     var json_body = JSON.parse(body);
-		
+
                     if(json_body == null || typeof json_body.customData === 'undefined' || typeof json_body.customData.response === "undefined" || typeof json_body.customData.response.garbage === 'undefined')
                     {
                         console.log(json_body);
                         return callback(new Error('Something went wrong while retrieving the data.'));
                     }
-			
+
                     var o = json_body.customData.response.garbage;
                     for (var i = 0; i < o.length; i++) {
                         var key = o[i].code.toLowerCase();
@@ -570,9 +577,9 @@ function circulusBerkel(postcode, homenumber, country, callback) {
                             case 'pmd':
                             case 'gft':
                             case 'rest':
-				                key = key.toUpperCase();
+                                key = key.toUpperCase();
                                 break;
-			                case 'drocodev':
+                            case 'drocodev':
                                 key = "PLASTIC";
                                 break;
                             case 'zwakra':
@@ -585,10 +592,10 @@ function circulusBerkel(postcode, homenumber, country, callback) {
                                 key = 'TEXTIEL';
                                 break;
                             default:
-				                key = key.toUpperCase();
-				            break;
+                                key = key.toUpperCase();
+                                break;
                         }
-                        
+
                         addToDates(key, o[i].dates, dates);
                     }
                     return callback(null, dates);
@@ -674,7 +681,7 @@ function afvalwijzerSuez(postcode, housenumber, country, callback) {
 
     request(url, function (err, res, body) {
         if (!err && res.statusCode == 200) {
-          
+
             var $ = cheerio.load(res.body);
             $('#ophaaldata li').each((i, elem) => {
                 try {
@@ -683,7 +690,7 @@ function afvalwijzerSuez(postcode, housenumber, country, callback) {
 
                     var dateString = elem.children[1].children[3].children[0].data.trim();
                     var splitted = dateString.split(" ");
-                    
+
                     if(typeof splitted[2] === 'undefined')
                     {
                         // Skip, not a valid date
@@ -714,7 +721,7 @@ function afvalwijzerSuez(postcode, housenumber, country, callback) {
                             console.log('defaulted', elem.attribs.class);
                     }
                 } catch (error) {
-                    return callback(new Error('Date format Error'));        
+                    return callback(new Error('Date format Error'));
                 }
             });
             console.log(fDates);
@@ -747,70 +754,70 @@ function customFormatDate(date) {
 }
 
 function parseDate(dateString) {
-	try {
+    try {
         var dateArray = dateString.split(" ");
         var fullString = "";
 
-		if(typeof dateArray[3] !== 'undefined' && dateArray[3].length === 4)
-		{
-			fullString += dateArray[3] + "-";
-		}
-		else {
-			fullString += new Date().getFullYear() + "-";
-		}
+        if(typeof dateArray[3] !== 'undefined' && dateArray[3].length === 4)
+        {
+            fullString += dateArray[3] + "-";
+        }
+        else {
+            fullString += new Date().getFullYear() + "-";
+        }
 
-		var months = [
-			'januari',
-			'februari',
-			'maart',
-			'april',
-			'mei',
-			'juni',
-			'juli',
-			'augustus',
-			'september',
-			'oktober',
-			'november',
+        var months = [
+            'januari',
+            'februari',
+            'maart',
+            'april',
+            'mei',
+            'juni',
+            'juli',
+            'augustus',
+            'september',
+            'oktober',
+            'november',
             'december',
             'jan',
-			'feb',
-			'mar',
-			'apr',
-			'mei',
-			'jun',
-			'jul',
-			'aug',
-			'sep',
-			'okt',
-			'nov',
+            'feb',
+            'mar',
+            'apr',
+            'mei',
+            'jun',
+            'jul',
+            'aug',
+            'sep',
+            'okt',
+            'nov',
             'dec',
         ];
-        
+
         var monthNum = months.indexOf(dateArray[2]) + 1;
-		if (monthNum > 0) {
+        if (monthNum > 0) {
             if(monthNum > 12)
             {
                 monthNum = monthNum-12;
             }
 
-			var monthString = (monthNum).toString();
-			if (monthString.length === 1) {
-				monthString = '0' + monthString;
-			}
-			fullString += monthString + '-';
-		} else {
+            var monthString = (monthNum).toString();
+            if (monthString.length === 1) {
+                monthString = '0' + monthString;
+            }
+            fullString += monthString + '-';
+        } else {
             console.log('This should not be possible...');
             return 'invalid month';
         }
-        
-		fullString += dateArray[1]; //day of the month(already padded)
-		
-		return fullString;
-	}
-	catch(ex)
-	{
-		console.log(ex);
-	}
+
+        fullString += dateArray[1]; //day of the month(already padded)
+
+        return fullString;
+    }
+    catch(ex)
+    {
+        console.log(ex);
+    }
 }
 
 /**
@@ -840,5 +847,6 @@ apiList.push({ name: "Mijn Blink Afvalkalender", id: "mba", execute: BlinkAfvalk
 apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
 apiList.push({ name: "ACV", id: "acv", execute: acvAfvalkalender });
 apiList.push({ name: "GAD Gooi en Vechtstreek", id: "gad", execute: GadGooiAndVechtstreek });
+apiList.push({ name: "Area Reiniging", id: "areareiniging", execute: areaReiniging });
 
 module.exports = apiList;
