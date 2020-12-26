@@ -31,7 +31,7 @@
     "en": "Updated API's, implemented swedish",
     "nl": "API's bijgewerkt, Zweeds nu ook ondersteund als taal"
   },
-  "3.0.0": {
+  "3.0.1": {
     "en": "Upgraded to SDK v3 to be future proof",
     "nl": "Bijgewerkt zodat de app SDK v3 ondersteund en toekomstbestendig is"
   }

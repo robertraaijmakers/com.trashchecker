@@ -53,3 +53,4 @@ Currently the supported trash types are (these are also the required property na
 - PLASTIC
 - PMD
 - TEXTIEL
+- KERSTBOOM

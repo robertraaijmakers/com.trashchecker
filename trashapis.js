@@ -313,7 +313,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
 
 function generalImplementationWasteApi(postcode, housenumber, country, companyCode, callback)
 {
-    console.log("Checking company code ${companyCode}.");
+    console.log(`Checking company code ${companyCode}.`);
 
     var fDates = {};
     if (country !== "NL") {
@@ -847,6 +847,6 @@ apiList.push({ name: "Mijn Blink Afvalkalender", id: "mba", execute: BlinkAfvalk
 apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
 apiList.push({ name: "ACV", id: "acv", execute: acvAfvalkalender });
 apiList.push({ name: "GAD Gooi en Vechtstreek", id: "gad", execute: GadGooiAndVechtstreek });
-apiList.push({ name: "Area Reiniging", id: "areareiniging", execute: areaReiniging });
+apiList.push({ name: "Area Reiniging", id: "arei", execute: areaReiniging });
 
 module.exports = apiList;
