@@ -5,7 +5,7 @@
     "en": "Trashcan Reminder 2.0",
     "nl": "Afval Herinnering 2.0"
   },
-  "version": "2.9.0",
+  "version": "3.0.0",
   "compatibility": ">=5.0",
   "author": {
     "name": "Robert Raaijmakers",
@@ -146,7 +146,7 @@
         "title": {
           "en": "Trash will !{{|not}} be collected",
           "nl": "Afval wordt !{{|niet}} opgehaald",
-          "sv": "Afval wordt !{{|niet}} opgehaald"
+          "sv": "Papperskorgen samlas !{{|inte}} in"
         },
         "args": [
           {
