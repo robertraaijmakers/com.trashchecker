@@ -28,6 +28,10 @@ function afvalkalenderCyclus(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cyclusnv.nl', callback);
 }
 
+function afvalkalenderZrd(postcode, housenumber, country, callback) {
+    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.zrd.nl', callback);
+}
+
 function afvalRmn(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl', callback);
 }
@@ -832,6 +836,7 @@ apiList.push({ name: "Afvalwijzer Suez", id: "arn", execute: afvalwijzerSuez });
 apiList.push({ name: "Afvalkalender Cure", id: "acu", execute: afvalkalenderCure })
 apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCyclus });
 apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
+apiList.push({ name: "Afvalkalender ZRD", id: "afzrd", execute: afvalkalenderZrd });
 apiList.push({ name: "Twente Milieu", id: "twm", execute: twenteMilieu });
 apiList.push({ name: "Gemeente Hellendoorn", id: "geh", execute: gemeenteHellendoorn });
 apiList.push({ name: "Recyclemanager", id: "remg", execute: recycleManager });
@@ -848,5 +853,6 @@ apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
 apiList.push({ name: "ACV", id: "acv", execute: acvAfvalkalender });
 apiList.push({ name: "GAD Gooi en Vechtstreek", id: "gad", execute: GadGooiAndVechtstreek });
 apiList.push({ name: "Area Reiniging", id: "arei", execute: areaReiniging });
+
 
 module.exports = apiList;

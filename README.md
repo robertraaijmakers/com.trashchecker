@@ -10,6 +10,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Afvalkalender Meerlanden](https://afvalkalender.meerlanden.nl)
 - [Afvalkalender Peel en Maas](https://afvalkalender.peelenmaas.nl)
 - [Afvalkalender Venray](https://afvalkalender.venray.nl)
+- [Afvalkalender ZRD](https://afvalkalender.zrd.nl)
 - [Avalex](https://www.avalex.nl/)
 - [Cure](https://afvalkalender.cure-afvalbeheer.nl)
 - [Cyclus](http://afvalkalender.cyclusnv.nl)

@@ -7,6 +7,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - Afvalkalender Circulus-Berkel
 - Afvalkalender Meerlanden
 - Afvalkalender Venray
+- Afvalkalender ZRD
 - Avalex
 - Cure
 - Cyclus
