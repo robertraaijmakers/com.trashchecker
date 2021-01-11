@@ -29,11 +29,10 @@ Supported Cards
 There is one card that you can place in the "and" column. The card lets you check whether or not trash is collected either today, tomorrow or the day after tomorrow. The type of trash that is checked for can be set to a specific one, or to 'any' to include all types.
 
 Supported Speech / Chat
-You can ask Homey four type of questions regarding your waste collection:
-- When is the green container collected?
-- What is collected next monday?
-- Is the residual waste collected this friday?
-- Which type of trash is collected next?
+The speech is removed in this new version. Homey is removing the speech completely from their own product.
 
 Tags
-There is one global tag available that you can set dynamically via the settings. This tag will show the value belonging to the trash type(s) that are collected.
+There are three global tags available. The tags can be configured trough the settings page. The tags represent the trash that is collected today, tomorrow and the day after tomorrow.
+If you want to create a flow that notifies you what type of trash is collected today, use the "today" tag.
+If you want to create a flow that notifies you what type of trash is collected tomorrow, use the "tomorrow" tag.
+Plase note that the tags are independent from the "What type of trash is collected on << day >>" card available in the "and" column.

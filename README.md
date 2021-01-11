@@ -32,11 +32,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 There is one card that you can place in the "and" column. The card lets you check whether or not trash is collected either today, tomorrow or the day after tomorrow. The type of trash that is checked for can be set to a specific one, or to 'any' to include all types.
 
 ## Supported Speech / Chat
-You can ask Homey four type of questions regarding your waste collection:
-- When is the green container collected?
-- What is collected next monday?
-- Is the residual waste collected this friday?
-- Which type of trash is collected next?
+The speech is removed in this new version. Homey is removing the speech completely from their own product.
 
 ## Tags
 There is one global tag available that you can set dynamically via the settings. There is one global tag available that you can set dynamically via the settings. This tag will show the value belonging to the trash type(s) that are collected.

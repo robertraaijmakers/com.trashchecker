@@ -18,18 +18,6 @@
   "contributors": {
     "developers": [
       {
-        "name": "Robert Raaijmakers",
-        "email": "dutchfighter@live.nl"
-      },
-      {
-        "name": "Remco Hannink",
-        "email": "remco@hannink.org"
-      },
-      {
-        "name": "Marcel Timmermans",
-        "email": "marcel@timmermans.us"
-      },
-      {
         "name": "Arthur Stemmer",
         "email": "apstemmer@hotmail.com"
       },
@@ -38,8 +26,20 @@
         "email": "j.brosens@gmail.com"
       },
       {
+        "name": "Marcel Timmermans",
+        "email": "marcel@timmermans.us"
+      },
+      {
         "name": "Maurice Wingbermuhle",
         "email": "maurice@mwict.nl"
+      },
+      {
+        "name": "Remco Hannink",
+        "email": "remco@hannink.org"
+      },
+      {
+        "name": "Robert Raaijmakers",
+        "email": "dutchfighter@live.nl"
       },
       {
         "name": "Wouter Carabain",
