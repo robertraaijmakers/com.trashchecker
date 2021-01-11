@@ -1,4 +1,5 @@
 {
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.trashchecker",
   "sdk": 3,
   "name": {
@@ -71,77 +72,11 @@
   },
   "homeyCommunityTopicId": 10410,
   "source": "https://github.com/robertraaijmakers/com.trashchecker",
-  "speech": {
-    "en": {
-      "element": {
-        "actionWords": {
-          "type": "regex",
-          "value": "(when|which|what|is)"
-        },
-        "trash": {
-          "type": "regex",
-          "value": "(container|trash|waste|collected)"
-        },
-        "trashType": {
-          "type": "regex",
-          "value": "(green|biological|black|residual|grey|gray|elastic|supple|metal|drink carton|cardboard|paper|papery|textile|cloth|yarn|christmas|bulky|christmas tree)"
-        },
-        "query": {
-          "type": "regex",
-          "value": "[\\s\\S]+"
-        }
-      },
-      "group": {
-        "main": {
-          "set": "(actionWords) && (trashType) && trash && (query)",
-          "ordered": false,
-          "allowDisconnect": true,
-          "capturingGroup": true
-        }
-      }
-    },
-    "nl": {
-      "element": {
-        "actionWords": {
-          "type": "regex",
-          "value": "(wanneer|welke|wordt|wat)"
-        },
-        "trash": {
-          "type": "regex",
-          "value": "(afval|afvalbak|container|kliko|vuilnisbak|opgehaald)"
-        },
-        "trashType": {
-          "type": "regex",
-          "value": "(groen|tuinafval|groene|groente|fruit|zwart|grijs|grijze|restafval|plastic|oranje|metaal|drinkpak|drink karton|blauw|karton|kleding|kledij|kerstboom|grof)"
-        },
-        "query": {
-          "type": "regex",
-          "value": "[\\s\\S]+"
-        }
-      },
-      "group": {
-        "main": {
-          "set": "(actionWords) && (trashType) && trash && query",
-          "ordered": false,
-          "allowDisconnect": true,
-          "capturingGroup": true
-        }
-      }
+  "api": {
+    "validateUserData": {
+      "method": "POST",
+      "path": "/"
     }
-  },
-  "speechExamples": {
-    "en": [
-      "When is the paper trash collected?",
-      "What type of trash is collected next?",
-      "What is collected next monday?",
-      "Is the green container collected this friday?"
-    ],
-    "nl": [
-      "Wanneer wordt het afval opgehaald?",
-      "Welk type afwal wordt als eerste opgehaald?",
-      "Wat wordt er volgende week maandag opgehaald?",
-      "Wordt de groene container deze vrijdag opgehaald?"
-    ]
   },
   "flow": {
     "conditions": [

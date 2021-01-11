@@ -32,7 +32,7 @@
     "nl": "API's bijgewerkt, Zweeds nu ook ondersteund als taal"
   },
   "3.0.1": {
-    "en": "Upgraded to SDK v3 to be future proof",
-    "nl": "Bijgewerkt zodat de app SDK v3 ondersteund en toekomstbestendig is"
+    "en": "Upgraded to SDK v3 to be future proof, removed speech due to Homey deprecating speech functionality",
+    "nl": "Bijgewerkt zodat de app SDK v3 ondersteund en toekomstbestendig is, spraak functionaliteit volledig verwijderd omdat Homey dit zelf ook doet"
   }
 }
