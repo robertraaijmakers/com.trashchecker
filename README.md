@@ -35,4 +35,8 @@ There is one card that you can place in the "and" column. The card lets you chec
 The speech is removed in this new version. Homey is removing the speech completely from their own product.
 
 ## Tags
-There is one global tag available that you can set dynamically via the settings. There is one global tag available that you can set dynamically via the settings. This tag will show the value belonging to the trash type(s) that are collected.
+There are three global tags available. The tags can be configured trough the settings page. The tags represent the trash that is collected today, tomorrow and the day after tomorrow.
+If you want to create a flow that notifies you what type of trash is collected today, use the "today" tag.
+If you want to create a flow that notifies you what type of trash is collected tomorrow, use the "tomorrow" tag.
+If you want to create a flow that notifies you what type of trash is collected the day after tomorrow, use the "day after tomorrow" tag.
+Plase note that the tags are independent from the "What type of trash is collected on << day >>" card available in the "and" column.
