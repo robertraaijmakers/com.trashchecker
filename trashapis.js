@@ -159,7 +159,7 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                         }  else if (description.indexOf('papier') !== -1) {
                             if (!dates.PAPIER) dates.PAPIER = [];
                             dates.PAPIER.push(dateStr);
-                        } else if (description.indexOf('textiel') !== -1) {
+                        } else if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1) {
                             if (!dates.TEXTIEL) dates.TEXTIEL = [];
                             dates.TEXTIEL.push(dateStr);
                         } else if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
@@ -218,19 +218,16 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
 
                     if(elem == null)
                     {
-                        console.log("shit not found");
                         return;
                     }
 
                     if(elem.children.length < 2)
                     {
-                        console.log("shit not found 1");
                         return;
                     }
 
                     if(elem.children[1].children == null)
                     {
-                        console.log("shit not found 2");
                         return;
                     }
 
@@ -271,12 +268,6 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                             fDates.REST.push(dateStr);
                             fDates.GFT.push(dateStr);
                             break;
-                        case 'dhm':
-                            if (!fDates.PAPIER) fDates.PAPIER = [];
-                            if (!fDates.PMD) fDates.PMD = [];
-                            fDates.PAPIER.push(dateStr);
-                            fDates.PMD.push(dateStr);
-                            break;
                         case 'grof':
                         case 'grof vuil':
                         case 'grofvuil':
@@ -288,6 +279,11 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                         case 'kerstbomen':
                             if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
                             fDates.KERSTBOOM.push(dateStr);
+                            break;
+						case 'dhm':
+						case 'textiel':
+							if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+                            fDates.TEXTIEL.push(dateStr);
                             break;
                         default:
                             console.log('Defaulted. Element not found:', elem.attribs.class);
