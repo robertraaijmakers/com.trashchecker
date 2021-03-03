@@ -155,7 +155,7 @@ it('API - Suez', function(done) {
             return;
         }
     });
-});
+});*/
 
 
 it('API - Meerlanden', function(done) {
@@ -195,7 +195,7 @@ it('API - Meerlanden', function(done) {
         }
     });
 });
-
+/*
 it('API - Afvalwijzer', function(done) {
     var postcode = "6191JM";
     var homenumber = 12;

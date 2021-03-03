@@ -694,7 +694,8 @@ function afvalwijzerSuez(postcode, housenumber, country, callback) {
                     if(typeof splitted[2] === 'undefined')
                     {
                         // Skip, not a valid date
-                        console.log(`datum:${elem.children[1].children[3].children[0].data.trim()}`);
+                        console.log(`datum: ${elem.children[1].children[3].children[0].data.trim()}`);
+                        return;
                     }
 
                     var dateString = splitted[0] + " " + splitted[1] + " " + splitted[2];
@@ -717,8 +718,12 @@ function afvalwijzerSuez(postcode, housenumber, country, callback) {
                             if (!fDates.PLASTIC) fDates.PLASTIC = [];
                             fDates.PLASTIC.push(dateStr);
                             break;
+                        case '/afvalstroom/6':
+                            if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+                            fDates.TEXTIEL.push(dateStr);
+                            break;
                         default:
-                            console.log('defaulted', elem.attribs.class);
+                            console.log('defaulted', elem.children[1].attribs.href);
                     }
                 } catch (error) {
                     return callback(new Error('Date format Error'));
@@ -791,6 +796,18 @@ function parseDate(dateString) {
             'okt',
             'nov',
             'dec',
+            'jan',
+            'feb',
+            'mrt', // suez
+            'apr',
+            'mei',
+            'jun',
+            'jul',
+            'aug',
+            'sep',
+            'okt',
+            'nov',
+            'dec'
         ];
 
         var monthNum = months.indexOf(dateArray[2]) + 1;
@@ -798,6 +815,10 @@ function parseDate(dateString) {
             if(monthNum > 12)
             {
                 monthNum = monthNum-12;
+            }
+            if(monthNum > 24)
+            {
+                monthNum = monthNum-24;
             }
 
             var monthString = (monthNum).toString();
