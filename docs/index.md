@@ -7,7 +7,7 @@ Here you can find information regarding:
 - [Developer Guidelines](developer-guidelines.md)
 
 ## Supported Cities
-A lot of cities are supported with this trashcan reminder. If your city is not supported you can always add your schedule manually. You can add new cities yourself, but requests to add new cities aren't honoured. If you wish to contribute to the project (for example by adding support for a city). I would advise you to take a look at [this explanation](https://robertraaijmakers.github.io/com.trashchecker/developer-guidelines/).
+A lot of cities are supported with this trashcan reminder. If your city is not supported you can always add your schedule manually. You can add new cities yourself, but requests to add new cities aren't honoured. If you wish to contribute to the project (for example by adding support for a city). I would advise you to take a look at [this explanation](developer-guidelines.md).
 
 - [Afvalwijzer Suez](https://inzamelwijzer.suez.nl/)
 - [Afvalkalender ACV](https://www.acv-groep.nl/)
