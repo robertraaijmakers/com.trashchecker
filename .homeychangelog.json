@@ -34,5 +34,9 @@
   "3.0.2": {
     "en": "Upgraded to SDK v3 to be future proof, removed speech due to Homey deprecating speech functionality",
     "nl": "Bijgewerkt zodat de app SDK v3 ondersteund en toekomstbestendig is, spraak functionaliteit volledig verwijderd omdat Homey dit zelf ook doet"
+  },
+  "3.0.3": {
+    "en": "Added help pages to the github repository, here you can find example flows and information on how to configure the app!",
+    "nl": "Aan de github repository zijn nu help pagina's toegevoegd zodat iedereen gemakkelijk de app kan configureren en voorbeelden kan vinden!"
   }
 }
