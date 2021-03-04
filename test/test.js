@@ -118,7 +118,7 @@ it('API - Afvalwijzer', function(done) {
     });
 });*/
 
-/*
+
 it('API - Suez', function(done) {
     var postcode = "6836ME";
     var homenumber = 10;
@@ -155,7 +155,7 @@ it('API - Suez', function(done) {
             return;
         }
     });
-});*/
+});
 
 
 it('API - Meerlanden', function(done) {

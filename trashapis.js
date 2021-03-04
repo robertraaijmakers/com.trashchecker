@@ -812,26 +812,24 @@ function parseDate(dateString) {
 
         var monthNum = months.indexOf(dateArray[2]) + 1;
         if (monthNum > 0) {
-            if(monthNum > 12)
-            {
-                monthNum = monthNum-12;
-            }
             if(monthNum > 24)
             {
                 monthNum = monthNum-24;
             }
-
-            var monthString = (monthNum).toString();
-            if (monthString.length === 1) {
-                monthString = '0' + monthString;
+			
+            if(monthNum > 12)
+            {
+                monthNum = monthNum-12;
             }
+
+            var monthString = (monthNum).toString().padStart(2, "0");
             fullString += monthString + '-';
         } else {
             console.log('This should not be possible...');
             return 'invalid month';
         }
 
-        fullString += dateArray[1]; //day of the month(already padded)
+        fullString += dateArray[1].padStart(2, "0"); //day of the month(already padded)
 
         return fullString;
     }

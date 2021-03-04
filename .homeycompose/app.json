@@ -5,16 +5,13 @@
     "en": "Trashcan Reminder 2.0",
     "nl": "Afval Herinnering 2.0"
   },
-  "version": "3.0.3",
+  "version": "3.0.4",
   "compatibility": ">=5.0",
   "author": {
     "name": "Robert Raaijmakers",
     "email": "dutchfighter@live.nl"
   },
-  "permissions": [
-    "homey:manager:speech-output",
-    "homey:manager:speech-input"
-  ],
+  "permissions": [],
   "contributors": {
     "developers": [
       {
@@ -49,7 +46,7 @@
   },
   "description": {
     "en": "Use this app to check when your trash will be collected",
-    "nl": "Gebruik deze app om er achter te komen wanneer uw afval thuis wordt opgehaald"
+    "nl": "Gebruik deze app om erachter te komen wanneer uw afval wordt opgehaald"
   },
   "category": "tools",
   "images": {
@@ -69,6 +66,7 @@
   "bugs": {
     "url": "https://github.com/robertraaijmakers/com.trashchecker/issues"
   },
+  "homepage": "https://robertraaijmakers.github.io/com.trashchecker/",
   "homeyCommunityTopicId": 10410,
   "source": "https://github.com/robertraaijmakers/com.trashchecker",
   "api":
