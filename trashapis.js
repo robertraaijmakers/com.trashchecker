@@ -508,7 +508,15 @@ function afvalkalenderRD4(postcode, housenumber, country, callback) {
                         transformedResult[type] = [];
                         result[type].forEach(function(value) {
                             var splitted = value.split('-');
-                            transformedResult[type].push(splitted[2] + '-' + splitted[1] + '-' + splitted[0]);
+
+                            if(splitted[2].len == 4)
+                            {
+                                transformedResult[type].push(splitted[2] + '-' + splitted[1] + '-' + splitted[0]);
+                            }
+                            else
+                            {
+                                transformedResult[type].push(splitted[0] + '-' + splitted[1] + '-' + splitted[2]);
+                            }
                         });
                     }
 
