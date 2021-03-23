@@ -25,6 +25,8 @@ class TrashcanReminder extends Homey.App
 		let daysToCollect = this.homey.flow.getConditionCard('days_to_collect');
 		daysToCollect.registerRunListener(this.flowDaysToCollect.bind(this));
 
+		this.getLocalDate();
+
 		// Manually kick off data retrieval
 		this.onUpdateData(true, false);
 		
@@ -71,7 +73,7 @@ class TrashcanReminder extends Homey.App
 			return Promise.resolve(false);
 		}
 	
-		var now = new Date();
+		var now = this.getLocalDate();
 		if(args.when == 'tomorrow') {
 			now.setDate(now.getDate() + 1);
 		} else if(args.when == 'datomorrow') {
@@ -253,7 +255,7 @@ class TrashcanReminder extends Homey.App
 
 	getTextLabel(labelSettings, dates, timeIndicator)
 	{
-		var checkDate = new Date();
+		var checkDate = this.getLocalDate();
 		if(timeIndicator == 1) {
 			checkDate.setDate(checkDate.getDate() + 1);
 		} else if(timeIndicator == 2) {
@@ -318,11 +320,17 @@ class TrashcanReminder extends Homey.App
 	
 	/* ******************
 		COMMON FUNCTIONS
-	******************* */	
+	******************* */
+	// Gets the local date
+	getLocalDate()
+	{
+		return new Date(new Date().toLocaleString('nl-NL', { timeZone: this.homey.clock.getTimezone() }));
+	}
+
 	// Exctualy calculates MS till 5 O clock
 	millisecondsTillMidnight()
 	{
-		var now = new Date();
+		var now = this.getLocalDate();
 		var currentHour = now.getHours();
 
 		var night = new Date(
@@ -339,7 +347,7 @@ class TrashcanReminder extends Homey.App
 	
 	millisecondsTillSaturdayNight()
 	{
-		var now = new Date();
+		var now = this.getLocalDate();
 		var currentDay = now.getDay()%6 == 0 ? 6 : now.getDay()%6;
 		
 		var msTillMidnight = this.millisecondsTillMidnight();
@@ -721,7 +729,7 @@ class TrashcanReminder extends Homey.App
 			intervalExtended = parseInt(settings.option_extension);
 		} catch(e) { console.log(e); }
 		
-		var startDate = new Date(Date.now());
+		var startDate = this.getLocalDate();
 		try { 
 			startDate = settings.startdate;
 		} catch(e) { console.log(e); }
@@ -731,7 +739,7 @@ class TrashcanReminder extends Homey.App
 			dayOfWeek = parseInt(settings.day);
 		} catch(e) { console.log(e); }
 		
-		var currentDate = new Date(Date.now());
+		var currentDate = this.getLocalDate();
 		var startDate = new Date(startDate);
 		
 		var firstDayInCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -742,9 +750,9 @@ class TrashcanReminder extends Homey.App
 		if(interval >= 11 && interval <= 14) // every x-th week of month/quarter/year
 		{
 			var nThWeek = interval-10;
-			var date1 = new Date();
-			var date2 = new Date();
-			var date3 = new Date();
+			var date1 = this.getLocalDate();
+			var date2 = this.getLocalDate();
+			var date3 = this.getLocalDate();
 			
 			if(intervalExtended == 12) // every x-th week of the year
 			{
@@ -809,10 +817,10 @@ class TrashcanReminder extends Homey.App
 		{
 			var nthLastWeekOf = interval-18;
 			
-			var date1 = new Date();
-			var date2 = new Date();
-			var date3 = new Date();
-			var date4 = new Date();
+			var date1 = this.getLocalDate();
+			var date2 = this.getLocalDate();
+			var date3 = this.getLocalDate();
+			var date4 = this.getLocalDate();
 			
 			if(intervalExtended == 12) // every x-th last week of the year
 			{
@@ -859,7 +867,7 @@ class TrashcanReminder extends Homey.App
 		}
 		else if(differenceInDaysForType <= 7)
 		{
-			var today = new Date();
+			var today = this.getLocalDate();
 			var dayOfWeek = Math.floor((today.getDay() + differenceInDaysForType) % 7); // I don't know why, but modulo won't work without Floor...
 			return this.homey.__('speech.output.next') + " " + this.homey.__('speech.output.weekdays.d'+ dayOfWeek);
 		}

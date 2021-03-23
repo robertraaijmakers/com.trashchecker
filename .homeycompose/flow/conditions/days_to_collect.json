@@ -1,6 +1,11 @@
 {
   "id": "days_to_collect",
   "title": {
+    "en": "Trash will be collected...",
+    "nl": "Afval wordt opgehaald...",
+    "sv": "Papperskorgen samlas in..."
+  },
+  "titleFormatted": {
     "en": "Trash will !{{|not}} be collected",
     "nl": "Afval wordt !{{|niet}} opgehaald",
     "sv": "Papperskorgen samlas !{{|inte}} in"
@@ -8,8 +13,8 @@
   "hint":
   {
     "en": "This card will run successful when the trash of selected type is !{{|not}} collected.",
-	"nl": "Deze actie zal succesvol draaien als het geselecteerde type !{{|niet}} wordt opgehaald.",
-	"sv": "!{{Detta kort kommer att fungera när papperskorgen av den valda typen samlas in|Det här kortet fungerar när papperskorgen av den valda typen inte samlas in.}}."
+	  "nl": "Deze actie zal succesvol draaien als het geselecteerde type !{{|niet}} wordt opgehaald.",
+	  "sv": "!{{Detta kort kommer att fungera när papperskorgen av den valda typen samlas in|Det här kortet fungerar när papperskorgen av den valda typen inte samlas in.}}."
   },
   "args": [
     {
