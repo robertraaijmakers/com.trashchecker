@@ -6,15 +6,15 @@
     "sv": "Papperskorgen samlas in..."
   },
   "titleFormatted": {
-    "en": "Trash will !{{|not}} be collected",
-    "nl": "Afval wordt !{{|niet}} opgehaald",
-    "sv": "Papperskorgen samlas !{{|inte}} in"
+    "en": "[[trash_type]] will !{{|not}} be collected [[when]]",
+    "nl": "[[trash_type]] wordt [[when]] !{{|niet}} opgehaald",
+    "sv": "[[trash_type]] samlas !{{|inte}} in [[when]]"
   },
   "hint":
   {
-    "en": "This card will run successful when the trash of selected type is !{{|not}} collected.",
-	  "nl": "Deze actie zal succesvol draaien als het geselecteerde type !{{|niet}} wordt opgehaald.",
-	  "sv": "!{{Detta kort kommer att fungera när papperskorgen av den valda typen samlas in|Det här kortet fungerar när papperskorgen av den valda typen inte samlas in.}}."
+    "en": "This card will run successful when the trash of selected type is collected.",
+	  "nl": "Deze actie zal succesvol draaien als het geselecteerde type wordt opgehaald.",
+	  "sv": "Detta kort kommer att fungera när papperskorgen av den valda typen samlas in."
   },
   "args": [
     {
