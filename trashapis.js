@@ -329,7 +329,7 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
 
     var post_data1 = `{companyCode:"${companyCode}",postCode:"${postcode}",houseNumber:"${housenumber}",houseLetter:""}`;
     var post_options1 = {
-        host: 'wasteapi.2go-mobile.com',
+        host: 'wasteprod2api.ximmio.com',
         port: '443',
         path: '/api/FetchAdress',
         method: 'POST',
@@ -357,7 +357,7 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                     // console.log("UniqueID: " + uniqueID);
                     var post_data2 = `{companyCode:"${companyCode}",uniqueAddressID:"${uniqueID}",startDate:"${startDate}",endDate:"${endDate}"}`;
                     var post_options2 = {
-                        host: 'wasteapi.2go-mobile.com',
+                        host: 'wasteprod2api.ximmio.com',
                         port: '443',
                         path: '/api/GetCalendar',
                         method: 'POST',

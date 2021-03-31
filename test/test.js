@@ -157,7 +157,7 @@ it('API - Suez', function(done) {
         }
     });
 });
-
+*/
 
 it('API - Meerlanden', function(done) {
     var postcode = "2134PJ";

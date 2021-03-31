@@ -39,8 +39,12 @@
     "en": "Added help pages to the github repository, here you can find example flows and information on how to configure the app!",
 	  "nl": "Aan de github repository zijn nu help pagina's toegevoegd zodat iedereen gemakkelijk de app kan configureren en voorbeelden kan vinden!"
   },
-  "3.0.5": {
+  "3.0.6": {
     "en": "Fixt issue with UTC vs local time causing flows running at midnight to give wrong data.",
 	  "nl": "Issues met time (local vs UTC) opgelost waardoor sommige flows om middernacht onjuiste resultaten gaven."
+  },
+  "3.0.7": {
+    "en": "Fixed Meerlanden API.",
+	  "nl": "Issue met Meerlanden API opgelost."
   }
 }
