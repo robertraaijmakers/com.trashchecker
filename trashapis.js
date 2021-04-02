@@ -95,6 +95,12 @@ function areaReiniging(postcode, housenumber, country, callback)
     generalImplementationWasteApi(postcode, housenumber, country, "adc418da-d19b-11e5-ab30-625662870761", callback);
 }
 
+function reinigingsdienstWaardlanden(postcode, housenumber, country, callback)
+{
+    console.log("Checking Reinigingsdienst Waardlanden");
+    generalImplementationWasteApi(postcode, housenumber, country, "942abcf6-3775-400d-ae5d-7380d728b23c", callback);
+}
+
 /**
  * General implementation of the afvalkalender API used by a lot of different vendors.
  */
@@ -876,6 +882,7 @@ apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
 apiList.push({ name: "ACV", id: "acv", execute: acvAfvalkalender });
 apiList.push({ name: "GAD Gooi en Vechtstreek", id: "gad", execute: GadGooiAndVechtstreek });
 apiList.push({ name: "Area Reiniging", id: "arei", execute: areaReiniging });
+apiList.push({ name: "Reinigingsdienst Waardlanden", id: "rewl", execute: reinigingsdienstWaardlanden });
 
 
 module.exports = apiList;
