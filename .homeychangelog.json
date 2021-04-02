@@ -46,5 +46,9 @@
   "3.0.7": {
     "en": "Fixed Meerlanden API.",
 	  "nl": "Issue met Meerlanden API opgelost."
+  },
+  "3.0.8": {
+    "en": "Dutchy- (Edwin) added the Waarlanden reinigingsdienst API.",
+	  "nl": "Dutchy- (Edwin) heeft ondersteuning voor Waarlanden reinigingsdienst toegevoegd."
   }
 }

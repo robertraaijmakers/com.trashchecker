@@ -29,6 +29,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Mijn Blink](https://mijnblink.nl/)
 - [RD4](https://rd4.syzygy.eu)
 - [Recyle Manager](http://www.recyclemanager.nl)
+- [Reinigingsdienst Waardlanden](https://www.waardlanden.nl/particulieren/afvalinzameling/afvalkalender)
 - [RMN](https://inzamelschema.rmn.nl)
 - [Rova](https://www.rova.nl)
 - [Twentemilieu](https://www.twentemilieu.nl)
