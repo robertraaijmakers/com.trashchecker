@@ -18,30 +18,11 @@ it('API - RD4', function(done) {
     // only load that API, this is so that we won't send requests to all data providers all the time.
     result['execute'](postcode,homenumber,country,
     (err,result) => {
-        if(err) {
-            console.log('Error in API', err);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length > 0)
-        {
-            console.log('API Settings found.');
-            console.log(result);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length === 0) {
-            console.log('No information found, go to settings to reset your API settings.');
-            done();
-            return;
-        } else {
-            console.log("fail");
-            done();
-            return;
-        }
+        expect(validateApiResults(err, result, "rd4", "API - RD4")).to.be.true;
+        done();
     });
 });
-/*
+
 it('API - Afvalwijzer', function(done) {
     var postcode = "9681TP";
     var homenumber = 5;
@@ -57,31 +38,12 @@ it('API - Afvalwijzer', function(done) {
     // only load that API, this is so that we won't send requests to all data providers all the time.
     result['execute'](postcode,homenumber,country,
     (err,result) => {
-        if(err) {
-            console.log('Error in API', err);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length > 0)
-        {
-            console.log('API Settings found.');
-            done();
-            return;
-        }
-        else if(Object.keys(result).length === 0) {
-            console.log('No information found, go to settings to reset your API settings.');
-            done();
-            return;
-        } else {
-            console.log("fail");
-            done();
-            return;
-        }
+        expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
+        done();
     });
 });
-*/
 
-/*it('API - Area Reiniging', function(done) {
+it('API - Area Reiniging', function(done) {
     var postcode = "7812GL";
     var homenumber = 280;
     var country = "NL";
@@ -96,30 +58,12 @@ it('API - Afvalwijzer', function(done) {
     // only load that API, this is so that we won't send requests to all data providers all the time.
     result['execute'](postcode,homenumber,country,
     (err,result) => {
-        if(err) {
-            console.log('Error in API', err);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length > 0)
-        {
-            console.log('API Settings found.');
-            done();
-            return;
-        }
-        else if(Object.keys(result).length === 0) {
-            console.log('No information found, go to settings to reset your API settings.');
-            done();
-            return;
-        } else {
-            console.log("fail");
-            done();
-            return;
-        }
+        expect(validateApiResults(err, result, "areareiniging", "API - Area Reiniging")).to.be.true;
+        done();
     });
-});*/
+});
 
-/*
+
 it('API - Suez', function(done) {
     var postcode = "6836ME";
     var homenumber = 10;
@@ -135,29 +79,10 @@ it('API - Suez', function(done) {
     // only load that API, this is so that we won't send requests to all data providers all the time.
     result['execute'](postcode,homenumber,country,
     (err,result) => {
-        if(err) {
-            console.log('Error in API', err);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length > 0)
-        {
-            console.log('API Settings found.');
-            done();
-            return;
-        }
-        else if(Object.keys(result).length === 0) {
-            console.log('No information found, go to settings to reset your API settings.');
-            done();
-            return;
-        } else {
-            console.log("fail");
-            done();
-            return;
-        }
+        expect(validateApiResults(err, result, "arn", "API - Suez")).to.be.true;
+        done();
     });
 });
-*/
 
 it('API - Meerlanden', function(done) {
     var postcode = "2134PJ";
@@ -174,26 +99,8 @@ it('API - Meerlanden', function(done) {
     // only load that API, this is so that we won't send requests to all data providers all the time.
     result['execute'](postcode,homenumber,country,
     (err,result) => {
-        if(err) {
-            console.log('Error in API', err);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length > 0)
-        {
-            console.log('API Settings found.');
-            done();
-            return;
-        }
-        else if(Object.keys(result).length === 0) {
-            console.log('No information found, go to settings to reset your API settings.');
-            done();
-            return;
-        } else {
-            console.log("fail");
-            done();
-            return;
-        }
+        expect(validateApiResults(err, result, "akm", "API - Meerlanden")).to.be.true;
+        done();
     });
 });
 
@@ -212,29 +119,11 @@ it('API - Waardlanden', function(done) {
     // only load that API, this is so that we won't send requests to all data providers all the time.
     result['execute'](postcode,homenumber,country,
     (err,result) => {
-        if(err) {
-            console.log('Error in API', err);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length > 0)
-        {
-            console.log('API Settings found.');
-            done();
-            return;
-        }
-        else if(Object.keys(result).length === 0) {
-            console.log('No information found, go to settings to reset your API settings.');
-            done();
-            return;
-        } else {
-            console.log("fail");
-            done();
-            return;
-        }
+        expect(validateApiResults(err, result, "rewl", "API - Waardlanden")).to.be.true;
+        done();
     });
 });
-/*
+
 it('API - Afvalwijzer', function(done) {
     var postcode = "6191JM";
     var homenumber = 12;
@@ -250,26 +139,8 @@ it('API - Afvalwijzer', function(done) {
     // only load that API, this is so that we won't send requests to all data providers all the time.
     result['execute'](postcode,homenumber,country,
     (err,result) => {
-        if(err) {
-            console.log('Error in API', err);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length > 0)
-        {
-            console.log('API Settings found.');
-            done();
-            return;
-        }
-        else if(Object.keys(result).length === 0) {
-            console.log('No information found, go to settings to reset your API settings.');
-            done();
-            return;
-        } else {
-            console.log("fail");
-            done();
-            return;
-        }
+        expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
+        done();
     });
 });
 
@@ -288,26 +159,8 @@ it('API - Mijn Blink', function(done) {
     // only load that API, this is so that we won't send requests to all data providers all the time.
     result['execute'](postcode,homenumber,country,
     (err,result) => {
-        if(err) {
-            console.log('Error in API', err);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length > 0)
-        {
-            console.log('API Settings found.');
-            done();
-            return;
-        }
-        else if(Object.keys(result).length === 0) {
-            console.log('No information found, go to settings to reset your API settings.');
-            done();
-            return;
-        } else {
-            console.log("fail");
-            done();
-            return;
-        }
+        expect(validateApiResults(err, result, "mba", "API - Mijn Blink")).to.be.true;
+        done();
     });
 });
 
@@ -326,26 +179,8 @@ it('API - Circulus Berkel', function(done) {
     // only load that API, this is so that we won't send requests to all data providers all the time.
     result['execute'](postcode,homenumber,country,
     (err,result) => {
-        if(err) {
-            console.log('Error in API', err);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length > 0)
-        {
-            console.log('API Settings found.');
-            done();
-            return;
-        }
-        else if(Object.keys(result).length === 0) {
-            console.log('No information found, go to settings to reset your API settings.');
-            done();
-            return;
-        } else {
-            console.log("fail");
-            done();
-            return;
-        }
+        expect(validateApiResults(err, result, "acb", "API - Circulus Berkel")).to.be.true;
+        done();
     });
 });
 
@@ -364,26 +199,8 @@ it('API - Mijn Blink', function(done) {
     // only load that API, this is so that we won't send requests to all data providers all the time.
     result['execute'](postcode,homenumber,country,
     (err,result) => {
-        if(err) {
-            console.log('Error in API', err);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length > 0)
-        {
-            console.log('API Settings found.');
-            done();
-            return;
-        }
-        else if(Object.keys(result).length === 0) {
-            console.log('No information found, go to settings to reset your API settings.');
-            done();
-            return;
-        } else {
-            console.log("fail");
-            done();
-            return;
-        }
+        expect(validateApiResults(err, result, "mba", "API - Mijn Blink")).to.be.true;
+        done();
     });
 });
 
@@ -402,26 +219,8 @@ it('API - Afvalwijzer', function(done) {
     // only load that API, this is so that we won't send requests to all data providers all the time.
     result['execute'](postcode,homenumber,country,
     (err,result) => {
-        if(err) {
-            console.log('Error in API', err);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length > 0)
-        {
-            console.log('API Settings found.');
-            done();
-            return;
-        }
-        else if(Object.keys(result).length === 0) {
-            console.log('No information found, go to settings to reset your API settings.');
-            done();
-            return;
-        } else {
-            console.log("fail");
-            done();
-            return;
-        }
+        expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
+        done();
     });
 });
 
@@ -440,26 +239,8 @@ it('API - Afvalwijzer', function(done) {
     // only load that API, this is so that we won't send requests to all data providers all the time.
     result['execute'](postcode,homenumber,country,
     (err,result) => {
-        if(err) {
-            console.log('Error in API', err);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length > 0)
-        {
-            console.log('API Settings found.');
-            done();
-            return;
-        }
-        else if(Object.keys(result).length === 0) {
-            console.log('No information found, go to settings to reset your API settings.');
-            done();
-            return;
-        } else {
-            console.log("fail");
-            done();
-            return;
-        }
+        expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
+        done();
     });
 });
 
@@ -478,25 +259,29 @@ it('API - Afvalwijzer', function(done) {
     // only load that API, this is so that we won't send requests to all data providers all the time.
     result['execute'](postcode,homenumber,country,
     (err,result) => {
-        if(err) {
-            console.log('Error in API', err);
-            done();
-            return;
-        }
-        else if(Object.keys(result).length > 0)
-        {
-            console.log('API Settings found.');
-            done();
-            return;
-        }
-        else if(Object.keys(result).length === 0) {
-            console.log('No information found, go to settings to reset your API settings.');
-            done();
-            return;
-        } else {
-            console.log("fail");
-            done();
-            return;
-        }
+        expect(validateApiResults(err, result, "dbafw", "API - Afvalwijzer")).to.be.true;
+        done();
     });
-});*/
+});
+
+function validateApiResults(err, result, apiId, apiName)
+{
+    console.log("Results for " + apiId + " - " + apiName);
+
+    if(err) {
+        console.log('Error in API', err);
+        return false;
+    }
+    else if(Object.keys(result).length > 0)
+    {
+        console.log('API Settings found.');
+        return true;
+    }
+    else if(Object.keys(result).length === 0) {
+        console.log('No information found, go to settings to reset your API settings.');
+        return false;
+    } else {
+        console.log("fail");
+        return false;
+    }
+}
