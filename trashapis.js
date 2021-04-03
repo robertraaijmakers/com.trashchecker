@@ -98,7 +98,7 @@ function areaReiniging(postcode, housenumber, country, callback)
 function reinigingsdienstWaardlanden(postcode, housenumber, country, callback)
 {
     console.log("Checking Reinigingsdienst Waardlanden");
-    generalImplementationWasteApi(postcode, housenumber, country, "942abcf6-3775-400d-ae5d-7380d728b23c", callback);
+    generalImplementationWasteApi(postcode, housenumber, country, "942abcf6-3775-400d-ae5d-7380d728b23c", callback, "wasteapi.ximmio.com");
 }
 
 /**
@@ -317,7 +317,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
     });
 }
 
-function generalImplementationWasteApi(postcode, housenumber, country, companyCode, callback)
+function generalImplementationWasteApi(postcode, housenumber, country, companyCode, callback, host = 'wasteprod2api.ximmio.com')
 {
     console.log(`Checking company code ${companyCode}.`);
 
@@ -335,7 +335,7 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
 
     var post_data1 = `{companyCode:"${companyCode}",postCode:"${postcode}",houseNumber:"${housenumber}",houseLetter:""}`;
     var post_options1 = {
-        host: 'wasteprod2api.ximmio.com',
+        host: host,
         port: '443',
         path: '/api/FetchAdress',
         method: 'POST',
@@ -363,7 +363,7 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                     // console.log("UniqueID: " + uniqueID);
                     var post_data2 = `{companyCode:"${companyCode}",uniqueAddressID:"${uniqueID}",startDate:"${startDate}",endDate:"${endDate}"}`;
                     var post_options2 = {
-                        host: 'wasteprod2api.ximmio.com',
+                        host: host,
                         port: '443',
                         path: '/api/GetCalendar',
                         method: 'POST',
