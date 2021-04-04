@@ -80,7 +80,7 @@ function twenteMilieu(postcode, housenumber, country, callback) {
 
 function gemeenteHellendoorn(postcode, housenumber, country, callback) {
     console.log("Checking Gemeente Hellendoorn");
-    generalImplementationWasteApi(postcode, housenumber, country, "24434f5b-7244-412b-9306-3a2bd1e22bc1", callback);
+    generalImplementationWasteApi(postcode, housenumber, country, "24434f5b-7244-412b-9306-3a2bd1e22bc1", callback, "wasteapi.ximmio.com");
 }
 
 function acvAfvalkalender(postcode, housenumber, country, callback)
