@@ -264,6 +264,26 @@ it('API - Afvalwijzer', function(done) {
     });
 });
 
+it('API - Waste API - Gemeente Hellendoorn', function(done) {
+    var postcode = "7441DH";
+    var homenumber = 30;
+    var country = "NL";
+
+    var result = apiArray.find(o => o.id === "geh");
+    if(result == null || typeof result === 'undefined')
+    {
+        console.log("Invalid API");
+        done();
+    }
+    
+    // only load that API, this is so that we won't send requests to all data providers all the time.
+    result['execute'](postcode,homenumber,country,
+    (err,result) => {
+        expect(validateApiResults(err, result, "geh", "API - Waste API - Gemeente Hellendoorn")).to.be.true;
+        done();
+    });
+});
+
 function validateApiResults(err, result, apiId, apiName)
 {
     console.log("Results for " + apiId + " - " + apiName);
