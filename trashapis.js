@@ -75,7 +75,7 @@ function afvalkalenderMeerlanden(postcode, housenumber, country, callback) {
 
 function twenteMilieu(postcode, housenumber, country, callback) {
     console.log("Checking Twente Milieu");
-    generalImplementationWasteApi(postcode, housenumber, country, "8d97bb56-5afd-4cbc-a651-b4f7314264b4", callback);
+    generalImplementationWasteApi(postcode, housenumber, country, "8d97bb56-5afd-4cbc-a651-b4f7314264b4", callback, "twentemilieuapi.ximmio.com");
 }
 
 function gemeenteHellendoorn(postcode, housenumber, country, callback) {
