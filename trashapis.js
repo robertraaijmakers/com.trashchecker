@@ -68,6 +68,10 @@ function GadGooiAndVechtstreek(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.gad.nl', callback);
 }
 
+function afvalwijzerStadswerk072(postcode, housenumber, country, callback) {
+    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'www.stadswerk072.nl', callback);
+}
+
 function afvalkalenderMeerlanden(postcode, housenumber, country, callback) {
     console.log("Checking Meerlanden");
     generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45", callback);
@@ -750,68 +754,6 @@ function afvalwijzerSuez(postcode, housenumber, country, callback) {
             return callback(new Error('Invalid location'));
         }
     });
-}
-
-function afvalwijzerStadswerk072(postcode, housenumber, country, callback) {
-    console.log("Checking Afvalwijzer Stadswerk072");
-
-    if (country !== "NL") {
-        console.log('unsupported country');
-        return callback(new Error('unsupported country'));
-    }
-
-    //Get addressID (BagID)
-    var addressUrl = `https://www.stadswerk072.nl/adressen/${postcode.replace(/ +/g, "")}:${housenumber}`;
-    request(addressUrl, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            try {
-                var addressResultJSON = JSON.parse(body);
-
-                if(!addressResultJSON || !addressResultJSON[0] || !addressResultJSON[0].bagid) {
-                    return callback(new Error("Address not found."));
-                }
-                
-                //Get Calendar for addressID(bagid) and current year
-                var calendarUrl = `https://www.stadswerk072.nl/rest/adressen/${addressResultJSON[0].bagid}/kalender/${new Date().getFullYear()}`;
-                request(calendarUrl, function (calError, calResponse, calBody) {
-                    if (!calError && calResponse.statusCode == 200) {
-                        var calendarResultJSON = JSON.parse(calBody);
-
-                        var resultArray = {};
-                        for(var calendarEntryID in calendarResultJSON) {
-                            var calendarEntry = calendarResultJSON[calendarEntryID];
-
-                            switch (calendarEntry.afvalstroom_id) {
-                                case 8:
-                                    if (!resultArray.REST) resultArray.REST = [];
-                                    resultArray.REST.push(calendarEntry.ophaaldatum);
-                                    break;
-                                case 3:
-                                    if (!resultArray.PMD) resultArray.PMD = [];
-                                    resultArray.PMD.push(calendarEntry.ophaaldatum);
-                                    break;
-                                case 4:
-                                    if (!resultArray.GFT) resultArray.GFT = [];
-                                    resultArray.GFT.push(calendarEntry.ophaaldatum);
-                                    break;
-                                case 5:
-                                    if (!resultArray.PAPIER) resultArray.PAPIER = [];
-                                    resultArray.PAPIER.push(calendarEntry.ophaaldatum);
-                                    break;
-                            }
-                        }
-
-                        return callback(null, resultArray);
-                    }
-                });
-
-            }
-            catch(err)
-            {
-                return callback(new Error("Exception parsing JSON: " + err + " for base url " + baseUrl + " and zip code " + postcode));
-            }
-        }
-      });
 }
 
 /**
