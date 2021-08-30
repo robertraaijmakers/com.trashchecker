@@ -68,6 +68,10 @@ function GadGooiAndVechtstreek(postcode, housenumber, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.gad.nl', callback);
 }
 
+function afvalwijzerStadswerk072(postcode, housenumber, country, callback) {
+    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'www.stadswerk072.nl', callback);
+}
+
 function afvalkalenderMeerlanden(postcode, housenumber, country, callback) {
     console.log("Checking Meerlanden");
     generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45", callback);
@@ -883,6 +887,7 @@ apiList.push({ name: "ACV", id: "acv", execute: acvAfvalkalender });
 apiList.push({ name: "GAD Gooi en Vechtstreek", id: "gad", execute: GadGooiAndVechtstreek });
 apiList.push({ name: "Area Reiniging", id: "arei", execute: areaReiniging });
 apiList.push({ name: "Reinigingsdienst Waardlanden", id: "rewl", execute: reinigingsdienstWaardlanden });
+apiList.push({ name: "Stadswerk072", id: "sw072", execute: afvalwijzerStadswerk072 });
 
 
 module.exports = apiList;
