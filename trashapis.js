@@ -86,7 +86,7 @@ function gemeenteHellendoorn(postcode, housenumber, country, callback) {
 function acvAfvalkalender(postcode, housenumber, country, callback)
 {
     console.log("Checking ACV afvalkalender");
-    generalImplementationWasteApi(postcode, housenumber, country, "f8e2844a-095e-48f9-9f98-71fceb51d2c3", callback);
+    generalImplementationWasteApi(postcode, housenumber, country, "f8e2844a-095e-48f9-9f98-71fceb51d2c3", callback, "wasteapi.ximmio.com");
 }
 
 function areaReiniging(postcode, housenumber, country, callback)
