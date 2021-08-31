@@ -336,8 +336,8 @@ it('API - Afval App', function(done) {
 
 
   it('API - Almere Ximmio', function(done) {
-    var postcode = "1354AD";
-    var homenumber = 7;
+    var postcode = "1324AM";
+    var homenumber = 10;
     var country = "NL";
   
     var result = apiArray.find(o => o.id === "alm");
