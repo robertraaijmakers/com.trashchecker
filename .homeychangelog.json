@@ -54,5 +54,9 @@
   "3.0.11": {
     "en": "Added fix for Twente Milieu API",
 	  "nl": "Twente Milieu API werkt weer"
+  },
+  "3.0.12": {
+    "en": "Added support for Almere, Stadswerk and fixes for some of the used APIs",
+	  "nl": "Almere en Stadswerk zijn toegevoegd. Plus nog wat andere APIs weer gefixt"
   }
 }

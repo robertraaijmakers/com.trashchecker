@@ -11,6 +11,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 
 - [Afvalwijzer Suez](https://inzamelwijzer.suez.nl/)
 - [Afvalkalender ACV](https://www.acv-groep.nl/)
+- [Afvalkalender Almere](https://almere.ximmio.com/modules/53d8db94-7945-42fd-9742-9bbc71dbe4c1/kalender/)
 - [Afvalkalender Circulus-Berkel](https://mijn.circulus-berkel.nl)
 - [Afvalkalender Meerlanden](https://afvalkalender.meerlanden.nl)
 - [Afvalkalender Peel en Maas](https://afvalkalender.peelenmaas.nl)
@@ -32,6 +33,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Reinigingsdienst Waardlanden](https://www.waardlanden.nl/particulieren/afvalinzameling/afvalkalender)
 - [RMN](https://inzamelschema.rmn.nl)
 - [Rova](https://www.rova.nl)
+- [Stadswerk072](https://www.stadswerk072.nl/wanneer)
 - [Twentemilieu](https://www.twentemilieu.nl)
 
 ## Supported Cards

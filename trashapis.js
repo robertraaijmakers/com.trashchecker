@@ -93,6 +93,12 @@ function acvAfvalkalender(postcode, housenumber, country, callback)
     generalImplementationWasteApi(postcode, housenumber, country, "f8e2844a-095e-48f9-9f98-71fceb51d2c3", callback, "wasteapi.ximmio.com");
 }
 
+function almereAfvalkalender(postcode, housenumber, country, callback)
+{
+    console.log("Checking Almere afvalkalender");
+    generalImplementationWasteApi(postcode, housenumber, country, "53d8db94-7945-42fd-9742-9bbc71dbe4c1", callback, "wasteapi.ximmio.com");
+}
+
 function areaReiniging(postcode, housenumber, country, callback)
 {
     console.log("Checking Area Reiniging");
@@ -888,6 +894,6 @@ apiList.push({ name: "GAD Gooi en Vechtstreek", id: "gad", execute: GadGooiAndVe
 apiList.push({ name: "Area Reiniging", id: "arei", execute: areaReiniging });
 apiList.push({ name: "Reinigingsdienst Waardlanden", id: "rewl", execute: reinigingsdienstWaardlanden });
 apiList.push({ name: "Stadswerk072", id: "sw072", execute: afvalwijzerStadswerk072 });
-
+apiList.push({ name: "Almere", id: "alm", execute: almereAfvalkalender });
 
 module.exports = apiList;
