@@ -318,6 +318,21 @@ it('API - Waste API - Twente Milieu', function(done) {
     done();
   });
 });
+   
+it('API - Afval App', function(done) {
+    var postcode = "5427CB";
+    var homenumber = 10;
+    var country = "NL";
+  
+    var result = apiArray.find(o => o.id === "afa");
+    
+    // only load that API, this is so that we won't send requests to all data providers all the time.
+    result['execute'](postcode,homenumber,country, 
+    (err,result) => {
+      expect(validateApiResults(err, result, "afa", "API - Afval App")).to.be.true;
+      done();
+    });
+  });
 
 function validateApiResults(err, result, apiId, apiName)
 {

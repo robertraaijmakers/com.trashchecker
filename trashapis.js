@@ -641,7 +641,7 @@ function afvalapp(postcode, homenumber, country, callback) {
             country + '&postcode=' + postcode + '&straatId=0&huisnr=' + homenumber + '&huisnrtoev='
     };
 
-    var req = http.get(options, (res) => {
+    var req = https.get(options, (res) => {
         var dates = {};
         var curr = '';
         var data = '';
