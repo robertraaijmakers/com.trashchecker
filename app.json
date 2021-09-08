@@ -6,7 +6,10 @@
     "en": "Trashcan Reminder 2.0",
     "nl": "Afval Herinnering 2.0"
   },
-  "version": "3.0.12",
+  "version": "3.1.0",
+  "platforms": [
+    "local"
+  ],
   "compatibility": ">=5.0",
   "author": {
     "name": "Robert Raaijmakers",
@@ -69,6 +72,7 @@
     "url": "https://github.com/robertraaijmakers/com.trashchecker/issues"
   },
   "homepage": "https://robertraaijmakers.github.io/com.trashchecker/",
+  "support": "https://robertraaijmakers.github.io/com.trashchecker/",
   "homeyCommunityTopicId": 10410,
   "source": "https://github.com/robertraaijmakers/com.trashchecker",
   "api": {
@@ -201,6 +205,14 @@
                   "en": "Christmas tree",
                   "nl": "Kerstboom",
                   "sv": "Julgran"
+                }
+              },
+              {
+                "id": "GLAS",
+                "label": {
+                  "en": "Glass",
+                  "nl": "Glas",
+                  "sv": "Glas"
                 }
               }
             ]

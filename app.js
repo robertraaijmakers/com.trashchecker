@@ -5,7 +5,7 @@ const Homey = require('homey');
 const DateTimeHelper = require('./lib/datetime.js');
 
 var apiArray = require('./trashapis.js');
-var supportedTypes = ["GFT","PLASTIC","PAPIER","PMD","REST","TEXTIEL","GROF","KERSTBOOM"];
+var supportedTypes = ["GFT","PLASTIC","PAPIER","PMD","REST","TEXTIEL","GROF","KERSTBOOM","GLAS"];
 
 class TrashcanReminder extends Homey.App
 {
@@ -127,6 +127,12 @@ class TrashcanReminder extends Homey.App
 	
 	onUpdateData(shouldExecute, shouldSetTimeout)
 	{
+		// For backwards compatibility and to support BE suppliers, add an empty the streetname to everyones settings.
+		if(!this.homey.settings.get('streetName'))
+		{
+			this.homey.settings.set('streetName', null);
+		}
+
 		if (this.homey.settings.get('postcode') &&
 			this.homey.settings.get('hnumber') &&
 			this.homey.settings.get('country') &&
@@ -137,6 +143,7 @@ class TrashcanReminder extends Homey.App
 			this.updateAPI(
 				this.homey.settings.get('postcode'),
 				this.homey.settings.get('hnumber'),
+				this.homey.settings.get('streetName'),
 				this.homey.settings.get('country'),
 				apiId,
 				function(success, that, newApiId)
@@ -194,6 +201,7 @@ class TrashcanReminder extends Homey.App
 					papier: this.homey.__('speech.output.type.PAPIER'),
 					textiel: this.homey.__('speech.output.type.TEXTIEL'),
 					grof: this.homey.__('speech.output.type.GROF'),
+					glas: this.homey.__('speech.output.type.GLAS'),
 					kerstboom: this.homey.__('speech.output.type.KERSTBOOM'),
 					none: this.homey.__('speech.output.type.NONE')
 				}
@@ -210,6 +218,18 @@ class TrashcanReminder extends Homey.App
 			
 			labelSettings.type["kerstboom"] = this.homey.__('speech.output.type.KERSTBOOM');
 			labelSettings.type["grof"] = this.homey.__('speech.output.type.GROF');
+			labelSettings.type["glas"] = this.homey.__('speech.output.type.GLAS');
+			
+			// Update default label settings
+			this.homey.settings.set('labelSettings', labelSettings);
+		}
+
+		// For backwards compatibility, add the glas waste types default values when they don't exist in the settings yet.
+		if(typeof labelSettings.type["glas"] === 'undefined')
+		{
+			console.log("Updating label with additional values for backwards compatibility");
+			
+			labelSettings.type["glas"] = this.homey.__('speech.output.type.GLAS');
 			
 			// Update default label settings
 			this.homey.settings.set('labelSettings', labelSettings);
@@ -364,7 +384,7 @@ class TrashcanReminder extends Homey.App
 	  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 	}
 	
-	updateAPI(postcode, homenumber, country, apiId, callback)
+	updateAPI(postcode, homenumber, streetName, country, apiId, callback)
 	{
 		let newDates = null;
 		
@@ -384,6 +404,15 @@ class TrashcanReminder extends Homey.App
 		else 
 		{
 			homenumber = '';
+		}
+
+		if(typeof streetName !== 'undefined' && streetName !== null && streetName !== '')
+		{
+			streetName = streetName.toLowerCase();
+		} 
+		else 
+		{
+			streetName = '';
 		}
 		
 		if(typeof apiId !== 'undefined' && apiId !== null && apiId !== '' && isNaN(apiId))
@@ -406,7 +435,7 @@ class TrashcanReminder extends Homey.App
 			}
 			
 			// only load that API, this is so that we won't send requests to all data providers all the time.
-			result['execute'](postcode,homenumber,country,
+			result['execute'](postcode,homenumber,streetName,country,
 			(err,result) => {
 				if(err) {
 					console.log('Error in API', err);
@@ -572,6 +601,11 @@ class TrashcanReminder extends Homey.App
 			dates.GROF = this.CalculatePickupDates(manualSettings.bulky);
 		}
 		
+		if(typeof manualSettings.bulky !== 'undefined' && manualSettings.glas && this.ParseManualOptionValue(manualSettings.glas) != 0)
+		{
+			dates.GLAS = this.CalculatePickupDates(manualSettings.glas);
+		}
+		
 		if(typeof manualSettings.christmas !== 'undefined' && manualSettings.christmas && this.ParseManualOptionValue(manualSettings.christmas) != 0)
 		{
 			dates.KERSTBOOM = this.CalculatePickupDates(manualSettings.christmas);
@@ -639,6 +673,19 @@ class TrashcanReminder extends Homey.App
 			for(var i=0; i<manualAdditions.GROF.length; i++)
 			{
 				dates.GROF.push(manualAdditions.GROF[i]);
+			}
+		}
+
+		if(typeof manualAdditions.GLAS !== 'undefined' && manualAdditions.GLAS !== null && manualAdditions.GLAS.length > 0)
+		{
+			if(typeof dates.GLAS === 'undefined' || dates.GLAS === null || dates.GLAS.length <= 0)
+			{
+				dates.GLAS = [];
+			}
+
+			for(var i=0; i<manualAdditions.GLAS.length; i++)
+			{
+				dates.GLAS.push(manualAdditions.GLAS[i]);
 			}
 		}
 

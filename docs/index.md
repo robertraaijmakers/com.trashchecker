@@ -1,6 +1,8 @@
 # Trashcan Reminder 2.0
 Homey will remind you to put the trash out! You can do this by providing a postal code, house number and country (NL/BE).
 
+*NOTE* NO this app will NOT work on Homey Cloud. I'm not investing [100 euro's](https://homey.app/nl-nl/store/product/homey_developer_athom_12m/) a year and my free time on this.
+
 Here you can find information regarding:
 - [Settings](settings.md)
 - [Flow Examples](flow-examples.md)
@@ -9,6 +11,7 @@ Here you can find information regarding:
 ## Supported Cities
 A lot of cities are supported with this trashcan reminder. If your city is not supported you can always add your schedule manually. You can add new cities yourself, but requests to add new cities aren't honoured. If you wish to contribute to the project (for example by adding support for a city). I would advise you to take a look at [this explanation](developer-guidelines.md).
 
+### Netherlands
 - [Afvalwijzer Suez](https://inzamelwijzer.suez.nl/)
 - [Afvalkalender ACV](https://www.acv-groep.nl/)
 - [Afvalkalender Almere](https://almere.ximmio.com/modules/53d8db94-7945-42fd-9742-9bbc71dbe4c1/kalender/)
@@ -35,6 +38,9 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Rova](https://www.rova.nl)
 - [Stadswerk072](https://www.stadswerk072.nl/wanneer)
 - [Twentemilieu](https://www.twentemilieu.nl)
+
+### Belgium
+- [Recycle!](https://recycleapp.be/home)
 
 ## Supported Cards
 There is one card that you can place in the "and" column. The card lets you check whether or not trash is collected either today, tomorrow or the day after tomorrow. The type of trash that is checked for can be set to a specific one, or to 'any' to include all types.

@@ -122,6 +122,14 @@
             "nl": "Kerstboom",
             "sv": "Julgran"
           }
+        },
+        {
+          "id": "GLAS",
+          "label": {
+            "en": "Glass",
+            "nl": "Glas",
+            "sv": "Glas"
+          }
         }
       ]
     }

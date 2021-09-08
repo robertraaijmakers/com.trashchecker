@@ -5,6 +5,7 @@
 		"description":"Please note that not all cities are supported. You can check availability by providing your postal code and house number to see if it's supported. If the address isn't supported, you can always add the pattern via the manual input settings below and still be able to use the full functionalities of the app!",
 		"postcode": "Postal Code",
 		"hnumber": "House Number",
+		"streetname": "Street",
 		"country": "Country",
 		"api": "Source",
 		"save": "Save Changes",
@@ -19,6 +20,7 @@
 		"paper": "Paper",
 		"textile": "Textile",
 		"bulky": "Bulky Waste",
+		"glas": "Glass",
 		"christmas": "Christmas Tree",
 		"unknown": "Unknown",
 		"none": "When nothing is collected",
@@ -84,6 +86,7 @@
 			"PAPIER": "paper",
 			"TEXTIEL": "textile",
 			"GROF": "bulky waste",
+			"GLAS": "glass",
 			"KERSTBOOM": "christmas tree"
 		},
 		"type_multipleother":
@@ -95,6 +98,7 @@
 			"PAPIER": "cardboard|papery",
 			"TEXTIEL": "cloth|yarn|textile",
 			"GROF": "bulky waste|bulky",
+			"GLAS": "glass",
 			"KERSTBOOM": "christmas tree|christmas"
 		},
 		"questiontype":
@@ -130,6 +134,7 @@
 				"PAPIER": "The paper",
 				"TEXTIEL": "The textile",
 				"GROF": "The bulky waste",
+				"GLAS": "The glass",
 				"KERSTBOOM": "The christmas tree",
 				"NONE": "Nothing"
 			},

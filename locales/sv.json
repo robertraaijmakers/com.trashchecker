@@ -4,7 +4,8 @@
 		"title": "Trashcan Reminder 2.0 Settings",
 		"description":"OBS! Vänligen notera att alla återvinningsföretag finns inte med. Du kan testa tillgängligheten för ditt återvinningsföretag genom att ang postnummer och gatunummer för att se om det är tillgängligt. Om adressen inte är tillgänglig så kan du alltid lägga in ditt schema manuellt i inställingarn nedan och ändå få full funktionalitet för appen!",
 		"postcode": "Postnummer",
-		"hnumber": "husnummer",
+		"hnumber": "Husnummer",
+		"streetname": "Gata",
 		"country": "Land",
 		"api": "Källa",
 		"save": "Spara ändringar",
@@ -19,6 +20,7 @@
 		"paper": "Papper",
 		"textile": "Textilier",
 		"bulky": "Grovsopor",
+		"glas": "Glas",
 		"christmas": "Julgran",
 		"unknown": "okänt",
 		"none": "Ingenting hämtas",
@@ -84,6 +86,7 @@
 			"PAPIER": "papper",
 			"TEXTIEL": "textilier",
 			"GROF": "grovsopor",
+			"GLAS": "glas",
 			"KERSTBOOM": "julgran"
 		},
 		"type_multipleother":
@@ -95,6 +98,7 @@
 			"PAPIER": "pappförpackningar|papper",
 			"TEXTIEL": "kläder|gard|textilier",
 			"GROF": "grovsopor|skräp",
+			"GLAS": "glas",
 			"KERSTBOOM": "julgran|jul"
 		},
 		"questiontype":
@@ -130,6 +134,7 @@
 				"PAPIER": "papper & papp",
 				"TEXTIEL": "textilier",
 				"GROF": "grovsopor",
+				"GLAS": "glas",
 				"KERSTBOOM": "julgranen",
 				"NONE": "ingenting"
 			},

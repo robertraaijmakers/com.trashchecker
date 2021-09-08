@@ -1,7 +1,6 @@
 "use strict";
 
 var apiList = [];
-var http = require('http');
 var https = require('https');
 var dateFormat = require('dateformat');
 var request = require('request');
@@ -12,103 +11,109 @@ var ical = require('ical');
  * Different vendors using the same three base API's
  */
 
-function mijnAfvalWijzer(postcode, housenumber, country, callback) {
+function mijnAfvalWijzer(postcode, housenumber, street, country, callback) {
     generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "https://www.mijnafvalwijzer.nl/nl/", callback);
 }
 
-function denBoschAfvalstoffendienstCalendar(postcode, housenumber, country, callback) {
+function denBoschAfvalstoffendienstCalendar(postcode, housenumber, street, country, callback) {
     generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, 'http://denbosch.afvalstoffendienstkalender.nl/nl/', callback);
 }
 
-function rovaAfvalkalender(postcode, housenumber, country, callback) {
+function rovaAfvalkalender(postcode, housenumber, street, country, callback) {
     generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "https://inzamelkalender.rova.nl/nl/", callback);
 }
 
-function afvalkalenderCyclus(postcode, housenumber, country, callback) {
+function afvalkalenderCyclus(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cyclusnv.nl', callback);
 }
 
-function afvalkalenderZrd(postcode, housenumber, country, callback) {
+function afvalkalenderZrd(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.zrd.nl', callback);
 }
 
-function afvalRmn(postcode, housenumber, country, callback) {
+function afvalRmn(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl', callback);
 }
 
-function afvalAvalex(postcode, housenumber, country, callback) {
+function afvalAvalex(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'avalex.nl', callback);
 }
 
-function afvalkalenderCure(postcode, housenumber, country, callback) {
+function afvalkalenderCure(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cure-afvalbeheer.nl', callback);
 }
 
-function afvalkalenderPeelEnMaas(postcode, housenumber, country, callback) {
+function afvalkalenderPeelEnMaas(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.peelenmaas.nl', callback);
 }
 
-function afvalkalenderVenray(postcode, housenumber, country, callback) {
+function afvalkalenderVenray(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.venray.nl', callback);
 }
 
-function darAfvalkalender(postcode, housenumber, country, callback) {
+function darAfvalkalender(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.dar.nl', callback);
 }
 
-function inzamelkalenderHVC(postcode, housenumber, country, callback) {
+function inzamelkalenderHVC(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.hvcgroep.nl', callback);
 }
 
-function BlinkAfvalkalender(postcode, housenumber, country, callback) {
+function BlinkAfvalkalender(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'mijnblink.nl', callback);
 }
 
-function GadGooiAndVechtstreek(postcode, housenumber, country, callback) {
+function GadGooiAndVechtstreek(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.gad.nl', callback);
 }
 
-function afvalwijzerStadswerk072(postcode, housenumber, country, callback) {
+function afvalwijzerStadswerk072(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'www.stadswerk072.nl', callback);
 }
 
-function afvalkalenderMeerlanden(postcode, housenumber, country, callback) {
+function afvalkalenderMeerlanden(postcode, housenumber, street, country, callback) {
     console.log("Checking Meerlanden");
     generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45", callback);
 }
 
-function twenteMilieu(postcode, housenumber, country, callback) {
+function twenteMilieu(postcode, housenumber, street, country, callback) {
     console.log("Checking Twente Milieu");
     generalImplementationWasteApi(postcode, housenumber, country, "8d97bb56-5afd-4cbc-a651-b4f7314264b4", callback, "twentemilieuapi.ximmio.com");
 }
 
-function gemeenteHellendoorn(postcode, housenumber, country, callback) {
+function gemeenteHellendoorn(postcode, housenumber, street, country, callback) {
     console.log("Checking Gemeente Hellendoorn");
     generalImplementationWasteApi(postcode, housenumber, country, "24434f5b-7244-412b-9306-3a2bd1e22bc1", callback, "wasteapi.ximmio.com");
 }
 
-function acvAfvalkalender(postcode, housenumber, country, callback)
+function acvAfvalkalender(postcode, housenumber, street, country, callback)
 {
     console.log("Checking ACV afvalkalender");
     generalImplementationWasteApi(postcode, housenumber, country, "f8e2844a-095e-48f9-9f98-71fceb51d2c3", callback, "wasteapi.ximmio.com");
 }
 
-function almereAfvalkalender(postcode, housenumber, country, callback)
+function almereAfvalkalender(postcode, housenumber, street, country, callback)
 {
     console.log("Checking Almere afvalkalender");
     generalImplementationWasteApi(postcode, housenumber, country, "53d8db94-7945-42fd-9742-9bbc71dbe4c1", callback, "wasteapi.ximmio.com");
 }
 
-function areaReiniging(postcode, housenumber, country, callback)
+function areaReiniging(postcode, housenumber, street, country, callback)
 {
     console.log("Checking Area Reiniging");
     generalImplementationWasteApi(postcode, housenumber, country, "adc418da-d19b-11e5-ab30-625662870761", callback);
 }
 
-function reinigingsdienstWaardlanden(postcode, housenumber, country, callback)
+function reinigingsdienstWaardlanden(postcode, housenumber, street, country, callback)
 {
     console.log("Checking Reinigingsdienst Waardlanden");
     generalImplementationWasteApi(postcode, housenumber, country, "942abcf6-3775-400d-ae5d-7380d728b23c", callback, "wasteapi.ximmio.com");
+}
+
+function recycleApp(postcode, housenumber, street, country, callback)
+{
+    console.log("Checking Recycle App");
+    generalImplementationRecycleApp(postcode, housenumber, street, country, callback);
 }
 
 /**
@@ -184,6 +189,9 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                         } else if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
                             if (!dates.GROF) dates.GROF = [];
                             dates.GROF.push(dateStr);
+                        } else if(description.indexOf('glas') !== -1) {
+                            if (!dates.GLAS) dates.GLAS = [];
+                            dates.GLAS.push(dateStr);
                         } else {
                             console.log("Unknown description: " + description);
                         }
@@ -301,6 +309,10 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
 							if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
                             fDates.TEXTIEL.push(dateStr);
                             break;
+                        case 'glas':
+                            if (!fDates.GLAS) fDates.GLAS = [];
+                            fDates.GLAS.push(dateStr);
+                            break;
                         default:
                             console.log('Defaulted. Element not found:', elem.attribs.class);
                     }
@@ -415,6 +427,11 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                                                 if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
                                                 fDates.TEXTIEL.push(date);
                                                 break;
+                                            case "GLAS":
+                                            case "GLASS":
+                                                if (!fDates.GLAS) fDates.GLAS = [];
+                                                fDates.GLAS.push(date);
+                                                break;
                                         }
                                     }
                                 }
@@ -446,11 +463,215 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
     post_req1.end();
 }
 
+function generalImplementationRecycleApp(postcode, housenumber, street, country, callback)
+{
+    var fDates = {};
+    if (country !== "BE") {
+        console.log('unsupported country');
+        return callback(new Error('unsupported country'));
+    }
+
+    var host = "https://recycleapp.be/";
+    var accessConsumer = "recycleapp.be";
+    var accessSecret = "Crgja3EGWe8jdapyr4EEoMBgZACYYjRRcRpaMQrLDW9HJBvmgkfGQyYqLgeXPavAGvnJqkV87PBB2b8zx43q46sUgzqio4yRZbABhtKeagkVKypTEDjKfPgGycjLyJTtLHYpzwJgp4YmmCuJZN9ZmJY8CGEoFs8MKfdJpU9RjkEVfngmmk2LYD4QzFegLNKUbcCeAdEW";
+
+    // Get access token
+    var accessTokenRequest = {
+        url: host + 'api/app/v1/access-token',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Homey',
+          'x-consumer': accessConsumer,
+          'x-secret': accessSecret
+        }
+    };
+
+    request.get(accessTokenRequest, function (err, res, body) {
+        if (!err && res.statusCode == 200) {
+            var result = "{}";
+
+            try {
+                result = JSON.parse(body);
+            }
+            catch(err)
+            {
+                return callback(new Error("Exception parsing JSON: " + err + " for " + accessTokenRequest.url + " and zip code " + postcode));
+            }
+
+            var accessToken = result.accessToken;
+
+            // Validate zipcode request
+            var validateZipCodeRequest = {
+                url: host + 'api/app/v1/zipcodes?q=' + postcode,
+                headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'Homey',
+                'Authorization': accessToken,
+                'x-consumer': accessConsumer,                
+                }
+            };
+            
+            request.get(validateZipCodeRequest, function (err, res, body) {
+                if (!err && res.statusCode == 200) {
+                    var result = "{}";
+        
+                    try {
+                        result = JSON.parse(body);
+                    }
+                    catch(err)
+                    {
+                        return callback(new Error("Exception parsing JSON: " + err + " for " + validateZipCodeRequest.url + " and zip code " + postcode));
+                    }
+
+                    if(result.items.length <= 0)
+                    {
+                        return callback(new Error("No zipcode found for: " + postcode));
+                    }
+
+                    if(result.items.length > 1)
+                    {
+                        return callback(new Error("Multiple zipcode entries found for: " + postcode));
+                    }
+
+                    var zipcodeId = result.items[0].id;
+
+                    // Validate street request
+                    var validateStreetRequest = {
+                        url: host + 'api/app/v1/streets?q=' + street + '&zipcodes=' + zipcodeId,
+                        headers: {
+                        'Content-Type': 'application/json',
+                        'User-Agent': 'Homey',
+                        'Authorization': accessToken,
+                        'x-consumer': accessConsumer,                
+                        }
+                    };
+                    
+                    request.get(validateStreetRequest, function (err, res, body) {
+                        if (!err && res.statusCode == 200) {
+                            var result = "{}";
+        
+                            try {
+                                result = JSON.parse(body);
+                            }
+                            catch(err)
+                            {
+                                return callback(new Error("Exception parsing JSON: " + err + " for " + validateStreetRequest.url + " and zip code " + postcode));
+                            }
+
+                            if(result.items.length <= 0)
+                            {
+                                return callback(new Error("No street found for: " + street));
+                            }
+
+                            if(result.items.length > 1)
+                            {
+                                return callback(new Error("Multiple streets found for: " + street));
+                            }
+
+                            var streetId = result.items[0].id;
+
+                            // Validate street request
+                            var startDate = new Date(); //startDate.set
+                            startDate = dateFormat(startDate.setDate(startDate.getDate() - 7), "yyyy-mm-dd");
+
+                            var endDate = new Date();
+                            endDate = dateFormat(endDate.setDate(endDate.getDate() + 14), "yyyy-mm-dd");
+
+                            var getTrashRequest = {
+                                url: host + 'api/app/v1/collections?size=100&untilDate=' + endDate + '&fromDate=' + startDate + '&houseNumber=' + housenumber + '&streetId=' + streetId + '&zipcodeId=' + zipcodeId,
+                                headers: {
+                                'Content-Type': 'application/json',
+                                'User-Agent': 'Homey',
+                                'Authorization': accessToken,
+                                'x-consumer': accessConsumer,                
+                                }
+                            };
+                            
+                            request.get(getTrashRequest, function (err, res, body) {
+                                if (!err && res.statusCode == 200) {
+                                    var result = "{}";
+                                    const dates = {};
+        
+                                    try {
+                                        result = JSON.parse(body);
+                                    }
+                                    catch(err)
+                                    {
+                                        return callback(new Error("Exception parsing JSON: " + err + " for " + getTrashRequest.url + " and zip code " + postcode));
+                                    }
+
+                                    if(result.items.length <= 0)
+                                    {
+                                        return callback(new Error("No trash data found for: " + getTrashRequest.url));
+                                    }
+
+                                    for (let i in result.items) {
+                                        const entry = result.items[i];
+                                        const dateStr = entry.timestamp.substr(0,10);
+                
+                                        var description = entry.fraction.name.nl.toLowerCase().trim();
+
+                                        if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
+                                            if (!dates.GFT) dates.GFT = [];
+                                            dates.GFT.push(dateStr);
+                                        } else if (description.indexOf('rest') !== -1) {
+                                            if (!dates.REST) dates.REST = [];
+                                            dates.REST.push(dateStr);
+                                        } else if (description.indexOf('pmd') !== -1 || description.indexOf('pd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
+                                            if (!dates.PMD) dates.PMD = [];
+                                            dates.PMD.push(dateStr);
+                                        } else if (description.indexOf('plastic') !== -1) {
+                                            if (!dates.PLASTIC) dates.PLASTIC = [];
+                                            dates.PLASTIC.push(dateStr);
+                                        }  else if (description.indexOf('papier') !== -1) {
+                                            if (!dates.PAPIER) dates.PAPIER = [];
+                                            dates.PAPIER.push(dateStr);
+                                        } else if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1) {
+                                            if (!dates.TEXTIEL) dates.TEXTIEL = [];
+                                            dates.TEXTIEL.push(dateStr);
+                                        } else if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
+                                            if (!dates.KERSTBOOM) dates.KERSTBOOM = [];
+                                            dates.KERSTBOOM.push(dateStr);
+                                        } else if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
+                                            if (!dates.GROF) dates.GROF = [];
+                                            dates.GROF.push(dateStr);
+                                        } else if(description.indexOf('glas') !== -1) {
+                                            if (!dates.GLAS) dates.GLAS = [];
+                                            dates.GLAS.push(dateStr);
+                                        } else {
+                                            console.log("Unknown description: " + description);
+                                        }
+                                    }
+                                        
+                                    console.log(dates);
+                                    return callback(null, dates);
+                                }
+                                else {
+                                    return callback(new Error("Can't retrieve trash data."));
+                                }
+                            });
+                        }
+                        else {
+                            return callback(new Error("Can't validate street."));
+                        }
+                    });
+                }
+                else {
+                    return callback(new Error("Can't validate zipcode."));
+                }
+            });
+        }
+        else {
+            return callback(new Error("Can't retrieve access token."));
+        }
+    });
+}
+
 /**
  * Vendor specific API implementations
  */
 
-function recycleManager(postcode, housenumber, country, callback) {
+function recycleManager(postcode, housenumber, street, country, callback) {
     if (country !== "NL") {
         console.log('unsupported country');
         callback(new Error('unsupported country'));
@@ -509,7 +730,7 @@ function recycleManager(postcode, housenumber, country, callback) {
     });
 }
 
-function afvalkalenderRD4(postcode, housenumber, country, callback) {
+function afvalkalenderRD4(postcode, housenumber, street, country, callback) {
     console.log("Checking afvalkalender RD4");
 
     var url = "https://rd4.syzygy.eu/" + postcode + "/" + housenumber + "/";
@@ -546,7 +767,7 @@ function afvalkalenderRD4(postcode, housenumber, country, callback) {
     });
 }
 
-function circulusBerkel(postcode, homenumber, country, callback) {
+function circulusBerkel(postcode, homenumber, street, country, callback) {
 
     if (country !== "NL") {
         return callback(new Error('unsupported country'));
@@ -632,7 +853,7 @@ function circulusBerkel(postcode, homenumber, country, callback) {
     }
 }
 
-function afvalapp(postcode, homenumber, country, callback) {
+function afvalapp(postcode, homenumber, street, country, callback) {
     console.log("Checking De Afval App");
 
     if (country !== "NL") {
@@ -692,7 +913,7 @@ function afvalapp(postcode, homenumber, country, callback) {
     });
 }
 
-function afvalwijzerSuez(postcode, housenumber, country, callback) {
+function afvalwijzerSuez(postcode, housenumber, street, country, callback) {
     console.log("Checking Afvalwijzer Suez");
 
     var fDates = {};
@@ -775,11 +996,6 @@ function addToDates(key, datesToAdd, dates) {
         var dutchDate = arrDate[0] + "-" + arrDate[1] + "-" + arrDate[2];
         dates[key].push(dutchDate);
     }
-}
-
-function customFormatDate(date) {
-    var ad = date.split('-');
-    return ad[2] + '-' + ('0' + ad[1]).slice(-2) + '-' + ('0' + ad[0]).slice(-2);
 }
 
 function parseDate(dateString) {
@@ -895,5 +1111,6 @@ apiList.push({ name: "Area Reiniging", id: "arei", execute: areaReiniging });
 apiList.push({ name: "Reinigingsdienst Waardlanden", id: "rewl", execute: reinigingsdienstWaardlanden });
 apiList.push({ name: "Stadswerk072", id: "sw072", execute: afvalwijzerStadswerk072 });
 apiList.push({ name: "Almere", id: "alm", execute: almereAfvalkalender });
+apiList.push({ name: "Recycle App (BE)", id: "recbe", execute: recycleApp });
 
 module.exports = apiList;

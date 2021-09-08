@@ -16,7 +16,7 @@ it('API - RD4', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "rd4", "API - RD4")).to.be.true;
         done();
@@ -36,7 +36,7 @@ it('API - Afvalwijzer', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
         done();
@@ -56,13 +56,12 @@ it('API - Area Reiniging', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "areareiniging", "API - Area Reiniging")).to.be.true;
         done();
     });
 });
-
 
 it('API - Suez', function(done) {
     var postcode = "6836ME";
@@ -77,7 +76,7 @@ it('API - Suez', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "arn", "API - Suez")).to.be.true;
         done();
@@ -97,7 +96,7 @@ it('API - Meerlanden', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "akm", "API - Meerlanden")).to.be.true;
         done();
@@ -117,7 +116,7 @@ it('API - Waardlanden', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "rewl", "API - Waardlanden")).to.be.true;
         done();
@@ -137,7 +136,7 @@ it('API - Afvalwijzer', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
         done();
@@ -157,7 +156,7 @@ it('API - Mijn Blink', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "mba", "API - Mijn Blink")).to.be.true;
         done();
@@ -177,7 +176,7 @@ it('API - Circulus Berkel', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "acb", "API - Circulus Berkel")).to.be.true;
         done();
@@ -197,7 +196,7 @@ it('API - Mijn Blink', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "mba", "API - Mijn Blink")).to.be.true;
         done();
@@ -217,7 +216,7 @@ it('API - Afvalwijzer', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
         done();
@@ -237,7 +236,7 @@ it('API - Afvalwijzer', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
         done();
@@ -257,7 +256,7 @@ it('API - Afvalwijzer', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "dbafw", "API - Afvalwijzer")).to.be.true;
         done();
@@ -277,7 +276,7 @@ it('API - Waste API - Gemeente Hellendoorn', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "geh", "API - Waste API - Gemeente Hellendoorn")).to.be.true;
         done();
@@ -297,7 +296,7 @@ it('API - Stadswerk072', function(done) {
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country,
+    result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "sw072", "API - Stadswerk072")).to.be.true;
         done();
@@ -312,7 +311,7 @@ it('API - Waste API - Twente Milieu', function(done) {
   var result = apiArray.find(o => o.id === "twm");
   
   // only load that API, this is so that we won't send requests to all data providers all the time.
-  result['execute'](postcode,homenumber,country, 
+  result['execute'](postcode,homenumber,"",country, 
   (err,result) => {
     expect(validateApiResults(err, result, "twm", "API - Waste API - Twente Milieu")).to.be.true;
     done();
@@ -327,13 +326,12 @@ it('API - Afval App', function(done) {
     var result = apiArray.find(o => o.id === "afa");
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country, 
+    result['execute'](postcode,homenumber,"",country, 
     (err,result) => {
       expect(validateApiResults(err, result, "afa", "API - Afval App")).to.be.true;
       done();
     });
   });
-
 
   it('API - Almere Ximmio', function(done) {
     var postcode = "1324AM";
@@ -343,9 +341,25 @@ it('API - Afval App', function(done) {
     var result = apiArray.find(o => o.id === "alm");
     
     // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,country, 
+    result['execute'](postcode,homenumber,"",country, 
     (err,result) => {
       expect(validateApiResults(err, result, "alm", "API - Almere Ximmio")).to.be.true;
+      done();
+    });
+  });
+
+  it('API - Recycle!', function(done) {
+    var postcode = "9040";
+    var homenumber = 116;
+    var streetName = "Isidoor de vosstraat";
+    var country = "BE";
+  
+    var result = apiArray.find(o => o.id === "recbe");
+    
+    // only load that API, this is so that we won't send requests to all data providers all the time.
+    result['execute'](postcode,homenumber,streetName,country, 
+    (err,result) => {
+      expect(validateApiResults(err, result, "recbe", "API - Recycle!")).to.be.true;
       done();
     });
   });

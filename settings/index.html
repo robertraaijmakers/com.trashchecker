@@ -12,6 +12,10 @@
             <label for="postcode" data-i18n="settings.postcode"></label>
             <input placeholder="1234AB" id="postcode" maxlength="6" type="text" value=""/>
         </div>
+		<div class="field row" id="streetName_div">
+            <label for="streetName" data-i18n="settings.streetname"></label>
+            <input placeholder="Van Homeystraat" id="streetName" type="text" value=""/>
+        </div>
         <div class="field row">
             <label for="number" data-i18n="settings.hnumber"></label>
             <input placeholder="42" id="number" type="text" value=""/>
@@ -25,32 +29,33 @@
 			<label for="api" data-i18n="settings.api"></label>
 			<select id="api">
 				<option value="" data-i18n="settings.unknown"></option>
-				<option value="afa">Afval App</option>
-				<option value="arn">Afvalwijzer Arnhem</option>
-				<option value="acv">Afvalkalender ACV</option>
-				<option value="acb">Afvalkalender Circulus-Berkel</option>
-				<option value="acu">Afvalkalender Cure</option>
-				<option value="afc">Afvalkalender Cyclus</option>
-				<option value="dar">Afvalkalender Dar</option>
-				<option value="akm">Afvalkalender Meerlanden</option>
-				<option value="akpm">Afvalkalender Peel en Maas</option>
-				<option value="rd4">Afvalkalender RD4</option>
-				<option value="afrm">Afvalkalender RMN</option>
-				<option value="rov">Afvalkalender ROVA</option>
-				<option value="akvr">Afvalkalender Venray</option>
-				<option value="afzrd">Afvalkalender ZRD</option>
-				<option value="arei">Area Reiniging</option>
-				<option value="avx">Avalex</option>
-				<option value="dbafw">Den Bosch Afvalstoffendienstkalender</option>
-				<option value="gad">GAD Gooi en Vechtstreek</option>
-				<option value="geh">Gemeente Hellendoorn</option>
-				<option value="hvc">Inzamelkalender HVC</option>
-				<option value="afw">Mijn Afvalwijzer</option>
-				<option value="mba">Mijn Blink</option>
-				<option value="remg">Recyclemanager</option>
-				<option value="rewl">Reinigingsdienst Waardlanden</option>
-				<option value="twm">Twente Milieu</option>
-				<option value="sw072">Stadswerk072</option>
+				<option value="afa">Afval App (NL)</option>
+				<option value="arn">Afvalwijzer Arnhem (NL)</option>
+				<option value="acv">Afvalkalender ACV (NL)</option>
+				<option value="acb">Afvalkalender Circulus-Berkel (NL)</option>
+				<option value="acu">Afvalkalender Cure (NL)</option>
+				<option value="afc">Afvalkalender Cyclus (NL)</option>
+				<option value="dar">Afvalkalender Dar (NL)</option>
+				<option value="akm">Afvalkalender Meerlanden (NL)</option>
+				<option value="akpm">Afvalkalender Peel en Maas (NL)</option>
+				<option value="rd4">Afvalkalender RD4 (NL)</option>
+				<option value="afrm">Afvalkalender RMN (NL)</option>
+				<option value="rov">Afvalkalender ROVA (NL)</option>
+				<option value="akvr">Afvalkalender Venray (NL)</option>
+				<option value="afzrd">Afvalkalender ZRD (NL)</option>
+				<option value="arei">Area Reiniging (NL)</option>
+				<option value="avx">Avalex (NL)</option>
+				<option value="dbafw">Den Bosch Afvalstoffendienstkalender (NL)</option>
+				<option value="gad">GAD Gooi en Vechtstreek (NL)</option>
+				<option value="geh">Gemeente Hellendoorn (NL)</option>
+				<option value="hvc">Inzamelkalender HVC (NL)</option>
+				<option value="afw">Mijn Afvalwijzer (NL)</option>
+				<option value="mba">Mijn Blink (NL)</option>
+				<option value="remg">Recyclemanager (NL)</option>
+				<option value="rewl">Reinigingsdienst Waardlanden (NL)</option>
+				<option value="sw072">Stadswerk072 (NL)</option>
+				<option value="twm">Twente Milieu (NL)</option>
+				<option value="recbe">Recycle! App (BE)</option>
 			</select>
         </div>
         <span id="resp" title="Details?" onclick="document.getElementById('respDates').style='display: block;'"></span>
@@ -376,6 +381,51 @@
 				<input style="display: inline; margin-left: 5px;" type="date" name="bulky[startdate]" id="bulky_startdate"></input>
 			</div>
         </div>
+
+		<!-- GLASS -->
+		<div class="field row">
+			<label for="glas" data-i18n="settings.glas"></label>
+			<div>
+				<select name="glas[option]" id="glas_option">
+					<option value="-1" data-i18n="settings.interval.na"></option>
+					<option value="0" data-i18n="settings.interval.automatic"></option>
+					<option value="1" data-i18n="settings.interval.everyweek"></option>
+					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
+					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
+					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
+					<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
+					<option value="11" data-i18n="settings.interval.everyfirst"></option>
+					<option value="12" data-i18n="settings.interval.everysecond"></option>
+					<option value="13" data-i18n="settings.interval.everythird"></option>
+					<option value="14" data-i18n="settings.interval.everyfourth"></option>
+					<option value="20" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="19" data-i18n="settings.interval.everylast"></option>
+				</select>
+			</div>
+			<div id="glas_day_div">
+				<select style="margin-left: 5px;" name="glas[day_of_week]" id="glas_dayofweek">
+					<option value="1" data-i18n="settings.dayofweek.mo"></option>
+					<option value="2" data-i18n="settings.dayofweek.tu"></option>
+					<option value="3" data-i18n="settings.dayofweek.we"></option>
+					<option value="4" data-i18n="settings.dayofweek.th"></option>
+					<option value="5" data-i18n="settings.dayofweek.fr"></option>
+					<option value="6" data-i18n="settings.dayofweek.sa"></option>
+					<option value="0" data-i18n="settings.dayofweek.su"></option>
+				</select>
+			</div>
+			<div>
+				<select style="display:none; margin-left: 5px;" name="glas[option_extension]" id="glas_option_extension">
+					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
+					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
+					<option value="12" data-i18n="settings.interval_extra.year"></option>
+				</select>
+			</div>
+			<div id="glas_startdate_div">
+				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
+				<input style="display: inline; margin-left: 5px;" type="date" name="glas[startdate]" id="glas_startdate"></input>
+			</div>
+        </div>
     </fieldset>
     <button id="manualSettingsSave" class="right" data-i18n="settings.save" ></button>
 	<br /><br />
@@ -431,6 +481,11 @@
 			<label for="labelGrof" data-i18n="settings.bulky"></label>
 			<input type="text" id="labelGrof" name="label[grof]" />
 			<p id="exampleGrof"></p>
+        </div>
+		<div class="field row">
+			<label for="labelGlas" data-i18n="settings.glas"></label>
+			<input type="text" id="labelGlas" name="label[glas]" />
+			<p id="exampleGlas"></p>
         </div>
 		<div class="field row">
 			<label for="labelKerstboom" data-i18n="settings.christmas"></label>
@@ -506,6 +561,7 @@
 			document.getElementById("pmd_option").addEventListener("change", function(elem) { ToggleManualInputFields("pmd"); });
 			document.getElementById("textile_option").addEventListener("change", function(elem) { ToggleManualInputFields("textile"); });
 			document.getElementById("bulky_option").addEventListener("change", function(elem) { ToggleManualInputFields("bulky"); });
+			document.getElementById("glas_option").addEventListener("change", function(elem) { ToggleManualInputFields("glas"); });
 
 			document.getElementById("gft_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("gft"); });
 			document.getElementById("paper_option_extension").addEventListener("change",function(elem) { ToggleManualInputFields("paper"); });
@@ -514,6 +570,7 @@
 			document.getElementById("pmd_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("pmd"); });
 			document.getElementById("textile_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("textile"); });
 			document.getElementById("bulky_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("bulky"); });
+			document.getElementById("glas_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("glas"); });
 
 			document.getElementById("labelTimeIndicator").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelGft").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
@@ -523,9 +580,12 @@
 			document.getElementById("labelPapier").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelTextiel").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelGrof").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
+			document.getElementById("labelGlas").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelKerstboom").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelNone").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelGeneric").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
+
+			document.getElementById("BE").addEventListener("change", function(elem) { ToggleFieldsBasedOnCountry( Homey ); });
 
 			var respDates = document.getElementById("respDatesDebug");
 				respDates.style.color = 'black';
@@ -539,6 +599,8 @@
 			ToggleManualInputFields("pmd");
 			ToggleManualInputFields("textile");
 			ToggleManualInputFields("bulky");
+			ToggleManualInputFields("glas");
+			ToggleFieldsBasedOnCountry( Homey );
 
 			// Retrieve values from Homey settings
         	Homey.get('postcode', function(err, postcode)
@@ -561,16 +623,26 @@
 				document.getElementById('number').value = houseNumber;
 			});
 
+			Homey.get('streetName', function (err, streetName)
+			{
+				console.log('STREET', err, streetName);
+				if (err) {
+					console.log("not working");
+					return console.error(err);
+				}
+				document.getElementById('streetName').value = streetName;
+			});
+
         	Homey.get('country',function(err, country)
         	{
         		console.log(country);
-        		if(err){
+        		if(err) {
         			return console.error(err);
         		}
 
         		if(country == 'NL' || country == 'BE') {
         			document.getElementById(country).checked = true;
-        		}else{
+        		} else {
         			document.getElementById('NL').checked = true;
         		}
         	});
@@ -638,6 +710,13 @@
 					SetManualEntryFormValues(manualEntryData.bulky, "bulky");
 				} else {
 					document.getElementById("bulky_option").value = 0;
+				}
+
+				if(manualEntryData !== null && typeof manualEntryData.glas !== 'undefined')
+				{
+					SetManualEntryFormValues(manualEntryData.glas, "glas");
+				} else {
+					document.getElementById("glas_option").value = 0;
 				}
 			});
 
@@ -721,6 +800,15 @@
 				else
 				{
 					SetLabelEntryFormValues(Homey, Homey.__('settings.bulky'), "grof");
+				}
+
+				if(typeof labelSettings.type.glas !== 'undefined')
+				{
+					SetLabelEntryFormValues(Homey, labelSettings.type.glas, "glas");
+				}
+				else
+				{
+					SetLabelEntryFormValues(Homey, Homey.__('settings.glas'), "glas");
 				}
 
 				if(typeof labelSettings.type.kerstboom !== 'undefined')
@@ -811,6 +899,7 @@
 
         	var pc = document.getElementById('postcode').value;
         	var num = document.getElementById('number').value;
+        	var streetName = document.getElementById('streetName').value;
 			var apiSelected = document.getElementById('api').value;
 
         	var country = null;
@@ -823,6 +912,7 @@
 			if(apiSelected == "") { apiSelected = null; }
 			if(pc == "") { pc = null; }
 			if(num == "") { num = null; }
+			if(streetName == "") { streetName = null; }
 
 			if(pc == null || num == null)
 			{
@@ -830,6 +920,7 @@
 				Homey.set('hnumber', '');
 				Homey.set('country', 'NL');
 				Homey.set('apiId', '');
+				Homey.set('streetName', '');
 
 				resp.innerHTML = Homey.__('settings.manualonly');
 				resp.style.color = 'green';
@@ -840,6 +931,7 @@
         	Homey.api('POST', '/', {
         		"postcode":pc,
         		"housenumber":num,
+				"streetName":streetName,
         		"country":country,
 				"api": apiSelected
         	}, function(err,result) {
@@ -851,6 +943,7 @@
 					resp.innerHTML = Homey.__('settings.update') + pc + ', ' + num + ' in ' + country;
 		            Homey.set('postcode', pc);
 		            Homey.set('hnumber', num);
+		            Homey.set('streetName', streetName);
 		            Homey.set('country', country);
 
 					// Retrieve API id & gdates from settings
@@ -889,6 +982,7 @@
 			data = SetManualInputDataFor("paper", data);
 			data = SetManualInputDataFor("textile", data);
 			data = SetManualInputDataFor("bulky", data);
+			data = SetManualInputDataFor("glas", data);
 
 			console.log(data);
 			Homey.set('manualEntryData', data);
@@ -1013,7 +1107,7 @@
 		{
 			var sentence = "<i>Example: " + document.getElementById("labelGeneric").value + "</i>";
 			var timeReplacement = Homey.__("speech.output.timeindicator.t" + document.getElementById("labelTimeIndicator").value);
-			var types = ["gft","rest","pmd","plastic","papier","textiel","grof","none"];
+			var types = ["gft","rest","pmd","plastic","papier","textiel","grof","glas","none"];
 			var replacementSingle = Homey.__("speech.output.replacementsingle");
 			var replacementPlural = Homey.__("speech.output.replacementplural");
 
@@ -1041,6 +1135,7 @@
 					papier: document.getElementById("labelPapier").value,
 					textiel: document.getElementById("labelTextiel").value,
 					grof: document.getElementById("labelGrof").value,
+					glas: document.getElementById("labelGlas").value,
 					kerstboom: document.getElementById("labelKerstboom").value,
 					none: document.getElementById("labelNone").value
 				}
@@ -1098,6 +1193,16 @@
 			}
 
 			return data;
+		}
+
+		// Toggle street name
+		function ToggleFieldsBasedOnCountry(Homey)
+		{
+			if(document.getElementById('NL').checked) {
+            	document.getElementById("streetName_div").style.display = 'none';
+            } else if(document.getElementById('BE').checked) {
+            	document.getElementById("streetName_div").style.display = 'block';
+            }
 		}
 
 		// Toggles fields on the form based on the given element

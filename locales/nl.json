@@ -5,6 +5,7 @@
 		"description":"Helaas worden niet alle postcodes ondersteund, voer hieronder je postcode en huisnummer in om te zien of ze ondersteund worden. Zo niet, dan kan je altijd de handmatige invoer toepassen waardoor je toch de volledige functionaliteit van de app kan gebruiken!",
 		"postcode": "Postcode",
 		"hnumber": "Huisnummer",
+		"streetname": "Straat",
 		"country": "Land",
 		"api": "Bron",
 		"save": "Opslaan",
@@ -19,6 +20,7 @@
 		"paper": "Papier",
 		"textile": "Textiel",
 		"bulky": "Grof vuil",
+		"glas": "Glas",
 		"christmas": "Kerstboom",
 		"unknown": "Onbekend",
 		"none": "Wanneer niets wordt opgehaald",
@@ -84,6 +86,7 @@
 			"PAPIER": "papier",
 			"TEXTIEL": "textiel",
 			"GROF": "grof vuil",
+			"GLAS": "glas",
 			"KERSTBOOM": "kerstboom"
 		},
 		"type_multipleother":
@@ -95,6 +98,7 @@
 			"PAPIER": "blauw|karton",
 			"TEXTIEL": "kleding|kledij",
 			"GROF": "grof vuil|grof|vuil",
+			"GLAS": "glas",
 			"KERSTBOOM": "kerstboom|kerst"
 		},
 		"questiontype":
@@ -130,6 +134,7 @@
 				"PAPIER": "De blauwe container",
 				"TEXTIEL": "Het textiel",
 				"GROF": "Het grof vuil",
+				"GLAS": "Het glas",
 				"KERSTBOOM": "De kerstboom",
 				"NONE": "Niets"
 			},

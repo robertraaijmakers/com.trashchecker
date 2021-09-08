@@ -7,6 +7,7 @@ module.exports = {
 		  homey.app.updateAPI(
 			body.postcode,
 			body.housenumber,
+			body.streetName,
 			body.country,
 			body.api,
 			(isValid, obj, apiId) => resolve(isValid)

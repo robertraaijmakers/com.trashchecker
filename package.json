@@ -9,7 +9,6 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
     "dateformat": "^3.0.3",
-    "http": "^0.0.0",
     "https": "^1.0.0",
     "ical": "^0.6.0",
     "request": "^2.88.2",
