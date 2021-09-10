@@ -1,22 +1,106 @@
-/*console.log(CalculatePickupDates({ option: "1", "option_extension": "1", startdate: null, day: "1" }));
-console.log(CalculatePickupDates({ option: "2", "option_extension": "1", startdate: "01-01-2016", day: "2" }));
-console.log(CalculatePickupDates({ option: "3", "option_extension": "1", startdate: "01-01-2016", day: "3" }));
-console.log(CalculatePickupDates({ option: "4", "option_extension": "1", startdate: "01-01-2016", day: "4" }));
+"use strict";
 
-console.log("elke eerste maandag van de maand");
-console.log(CalculatePickupDates({ option: "5", "option_extension": "1", startdate: "01-01-2016", day: "1" }));
+const DateTimeHelper = require('../lib/datetime.js');
+var expect  = require('chai').expect;
 
-console.log("elke tweede dinsdag van het kwartaal");
-console.log(CalculatePickupDates({ option: "6", "option_extension": "3", startdate: "01-01-2016", day: "2" }));
+it('Manual - Every 4 weeks on wednesday - 0', function(done) {
 
-console.log("elke derde woensdag van het jaar");
-console.log(CalculatePickupDates({ option: "7", "option_extension": "12", startdate: "01-01-2016", day: "3" }));
+    // Every 4 weeks on Tuesday (3)
+    var date1 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-10-10"), -2);
+    var date2 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-10-10"), -1);
+    var date3 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-10-10"), 0);
+    var date4 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-10-10"), 1);
+    var date5 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"),  new Date("2021-10-10"), 2);
 
-console.log("elke laatste donderdag van de maand");
-console.log(CalculatePickupDates({ option: "8", "option_extension": "1", startdate: "01-01-2016", day: "4" }));	
+    expect(date1.toISOString().slice(0,10)).to.equal('2021-08-03');
+    expect(date2.toISOString().slice(0,10)).to.equal('2021-08-31');
+    expect(date3.toISOString().slice(0,10)).to.equal('2021-09-28');
+    expect(date4.toISOString().slice(0,10)).to.equal('2021-10-26');
+    expect(date5.toISOString().slice(0,10)).to.equal('2021-11-23');
+    done();
+});
 
-console.log("elke een na laatste vrijdag van het kwartaal");
-console.log(CalculatePickupDates({ option: "9", "option_extension": "3", startdate: "01-01-2016", day: "5" }));	
+it('Manual - Every 4 weeks on wednesday - 1', function(done) {
 
-console.log("elke een na laatste zaterdag van het jaar");
-console.log(CalculatePickupDates({ option: "9", "option_extension": "12", startdate: "01-01-2016", day: "6" }));*/
+    // Every 4 weeks on Tuesday (3)
+    var date1 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-27"), -2);
+    var date2 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-27"), -1);
+    var date3 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-27"), 0);
+    var date4 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-27"), 1);
+    var date5 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"),  new Date("2021-09-27"), 2);
+
+    expect(date1.toISOString().slice(0,10)).to.equal('2021-08-03');
+    expect(date2.toISOString().slice(0,10)).to.equal('2021-08-31');
+    expect(date3.toISOString().slice(0,10)).to.equal('2021-09-28');
+    expect(date4.toISOString().slice(0,10)).to.equal('2021-10-26');
+    expect(date5.toISOString().slice(0,10)).to.equal('2021-11-23');
+    done();
+});
+
+it('Manual - Every 4 weeks on wednesday - 2', function(done) {
+
+    // Every 4 weeks on Tuesday (3)
+    var date1 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-21"), -2);
+    var date2 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-21"), -1);
+    var date3 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-21"), 0);
+    var date4 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-21"), 1);
+    var date5 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"),  new Date("2021-09-21"), 2);
+
+    expect(date1.toISOString().slice(0,10)).to.equal('2021-07-06');
+    expect(date2.toISOString().slice(0,10)).to.equal('2021-08-03');
+    expect(date3.toISOString().slice(0,10)).to.equal('2021-08-31');
+    expect(date4.toISOString().slice(0,10)).to.equal('2021-09-28');
+    expect(date5.toISOString().slice(0,10)).to.equal('2021-10-26');
+    done();
+});
+
+it('Manual - Every 4 weeks on wednesday - 3', function(done) {
+
+    // Every 4 weeks on Tuesday (3)
+    var date1 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-14"), -2);
+    var date2 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-14"), -1);
+    var date3 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-14"), 0);
+    var date4 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-14"), 1);
+    var date5 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"),  new Date("2021-09-14"), 2);
+
+    expect(date1.toISOString().slice(0,10)).to.equal('2021-07-06');
+    expect(date2.toISOString().slice(0,10)).to.equal('2021-08-03');
+    expect(date3.toISOString().slice(0,10)).to.equal('2021-08-31');
+    expect(date4.toISOString().slice(0,10)).to.equal('2021-09-28');
+    expect(date5.toISOString().slice(0,10)).to.equal('2021-10-26');
+    done();
+});
+
+it('Manual - Every 4 weeks on wednesday - 3', function(done) {
+
+    // Every 4 weeks on Tuesday (3)
+    var date1 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-07"), -2);
+    var date2 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-07"), -1);
+    var date3 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-07"), 0);
+    var date4 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-09-07"), 1);
+    var date5 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"),  new Date("2021-09-07"), 2);
+
+    expect(date1.toISOString().slice(0,10)).to.equal('2021-07-06');
+    expect(date2.toISOString().slice(0,10)).to.equal('2021-08-03');
+    expect(date3.toISOString().slice(0,10)).to.equal('2021-08-31');
+    expect(date4.toISOString().slice(0,10)).to.equal('2021-09-28');
+    expect(date5.toISOString().slice(0,10)).to.equal('2021-10-26');
+    done();
+});
+
+it('Manual - Every 4 weeks on wednesday - 4', function(done) {
+
+    // Every 4 weeks on Tuesday (3)
+    var date1 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-08-31"), -2);
+    var date2 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-08-31"), -1);
+    var date3 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-08-31"), 0);
+    var date4 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"), new Date("2021-08-31"), 1);
+    var date5 = DateTimeHelper.everyNthWeek(4, 3, new Date("2021-04-17"),  new Date("2021-08-31"), 2);
+
+    expect(date1.toISOString().slice(0,10)).to.equal('2021-07-06');
+    expect(date2.toISOString().slice(0,10)).to.equal('2021-08-03');
+    expect(date3.toISOString().slice(0,10)).to.equal('2021-08-31');
+    expect(date4.toISOString().slice(0,10)).to.equal('2021-09-28');
+    expect(date5.toISOString().slice(0,10)).to.equal('2021-10-26');
+    done();
+});

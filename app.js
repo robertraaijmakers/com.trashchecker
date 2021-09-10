@@ -601,7 +601,7 @@ class TrashcanReminder extends Homey.App
 			dates.GROF = this.CalculatePickupDates(manualSettings.bulky);
 		}
 		
-		if(typeof manualSettings.bulky !== 'undefined' && manualSettings.glas && this.ParseManualOptionValue(manualSettings.glas) != 0)
+		if(typeof manualSettings.glas !== 'undefined' && manualSettings.glas && this.ParseManualOptionValue(manualSettings.glas) != 0)
 		{
 			dates.GLAS = this.CalculatePickupDates(manualSettings.glas);
 		}
