@@ -62,5 +62,9 @@
   "3.1.0": {
     "en": "Welcome Belgium! The first Belgium API has been added: Recycle! app.",
 	  "nl": "Welkom België! De eerste Belgische API wordt nu uitgelezen: Recycle! app."
+  },
+  "3.1.1": {
+    "en": "Fixes for Avalex (#131), Afval App (#129) and Suez. P.S. Did you know Belgium has been added as well?!",
+	  "nl": "Avalex (#131), Afval App (#129) en Suez werken weer. P.S. Wist je al dat België nu ook ondersteund wordt?!"
   }
 }

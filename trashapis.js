@@ -125,7 +125,6 @@ function recycleApp(postcode, housenumber, street, country, callback)
 /**
  * General implementation of the afvalkalender API used by a lot of different vendors.
  */
-
 function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseUrl, callback) {
     console.log("Checking new general afvalkalenders with URL: " + baseUrl);
 
