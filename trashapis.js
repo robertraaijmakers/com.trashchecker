@@ -35,10 +35,6 @@ function afvalRmn(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl', callback);
 }
 
-function afvalAvalex(postcode, housenumber, street, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'avalex.nl', callback);
-}
-
 function afvalkalenderCure(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cure-afvalbeheer.nl', callback);
 }
@@ -71,9 +67,19 @@ function afvalwijzerStadswerk072(postcode, housenumber, street, country, callbac
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'www.stadswerk072.nl', callback);
 }
 
+function afvalwijzerPreZero(postcode, housenumber, street, country, callback) {
+    console.log("Checking Afvalwijzer Suez");
+    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelwijzer.prezero.nl', callback)
+}
+
 function afvalkalenderMeerlanden(postcode, housenumber, street, country, callback) {
     console.log("Checking Meerlanden");
     generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45", callback);
+}
+
+function afvalAvalex(postcode, housenumber, street, country, callback) {
+    console.log("Checking Avalex");
+    generalImplementationWasteApi(postcode, housenumber, country, 'f7a74ad1-fdbf-4a43-9f91-44644f4d4222', callback);
 }
 
 function twenteMilieu(postcode, housenumber, street, country, callback) {
@@ -894,7 +900,8 @@ function afvalapp(postcode, homenumber, street, country, callback) {
                     dates[curr] = [];
                 }
                 else {
-                    dates[curr].push(respArray[i]);
+                    var verifiedDate = verifyDate(respArray[i]);
+                    dates[curr].push(verifiedDate);
                 }
             }
 
@@ -902,6 +909,7 @@ function afvalapp(postcode, homenumber, street, country, callback) {
                 console.log('Invalid input');
                 return callback(null, {});
             } else { //validate the response
+                console.log(dates);
                 return callback(null, dates);
             }
         });
@@ -913,80 +921,9 @@ function afvalapp(postcode, homenumber, street, country, callback) {
     });
 }
 
-function afvalwijzerSuez(postcode, housenumber, street, country, callback) {
-    console.log("Checking Afvalwijzer Suez");
-
-    var fDates = {};
-    if (country !== "NL") {
-        console.log('unsupported country');
-        return callback(new Error('unsupported country'));
-    }
-
-    var url = `https://inzamelwijzer.suez.nl/adres/${postcode.replace(/ +/g, "")}:${housenumber}`;
-
-    request(url, function (err, res, body) {
-        if (!err && res.statusCode == 200) {
-
-            var $ = cheerio.load(res.body);
-            $('#ophaaldata li').each((i, elem) => {
-                try {
-                    console.log(`datum:${elem.children[1].children[3].children[0].data.trim()}`);
-                    console.log(`href: ${elem.children[1].attribs.href}`);
-
-                    var dateString = elem.children[1].children[3].children[0].data.trim();
-                    var splitted = dateString.split(" ");
-
-                    if(typeof splitted[2] === 'undefined')
-                    {
-                        // Skip, not a valid date
-                        console.log(`datum: ${elem.children[1].children[3].children[0].data.trim()}`);
-                        return;
-                    }
-
-                    var dateString = splitted[0] + " " + splitted[1] + " " + splitted[2];
-                    var dateStr = parseDate(dateString);
-
-                    switch (elem.children[1].attribs.href) {
-                        case '/afvalstroom/1':
-                            if (!fDates.GFT) fDates.GFT = [];
-                            fDates.GFT.push(dateStr);
-                            break;
-                        case '/afvalstroom/2':
-                            if (!fDates.PAPIER) fDates.PAPIER = [];
-                            fDates.PAPIER.push(dateStr);
-                            break;
-                        case '/afvalstroom/3':
-                            if (!fDates.REST) fDates.REST = [];
-                            fDates.REST.push(dateStr);
-                            break;
-                        case '/afvalstroom/4':
-                            if (!fDates.PLASTIC) fDates.PLASTIC = [];
-                            fDates.PLASTIC.push(dateStr);
-                            break;
-                        case '/afvalstroom/6':
-                            if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
-                            fDates.TEXTIEL.push(dateStr);
-                            break;
-                        default:
-                            console.log('defaulted', elem.children[1].attribs.href);
-                    }
-                } catch (error) {
-                    return callback(new Error('Date format Error'));
-                }
-            });
-            console.log(fDates);
-            return callback(null, fDates);
-        }
-        else {
-            return callback(new Error('Invalid location'));
-        }
-    });
-}
-
 /**
  * Helper functions used by different API implementations
  */
-
 function addToDates(key, datesToAdd, dates) {
     for (var i = 0; i < datesToAdd.length; i++) {
         var date = datesToAdd[i];
@@ -1079,6 +1016,18 @@ function parseDate(dateString) {
     }
 }
 
+function verifyDate(dateString) {
+    var dateArray = dateString.split("-");
+    if(dateArray[0].length === 4)
+    {
+        return dateString;
+    }
+    else
+    {
+        return dateArray[2] + "-" + dateArray[1] + "-" + dateArray[0];
+    }
+}
+
 /**
  * List of providers consuming different API implementations
  */
@@ -1087,7 +1036,7 @@ function parseDate(dateString) {
 apiList.push({ name: "Afval App", id: "afa", execute: afvalapp });
 apiList.push({ name: "Mijn Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
 apiList.push({ name: "Den Bosch Afvalstoffendienstkalender", id: "dbafw", execute: denBoschAfvalstoffendienstCalendar });
-apiList.push({ name: "Afvalwijzer Suez", id: "arn", execute: afvalwijzerSuez });
+apiList.push({ name: "Afvalwijzer Pre Zero", id: "arn", execute: afvalwijzerPreZero });
 apiList.push({ name: "Afvalkalender Cure", id: "acu", execute: afvalkalenderCure })
 apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCyclus });
 apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });

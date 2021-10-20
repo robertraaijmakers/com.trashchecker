@@ -12,12 +12,12 @@ Here you can find information regarding:
 A lot of cities are supported with this trashcan reminder. If your city is not supported you can always add your schedule manually. You can add new cities yourself, but requests to add new cities aren't honoured. If you wish to contribute to the project (for example by adding support for a city). I would advise you to take a look at [this explanation](developer-guidelines.md).
 
 ### Netherlands
-- [Afvalwijzer Suez](https://inzamelwijzer.suez.nl/)
 - [Afvalkalender ACV](https://www.acv-groep.nl/)
 - [Afvalkalender Almere](https://almere.ximmio.com/modules/53d8db94-7945-42fd-9742-9bbc71dbe4c1/kalender/)
 - [Afvalkalender Circulus-Berkel](https://mijn.circulus-berkel.nl)
 - [Afvalkalender Meerlanden](https://afvalkalender.meerlanden.nl)
 - [Afvalkalender Peel en Maas](https://afvalkalender.peelenmaas.nl)
+- [Afvalkalender Pre Zero](https://inzamelwijzer.prezero.nl/)
 - [Afvalkalender Venray](https://afvalkalender.venray.nl)
 - [Afvalkalender ZRD](https://afvalkalender.zrd.nl)
 - [Avalex](https://www.avalex.nl/)
