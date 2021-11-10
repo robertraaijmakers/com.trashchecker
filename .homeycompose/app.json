@@ -5,7 +5,7 @@
     "en": "Trashcan Reminder 2.0",
     "nl": "Afval Herinnering 2.0"
   },
-  "version": "3.1.1",
+  "version": "3.1.3",
   "platforms": ["local"],
   "compatibility": ">=5.0",
   "author": {
@@ -17,32 +17,8 @@
   "contributors": {
     "developers": [
       {
-        "name": "Arthur Stemmer",
-        "email": "apstemmer@hotmail.com"
-      },
-      {
-        "name": "Jeroen Brosens",
-        "email": "j.brosens@gmail.com"
-      },
-      {
-        "name": "Marcel Timmermans",
-        "email": "marcel@timmermans.us"
-      },
-      {
-        "name": "Maurice Wingbermuhle",
-        "email": "maurice@mwict.nl"
-      },
-      {
-        "name": "Remco Hannink",
-        "email": "remco@hannink.org"
-      },
-      {
         "name": "Robert Raaijmakers",
         "email": "dutchfighter@live.nl"
-      },
-      {
-        "name": "Wouter Carabain",
-        "email": "wcarabain@gmail.com"
       }
     ]
   },
