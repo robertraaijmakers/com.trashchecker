@@ -424,9 +424,13 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                                                 fDates.PAPIER.push(date);
                                                 break;
                                             case "PLASTIC":
-                                            case "PACKAGES":
                                                 if (!fDates.PLASTIC) fDates.PLASTIC = [];
                                                 fDates.PLASTIC.push(date);
+                                                break;
+                                            case "PACKAGES":
+                                            case "PMD":
+                                                if (!fDates.PMD) fDates.PMD = [];
+                                                fDates.PMD.push(date);
                                                 break;
                                             case "TEXTILE":
                                                 if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
