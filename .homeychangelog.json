@@ -37,34 +37,37 @@
   },
   "3.0.4": {
     "en": "Added help pages to the github repository, here you can find example flows and information on how to configure the app!",
-	  "nl": "Aan de github repository zijn nu help pagina's toegevoegd zodat iedereen gemakkelijk de app kan configureren en voorbeelden kan vinden!"
+    "nl": "Aan de github repository zijn nu help pagina's toegevoegd zodat iedereen gemakkelijk de app kan configureren en voorbeelden kan vinden!"
   },
   "3.0.6": {
     "en": "Fixt issue with UTC vs local time causing flows running at midnight to give wrong data.",
-	  "nl": "Issues met time (local vs UTC) opgelost waardoor sommige flows om middernacht onjuiste resultaten gaven."
+    "nl": "Issues met time (local vs UTC) opgelost waardoor sommige flows om middernacht onjuiste resultaten gaven."
   },
   "3.0.7": {
     "en": "Fixed Meerlanden API.",
-	  "nl": "Issue met Meerlanden API opgelost."
+    "nl": "Issue met Meerlanden API opgelost."
   },
   "3.0.10": {
     "en": "Dutchy- (Edwin) added the Waarlanden reinigingsdienst API.",
-	  "nl": "Dutchy- (Edwin) heeft ondersteuning voor Waarlanden reinigingsdienst toegevoegd."
+    "nl": "Dutchy- (Edwin) heeft ondersteuning voor Waarlanden reinigingsdienst toegevoegd."
   },
   "3.0.11": {
     "en": "Added fix for Twente Milieu API",
-	  "nl": "Twente Milieu API werkt weer"
+    "nl": "Twente Milieu API werkt weer"
   },
   "3.0.12": {
     "en": "Added support for Almere, Stadswerk and fixes for some of the used APIs",
-	  "nl": "Almere en Stadswerk zijn toegevoegd. Plus nog wat andere APIs weer gefixt"
+    "nl": "Almere en Stadswerk zijn toegevoegd. Plus nog wat andere APIs weer gefixt"
   },
   "3.1.0": {
     "en": "Welcome Belgium! The first Belgium API has been added: Recycle! app.",
-	  "nl": "Welkom België! De eerste Belgische API wordt nu uitgelezen: Recycle! app."
+    "nl": "Welkom België! De eerste Belgische API wordt nu uitgelezen: Recycle! app."
   },
   "3.1.1": {
     "en": "Fixes for Avalex (#131), Afval App (#129) and Suez. P.S. Did you know Belgium has been added as well?!",
-	  "nl": "Avalex (#131), Afval App (#129) en Suez werken weer. P.S. Wist je al dat België nu ook ondersteund wordt?!"
+    "nl": "Avalex (#131), Afval App (#129) en Suez werken weer. P.S. Wist je al dat België nu ook ondersteund wordt?!"
+  },
+  "3.1.3": {
+    "en": "Some minor bugfixes with regards to manual date settings"
   }
 }
