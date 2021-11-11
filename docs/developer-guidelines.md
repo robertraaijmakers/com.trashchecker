@@ -1,28 +1,12 @@
 # Developers
-Because trash collection is organized by the local city authorities there is no national database with all the
-collection dates. However, many cities provide the dates on which trash will be collected openly. Because it would take a lot of time to write a handler for ech of the 390 municipalities in the Netherlands and the 589(!) in Belgium I have decided to make it easy for developers to add a handler for their city. You can submit your handler through a pull-request [here](https://github.com/robertraaijmakers/com.athom.trashchecker). I will explain how this works:
+Because trash collection is organized by the local city authorities there is no national database with all the collection dates. However, many cities provide the dates on which trash will be collected openly. Because it would take a lot of time to write a handler for ech of the 390 municipalities in the Netherlands and the 589(!) in Belgium we made it easy for developers to add a handler for their city. You can submit your handler through a pull-request [here](https://github.com/robertraaijmakers/com.athom.trashchecker). I will explain how this works:
 
-In the file [trashapis.js](https://github.com/robertraaijmakers/com.trashchecker/blob/beta/trashapis.js) there are functions for each trash data provider the function takes a postcode, a house number, a country and a callback.
+In the file [trashapis.js](https://github.com/robertraaijmakers/com.trashchecker/blob/beta/trashapis.js) there are functions for each trash data provider the function takes a postcode, a house number, a street (for Belgium), a country and a callback.
 
 ```
-function(postcode, homenumber, country, callback){
+function yourTrashCollectionProviderName(postcode, housenumber, street, country, callback) {
 
-	if(!isDataValid(postcode, homenumber, country)){
-		return callback(new Error('unsupported city'));
-	}
-
-	request('http://www.mytrashapi.com/path/to/api',function(err, res, body){
-		let dates = {}
-		/*
-		parse response, put in object(dates in this example) using required format
-        .
-        .
-        .
-    and give it back using the callback
-		*/
-		return callback(null, dates)
-	});
-
+	/** Your custom trash collection implementation **/
 }
 
 ```
@@ -54,3 +38,40 @@ Currently the supported trash types are (these are also the required property na
 - TEXTIEL
 - GROF
 - KERSTBOOM
+
+In the Netherlands there are a couple of vendors that provide "default" software functionality to municipalities and/or regions. If your provider uses one of these default software packages then the implementation is even more easy.
+
+The following providers are supported:
+- RecycleApp
+- Waste API
+- Mijn Afvalwijzer (old)
+- Mijn Afvalwijzer (new)
+
+The implementation for the Waste API is as follows. You need two parameters that differ per implementation. You need the Company ID and the API URL.
+```
+function twenteMilieu(postcode, housenumber, street, country, callback) {
+    console.log("Checking Twente Milieu");
+    generalImplementationWasteApi(postcode, housenumber, country, "<< enter the company ID, this is a GUID >>", callback, "<< enter the API URL e.g. organizationname.ximmio.com >>");
+}
+```
+
+The implementation for the Recycle App is as follows. For this you don't need any parameters.
+```
+function recycleApp(postcode, housenumber, street, country, callback)
+    generalImplementationRecycleApp(postcode, housenumber, street, country, callback);
+}
+```
+
+The implementation for Mijn Afvalwijzer (old) is as follows. You need to get the API URL and enter it as a parameter.
+```
+function rovaAfvalkalender(postcode, housenumber, street, country, callback) {
+    generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "<< enter the API URL e.g. https://inzamelkalender.rova.nl/nl/>>", callback);
+}
+```
+
+The implementation for Mijn Afvalwijzer (new) is as follows. You need to get the API URL and enter it as a parameter.
+```
+function afvalkalenderCyclus(postcode, housenumber, street, country, callback) {
+    newGeneralAfvalkalendersNederland(postcode, housenumber, country, '<< enter the API URL e.g. afvalkalender.cyclusnv.nl>>', callback);
+}
+```

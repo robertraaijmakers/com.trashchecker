@@ -679,7 +679,6 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country,
 /**
  * Vendor specific API implementations
  */
-
 function recycleManager(postcode, housenumber, street, country, callback) {
     if (country !== "NL") {
         console.log('unsupported country');
