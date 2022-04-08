@@ -73,5 +73,9 @@
   "3.1.4": {
     "en": "Fixed implementation of Circulus-Berkel (GitHub: #137)",
     "nl": "Circulus-Berkel API werkt weer (GitHub: #137)"
+  },
+  "3.1.5": {
+    "en": "Fixed implementation of Circulus-Berkel (GitHub: #138)",
+    "nl": "Circulus-Berkel API werkt weer (GitHub: #138)"
   }
 }

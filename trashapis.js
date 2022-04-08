@@ -63,10 +63,6 @@ function GadGooiAndVechtstreek(postcode, housenumber, street, country, callback)
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.gad.nl', callback);
 }
 
-function circulusBerkel(postcode, housenumber, street, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.circulus-berkel.nl', callback);
-}
-
 function afvalwijzerStadswerk072(postcode, housenumber, street, country, callback) {
     newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'www.stadswerk072.nl', callback);
 }
@@ -845,6 +841,93 @@ function afvalapp(postcode, homenumber, street, country, callback) {
         return callback(new Error('Error occured during request: ' + err.message));
     });
 }
+
+function circulusBerkel(postcode, homenumber, street, country, callback) {
+
+    if (country !== "NL") {
+        return callback(new Error('unsupported country'));
+    }
+
+    try {
+        //Get a session token
+        request('https://mijn.circulus.nl/', (err, response, body) => {
+            let cookie = response.headers['set-cookie'];
+            let authenticityToken = null;
+            for (var i = 0; i < cookie.length; i++) {
+                if (cookie[i].startsWith('CB_SESSION')) { var j = cookie[i].indexOf('___AT='); var k = cookie[i].indexOf('&', j); authenticityToken = cookie[i].substring(j + 6, k); }
+            }
+            var headers = { 'Content-Type': 'application/json', 'Cookie': cookie };
+            var options = {
+                url: 'https://mijn.circulus.nl/register/zipcode.json',
+                method: 'POST',
+                form: { authenticityToken: authenticityToken, zipCode: postcode, number: homenumber },
+                headers: headers
+            };
+
+            var startDate = new Date(); //startDate.set
+            startDate = dateFormat(startDate.setDate(startDate.getDate() - 14), "yyyy-mm-dd");
+
+            var endDate = new Date();
+            endDate = dateFormat(endDate.setDate(endDate.getDate() + 90), "yyyy-mm-dd");
+
+            //Get a security token
+            request(options, function (err, res, body) {
+                let cookie = res.headers['set-cookie'];
+                var headers = { 'Content-Type': 'application/json', 'Cookie': cookie };
+                var options = {
+                    url: 'https://mijn.circulus.nl/afvalkalender.json?from=' + startDate + '&till=' + endDate,
+                    method: 'GET',
+                    headers: headers
+                };
+                //Execute the real trash request
+                request(options, function (err, res, body) {
+                    let dates = {}
+                    var json_body = JSON.parse(body);
+
+                    if(json_body == null || typeof json_body.customData === 'undefined' || typeof json_body.customData.response === "undefined" || typeof json_body.customData.response.garbage === 'undefined')
+                    {
+                        console.log(json_body);
+                        return callback(new Error('Something went wrong while retrieving the data.'));
+                    }
+
+                    var o = json_body.customData.response.garbage;
+                    for (var i = 0; i < o.length; i++) {
+                        var key = o[i].code.toLowerCase();
+                        switch (key) {
+                            case 'pmd':
+                            case 'gft':
+                            case 'rest':
+                                key = key.toUpperCase();
+                                break;
+                            case 'drocodev':
+                                key = "PLASTIC";
+                                break;
+                            case 'zwakra':
+                                key = "PMD";
+                                break;
+                            case 'pap':
+                                key = 'PAPIER';
+                                break;
+                            case 'best':
+                                key = 'TEXTIEL';
+                                break;
+                            default:
+                                key = key.toUpperCase();
+                                break;
+                        }
+
+                        addToDates(key, o[i].dates, dates);
+                    }
+                    return callback(null, dates);
+                });
+            });
+        });
+    } catch (ex) {
+        //res.write('Error: ' + ex);
+        return callback(new Error('Error: ' + ex));
+    }
+}
+
 
 /**
  * Helper functions used by different API implementations

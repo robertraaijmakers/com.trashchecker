@@ -3,3 +3,6 @@
 node_modules/
 app.json
 build/
+
+# Added by Homey CLI
+/.homeybuild/
