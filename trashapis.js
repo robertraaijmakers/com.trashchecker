@@ -783,7 +783,7 @@ function circulusBerkel(postcode, homenumber, street, country, callback) {
 
     try {
         //Get a session token
-        request('https://mijn.circulus-berkel.nl/', (err, response, body) => {
+        request('https://mijn.circulus.nl/', (err, response, body) => {
             let cookie = response.headers['set-cookie'];
             let authenticityToken = null;
             for (var i = 0; i < cookie.length; i++) {
@@ -791,7 +791,7 @@ function circulusBerkel(postcode, homenumber, street, country, callback) {
             }
             var headers = { 'Content-Type': 'application/json', 'Cookie': cookie };
             var options = {
-                url: 'https://mijn.circulus-berkel.nl/register/zipcode.json',
+                url: 'https://mijn.circulus.nl/register/zipcode.json',
                 method: 'POST',
                 form: { authenticityToken: authenticityToken, zipCode: postcode, number: homenumber },
                 headers: headers
@@ -808,7 +808,7 @@ function circulusBerkel(postcode, homenumber, street, country, callback) {
                 let cookie = res.headers['set-cookie'];
                 var headers = { 'Content-Type': 'application/json', 'Cookie': cookie };
                 var options = {
-                    url: 'https://mijn.circulus-berkel.nl/afvalkalender.json?from=' + startDate + '&till=' + endDate,
+                    url: 'https://mijn.circulus.nl/afvalkalender.json?from=' + startDate + '&till=' + endDate,
                     method: 'GET',
                     headers: headers
                 };
