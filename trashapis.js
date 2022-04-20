@@ -234,18 +234,18 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
         if (!err && res.statusCode == 200) {
 
             // Stip lot of data from body to prevent memory overflow
-            var searchResultIndex = res.body.indexOf('<table width="100%" cellpadding="0" cellspacing="0" role=\'presentation\'>');
+            var searchResultIndex = body.indexOf('<table width="100%" cellpadding="0" cellspacing="0" role=\'presentation\'>');
 
             var regex = /<a href="#waste-(.*) class="wasteInfoIcon/i;
-            var searchResultIndex = res.body.search(regex);
+            var searchResultIndex = body.search(regex);
 
 
             console.log(searchResultIndex);
 
             while(searchResultIndex >= 0)
             {
-                var endString = res.body.indexOf('</a>', searchResultIndex);
-                var result = res.body.substr(searchResultIndex, endString-searchResultIndex+4);
+                var endString = body.indexOf('</a>', searchResultIndex);
+                var result = body.substr(searchResultIndex, endString-searchResultIndex+4);
                 var $ = cheerio.load(result);
 
                 $('a.wasteInfoIcon p').each((i, elem) => {
@@ -330,7 +330,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                     elem = null; // clear memory leak?
                 });
 
-                var nextResult = res.body.substring(searchResultIndex+4).search(regex);
+                var nextResult = body.substring(searchResultIndex+4).search(regex);
                 if(nextResult > 0)
                 {
                     searchResultIndex = nextResult + searchResultIndex + 4;
