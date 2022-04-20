@@ -22,7 +22,7 @@ it('API - RD4', function(done) {
         done();
     });
 });
-
+/*
 it('API - Afvalwijzer', function(done) {
     var postcode = "9681TP";
     var homenumber = 5;
@@ -39,6 +39,26 @@ it('API - Afvalwijzer', function(done) {
     result['execute'](postcode,homenumber,"",country,
     (err,result) => {
         expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
+        done();
+    });
+});
+
+it('API - Reinis', function(done) {
+    var postcode = "3204BJ";
+    var homenumber = 5;
+    var country = "NL";
+
+    var result = apiArray.find(o => o.id === "afnw");
+    if(result == null || typeof result === 'undefined')
+    {
+        console.log("Invalid API");
+        done();
+    }
+    
+    // only load that API, this is so that we won't send requests to all data providers all the time.
+    result['execute'](postcode,homenumber,"",country,
+    (err,result) => {
+        expect(validateApiResults(err, result, "afnw", "API - Reinis")).to.be.true;
         done();
     });
 });
@@ -396,7 +416,7 @@ it('API - Afval App', function(done) {
       done();
     });
   });
-
+*/
 function validateApiResults(err, result, apiId, apiName)
 {
     console.log("Results for " + apiId + " - " + apiName);

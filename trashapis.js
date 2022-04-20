@@ -87,6 +87,11 @@ function twenteMilieu(postcode, housenumber, street, country, callback) {
     generalImplementationWasteApi(postcode, housenumber, country, "8d97bb56-5afd-4cbc-a651-b4f7314264b4", callback, "twentemilieuapi.ximmio.com");
 }
 
+function nissewaard(postcode, housenumber, street, country, callback) {
+    console.log("Checking Nissewaard");
+    generalImplementationWasteApi(postcode, housenumber, country, "9dc25c8a-175a-4a41-b7a1-83f237a80b77", callback, "reinis.ximmio.com");
+}
+
 function gemeenteHellendoorn(postcode, housenumber, street, country, callback) {
     console.log("Checking Gemeente Hellendoorn");
     generalImplementationWasteApi(postcode, housenumber, country, "24434f5b-7244-412b-9306-3a2bd1e22bc1", callback, "wasteapi.ximmio.com");
@@ -746,31 +751,66 @@ function recycleManager(postcode, housenumber, street, country, callback) {
 function afvalkalenderRD4(postcode, housenumber, street, country, callback) {
     console.log("Checking afvalkalender RD4");
 
-    var url = "https://rd4.syzygy.eu/" + postcode + "/" + housenumber + "/";
+    const d = new Date();
+    var url = "https://data.rd4.nl/api/v1/waste-calendar?postal_code="+postcode.substring(0,4)+"+"+postcode.substring(4,6)+"&house_number="+housenumber+"&year="+d.getFullYear()+"&types[]=residual_waste&types[]=gft&types[]=paper&types[]=pruning_waste&types[]=pmd&types[]=best_bag&types[]=christmas_trees";
 
     request(url, function (err, res, body) {
+
         if (!err && res.statusCode == 200) {
           try {
-            var result = JSON.parse(res.body);
-                    var transformedResult = {};
+            var result = JSON.parse(body);
+            if(!result.success)
+            {
+                return callback(new Error(result.message));                
+            }
 
-                    for(var type in result) {
-                        transformedResult[type] = [];
-                        result[type].forEach(function(value) {
-                            var splitted = value.split('-');
+            var fDates = {};
 
-                            if(splitted[2].len == 4)
-                            {
-                                transformedResult[type].push(splitted[2] + '-' + splitted[1] + '-' + splitted[0]);
-                            }
-                            else
-                            {
-                                transformedResult[type].push(splitted[0] + '-' + splitted[1] + '-' + splitted[2]);
-                            }
-                        });
-                    }
+            for(var et in result.data.items[0])
+            {
+                var entry = result.data.items[0][et];
+                var dateStr = entry.date.substring(8,10) + "-" + entry.date.substring(5,7) + "-" + entry.date.substring(0,4);
 
-            return callback(null, transformedResult);
+                switch(entry.type)
+                {
+                    case 'gft':
+                        if (!fDates.GFT) fDates.GFT = [];
+                        fDates.GFT.push(dateStr);
+                        break;
+                    case 'paper':
+                        if (!fDates.PAPIER) fDates.PAPIER = [];
+                        fDates.PAPIER.push(dateStr);
+                        break;
+                    case 'plastic':
+                        if (!fDates.PLASTIC) fDates.PLASTIC = [];
+                        fDates.PLASTIC.push(dateStr);
+                        break;
+                    case 'residual_waste':
+                        if (!fDates.REST) fDates.REST = [];
+                        fDates.REST.push(dateStr);
+                        break;
+                    case 'pmd':
+                        if (!fDates.PMD) fDates.PMD = [];
+                        fDates.PMD.push(dateStr);
+                        break;
+                    case 'best_bag':
+                        if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+                        fDates.TEXTIEL.push(dateStr);
+                        break;
+                    case 'pruning_waste':
+                        if (!fDates.GROF) fDates.GROF = [];
+                        fDates.GROF.push(dateStr);
+                        break;
+                    case 'christmas_trees':
+                        if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
+                        fDates.KERSTBOOM.push(dateStr);
+                        break;
+                    default:
+                        console.log('Defaulted. Element not found:', entry.type);
+                }
+            }
+
+            return callback(null, fDates);
           } catch (ex) {
             return callback(new Error('Error: ' + ex));
           }
@@ -923,11 +963,9 @@ function circulusBerkel(postcode, homenumber, street, country, callback) {
             });
         });
     } catch (ex) {
-        //res.write('Error: ' + ex);
         return callback(new Error('Error: ' + ex));
     }
 }
-
 
 /**
  * Helper functions used by different API implementations
@@ -1055,6 +1093,7 @@ apiList.push({ name: "Recyclemanager", id: "remg", execute: recycleManager });
 apiList.push({ name: "Afvalkalender Meerlanden", id: "akm", execute: afvalkalenderMeerlanden });
 apiList.push({ name: "Afvalkalender Peel en Maas", id: "akpm", execute: afvalkalenderPeelEnMaas });
 apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderVenray });
+apiList.push({ name: "Afvalkalender Reinis", id: "aknw", execute: nissewaard });
 apiList.push({ name: "Inzamelkalender HVC", id: "hvc", execute: inzamelkalenderHVC });
 apiList.push({ name: "Dar Afvalkalender", id: "dar", execute: darAfvalkalender });
 apiList.push({ name: "Afvalkalender RD4", id: "rd4", execute: afvalkalenderRD4 });

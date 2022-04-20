@@ -12,6 +12,10 @@ module.exports = {
 			body.api,
 			(isValid, obj, apiId) => resolve(isValid)
 		  );
+		}).catch(function(error)
+		{
+			console.log('Error in API: ', body);
+			console.log('Errormessage: ', error);
 		});
 	}
 };
