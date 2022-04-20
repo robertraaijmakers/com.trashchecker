@@ -3,7 +3,6 @@
 var apiList = [];
 var https = require('https');
 var dateFormat = require('dateformat');
-var request = require('request');
 var cheerio = require('cheerio');
 var ical = require('ical');
 
@@ -11,213 +10,217 @@ var ical = require('ical');
  * Different vendors using the same three base API's
  */
 
-function mijnAfvalWijzer(postcode, housenumber, street, country, callback) {
-    generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "https://www.mijnafvalwijzer.nl/nl/", callback);
+function mijnAfvalWijzer(postcode, housenumber, street, country) {
+    return generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "https://www.mijnafvalwijzer.nl/nl/");
 }
 
-function denBoschAfvalstoffendienstCalendar(postcode, housenumber, street, country, callback) {
-    generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, 'http://denbosch.afvalstoffendienstkalender.nl/nl/', callback);
+function denBoschAfvalstoffendienstCalendar(postcode, housenumber, street, country) {
+    return generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, 'http://denbosch.afvalstoffendienstkalender.nl/nl/');
 }
 
-function rovaAfvalkalender(postcode, housenumber, street, country, callback) {
-    generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "https://inzamelkalender.rova.nl/nl/", callback);
+function rovaAfvalkalender(postcode, housenumber, street, country) {
+    return generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "https://inzamelkalender.rova.nl/nl/");
 }
 
-function afvalkalenderCyclus(postcode, housenumber, street, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cyclusnv.nl', callback);
+function afvalkalenderCyclus(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cyclusnv.nl');
 }
 
-function afvalkalenderZrd(postcode, housenumber, street, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.zrd.nl', callback);
+function afvalkalenderZrd(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.zrd.nl');
 }
 
-function afvalRmn(postcode, housenumber, street, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl', callback);
+function afvalRmn(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl');
 }
 
-function afvalkalenderCure(postcode, housenumber, street, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cure-afvalbeheer.nl', callback);
+function afvalkalenderCure(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cure-afvalbeheer.nl');
 }
 
-function afvalkalenderPeelEnMaas(postcode, housenumber, street, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.peelenmaas.nl', callback);
+function afvalkalenderPeelEnMaas(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.peelenmaas.nl');
 }
 
-function afvalkalenderVenray(postcode, housenumber, street, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.venray.nl', callback);
+function afvalkalenderVenray(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.venray.nl');
 }
 
-function darAfvalkalender(postcode, housenumber, street, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.dar.nl', callback);
+function darAfvalkalender(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.dar.nl');
 }
 
-function inzamelkalenderHVC(postcode, housenumber, street, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.hvcgroep.nl', callback);
+function inzamelkalenderHVC(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.hvcgroep.nl');
 }
 
-function BlinkAfvalkalender(postcode, housenumber, street, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'mijnblink.nl', callback);
+function BlinkAfvalkalender(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'mijnblink.nl');
 }
 
-function GadGooiAndVechtstreek(postcode, housenumber, street, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.gad.nl', callback);
+function GadGooiAndVechtstreek(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelkalender.gad.nl');
 }
 
-function afvalwijzerStadswerk072(postcode, housenumber, street, country, callback) {
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'www.stadswerk072.nl', callback);
+function afvalwijzerStadswerk072(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'www.stadswerk072.nl');
 }
 
-function afvalwijzerPreZero(postcode, housenumber, street, country, callback) {
+function afvalwijzerPreZero(postcode, housenumber, street, country) {
     console.log("Checking Afvalwijzer Suez");
-    newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelwijzer.prezero.nl', callback)
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelwijzer.prezero.nl')
 }
 
-function afvalkalenderMeerlanden(postcode, housenumber, street, country, callback) {
+function afvalkalenderMeerlanden(postcode, housenumber, street, country) {
     console.log("Checking Meerlanden");
-    generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45", callback);
+    return generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45");
 }
 
-function afvalAvalex(postcode, housenumber, street, country, callback) {
+function afvalAvalex(postcode, housenumber, street, country) {
     console.log("Checking Avalex");
-    generalImplementationWasteApi(postcode, housenumber, country, 'f7a74ad1-fdbf-4a43-9f91-44644f4d4222', callback);
+    return generalImplementationWasteApi(postcode, housenumber, country, 'f7a74ad1-fdbf-4a43-9f91-44644f4d4222');
 }
 
-function twenteMilieu(postcode, housenumber, street, country, callback) {
+function twenteMilieu(postcode, housenumber, street, country) {
     console.log("Checking Twente Milieu");
-    generalImplementationWasteApi(postcode, housenumber, country, "8d97bb56-5afd-4cbc-a651-b4f7314264b4", callback, "twentemilieuapi.ximmio.com");
+    return generalImplementationWasteApi(postcode, housenumber, country, "8d97bb56-5afd-4cbc-a651-b4f7314264b4", "twentemilieuapi.ximmio.com");
 }
 
-function nissewaard(postcode, housenumber, street, country, callback) {
+function nissewaard(postcode, housenumber, street, country) {
     console.log("Checking Nissewaard");
-    generalImplementationWasteApi(postcode, housenumber, country, "9dc25c8a-175a-4a41-b7a1-83f237a80b77", callback, "reinis.ximmio.com");
+    return generalImplementationWasteApi(postcode, housenumber, country, "9dc25c8a-175a-4a41-b7a1-83f237a80b77", "reinis.ximmio.com");
 }
 
-function gemeenteHellendoorn(postcode, housenumber, street, country, callback) {
+function gemeenteHellendoorn(postcode, housenumber, street, country) {
     console.log("Checking Gemeente Hellendoorn");
-    generalImplementationWasteApi(postcode, housenumber, country, "24434f5b-7244-412b-9306-3a2bd1e22bc1", callback, "wasteapi.ximmio.com");
+    return generalImplementationWasteApi(postcode, housenumber, country, "24434f5b-7244-412b-9306-3a2bd1e22bc1", "wasteapi.ximmio.com");
 }
 
-function acvAfvalkalender(postcode, housenumber, street, country, callback)
+function acvAfvalkalender(postcode, housenumber, street, country)
 {
     console.log("Checking ACV afvalkalender");
-    generalImplementationWasteApi(postcode, housenumber, country, "f8e2844a-095e-48f9-9f98-71fceb51d2c3", callback, "wasteapi.ximmio.com");
+    return generalImplementationWasteApi(postcode, housenumber, country, "f8e2844a-095e-48f9-9f98-71fceb51d2c3", "wasteapi.ximmio.com");
 }
 
-function almereAfvalkalender(postcode, housenumber, street, country, callback)
+function almereAfvalkalender(postcode, housenumber, street, country)
 {
     console.log("Checking Almere afvalkalender");
-    generalImplementationWasteApi(postcode, housenumber, country, "53d8db94-7945-42fd-9742-9bbc71dbe4c1", callback, "wasteapi.ximmio.com");
+    return generalImplementationWasteApi(postcode, housenumber, country, "53d8db94-7945-42fd-9742-9bbc71dbe4c1", "wasteapi.ximmio.com");
 }
 
-function areaReiniging(postcode, housenumber, street, country, callback)
+function areaReiniging(postcode, housenumber, street, country)
 {
     console.log("Checking Area Reiniging");
-    generalImplementationWasteApi(postcode, housenumber, country, "adc418da-d19b-11e5-ab30-625662870761", callback);
+    return generalImplementationWasteApi(postcode, housenumber, country, "adc418da-d19b-11e5-ab30-625662870761");
 }
 
-function reinigingsdienstWaardlanden(postcode, housenumber, street, country, callback)
+function reinigingsdienstWaardlanden(postcode, housenumber, street, country)
 {
     console.log("Checking Reinigingsdienst Waardlanden");
-    generalImplementationWasteApi(postcode, housenumber, country, "942abcf6-3775-400d-ae5d-7380d728b23c", callback, "wasteapi.ximmio.com");
+    return generalImplementationWasteApi(postcode, housenumber, country, "942abcf6-3775-400d-ae5d-7380d728b23c", "wasteapi.ximmio.com");
 }
 
-function recycleApp(postcode, housenumber, street, country, callback)
+function recycleApp(postcode, housenumber, street, country)
 {
     console.log("Checking Recycle App");
-    generalImplementationRecycleApp(postcode, housenumber, street, country, callback);
+    return generalImplementationRecycleApp(postcode, housenumber, street, country);
 }
 
 /**
  * General implementation of the afvalkalender API used by a lot of different vendors.
  */
-function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseUrl, callback) {
+function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseUrl) {
     console.log("Checking new general afvalkalenders with URL: " + baseUrl);
 
     if (country !== "NL") {
         console.log('unsupported country');
-        return callback(new Error('unsupported country'));
+        return new Promise.reject(Error('Unsupported country'));
     }
 
-    var urlRequest = "https://" + baseUrl + "/adressen/" + postcode + ":" + housenumber;
-
-    request(urlRequest, function (err, res, body) {
-        if (!err && res.statusCode == 200) {
-            var result = "{}";
-
-            try {
-                result = JSON.parse(body);
-            }
-            catch(err)
+    var retrieveIdentificationRequest = httpsPromise({
+        hostname: baseUrl,
+        path: `/adressen/${postcode}:${housenumber}`,
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+    
+    return new Promise(function(resolve, reject)
+    {
+        retrieveIdentificationRequest.then(function(result)
+        {            
+            if(result.length <= 0)
             {
-                return callback(new Error("Exception parsing JSON: " + err + " for base url " + baseUrl + " and zip code " + postcode));
-            }
-
-            if (result.length <= 0)
-            {
-                return callback(new Error('Invalid zipcode for: ' + baseUrl));
+                reject(new Error("Invalid zipcode for " + baseUrl));
             }
 
             var identificatie = result[0].bagid;
             console.log(identificatie);
 
-            var url = 'https://' + baseUrl + '/ical/' + identificatie;
-            console.log(url);
-            const r = request.defaults({
-                jar: true
+            var retrieveCalendar  = httpsPromise({
+                hostname: baseUrl,
+                path: `/ical/${identificatie}`,
+                method: 'GET'
             });
-            r.get(url, function (err, res, body) {
-                if (!err && res.statusCode == 200) {
-                    const dates = {};
-                    const entries = ical.parseICS(body);
-                    for (let i in entries) {
-                        const entry = entries[i];
-                        const dateStr = entry.start.getFullYear() + '-' + (('0' + (entry.start.getMonth() + 1)).slice(-2)) + "-" + ('0' + entry.start.getDate()).slice(-2);
 
-                        var description = entry.description.toLowerCase().trim();
+            retrieveCalendar.then(function(icalResult)
+            {
+                const dates = {};
+                const entries = ical.parseICS(icalResult);
+                for (let i in entries) {
+                    const entry = entries[i];
+                    const dateStr = entry.start.getFullYear() + '-' + (('0' + (entry.start.getMonth() + 1)).slice(-2)) + "-" + ('0' + entry.start.getDate()).slice(-2);
 
-                        if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
-                            if (!dates.GFT) dates.GFT = [];
-                            dates.GFT.push(dateStr);
-                        } else if (description.indexOf('rest') !== -1) {
-                            if (!dates.REST) dates.REST = [];
-                            dates.REST.push(dateStr);
-                        } else if (description.indexOf('pmd') !== -1 || description.indexOf('pd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
-                            if (!dates.PMD) dates.PMD = [];
-                            dates.PMD.push(dateStr);
-                        } else if (description.indexOf('plastic') !== -1) {
-                            if (!dates.PLASTIC) dates.PLASTIC = [];
-                            dates.PLASTIC.push(dateStr);
-                        }  else if (description.indexOf('papier') !== -1) {
-                            if (!dates.PAPIER) dates.PAPIER = [];
-                            dates.PAPIER.push(dateStr);
-                        } else if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1) {
-                            if (!dates.TEXTIEL) dates.TEXTIEL = [];
-                            dates.TEXTIEL.push(dateStr);
-                        } else if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
-                            if (!dates.KERSTBOOM) dates.KERSTBOOM = [];
-                            dates.KERSTBOOM.push(dateStr);
-                        } else if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
-                            if (!dates.GROF) dates.GROF = [];
-                            dates.GROF.push(dateStr);
-                        } else if(description.indexOf('glas') !== -1) {
-                            if (!dates.GLAS) dates.GLAS = [];
-                            dates.GLAS.push(dateStr);
-                        } else {
-                            console.log("Unknown description: " + description);
-                        }
+                    var description = entry.description.toLowerCase().trim();
+
+                    if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
+                        if (!dates.GFT) dates.GFT = [];
+                        dates.GFT.push(dateStr);
+                    } else if (description.indexOf('rest') !== -1) {
+                        if (!dates.REST) dates.REST = [];
+                        dates.REST.push(dateStr);
+                    } else if (description.indexOf('pmd') !== -1 || description.indexOf('pd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
+                        if (!dates.PMD) dates.PMD = [];
+                        dates.PMD.push(dateStr);
+                    } else if (description.indexOf('plastic') !== -1) {
+                        if (!dates.PLASTIC) dates.PLASTIC = [];
+                        dates.PLASTIC.push(dateStr);
+                    }  else if (description.indexOf('papier') !== -1) {
+                        if (!dates.PAPIER) dates.PAPIER = [];
+                        dates.PAPIER.push(dateStr);
+                    } else if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1) {
+                        if (!dates.TEXTIEL) dates.TEXTIEL = [];
+                        dates.TEXTIEL.push(dateStr);
+                    } else if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
+                        if (!dates.KERSTBOOM) dates.KERSTBOOM = [];
+                        dates.KERSTBOOM.push(dateStr);
+                    } else if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
+                        if (!dates.GROF) dates.GROF = [];
+                        dates.GROF.push(dateStr);
+                    } else if(description.indexOf('glas') !== -1) {
+                        if (!dates.GLAS) dates.GLAS = [];
+                        dates.GLAS.push(dateStr);
+                    } else {
+                        console.log("Unknown description: " + description);
                     }
-
-                    console.log(dates);
-                    return callback(null, dates);
-                } else {
-                    return callback(new Error('Unable to download ical file'));
                 }
-            });
 
-        }
-        else {
-            return callback(new Error('Onbekende fout'));
-        }
+                console.log(dates);
+                resolve(dates);
+            })
+            .catch(function(error)
+            {
+                console.log("retrieve calender rejected");
+                console.log(error);
+                reject(error);
+            });
+        }).catch(function(error)
+        {
+            console.log("retrieve identification rejected");
+            console.log(error);
+            reject(error);
+        });
     });
 }
 
@@ -1073,6 +1076,42 @@ function verifyDate(dateString) {
         return dateArray[2] + "-" + dateArray[1] + "-" + dateArray[0];
     }
 }
+
+function httpsPromise({body, ...options}) {
+    return new Promise((resolve, reject) => {
+        const req = https.request({
+            ...options,
+        }, res => {
+            const chunks = [];
+            res.on('data', data => chunks.push(data))
+            res.on('end', () => {
+                let resBody = Buffer.concat(chunks);
+                switch(res.headers['content-type']) {
+                    case 'application/json':
+                        try {
+                            resBody = JSON.parse(resBody);
+                        }
+                        catch(error)
+                        {
+                            reject(new Error("Exception parsing JSON: " + err + " for base url " + baseUrl + " and zip code " + postcode));
+                        }
+                    break;
+                    default:
+                        resBody = resBody.toString();
+                    break;
+                }
+
+                resolve(resBody)
+            })
+        })
+        req.on('error', reject);
+        if(body) {
+            req.write(body);
+        }
+        req.end();
+    });
+}
+
 
 /**
  * List of providers consuming different API implementations

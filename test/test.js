@@ -2,7 +2,7 @@
 
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
-
+/*
 it('API - RD4', function(done) {
     var postcode = "6374BA";
     var homenumber = 159;
@@ -162,28 +162,22 @@ it('API - Afvalwijzer', function(done) {
         expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
         done();
     });
-});
+});*/
 
-it('API - Mijn Blink', function(done) {
+it('API - Mijn Blink', function() {
     var postcode = "5673RE";
     var homenumber = 2;
     var country = "NL";
+    var apiId = "mba";
+    var apiName = "API - Mijn Blink";
 
-    var result = apiArray.find(o => o.id === "mba");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "mba", "API - Mijn Blink")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
-
+/*
 it('API - Circulus Berkel', function(done) {
     var postcode = "7415TW";
     var homenumber = 66;
@@ -416,7 +410,20 @@ it('API - Afval App', function(done) {
       expect(validateApiResults(err, result, "afa", "API - Afval App")).to.be.true;
       done();
     });
-  });
+  });*/
+
+function testAPI(apiId, apiName, postcode, homenumber, streetName, country)
+{
+    var result = apiArray.find(o => o.id === apiId);
+    if(result == null || typeof result === 'undefined')
+    {
+        console.log("Invalid API");
+        return Promise.reject(new Error("Invalid API"));
+    }
+    
+    // only load that API, this is so that we won't send requests to all data providers all the time.
+    return result['execute'](postcode,homenumber,streetName,country);
+}
 
 function validateApiResults(err, result, apiId, apiName)
 {

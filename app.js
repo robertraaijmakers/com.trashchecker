@@ -431,19 +431,14 @@ class TrashcanReminder extends Homey.App
 			var result = apiArray.find(o => o.id === apiId);
 			if(result == null || typeof result === 'undefined')
 			{
-				return;
+				return Promise.error("API cannot be found.");
 			}
 			
 			// only load that API, this is so that we won't send requests to all data providers all the time.
-			result['execute'](postcode,homenumber,streetName,country,
-			(err,result) => {
-				if(err) {
-					console.log('Error in API', err);
-					
-					callback(false, this, null);
-					return;
-				}
-				else if(Object.keys(result).length > 0)
+			result['execute'](postcode,homenumber,streetName,country)
+			.then(function(result)
+			{
+				if(Object.keys(result).length > 0)
 				{
 					this.homey.settings.set('collectingDays', null);
 					
@@ -453,14 +448,17 @@ class TrashcanReminder extends Homey.App
 					
 					this.homey.settings.set('apiId', apiId);					
 					callback(true, this, apiId);
-					return;
 				}
 				else if(Object.keys(result).length === 0) {
 					console.log('No information found, go to settings to reset your API settings.');
 					
 					callback(false, this, null);
-					return;
 				}
+			})
+			.catch(function(error)
+			{
+				console.log(error);
+				callback(false, this, null);
 			});
 			
 			return;
@@ -511,12 +509,11 @@ class TrashcanReminder extends Homey.App
 			console.log(loop.iteration());
 			console.log(apiArray[loop.iteration()]);
 			
-			apiArray[loop.iteration()]['execute'](postcode,homenumber,country,
-			(err,result) => {
-				if(err) {
-					console.log('error while looping', err);
-					loop.next();
-				} else if(Object.keys(result).length > 0) {
+			apiArray[loop.iteration()]['execute'](postcode,homenumber,streetname,country)
+			.then(function(result)
+			{
+				if(Object.keys(result).length > 0)
+				{
 					newDates = result;
 					that.gdates = newDates;
 					
@@ -524,9 +521,15 @@ class TrashcanReminder extends Homey.App
 					this.homey.settings.set('collectingDays', newDates);
 					that.GenerateNewDaysBasedOnManualInput();
 					callback(true, that, apiArray[loop.iteration()]['id']);
-				} else if(Object.keys(result).length === 0) {
+				} 
+				else if(Object.keys(result).length === 0)
+				{
 					loop.next();
 				}
+			}).catch(function(err)
+			{
+				console.log('error while looping', err);
+				loop.next();
 			});
 		},
 		() => {
