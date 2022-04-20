@@ -22,7 +22,7 @@ it('API - RD4', function(done) {
         done();
     });
 });
-/*
+
 it('API - Afvalwijzer', function(done) {
     var postcode = "9681TP";
     var homenumber = 5;
@@ -42,6 +42,7 @@ it('API - Afvalwijzer', function(done) {
         done();
     });
 });
+
 
 it('API - Reinis', function(done) {
     var postcode = "3204BJ";
@@ -416,7 +417,7 @@ it('API - Afval App', function(done) {
       done();
     });
   });
-*/
+
 function validateApiResults(err, result, apiId, apiName)
 {
     console.log("Results for " + apiId + " - " + apiName);
