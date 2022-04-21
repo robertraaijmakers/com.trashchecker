@@ -2,7 +2,6 @@
 
 var apiList = [];
 var https = require('https');
-var dateFormat = require('dateformat');
 var cheerio = require('cheerio');
 var ical = require('ical');
 
@@ -11,15 +10,15 @@ var ical = require('ical');
  */
 
 function mijnAfvalWijzer(postcode, housenumber, street, country) {
-    return generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "https://www.mijnafvalwijzer.nl/nl/");
+    return generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "www.mijnafvalwijzer.nl");
 }
 
 function denBoschAfvalstoffendienstCalendar(postcode, housenumber, street, country) {
-    return generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, 'http://denbosch.afvalstoffendienstkalender.nl/nl/');
+    return generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, 'denbosch.afvalstoffendienstkalender.nl');
 }
 
 function rovaAfvalkalender(postcode, housenumber, street, country) {
-    return generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "https://inzamelkalender.rova.nl/nl/");
+    return generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "inzamelkalender.rova.nl");
 }
 
 function afvalkalenderCyclus(postcode, housenumber, street, country) {
@@ -134,7 +133,7 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
 
     if (country !== "NL") {
         console.log('unsupported country');
-        return new Promise.reject(Error('Unsupported country'));
+        return Promise.reject(Error('Unsupported country'));
     }
 
     var retrieveIdentificationRequest = httpsPromise({
@@ -227,22 +226,30 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
 function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, baseUrl, callback) {
     console.log("Checking general afvalkalenders API implementation URL: " + baseUrl);
 
-    var fDates = {};
     if (country !== "NL") {
         console.log('unsupported country');
-        return callback(new Error('unsupported country'));
+        return Promise.reject(Error('Unsupported country'));
     }
 
-    request(`${baseUrl}${postcode}/${housenumber}/`, function (err, res, body) {
-        if (!err && res.statusCode == 200) {
-
+    var retrieveCalendarDataRequest = httpsPromise({
+        hostname: baseUrl,
+        path: `/nl/${postcode}/${housenumber}/`,
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+    
+    return new Promise(function(resolve, reject)
+    {
+        retrieveCalendarDataRequest.then(function(body)
+        {            
             // Stip lot of data from body to prevent memory overflow
+            var fDates = {};
             var searchResultIndex = body.indexOf('<table width="100%" cellpadding="0" cellspacing="0" role=\'presentation\'>');
 
             var regex = /<a href="#waste-(.*) class="wasteInfoIcon/i;
             var searchResultIndex = body.search(regex);
-
-
             console.log(searchResultIndex);
 
             while(searchResultIndex >= 0)
@@ -345,139 +352,141 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
             }
 
             console.log(fDates);
-            return callback(null, fDates);
-        } else {
-            return callback(new Error('Invalid location'));
-        }
+            resolve(fDates);
+        }).catch(function(error)
+        {
+            console.log("retrieve identification rejected");
+            console.log(error);
+            reject(error);
+        });
     });
 }
 
-function generalImplementationWasteApi(postcode, housenumber, country, companyCode, callback, host = 'wasteprod2api.ximmio.com')
+function generalImplementationWasteApi(postcode, housenumber, country, companyCode, callback, hostName = 'wasteprod2api.ximmio.com')
 {
     console.log(`Checking company code ${companyCode}.`);
 
-    var fDates = {};
     if (country !== "NL") {
         console.log('unsupported country');
-        return callback(new Error('unsupported country'));
+        return Promise.reject(Error('Unsupported country'));
     }
 
+    return Promise.reject(Error('Waste API isnt working at this moment due to an unknown error.'));
+
     var startDate = new Date();
-    startDate = dateFormat(startDate.setDate(startDate.getDate() - 14), "yyyy-mm-dd");
+    startDate = formatDate(startDate.setDate(startDate.getDate() - 14));
 
     var endDate = new Date();
-    endDate = dateFormat(endDate.setDate(endDate.getDate() + 30), "yyyy-mm-dd");
+    endDate = formatDate(endDate.setDate(endDate.getDate() + 30));
+
+    console.log(startDate);
+    console.log(endDate);
 
     var post_data1 = `{companyCode:"${companyCode}",postCode:"${postcode}",houseNumber:"${housenumber}",houseLetter:""}`;
-    var post_options1 = {
-        host: host,
-        port: '443',
-        path: '/api/FetchAdress',
+    var retrieveUniqueId = httpsPromise({ 
+        hostname: hostName,
+        path: `/api/FetchAdress`,
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(post_data1)
-        }
-    };
-
-    var buffer1 = "";
-    var buffer2 = "";
-    var post_req1 = https.request(post_options1, function (res1) {
-        if (res1.statusCode == 200) {
-            res1.on("data", function (chunk1) { buffer1 = buffer1 + chunk1; });
-            res1.on("end", function (chunk1) {
-                var obj1 = JSON.parse(buffer1);
-                if (obj1.status) {
-
-                    if (typeof obj1 === 'undefined' || typeof obj1.dataList === 'undefined' || typeof obj1.dataList[0] === 'undefined') {
-                        console.log("UniqueID couldn't be found in the respons.");
-                        return callback(new Error('UniqueID could not be found in the response.'));
-                    }
-
-                    var uniqueID = obj1.dataList[0].UniqueId;
-                    // console.log("UniqueID: " + uniqueID);
-                    var post_data2 = `{companyCode:"${companyCode}",uniqueAddressID:"${uniqueID}",startDate:"${startDate}",endDate:"${endDate}"}`;
-                    var post_options2 = {
-                        host: host,
-                        port: '443',
-                        path: '/api/GetCalendar',
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Content-Length': Buffer.byteLength(post_data2)
-                        }
-                    };
-                    var post_req2 = https.request(post_options2, function (res2) {
-                        res2.on("data", function (chunk2) { buffer2 = buffer2 + chunk2; });
-                        res2.on("end", function (chunk2) {
-                            var obj2 = JSON.parse(buffer2);
-                            if (obj2.status) {
-                                for (var i = 0; i < Object.keys(obj2.dataList).length; i++) {
-                                    // console.log("Type afval is: " + obj2.dataList[i]._pickupTypeText);
-                                    // console.log("Datum is: " + obj2.dataList[i].pickupDates[0]);
-                                    //console.log("Aantal datums: " + Object.keys(obj2.dataList[i].pickupDates).length);
-                                    for (var j = 0; j < Object.keys(obj2.dataList[i].pickupDates).length; j++) {
-                                        var date = dateFormat(obj2.dataList[i].pickupDates[j], "yyyy-mm-dd");
-                                        switch (obj2.dataList[i]._pickupTypeText) {
-                                            case "GREY":
-                                                if (!fDates.REST) fDates.REST = [];
-                                                fDates.REST.push(date);
-                                                break;
-                                            case "GREEN":
-                                                if (!fDates.GFT) fDates.GFT = [];
-                                                fDates.GFT.push(date);
-                                                break;
-                                            case "PAPER":
-                                                if (!fDates.PAPIER) fDates.PAPIER = [];
-                                                fDates.PAPIER.push(date);
-                                                break;
-                                            case "PLASTIC":
-                                                if (!fDates.PLASTIC) fDates.PLASTIC = [];
-                                                fDates.PLASTIC.push(date);
-                                                break;
-                                            case "PACKAGES":
-                                            case "PMD":
-                                                if (!fDates.PMD) fDates.PMD = [];
-                                                fDates.PMD.push(date);
-                                                break;
-                                            case "TEXTILE":
-                                                if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
-                                                fDates.TEXTIEL.push(date);
-                                                break;
-                                            case "GLAS":
-                                            case "GLASS":
-                                                if (!fDates.GLAS) fDates.GLAS = [];
-                                                fDates.GLAS.push(date);
-                                                break;
-                                        }
-                                    }
-                                }
-                                console.log(fDates);
-                                return callback(null, fDates);
-                            } else {
-                                console.log("Er is iets fout gegaan bij het ophalen vd data");
-                                return callback(new Error('Invalid location'));
-                            }
-                        });
-                    });
-
-                    // post the data
-                    post_req2.write(post_data2);
-                    post_req2.end();
-                } else {
-                    console.log("Postcode niet gevonden status = false");
-                    return callback(new Error('Invalid location'));
-                }
-            });
-        } else {
-            console.log("Postcode niet gevonden != 200");
-            return callback(new Error('Invalid location'));
-        }
+        },
+        body: post_data1
     });
 
-    // post the data
-    post_req1.write(post_data1);
-    post_req1.end();
+    return new Promise(function(resolve, reject)
+    {
+        retrieveUniqueId.then(function(result)
+        {            
+            console.log(result);
+
+            if(!result.status)
+            {
+                reject(new Error("Invalid response. Postal code not identified."));
+                return;
+            }
+
+            if (typeof result === 'undefined' || typeof result.dataList === 'undefined' || typeof result.dataList[0] === 'undefined')
+            {
+                reject(new Error('UniqueID could not be found in the response.'));
+                return;
+            }
+
+            var uniqueID = obj1.dataList[0].UniqueId;
+
+            var post_data2 = `{companyCode:"${companyCode}",uniqueAddressID:"${uniqueID}",startDate:"${startDate}",endDate:"${endDate}"}`;
+            var retrieveCalendarDataRequest = httpsPromise({
+                hostname: hostName,
+                path: `/api/GetCalendar`,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': Buffer.byteLength(post_data2)
+                },
+                body: post_data2
+            });
+
+            retrieveCalendarDataRequest.then(function(calendarResult)
+            {    
+                if(!calendarResult.status)
+                {
+                    reject(new Error('Invalid calendar result. ' + calendarResult.status));
+                    return;
+                }
+                
+                var fDates = {};
+                for (var i = 0; i < Object.keys(obj2.dataList).length; i++) {
+                    for (var j = 0; j < Object.keys(obj2.dataList[i].pickupDates).length; j++) {
+                        var date = dateFormat(obj2.dataList[i].pickupDates[j], "yyyy-mm-dd");
+                        switch (obj2.dataList[i]._pickupTypeText) {
+                            case "GREY":
+                                if (!fDates.REST) fDates.REST = [];
+                                fDates.REST.push(date);
+                                break;
+                            case "GREEN":
+                                if (!fDates.GFT) fDates.GFT = [];
+                                fDates.GFT.push(date);
+                                break;
+                            case "PAPER":
+                                if (!fDates.PAPIER) fDates.PAPIER = [];
+                                fDates.PAPIER.push(date);
+                                break;
+                            case "PLASTIC":
+                                if (!fDates.PLASTIC) fDates.PLASTIC = [];
+                                fDates.PLASTIC.push(date);
+                                break;
+                            case "PACKAGES":
+                            case "PMD":
+                                if (!fDates.PMD) fDates.PMD = [];
+                                fDates.PMD.push(date);
+                                break;
+                            case "TEXTILE":
+                                if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+                                fDates.TEXTIEL.push(date);
+                                break;
+                            case "GLAS":
+                            case "GLASS":
+                                if (!fDates.GLAS) fDates.GLAS = [];
+                                fDates.GLAS.push(date);
+                                break;
+                        }
+                    }
+                }
+                
+                resolve(fDates);
+            }).catch(function(error)
+            {
+                console.log("Retrieval of dates failed.");
+                console.log(error);
+                reject(error);
+            });
+        }).catch(function(error)
+        {
+            console.log("Retrieval of identification failed.");
+            console.log(error);
+            reject(error);
+        });
+    });
 }
 
 function generalImplementationRecycleApp(postcode, housenumber, street, country, callback)
@@ -1077,7 +1086,23 @@ function verifyDate(dateString) {
     }
 }
 
+function formatDate(date)
+{
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
 function httpsPromise({body, ...options}) {
+
     return new Promise((resolve, reject) => {
         const req = https.request({
             ...options,
@@ -1111,7 +1136,6 @@ function httpsPromise({body, ...options}) {
         req.end();
     });
 }
-
 
 /**
  * List of providers consuming different API implementations

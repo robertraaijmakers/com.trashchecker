@@ -3,166 +3,118 @@
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
 /*
-it('API - RD4', function(done) {
+it('API - RD4', function() {
     var postcode = "6374BA";
     var homenumber = 159;
     var country = "NL";
+    var apiId = "rd4";
+    var apiName = "API - RD4";
 
-    var result = apiArray.find(o => o.id === "rd4");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "rd4", "API - RD4")).to.be.true;
-        done();
-    });
-});
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});*/
 
-it('API - Afvalwijzer', function(done) {
+it('API - Afvalwijzer', function() {
     var postcode = "9681TP";
     var homenumber = 5;
     var country = "NL";
+    var apiId = "afw";
+    var apiName = "API - Afvalwijzer";
 
-    var result = apiArray.find(o => o.id === "afw");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
 
-
+/*
 it('API - Reinis', function(done) {
     var postcode = "3204BJ";
     var homenumber = 5;
     var country = "NL";
+    var apiId = "afnw";
+    var apiName = "API - Reinis";
 
-    var result = apiArray.find(o => o.id === "afnw");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "afnw", "API - Reinis")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
 
 it('API - Area Reiniging', function(done) {
     var postcode = "7812GL";
     var homenumber = 280;
     var country = "NL";
+    var apiId = "areareiniging";
+    var apiName = "API - Area Reiniging";
 
-    var result = apiArray.find(o => o.id === "areareiniging");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "areareiniging", "API - Area Reiniging")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
 
 it('API - Suez', function(done) {
     var postcode = "6836ME";
     var homenumber = 10;
     var country = "NL";
+    var apiId = "arn";
+    var apiName = "API - Suez";
 
-    var result = apiArray.find(o => o.id === "arn");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "arn", "API - Suez")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
 
 it('API - Meerlanden', function(done) {
     var postcode = "2134PJ";
     var homenumber = 105;
     var country = "NL";
+    var apiId = "akm";
+    var apiName = "API - Meerlanden";
 
-    var result = apiArray.find(o => o.id === "akm");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "akm", "API - Meerlanden")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
 
 it('API - Waardlanden', function(done) {
     var postcode = "4132BL";
     var homenumber = 48;
     var country = "NL";
+    var apiId = "rewl";
+    var apiName = "API - Waardlanden";
 
-    var result = apiArray.find(o => o.id === "rewl");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "rewl", "API - Waardlanden")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
 
-it('API - Afvalwijzer', function(done) {
+it('API - Afvalwijzer', function() {
     var postcode = "6191JM";
     var homenumber = 12;
     var country = "NL";
+    var apiId = "afw";
+    var apiName = "API - Afvalwijzer";
 
-    var result = apiArray.find(o => o.id === "afw");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
-        done();
-    });
-});*/
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
 
 it('API - Mijn Blink', function() {
     var postcode = "5673RE";
@@ -177,240 +129,192 @@ it('API - Mijn Blink', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-/*
-it('API - Circulus Berkel', function(done) {
+
+it('API - Circulus Berkel', function() {
     var postcode = "7415TW";
     var homenumber = 66;
     var country = "NL";
+    var apiId = "acb";
+    var apiName = "API - Circulus Berkel";
 
-    var result = apiArray.find(o => o.id === "acb");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "acb", "API - Circulus Berkel")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
 
-it('API - Mijn Blink', function(done) {
+it('API - Mijn Blink', function() {
     var postcode = "5673RE";
     var homenumber = 2;
     var country = "NL";
+    var apiId = "mba";
+    var apiName = "API - Mijn Blink";
 
-    var result = apiArray.find(o => o.id === "mba");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "mba", "API - Mijn Blink")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
 
-it('API - Afvalwijzer', function(done) {
+it('API - Afvalwijzer', function() {
     var postcode = "7007HS";
     var homenumber = 35;
     var country = "NL";
+    var apiId = "afw";
+    var apiName = "API - Afvalwijzer";
 
-    var result = apiArray.find(o => o.id === "afw");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
 
-it('API - Afvalwijzer', function(done) {
+it('API - Afvalwijzer', function() {
     var postcode = "4707RE";
     var homenumber = 1;
     var country = "NL";
+    var apiId = "afw";
+    var apiName = "API - Afvalwijzer";
 
-    var result = apiArray.find(o => o.id === "afw");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "afw", "API - Afvalwijzer")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
 
-it('API - Afvalwijzer', function(done) {
+it('API - Afvalwijzer', function() {
     var postcode = "5231PB";
     var homenumber = 4;
     var country = "NL";
+    var apiId = "dbafw";
+    var apiName = "API - Afvalwijzer";
 
-    var result = apiArray.find(o => o.id === "dbafw");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "dbafw", "API - Afvalwijzer")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
-
-it('API - Waste API - Gemeente Hellendoorn', function(done) {
-    var postcode = "7441DH";
-    var homenumber = 30;
+*/
+it('API - Waste API - Gemeente Hellendoorn', function() {
+    var postcode = "7447CE";
+    var homenumber = 17;
     var country = "NL";
+    var apiId = "geh";
+    var apiName = "API - Waste API - Gemeente Hellendoorn";
 
-    var result = apiArray.find(o => o.id === "geh");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "geh", "API - Waste API - Gemeente Hellendoorn")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
 
-it('API - Stadswerk072', function(done) {
+it('API - Stadswerk072', function() {
     var postcode = "1817HP";
     var homenumber = 190;
     var country = "NL";
+    var apiId = "sw072";
+    var apiName = "API - Stadswerk072";
 
-    var result = apiArray.find(o => o.id === "sw072");
-    if(result == null || typeof result === 'undefined')
-    {
-        console.log("Invalid API");
-        done();
-    }
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country,
-    (err,result) => {
-        expect(validateApiResults(err, result, "sw072", "API - Stadswerk072")).to.be.true;
-        done();
-    });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
     
-it('API - Waste API - Twente Milieu', function(done) {
+it('API - Waste API - Twente Milieu', function() {
   var postcode = "7642GN";
   var homenumber = 16;
   var country = "NL";
+  var apiId = "twm";
+    var apiName = "API - Waste API - Twente Milieu";
 
-  var result = apiArray.find(o => o.id === "twm");
-  
-  // only load that API, this is so that we won't send requests to all data providers all the time.
-  result['execute'](postcode,homenumber,"",country, 
-  (err,result) => {
-    expect(validateApiResults(err, result, "twm", "API - Waste API - Twente Milieu")).to.be.true;
-    done();
-  });
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
 });
-   
-it('API - Afval App', function(done) {
+   /*
+it('API - Afval App', function() {
     var postcode = "5427CB";
     var homenumber = 10;
     var country = "NL";
-  
-    var result = apiArray.find(o => o.id === "afa");
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country, 
-    (err,result) => {
-      expect(validateApiResults(err, result, "afa", "API - Afval App")).to.be.true;
-      done();
-    });
+    var apiId = "afa";
+    var apiName = "API - Afval App";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
   });
 
-  it('API - Almere Ximmio', function(done) {
+it('API - Almere Ximmio', function() {
     var postcode = "1324AM";
     var homenumber = 10;
     var country = "NL";
-  
-    var result = apiArray.find(o => o.id === "alm");
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,"",country, 
-    (err,result) => {
-      expect(validateApiResults(err, result, "alm", "API - Almere Ximmio")).to.be.true;
-      done();
-    });
-  });
+    var apiId = "alm";
+    var apiName = "API - Almere Ximmio";
 
-  it('API - Recycle!', function(done) {
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Recycle!', function() {
     var postcode = "9040";
     var homenumber = 116;
     var streetName = "Isidoor de vosstraat";
     var country = "BE";
-  
-    var result = apiArray.find(o => o.id === "recbe");
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,streetName,country, 
-    (err,result) => {
-      expect(validateApiResults(err, result, "recbe", "API - Recycle!")).to.be.true;
-      done();
-    });
-  });
+    var apiId = "recbe";
+    var apiName = "API - REcycle!";
 
-  
-  it('API - Avalex', function(done) {
+    return testAPI(apiId, apiName, postcode, homenumber, streetName, country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+
+it('API - Avalex', function() {
     var postcode = "2627AD";
     var homenumber = 33;
     var streetName = "";
     var country = "NL";
-  
-    var result = apiArray.find(o => o.id === "avx");
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,streetName,country, 
-    (err,result) => {
-      expect(validateApiResults(err, result, "avx", "API - Avalex")).to.be.true;
-      done();
-    });
-  });
+    var apiId = "avx";
+    var apiName = "API - Avalex";
 
-  it('API - Afval App', function(done) {
+    return testAPI(apiId, apiName, postcode, homenumber, streetName, country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Afval App', function() {
     var postcode = "5427CW";
     var homenumber = 6;
     var streetName = "";
     var country = "NL";
-  
-    var result = apiArray.find(o => o.id === "afa");
-    
-    // only load that API, this is so that we won't send requests to all data providers all the time.
-    result['execute'](postcode,homenumber,streetName,country, 
-    (err,result) => {
-      expect(validateApiResults(err, result, "afa", "API - Afval App")).to.be.true;
-      done();
-    });
-  });*/
+    var apiId = "afa";
+    var apiName = "API - Afval App";
+
+    return testAPI(apiId, apiName, postcode, homenumber, streetName, country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});*/
 
 function testAPI(apiId, apiName, postcode, homenumber, streetName, country)
 {
@@ -418,7 +322,7 @@ function testAPI(apiId, apiName, postcode, homenumber, streetName, country)
     if(result == null || typeof result === 'undefined')
     {
         console.log("Invalid API");
-        return Promise.reject(new Error("Invalid API"));
+        return Promise.reject(new Error("Invalid API - " + apiName));
     }
     
     // only load that API, this is so that we won't send requests to all data providers all the time.

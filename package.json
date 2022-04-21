@@ -8,10 +8,8 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
-    "dateformat": "^3.0.3",
     "https": "^1.0.0",
-    "ical": "^0.6.0",
-    "request": "^2.88.2"
+    "ical": "^0.8.0"
   },
   "devDependencies": {
     "chai": "^4.3.4",
