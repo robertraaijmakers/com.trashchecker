@@ -2,7 +2,7 @@
 
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
-/*
+
 it('API - RD4', function() {
     var postcode = "6374BA";
     var homenumber = 159;
@@ -15,7 +15,7 @@ it('API - RD4', function() {
         {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
-});*/
+});
 
 it('API - Afvalwijzer', function() {
     var postcode = "9681TP";
@@ -31,13 +31,12 @@ it('API - Afvalwijzer', function() {
         });
 });
 
-/*
-it('API - Reinis', function(done) {
+it('API - Nissewaard', function() {
     var postcode = "3204BJ";
     var homenumber = 5;
     var country = "NL";
-    var apiId = "afnw";
-    var apiName = "API - Reinis";
+    var apiId = "aknw";
+    var apiName = "API - Nissewaard";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
@@ -46,11 +45,11 @@ it('API - Reinis', function(done) {
         });
 });
 
-it('API - Area Reiniging', function(done) {
+it('API - Area Reiniging', function() {
     var postcode = "7812GL";
     var homenumber = 280;
     var country = "NL";
-    var apiId = "areareiniging";
+    var apiId = "arei";
     var apiName = "API - Area Reiniging";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
@@ -60,7 +59,7 @@ it('API - Area Reiniging', function(done) {
         });
 });
 
-it('API - Suez', function(done) {
+it('API - Suez', function() {
     var postcode = "6836ME";
     var homenumber = 10;
     var country = "NL";
@@ -74,7 +73,7 @@ it('API - Suez', function(done) {
         });
 });
 
-it('API - Meerlanden', function(done) {
+it('API - Meerlanden', function() {
     var postcode = "2134PJ";
     var homenumber = 105;
     var country = "NL";
@@ -88,7 +87,7 @@ it('API - Meerlanden', function(done) {
         });
 });
 
-it('API - Waardlanden', function(done) {
+it('API - Waardlanden', function() {
     var postcode = "4132BL";
     var homenumber = 48;
     var country = "NL";
@@ -199,7 +198,7 @@ it('API - Afvalwijzer', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-*/
+
 it('API - Waste API - Gemeente Hellendoorn', function() {
     var postcode = "7447CE";
     var homenumber = 17;
@@ -241,7 +240,7 @@ it('API - Waste API - Twente Milieu', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-   /*
+
 it('API - Afval App', function() {
     var postcode = "5427CB";
     var homenumber = 10;
@@ -285,7 +284,6 @@ it('API - Recycle!', function() {
         });
 });
 
-
 it('API - Avalex', function() {
     var postcode = "2627AD";
     var homenumber = 33;
@@ -314,7 +312,7 @@ it('API - Afval App', function() {
         {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
-});*/
+});
 
 function testAPI(apiId, apiName, postcode, homenumber, streetName, country)
 {

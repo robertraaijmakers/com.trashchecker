@@ -4,6 +4,7 @@ var apiList = [];
 var https = require('https');
 var cheerio = require('cheerio');
 var ical = require('ical');
+const { end } = require('cheerio/lib/api/traversing');
 
 /**
  * Different vendors using the same three base API's
@@ -72,22 +73,22 @@ function afvalwijzerPreZero(postcode, housenumber, street, country) {
 
 function afvalkalenderMeerlanden(postcode, housenumber, street, country) {
     console.log("Checking Meerlanden");
-    return generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45");
+    return generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45", "wasteprod2api.ximmio.com");
 }
 
 function afvalAvalex(postcode, housenumber, street, country) {
     console.log("Checking Avalex");
-    return generalImplementationWasteApi(postcode, housenumber, country, 'f7a74ad1-fdbf-4a43-9f91-44644f4d4222');
+    return generalImplementationWasteApi(postcode, housenumber, country, 'f7a74ad1-fdbf-4a43-9f91-44644f4d4222', "wasteprod2api.ximmio.com");
 }
 
 function twenteMilieu(postcode, housenumber, street, country) {
     console.log("Checking Twente Milieu");
-    return generalImplementationWasteApi(postcode, housenumber, country, "8d97bb56-5afd-4cbc-a651-b4f7314264b4", "twentemilieuapi.ximmio.com");
+    return generalImplementationWasteApi(postcode, housenumber, country, "8d97bb56-5afd-4cbc-a651-b4f7314264b4", "wasteapi.ximmio.com");
 }
 
 function nissewaard(postcode, housenumber, street, country) {
     console.log("Checking Nissewaard");
-    return generalImplementationWasteApi(postcode, housenumber, country, "9dc25c8a-175a-4a41-b7a1-83f237a80b77", "reinis.ximmio.com");
+    return generalImplementationWasteApi(postcode, housenumber, country, "9dc25c8a-175a-4a41-b7a1-83f237a80b77", "wasteapi.ximmio.com");
 }
 
 function gemeenteHellendoorn(postcode, housenumber, street, country) {
@@ -147,8 +148,9 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
     
     return new Promise(function(resolve, reject)
     {
-        retrieveIdentificationRequest.then(function(result)
+        retrieveIdentificationRequest.then(function(response)
         {            
+            var result = response.body;
             if(result.length <= 0)
             {
                 reject(new Error("Invalid zipcode for " + baseUrl));
@@ -163,8 +165,9 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
                 method: 'GET'
             });
 
-            retrieveCalendar.then(function(icalResult)
+            retrieveCalendar.then(function(response)
             {
+                var icalResult = response.body;
                 const dates = {};
                 const entries = ical.parseICS(icalResult);
                 for (let i in entries) {
@@ -223,7 +226,7 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
     });
 }
 
-function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, baseUrl, callback) {
+function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, baseUrl) {
     console.log("Checking general afvalkalenders API implementation URL: " + baseUrl);
 
     if (country !== "NL") {
@@ -242,9 +245,10 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
     
     return new Promise(function(resolve, reject)
     {
-        retrieveCalendarDataRequest.then(function(body)
+        retrieveCalendarDataRequest.then(function(response)
         {            
             // Stip lot of data from body to prevent memory overflow
+            var body = response.body;
             var fDates = {};
             var searchResultIndex = body.indexOf('<table width="100%" cellpadding="0" cellspacing="0" role=\'presentation\'>');
 
@@ -362,7 +366,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
     });
 }
 
-function generalImplementationWasteApi(postcode, housenumber, country, companyCode, callback, hostName = 'wasteprod2api.ximmio.com')
+function generalImplementationWasteApi(postcode, housenumber, country, companyCode, hostName = 'wasteapi.ximmio.com')
 {
     console.log(`Checking company code ${companyCode}.`);
 
@@ -371,18 +375,13 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
         return Promise.reject(Error('Unsupported country'));
     }
 
-    return Promise.reject(Error('Waste API isnt working at this moment due to an unknown error.'));
-
     var startDate = new Date();
     startDate = formatDate(startDate.setDate(startDate.getDate() - 14));
 
     var endDate = new Date();
     endDate = formatDate(endDate.setDate(endDate.getDate() + 30));
 
-    console.log(startDate);
-    console.log(endDate);
-
-    var post_data1 = `{companyCode:"${companyCode}",postCode:"${postcode}",houseNumber:"${housenumber}",houseLetter:""}`;
+    var post_data1 = `{companyCode:"${companyCode}",postCode:"${postcode}",houseNumber:${housenumber}}`;
     var retrieveUniqueId = httpsPromise({ 
         hostname: hostName,
         path: `/api/FetchAdress`,
@@ -396,10 +395,9 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
 
     return new Promise(function(resolve, reject)
     {
-        retrieveUniqueId.then(function(result)
+        retrieveUniqueId.then(function(response)
         {            
-            console.log(result);
-
+            var result = response.body;
             if(!result.status)
             {
                 reject(new Error("Invalid response. Postal code not identified."));
@@ -412,7 +410,7 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                 return;
             }
 
-            var uniqueID = obj1.dataList[0].UniqueId;
+            var uniqueID = result.dataList[0].UniqueId;
 
             var post_data2 = `{companyCode:"${companyCode}",uniqueAddressID:"${uniqueID}",startDate:"${startDate}",endDate:"${endDate}"}`;
             var retrieveCalendarDataRequest = httpsPromise({
@@ -426,8 +424,9 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                 body: post_data2
             });
 
-            retrieveCalendarDataRequest.then(function(calendarResult)
+            retrieveCalendarDataRequest.then(function(response)
             {    
+                var calendarResult = response.body;
                 if(!calendarResult.status)
                 {
                     reject(new Error('Invalid calendar result. ' + calendarResult.status));
@@ -435,10 +434,10 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                 }
                 
                 var fDates = {};
-                for (var i = 0; i < Object.keys(obj2.dataList).length; i++) {
-                    for (var j = 0; j < Object.keys(obj2.dataList[i].pickupDates).length; j++) {
-                        var date = dateFormat(obj2.dataList[i].pickupDates[j], "yyyy-mm-dd");
-                        switch (obj2.dataList[i]._pickupTypeText) {
+                for (var i = 0; i < Object.keys(calendarResult.dataList).length; i++) {
+                    for (var j = 0; j < Object.keys(calendarResult.dataList[i].pickupDates).length; j++) {
+                        var date = formatDate(calendarResult.dataList[i].pickupDates[j]);
+                        switch (calendarResult.dataList[i]._pickupTypeText) {
                             case "GREY":
                                 if (!fDates.REST) fDates.REST = [];
                                 fDates.REST.push(date);
@@ -473,6 +472,7 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                     }
                 }
                 
+                console.log(fDates);
                 resolve(fDates);
             }).catch(function(error)
             {
@@ -489,295 +489,286 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
     });
 }
 
-function generalImplementationRecycleApp(postcode, housenumber, street, country, callback)
+function generalImplementationRecycleApp(postcode, housenumber, street, country)
 {
-    var fDates = {};
+    var fDates = {};    
     if (country !== "BE") {
         console.log('unsupported country');
-        return callback(new Error('unsupported country'));
+        return Promise.reject(Error('Unsupported country'));
     }
 
-    var host = "https://recycleapp.be/";
+    var hostName = "recycleapp.be";
     var accessConsumer = "recycleapp.be";
     var accessSecret = "Crgja3EGWe8jdapyr4EEoMBgZACYYjRRcRpaMQrLDW9HJBvmgkfGQyYqLgeXPavAGvnJqkV87PBB2b8zx43q46sUgzqio4yRZbABhtKeagkVKypTEDjKfPgGycjLyJTtLHYpzwJgp4YmmCuJZN9ZmJY8CGEoFs8MKfdJpU9RjkEVfngmmk2LYD4QzFegLNKUbcCeAdEW";
 
     // Get access token
-    var accessTokenRequest = {
-        url: host + 'api/app/v1/access-token',
+    var accessTokenRequest = httpsPromise({
+        hostname: hostName,
+        path: '/api/app/v1/access-token',
+        method: "GET",
         headers: {
           'Content-Type': 'application/json',
           'User-Agent': 'Homey',
           'x-consumer': accessConsumer,
           'x-secret': accessSecret
         }
-    };
+    });
 
-    request.get(accessTokenRequest, function (err, res, body) {
-        if (!err && res.statusCode == 200) {
-            var result = "{}";
-
-            try {
-                result = JSON.parse(body);
-            }
-            catch(err)
-            {
-                return callback(new Error("Exception parsing JSON: " + err + " for " + accessTokenRequest.url + " and zip code " + postcode));
-            }
-
-            var accessToken = result.accessToken;
+    return new Promise(function(resolve, reject)
+    {
+        accessTokenRequest.then(function(response)
+        {
+            var accessToken = response.body.accessToken;
 
             // Validate zipcode request
-            var validateZipCodeRequest = {
-                url: host + 'api/app/v1/zipcodes?q=' + postcode,
+            var validateZipCodeRequest = httpsPromise({
+                hostname: hostName,
+                path: `/api/app/v1/zipcodes?q=${postcode}`,
+                method: "GET",
                 headers: {
-                'Content-Type': 'application/json',
-                'User-Agent': 'Homey',
-                'Authorization': accessToken,
-                'x-consumer': accessConsumer,                
+                    'Content-Type': 'application/json',
+                    'User-Agent': 'Homey',
+                    'Authorization': accessToken,
+                    'x-consumer': accessConsumer,
                 }
-            };
-            
-            request.get(validateZipCodeRequest, function (err, res, body) {
-                if (!err && res.statusCode == 200) {
-                    var result = "{}";
-        
-                    try {
-                        result = JSON.parse(body);
-                    }
-                    catch(err)
-                    {
-                        return callback(new Error("Exception parsing JSON: " + err + " for " + validateZipCodeRequest.url + " and zip code " + postcode));
-                    }
+            });
 
+            validateZipCodeRequest.then(function(response)
+            {
+                var result = response.body;
+                if(result.items.length <= 0)
+                {
+                    reject(new Error("No zipcode found for: " + postcode));
+                    return;
+                }
+
+                if(result.items.length > 1)
+                {
+                    reject(new Error("Multiple zipcode entries found for: " + postcode));
+                    return;
+                }
+
+                var zipcodeId = result.items[0].id;
+
+                // Validate street request
+                var validateStreetRequest = httpsPromise({
+                    hostname: hostName,
+                    path: encodeURI(`/api/app/v1/streets?q=${street}&zipcodes=${zipcodeId}`),
+                    headers: {
+                    'Content-Type': 'application/json',
+                    'User-Agent': 'Homey',
+                    'Authorization': accessToken,
+                    'x-consumer': accessConsumer,                
+                    }
+                });
+    
+                validateStreetRequest.then(function(response)
+                {
+                    var result = response.body;
                     if(result.items.length <= 0)
                     {
-                        return callback(new Error("No zipcode found for: " + postcode));
+                        reject(new Error("No street found for: " + street));
+                        return;
                     }
 
                     if(result.items.length > 1)
                     {
-                        return callback(new Error("Multiple zipcode entries found for: " + postcode));
+                        reject(new Error("Multiple streets found for: " + street));
+                        return;
                     }
 
-                    var zipcodeId = result.items[0].id;
+                    var streetId = result.items[0].id;
 
-                    // Validate street request
-                    var validateStreetRequest = {
-                        url: host + 'api/app/v1/streets?q=' + street + '&zipcodes=' + zipcodeId,
-                        headers: {
-                        'Content-Type': 'application/json',
-                        'User-Agent': 'Homey',
-                        'Authorization': accessToken,
-                        'x-consumer': accessConsumer,                
-                        }
-                    };
+                    // Retrieve trash request
+                    var startDate = new Date(); //startDate.set
+                    startDate = formatDate(startDate.setDate(startDate.getDate() - 7));
+
+                    var endDate = new Date();
+                    endDate = formatDate(endDate.setDate(endDate.getDate() + 14));
                     
-                    request.get(validateStreetRequest, function (err, res, body) {
-                        if (!err && res.statusCode == 200) {
-                            var result = "{}";
-        
-                            try {
-                                result = JSON.parse(body);
-                            }
-                            catch(err)
-                            {
-                                return callback(new Error("Exception parsing JSON: " + err + " for " + validateStreetRequest.url + " and zip code " + postcode));
-                            }
-
-                            if(result.items.length <= 0)
-                            {
-                                return callback(new Error("No street found for: " + street));
-                            }
-
-                            if(result.items.length > 1)
-                            {
-                                return callback(new Error("Multiple streets found for: " + street));
-                            }
-
-                            var streetId = result.items[0].id;
-
-                            // Validate street request
-                            var startDate = new Date(); //startDate.set
-                            startDate = dateFormat(startDate.setDate(startDate.getDate() - 7), "yyyy-mm-dd");
-
-                            var endDate = new Date();
-                            endDate = dateFormat(endDate.setDate(endDate.getDate() + 14), "yyyy-mm-dd");
-
-                            var getTrashRequest = {
-                                url: host + 'api/app/v1/collections?size=100&untilDate=' + endDate + '&fromDate=' + startDate + '&houseNumber=' + housenumber + '&streetId=' + streetId + '&zipcodeId=' + zipcodeId,
-                                headers: {
-                                'Content-Type': 'application/json',
-                                'User-Agent': 'Homey',
-                                'Authorization': accessToken,
-                                'x-consumer': accessConsumer,                
-                                }
-                            };
-                            
-                            request.get(getTrashRequest, function (err, res, body) {
-                                if (!err && res.statusCode == 200) {
-                                    var result = "{}";
-                                    const dates = {};
-        
-                                    try {
-                                        result = JSON.parse(body);
-                                    }
-                                    catch(err)
-                                    {
-                                        return callback(new Error("Exception parsing JSON: " + err + " for " + getTrashRequest.url + " and zip code " + postcode));
-                                    }
-
-                                    if(result.items.length <= 0)
-                                    {
-                                        return callback(new Error("No trash data found for: " + getTrashRequest.url));
-                                    }
-
-                                    for (let i in result.items) {
-                                        const entry = result.items[i];
-                                        const dateStr = entry.timestamp.substr(0,10);
-
-                                        var description = "";
-                                        try {
-                                            description = entry.fraction.name.nl.toLowerCase().trim();
-                                        } catch(Exception) {
-                                            description = entry.fraction.name.fr.toLowerCase().trim();
-                                        }
-
-                                        if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
-                                            if (!dates.GFT) dates.GFT = [];
-                                            dates.GFT.push(dateStr);
-                                        } else if (description.indexOf('rest') !== -1) {
-                                            if (!dates.REST) dates.REST = [];
-                                            dates.REST.push(dateStr);
-                                        } else if (description.indexOf('pmd') !== -1 || description.indexOf('pd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
-                                            if (!dates.PMD) dates.PMD = [];
-                                            dates.PMD.push(dateStr);
-                                        } else if (description.indexOf('plastic') !== -1) {
-                                            if (!dates.PLASTIC) dates.PLASTIC = [];
-                                            dates.PLASTIC.push(dateStr);
-                                        }  else if (description.indexOf('papier') !== -1) {
-                                            if (!dates.PAPIER) dates.PAPIER = [];
-                                            dates.PAPIER.push(dateStr);
-                                        } else if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1) {
-                                            if (!dates.TEXTIEL) dates.TEXTIEL = [];
-                                            dates.TEXTIEL.push(dateStr);
-                                        } else if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
-                                            if (!dates.KERSTBOOM) dates.KERSTBOOM = [];
-                                            dates.KERSTBOOM.push(dateStr);
-                                        } else if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
-                                            if (!dates.GROF) dates.GROF = [];
-                                            dates.GROF.push(dateStr);
-                                        } else if(description.indexOf('glas') !== -1) {
-                                            if (!dates.GLAS) dates.GLAS = [];
-                                            dates.GLAS.push(dateStr);
-                                        } else {
-                                            console.log("Unknown description: " + description);
-                                        }
-                                    }
-                                        
-                                    console.log(dates);
-                                    return callback(null, dates);
-                                }
-                                else {
-                                    return callback(new Error("Can't retrieve trash data."));
-                                }
-                            });
-                        }
-                        else {
-                            return callback(new Error("Can't validate street."));
+                    var getTrashRequest = httpsPromise({
+                        hostname: hostName,
+                        path: `/api/app/v1/collections?size=100&untilDate=${endDate}&fromDate=${startDate}&houseNumber=${housenumber}&streetId=${streetId}&zipcodeId=${zipcodeId}`,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'User-Agent': 'Homey',
+                            'Authorization': accessToken,
+                            'x-consumer': accessConsumer,                
                         }
                     });
-                }
-                else {
-                    return callback(new Error("Can't validate zipcode."));
-                }
+        
+                    getTrashRequest.then(function(response)
+                    {
+                        var result = response.body;
+                        if(result.items.length <= 0)
+                        {
+                            reject(new Error("No trash data found for: " + getTrashRequest.path));
+                            return;
+                        }
+
+                        for (let i in result.items) {
+                            const entry = result.items[i];
+                            const dateStr = entry.timestamp.substr(0,10);
+
+                            var description = "";
+                            try {
+                                description = entry.fraction.name.nl.toLowerCase().trim();
+                            } catch(Exception) {
+                                description = entry.fraction.name.fr.toLowerCase().trim();
+                            }
+
+                            if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
+                                if (!fDates.GFT) fDates.GFT = [];
+                                fDates.GFT.push(dateStr);
+                            } else if (description.indexOf('rest') !== -1) {
+                                if (!fDates.REST) fDates.REST = [];
+                                fDates.REST.push(dateStr);
+                            } else if (description.indexOf('pmd') !== -1 || description.indexOf('pd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
+                                if (!fDates.PMD) fDates.PMD = [];
+                                fDates.PMD.push(dateStr);
+                            } else if (description.indexOf('plastic') !== -1) {
+                                if (!fDates.PLASTIC) fDates.PLASTIC = [];
+                                fDates.PLASTIC.push(dateStr);
+                            }  else if (description.indexOf('papier') !== -1) {
+                                if (!fDates.PAPIER) fDates.PAPIER = [];
+                                fDates.PAPIER.push(dateStr);
+                            } else if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1) {
+                                if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+                                fDates.TEXTIEL.push(dateStr);
+                            } else if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
+                                if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
+                                fDates.KERSTBOOM.push(dateStr);
+                            } else if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
+                                if (!fDates.GROF) fDates.GROF = [];
+                                fDates.GROF.push(dateStr);
+                            } else if(description.indexOf('glas') !== -1) {
+                                if (!fDates.GLAS) fDates.GLAS = [];
+                                fDates.GLAS.push(dateStr);
+                            } else {
+                                console.log("Unknown description: " + description);
+                            }
+                        }
+                        
+                        resolve(fDates);
+                        return;
+                    }).catch(function(error)
+                    {
+                        reject(new Error("Can't retrieve trash data: " + error));
+                    });
+                }).catch(function(error)
+                {
+                    reject(new Error("Can't validate street: " + error));
+                });
+            }).catch(function(error)
+            {
+                reject(new Error("Can't validate zipcode: " + error));
             });
-        }
-        else {
-            return callback(new Error("Can't retrieve access token."));
-        }
+        }).catch(function(error)
+        {
+            reject(new Error("Can't retrieve access token: " + error));
+        });
     });
 }
 
 /**
  * Vendor specific API implementations
  */
-function recycleManager(postcode, housenumber, street, country, callback) {
+function recycleManager(postcode, housenumber, street, country)
+{
+    console.log("Recyclemanager met: " + postcode + " " + housenumber);
+
+    var fDates = {};    
     if (country !== "NL") {
         console.log('unsupported country');
-        callback(new Error('unsupported country'));
+        return Promise.reject(Error('Unsupported country'));
     }
 
-    var fDates = {};
-    console.log("Recyclemanager met: " + postcode + " " + housenumber);
-    var url = `https://vpn-wec-api.recyclemanager.nl/v2/calendars?postalcode=${postcode}&number=${housenumber}`;
+    // Retrieve recyclemanager data
+    var getRecycleData = httpsPromise({
+        hostname: 'vpn-wec-api.recyclemanager.nl',
+        path: `/v2/calendars?postalcode=${postcode}&number=${housenumber}`,
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json'
+        }
+    });
 
-    request(url, function (err, res, body) {
-        if (!err && res.statusCode == 200) {
-            // console.log(res);
-            var obj1 = JSON.parse(res.body);
-            if (obj1.status == "success") {
-                for (var i = 0; i < 2; i++) {
-                    // console.log("Maand is: " + dateFormat(obj1.data[i].title));
-                    if (typeof obj1.data[i].occurrences !== 'undefined') {
-                        for (var j = 0; j < obj1.data[i].occurrences.length; j++) {
-                            var dateStr = dateFormat(obj1.data[i].occurrences[j].from.date, "yyyy-mm-dd");
-                            console.log("Soort afval is: " + obj1.data[i].occurrences[j].title);
-                            switch (obj1.data[i].occurrences[j].title) {
-                                case 'Groente en fruit':
-                                case 'GFT':
-                                    if (!fDates.GFT) fDates.GFT = [];
-                                    fDates.GFT.push(dateStr);
-                                    break;
-                                case 'Papier':
-                                    if (!fDates.PAPIER) fDates.PAPIER = [];
-                                    fDates.PAPIER.push(dateStr);
-                                    break;
-                                case 'Restafval':
-                                    if (!fDates.REST) fDates.REST = [];
-                                    fDates.REST.push(dateStr);
-                                    break;
-                                case 'PMD':
-                                case 'Plastic verpakkingen':
-                                    if (!fDates.PLASTIC) fDates.PLASTIC = [];
-                                    fDates.PLASTIC.push(dateStr);
-                                    break;
-                                default:
-                                    console.log('defaulted', obj1.data[i].occurrences[j]);
-                            }
+    return new Promise(function(resolve, reject)
+    {
+        getRecycleData.then(function(response)
+        {
+            var obj1 = response.body;
+            if (obj1.status != "success") {
+                reject(Error('Not a valid response from Recyclemanager: ' + getRecycleData.path));
+                return;
+            }
+
+            for (var i = 0; i < 2; i++) {
+                if (typeof obj1.data[i].occurrences !== 'undefined') {
+                    for (var j = 0; j < obj1.data[i].occurrences.length; j++) {
+                        var dateStr = dateFormat(obj1.data[i].occurrences[j].from.date, "yyyy-mm-dd");
+                        console.log("Soort afval is: " + obj1.data[i].occurrences[j].title);
+                        switch (obj1.data[i].occurrences[j].title) {
+                            case 'Groente en fruit':
+                            case 'GFT':
+                                if (!fDates.GFT) fDates.GFT = [];
+                                fDates.GFT.push(dateStr);
+                                break;
+                            case 'Papier':
+                                if (!fDates.PAPIER) fDates.PAPIER = [];
+                                fDates.PAPIER.push(dateStr);
+                                break;
+                            case 'Restafval':
+                                if (!fDates.REST) fDates.REST = [];
+                                fDates.REST.push(dateStr);
+                                break;
+                            case 'PMD':
+                            case 'Plastic verpakkingen':
+                                if (!fDates.PLASTIC) fDates.PLASTIC = [];
+                                fDates.PLASTIC.push(dateStr);
+                                break;
+                            default:
+                                console.log('defaulted', obj1.data[i].occurrences[j]);
                         }
                     }
                 }
-                console.log(fDates);
-                return callback(null, fDates);
-            } else {
-                console.log("Postcode niet gevonden!");
-                return callback(new Error("Postcode niet gevonden!"));
             }
-        } else {
-            console.log("Probleem met aanroep API!");
-            return callback(new Error("Probleem met aanroep API!"));
-        }
+
+            console.log(fDates);
+            resolve(fDates);
+            return;
+        }).catch(function(error)
+        {
+            reject(new Error("Error in API execution: " + error));
+            return;
+        });
     });
 }
 
-function afvalkalenderRD4(postcode, housenumber, street, country, callback) {
+function afvalkalenderRD4(postcode, housenumber, street, country) {
     console.log("Checking afvalkalender RD4");
 
-    const d = new Date();
-    var url = "https://data.rd4.nl/api/v1/waste-calendar?postal_code="+postcode.substring(0,4)+"+"+postcode.substring(4,6)+"&house_number="+housenumber+"&year="+d.getFullYear()+"&types[]=residual_waste&types[]=gft&types[]=paper&types[]=pruning_waste&types[]=pmd&types[]=best_bag&types[]=christmas_trees";
+    var fDates = {};  
+    const d = new Date(); 
+    if (country !== "NL") {
+        return Promise.reject(Error('Unsupported country'));
+    }
 
-    request(url, function (err, res, body) {
+    // Retrieve recyclemanager data
+    var getRecycleData = httpsPromise({
+        hostname: 'data.rd4.nl',
+        path: `/api/v1/waste-calendar?postal_code=${postcode.substring(0,4)}+${postcode.substring(4,6)}&house_number=${housenumber}&year=${d.getFullYear()}&types[]=residual_waste&types[]=gft&types[]=paper&types[]=pruning_waste&types[]=pmd&types[]=best_bag&types[]=christmas_trees`,
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json'
+        }
+    });
 
-        if (!err && res.statusCode == 200) {
-          try {
-            var result = JSON.parse(body);
-            if(!result.success)
-            {
-                return callback(new Error(result.message));                
-            }
-
-            var fDates = {};
-
+    return new Promise(function(resolve, reject)
+    {
+        getRecycleData.then(function(response)
+        {
+            var result = response.body;
             for(var et in result.data.items[0])
             {
                 var entry = result.data.items[0][et];
@@ -822,43 +813,40 @@ function afvalkalenderRD4(postcode, housenumber, street, country, callback) {
                 }
             }
 
-            return callback(null, fDates);
-          } catch (ex) {
-            return callback(new Error('Error: ' + ex));
-          }
-        } else {
-            return callback(new Error('Invalid location'));
-        }
+            resolve(fDates);
+        }).catch(function(error)
+        {
+            reject(new Error('Invalid location: ' + error));
+        });
     });
 }
 
-function afvalapp(postcode, homenumber, street, country, callback) {
+function afvalapp(postcode, homenumber, street, country) {
     console.log("Checking De Afval App");
 
+    var fDates = {};  
     if (country !== "NL") {
-        console.log('unsupported country');
-        callback(new Error('Unsupported country'));
-        return;
+        return Promise.reject(Error('Unsupported country'));
     }
 
-    var options = {
-        host: 'dataservice.deafvalapp.nl',
-        path: '/dataservice/DataServiceServlet?type=ANDROID&service=OPHAALSCHEMA&land=' +
-            country + '&postcode=' + postcode + '&straatId=0&huisnr=' + homenumber + '&huisnrtoev='
-    };
+    // Retrieve recyclemanager data
+    var getRecycleData = httpsPromise({
+        hostname: 'dataservice.deafvalapp.nl',
+        path: `/dataservice/DataServiceServlet?type=ANDROID&service=OPHAALSCHEMA&land=NL&postcode=${postcode}&straatId=0&huisnr=${homenumber}'&huisnrtoev=`,
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json'
+        }
+    });
 
-    var req = https.get(options, (res) => {
-        var dates = {};
-        var curr = '';
-        var data = '';
-
-        res.on('data', function (chunk) {
-            data += chunk;
-        });
-
-        res.on('end', () => {
+    return new Promise(function(resolve, reject)
+    {
+        getRecycleData.then(function(response)
+        {
+            var data = response.body;
             var respArray = data.toString().split('\n').join('').split(";");
             respArray.pop();
+            var curr = "";
             for (var i in respArray) {
                 if (isNaN(parseInt(respArray[i]))) {
                     curr = respArray[i];
@@ -870,79 +858,93 @@ function afvalapp(postcode, homenumber, street, country, callback) {
                             curr = "PLASTIC";
                             break;
                     }
-                    dates[curr] = [];
+                    fDates[curr] = [];
                 }
                 else {
                     var verifiedDate = verifyDate(respArray[i]);
-                    dates[curr].push(verifiedDate);
+                    fDates[curr].push(verifiedDate);
                 }
             }
 
-            if (Object.keys(dates).length === 0 && dates.constructor === Object) {
-                console.log('Invalid input');
-                return callback(null, {});
+            if (Object.keys(fDates).length === 0 && fDates.constructor === Object) {
+                reject(new Error("No dates found"));
+                return;
             } else { //validate the response
-                console.log(dates);
-                return callback(null, dates);
+                resolve(fDates);
+                return;
             }
+        }).catch(function(error)
+        {
+            reject(new Error('Error occured during request: ' + error));
+            return;
         });
-    });
-
-    req.on('error', function (err) {
-        console.log(err.message);
-        return callback(new Error('Error occured during request: ' + err.message));
     });
 }
 
-function circulusBerkel(postcode, homenumber, street, country, callback) {
-
+function circulusBerkel(postcode, homenumber, street, country)
+{
+    var fDates = {};  
     if (country !== "NL") {
-        return callback(new Error('unsupported country'));
+        return Promise.reject(Error('Unsupported country'));
     }
 
-    try {
-        //Get a session token
-        request('https://mijn.circulus.nl/', (err, response, body) => {
+    // Retrieve recyclemanager data
+    var getRecycleData = httpsPromise({
+        hostname: 'mijn.circulus.nl',
+        path: '/login',
+        method: "GET",
+    });
+
+    return new Promise(function(resolve, reject)
+    {
+        getRecycleData.then(function(response)
+        {
             let cookie = response.headers['set-cookie'];
             let authenticityToken = null;
             for (var i = 0; i < cookie.length; i++) {
-                if (cookie[i].startsWith('CB_SESSION')) { var j = cookie[i].indexOf('___AT='); var k = cookie[i].indexOf('&', j); authenticityToken = cookie[i].substring(j + 6, k); }
+                if (cookie[i].startsWith('CB_SESSION')) { 
+                    console.log(cookie[i]);
+                    var j = cookie[i].indexOf('___AT='); var k = cookie[i].indexOf('&', j); 
+                    authenticityToken = cookie[i].substring(j + 6, k); 
+                }
             }
-            var headers = { 'Content-Type': 'application/json', 'Cookie': cookie };
-            var options = {
-                url: 'https://mijn.circulus.nl/register/zipcode.json',
+
+            var post_data = `?authenticityToken=${authenticityToken}&zipCode=${postcode}&number=${homenumber}`;
+            var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Cookie': cookie, 'Content-Length': Buffer.byteLength(post_data) };
+            var validateAddressRequest = httpsPromise({
+                hostname: 'mijn.circulus.nl',
+                path: '/register/zipcode.json',
                 method: 'POST',
-                form: { authenticityToken: authenticityToken, zipCode: postcode, number: homenumber },
+                body: post_data,
                 headers: headers
-            };
+            });
 
-            var startDate = new Date(); //startDate.set
-            startDate = dateFormat(startDate.setDate(startDate.getDate() - 14), "yyyy-mm-dd");
+            validateAddressRequest.then(function(response)
+            {
+                var startDate = new Date(); //startDate.set
+                startDate = formatDate(startDate.setDate(startDate.getDate() - 14)).replaceAll('-0','-');
+    
+                var endDate = new Date();
+                endDate = formatDate(endDate.setDate(endDate.getDate() + 90)).replaceAll('-0','-');
 
-            var endDate = new Date();
-            endDate = dateFormat(endDate.setDate(endDate.getDate() + 90), "yyyy-mm-dd");
-
-            //Get a security token
-            request(options, function (err, res, body) {
-                let cookie = res.headers['set-cookie'];
+                let cookie = response.headers['set-cookie'];
                 var headers = { 'Content-Type': 'application/json', 'Cookie': cookie };
-                var options = {
-                    url: 'https://mijn.circulus.nl/afvalkalender.json?from=' + startDate + '&till=' + endDate,
+                var getTrashData = httpsPromise({
+                    hostname: 'mijn.circulus.nl',
+                    path: `/afvalkalender.json?from=${startDate}&till=${endDate}`,
                     method: 'GET',
                     headers: headers
-                };
-                //Execute the real trash request
-                request(options, function (err, res, body) {
-                    let dates = {}
-                    var json_body = JSON.parse(body);
+                });
 
-                    if(json_body == null || typeof json_body.customData === 'undefined' || typeof json_body.customData.response === "undefined" || typeof json_body.customData.response.garbage === 'undefined')
+                getTrashData.then(function(response)
+                {
+                    if(response.body == null || typeof response.body.customData === 'undefined' || typeof response.body.customData.response === "undefined" || typeof response.body.customData.response.garbage === 'undefined')
                     {
-                        console.log(json_body);
-                        return callback(new Error('Something went wrong while retrieving the data.'));
+                        reject(new Error('Something went wrong while retrieving the data.'));
+                        return;
                     }
 
-                    var o = json_body.customData.response.garbage;
+                    var o = response.body.customData.response.garbage;
                     for (var i = 0; i < o.length; i++) {
                         var key = o[i].code.toLowerCase();
                         switch (key) {
@@ -968,15 +970,28 @@ function circulusBerkel(postcode, homenumber, street, country, callback) {
                                 break;
                         }
 
-                        addToDates(key, o[i].dates, dates);
+                        addToDates(key, o[i].dates, fDates);
                     }
-                    return callback(null, dates);
+
+                    console.log(fDates);
+                    resolve(fDates);
+                    return;
+                }).catch(function(error)
+                {
+                    reject(new Error('Error occured during retrieval of trash data: ' + error));
+                    return;
                 });
+            }).catch(function(error)
+            {
+                reject(new Error('Error occured during retrieval of address: ' + error));
+                return;
             });
-        });
-    } catch (ex) {
-        return callback(new Error('Error: ' + ex));
-    }
+        }).catch(function(error)
+        {
+            reject(new Error('Error occured during retrieval of first cookie: ' + error));
+            return;
+        });;
+    });
 }
 
 /**
@@ -1122,11 +1137,17 @@ function httpsPromise({body, ...options}) {
                         }
                     break;
                     default:
-                        resBody = resBody.toString();
+                        try {
+                            resBody = JSON.parse(resBody);
+                        }
+                        catch(error)
+                        {
+                            resBody = resBody.toString();
+                        }
                     break;
                 }
 
-                resolve(resBody)
+                resolve({body: resBody, headers: res.headers});
             })
         })
         req.on('error', reject);

@@ -3,7 +3,7 @@
 module.exports = {
 	async validateUserData({ homey, body }) {
 		console.log(body);
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 		  homey.app.updateAPI(body.postcode, body.housenumber, body.streetName, body.country, body.api)
 			.then(function (result)
 			{
@@ -20,11 +20,13 @@ module.exports = {
 			{
 				console.log('Error in Update API: ', body);
 				console.log('Errormessage: ', error);
+				reject(new Error('Error in Update API: ' + body + '. Errormessage: ' + error));
 			});
 		}).catch(function(error)
 		{
 			console.log('Error in API: ', body);
 			console.log('Errormessage: ', error);
+			reject(new Error('Error in Update API: ' + body + '. Errormessage: ' + error));
 		});
 	}
 };

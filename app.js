@@ -379,9 +379,9 @@ class TrashcanReminder extends Homey.App
 	
 	pad(n, width, z)
 	{
-	  z = z || '0';
-	  n = n + '';
-	  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+		z = z || '0';
+		n = n + '';
+		return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 	}
 	
 	updateAPI(postcode, homenumber, streetName, country, apiId, callback)
@@ -458,7 +458,6 @@ class TrashcanReminder extends Homey.App
 			.catch(function(error)
 			{
 				console.log(error);
-				callback(false, this, null);
 			});
 			
 			return;
