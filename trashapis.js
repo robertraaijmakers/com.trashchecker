@@ -4,7 +4,6 @@ var apiList = [];
 var https = require('https');
 var cheerio = require('cheerio');
 var ical = require('ical');
-const { end } = require('cheerio/lib/api/traversing');
 
 /**
  * Different vendors using the same three base API's
@@ -83,7 +82,7 @@ function afvalAvalex(postcode, housenumber, street, country) {
 
 function twenteMilieu(postcode, housenumber, street, country) {
     console.log("Checking Twente Milieu");
-    return generalImplementationWasteApi(postcode, housenumber, country, "8d97bb56-5afd-4cbc-a651-b4f7314264b4", "wasteapi.ximmio.com");
+    return generalImplementationWasteApi(postcode, housenumber, country, "8d97bb56-5afd-4cbc-a651-b4f7314264b4", "twentemilieuapi.ximmio.com");
 }
 
 function nissewaard(postcode, housenumber, street, country) {
@@ -354,6 +353,8 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                     searchResultIndex = -1;
                 }
             }
+            
+            $ = null;                
 
             console.log(fDates);
             resolve(fDates);

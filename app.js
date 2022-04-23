@@ -344,7 +344,9 @@ class TrashcanReminder extends Homey.App
 	// Gets the local date
 	getLocalDate()
 	{
-		return new Date(new Date().toLocaleString('nl-NL', { timeZone: this.homey.clock.getTimezone() }));
+		var date = new Date(new Date().toLocaleString('nl-NL', { timeZone: this.homey.clock.getTimezone() }));
+		console.log(`Local date: ${date}`);
+		return date;
 	}
 
 	// Exctualy calculates MS till 5 O clock
@@ -361,6 +363,8 @@ class TrashcanReminder extends Homey.App
 		);
 		
 		let msTillMidnight = night.getTime() - now.getTime();
+		console.log(night.getTime());
+		console.log(now.getTime());
 		console.log(msTillMidnight);
 		return msTillMidnight <= 0 ? 1000 : msTillMidnight;
 	}
@@ -374,7 +378,7 @@ class TrashcanReminder extends Homey.App
 		var msTillSaturday = ((currentDay * 24 * 60 * 60 * 1000) + msTillMidnight);
 		console.log("ms till Saturday night");
 		console.log(msTillSaturday);
-		return msTillSaturday <= 0 ? 1000 : msTillSaturday;
+		return msTillSaturday <= 0 ? 21600000 : msTillSaturday; // set default to 6 hours to prevent some infinite loop we cannot solve at this moment
 	}
 	
 	pad(n, width, z)
@@ -387,6 +391,7 @@ class TrashcanReminder extends Homey.App
 	updateAPI(postcode, homenumber, streetName, country, apiId, callback)
 	{
 		let newDates = null;
+		let newThis = this;
 		
 		if(typeof postcode !== 'undefined' && postcode !== null && postcode !== '')
 		{
@@ -440,14 +445,14 @@ class TrashcanReminder extends Homey.App
 			{
 				if(Object.keys(result).length > 0)
 				{
-					this.homey.settings.set('collectingDays', null);
+					newThis.homey.settings.set('collectingDays', null);
 					
 					newDates = result;
-					this.gdates = newDates;
-					this.GenerateNewDaysBasedOnManualInput(); // Can add additional dates
+					newThis.gdates = newDates;
+					newThis.GenerateNewDaysBasedOnManualInput(); // Can add additional dates
 					
-					this.homey.settings.set('apiId', apiId);					
-					callback(true, this, apiId);
+					newThis.homey.settings.set('apiId', apiId);					
+					callback(true, newThis, apiId);
 				}
 				else if(Object.keys(result).length === 0) {
 					console.log('No information found, go to settings to reset your API settings.');
@@ -507,7 +512,7 @@ class TrashcanReminder extends Homey.App
 		{
 			console.log(loop.iteration());
 			console.log(apiArray[loop.iteration()]);
-			
+
 			apiArray[loop.iteration()]['execute'](postcode,homenumber,streetname,country)
 			.then(function(result)
 			{
@@ -516,8 +521,8 @@ class TrashcanReminder extends Homey.App
 					newDates = result;
 					that.gdates = newDates;
 					
-					this.homey.settings.set('apiId', apiArray[loop.iteration()]['id']);
-					this.homey.settings.set('collectingDays', newDates);
+					that.homey.settings.set('apiId', apiArray[loop.iteration()]['id']);
+					that.homey.settings.set('collectingDays', newDates);
 					that.GenerateNewDaysBasedOnManualInput();
 					callback(true, that, apiArray[loop.iteration()]['id']);
 				} 
