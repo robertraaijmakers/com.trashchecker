@@ -143,6 +143,20 @@ it('API - Circulus Berkel', function() {
         });
 });
 
+it('API - Circulus Berkel', function() {
+    var postcode = "7326RK";
+    var homenumber = 305;
+    var country = "NL";
+    var apiId = "acb";
+    var apiName = "API - Circulus Berkel - Henk";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 it('API - Mijn Blink', function() {
     var postcode = "5673RE";
     var homenumber = 2;

@@ -422,6 +422,7 @@ class TrashcanReminder extends Homey.App
 			.catch(function(error)
 			{
 				console.log(error);
+				callback(false, this, null);
 			});
 			
 			return;
@@ -497,7 +498,7 @@ class TrashcanReminder extends Homey.App
 		},
 		() => {
 			console.log('Checked all APIs');
-			return callback(false);
+			return callback(false, this, null);
 		});
 	}
 	
