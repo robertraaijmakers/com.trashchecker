@@ -941,6 +941,7 @@ function circulusBerkel(postcode, homenumber, street, country)
                 {
                     if(response.body == null || typeof response.body.customData === 'undefined' || typeof response.body.customData.response === "undefined" || typeof response.body.customData.response.garbage === 'undefined')
                     {
+                        console.log('Something went wrong while retrieving the data.');
                         reject(new Error('Something went wrong while retrieving the data.'));
                         return;
                     }
@@ -974,21 +975,25 @@ function circulusBerkel(postcode, homenumber, street, country)
                         addToDates(key, o[i].dates, fDates);
                     }
 
+                    console.log("Circulus");
                     console.log(fDates);
                     resolve(fDates);
                     return;
                 }).catch(function(error)
                 {
+                    console.log('Error occured during retrieval of trash data: ' + error);
                     reject(new Error('Error occured during retrieval of trash data: ' + error));
                     return;
                 });
             }).catch(function(error)
             {
+                console.log('Error occured during retrieval of address: ' + error);
                 reject(new Error('Error occured during retrieval of address: ' + error));
                 return;
             });
         }).catch(function(error)
         {
+            console.log('Error occured during retrieval of first cookie: ' + error);
             reject(new Error('Error occured during retrieval of first cookie: ' + error));
             return;
         });;

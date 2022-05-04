@@ -33,5 +33,18 @@ This way you are in full control of the text that is displayed in the global tag
 ## Advanced Data Entry
 Here you can enter custom dates for trashcan pick-up in JSON format. These dates will be *added* to the existing dates that already exist based on other selected options. This is only for advanced users and isn't recommended to use.
 
+```
+{
+    GFT: ['2022-05-05','2022-05-19'],
+    REST: [],
+    PAPIER: [],
+    GROF: [],
+    PLASTIC: [],
+    PMD: [],
+    TEXTIEL: [],
+    KERSTBOOM: []
+}
+```
+
 ## Debug information
 This shows the dates found based on the input given. When you have applied new settings, please click "refresh debug information" to get the latest and greatest information.

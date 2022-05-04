@@ -34,6 +34,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [RD4](https://rd4.syzygy.eu)
 - [Recyle Manager](http://www.recyclemanager.nl)
 - [Reinigingsdienst Waardlanden](https://www.waardlanden.nl/particulieren/afvalinzameling/afvalkalender)
+- [Reinis](https://reinis.ximmio.com/modules/9dc25c8a-175a-4a41-b7a1-83f237a80b77/sitekalender/)
 - [RMN](https://inzamelschema.rmn.nl)
 - [Rova](https://www.rova.nl)
 - [Stadswerk072](https://www.stadswerk072.nl/wanneer)
