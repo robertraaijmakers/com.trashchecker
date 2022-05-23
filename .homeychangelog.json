@@ -81,5 +81,9 @@
   "3.1.13": {
     "en": "Fixed implementation of RD4 and added Reinus (GitHub: #140)",
     "nl": "RD4 weer gemaakt en Reinus toegevoegd (GitHub: #140)"
+  },
+  "3.1.14": {
+    "en": "Fixed issue with initial set-up that didn't loop through the available APIs",
+    "nl": "Issue opgelost die ervoor zorgde dat de initiele set-up niet door alle APIs kon zoeken"
   }
 }

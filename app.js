@@ -448,7 +448,6 @@ class TrashcanReminder extends Homey.App
 					if (index < iterations) {
 						index++;
 						func(loop, that);
-	
 					} else {
 						done = true;
 						callback();
@@ -464,16 +463,15 @@ class TrashcanReminder extends Homey.App
 					callback();
 				}
 			};
+
 			loop.next();
 			return loop;
 		}
-	
+
 		asyncLoop(apiArray.length, this, function(loop, that)
 		{
-			console.log(loop.iteration());
-			console.log(apiArray[loop.iteration()]);
-
-			apiArray[loop.iteration()]['execute'](postcode,homenumber,streetname,country)
+			var executable = apiArray[loop.iteration()];
+			executable['execute'](postcode,homenumber,streetName,country)
 			.then(function(result)
 			{
 				if(Object.keys(result).length > 0)
@@ -484,12 +482,16 @@ class TrashcanReminder extends Homey.App
 					that.homey.settings.set('apiId', apiArray[loop.iteration()]['id']);
 					that.homey.settings.set('collectingDays', newDates);
 					that.GenerateNewDaysBasedOnManualInput();
-					callback(true, that, apiArray[loop.iteration()]['id']);
-				} 
+					return callback(true, that, apiArray[loop.iteration()]['id']);
+				}
 				else if(Object.keys(result).length === 0)
 				{
+					console.log('starting next iteration');
 					loop.next();
+					return;
 				}
+
+				loop.next();
 			}).catch(function(err)
 			{
 				console.log('error while looping', err);
