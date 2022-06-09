@@ -85,5 +85,9 @@
   "3.1.14": {
     "en": "Fixed issue with initial set-up that didn't loop through the available APIs",
     "nl": "Issue opgelost die ervoor zorgde dat de initiele set-up niet door alle APIs kon zoeken"
+  },
+  "3.1.15": {
+    "en": "Added better error handling and added new 6-week interval.",
+    "nl": "Betere foutafhandeling en nu ook een 6-weekse interval beschikbaar als handmatige optie."
   }
 }

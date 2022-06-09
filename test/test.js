@@ -231,7 +231,7 @@ it('API - Stadswerk072', function() {
     var postcode = "1817HP";
     var homenumber = 190;
     var country = "NL";
-    var apiId = "sw072";
+    var apiId = "hvc";
     var apiName = "API - Stadswerk072";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)

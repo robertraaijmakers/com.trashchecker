@@ -278,13 +278,16 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                     }
 
                     var dateStr = "";
+                    var wasteDescription = "";
                     if(elem.children[1].children.length < 1)
                     {
                         dateStr = parseDate(elem.children[0].data);
+                        wasteDescription = $(".afvaldescr", elem).text();
                     }
                     else {
                         dateStr = parseDate(elem.children[1].children[0].data);
-                    }
+                        wasteDescription = $(".afvaldescr", elem).text();
+                    }                   
 
                     switch (elem.attribs.class.trim()) {
                         case 'gft':
@@ -314,19 +317,6 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                             fDates.REST.push(dateStr);
                             fDates.GFT.push(dateStr);
                             break;
-                        case 'grof':
-                        case 'grof vuil':
-                        case 'grofvuil':
-                            if (!fDates.GROF) fDates.GROF = [];
-                            fDates.GROF.push(dateStr);
-                            break;
-                        case 'kerst':
-                        case 'kerstboom':
-                        case 'kerstbomen':
-                            if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
-                            fDates.KERSTBOOM.push(dateStr);
-                            break;
-						case 'dhm':
 						case 'textiel':
 							if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
                             fDates.TEXTIEL.push(dateStr);
@@ -336,7 +326,9 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                             fDates.GLAS.push(dateStr);
                             break;
                         default:
-                            console.log('Defaulted. Element not found:', elem.attribs.class);
+                            fDates = verifyByName(fDates, elem.attribs.class.trim(), wasteDescription);
+                            console.log("Defaulted. Element not found: ", elem.attribs.class);
+                            console.log("Trying to find date based on description: ", wasteDescription);
                     }
 
                     elem = null; // clear memory leak?
@@ -364,6 +356,82 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
             reject(error);
         });
     });
+}
+
+function verifyByName(fDates, className, description)
+{
+    if(description === "" || typeof description === undefined)
+    {
+        if(className == "dhm")
+        {
+            if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+            fDates.TEXTIEL.push(dateStr);
+        }
+
+        return fDates;
+    }
+
+    if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
+        if (!fDates.GFT) fDates.GFT = [];
+        fDates.GFT.push(dateStr);
+    } 
+    
+    if (description.indexOf('rest') !== -1) {
+        if (!fDates.REST) fDates.REST = [];
+        fDates.REST.push(dateStr);
+    } 
+    
+    if (description.indexOf('pmd') !== -1 || description.indexOf('pd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
+        if (!fDates.PMD) fDates.PMD = [];
+        fDates.PMD.push(dateStr);
+    } 
+    
+    if (description.indexOf('plastic') !== -1) {
+        if (!fDates.PLASTIC) fDates.PLASTIC = [];
+        fDates.PLASTIC.push(dateStr);
+    }
+    
+    if (description.indexOf('papier') !== -1) {
+        if (!fDates.PAPIER) fDates.PAPIER = [];
+        fDates.PAPIER.push(dateStr);
+    } 
+    
+    if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1) {
+        if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+        fDates.TEXTIEL.push(dateStr);
+    } 
+    
+    if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
+        if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
+        fDates.KERSTBOOM.push(dateStr);
+    } 
+    
+    if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
+        if (!fDates.GROF) fDates.GROF = [];
+        fDates.GROF.push(dateStr);
+    } 
+    
+    if(description.indexOf('glas') !== -1) {
+        if (!fDates.GLAS) fDates.GLAS = [];
+        fDates.GLAS.push(dateStr);
+    }
+    
+    if(description.indexOf('retour') !== -1) {      // Marking retourstoffen as textiel to make sure it can be identified
+        if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+        fDates.TEXTIEL.push(dateStr);
+    }
+    
+    // if(description.indexOf('takken') !== -1 || description.indexOf('snoei') !== -1) {
+    //     if (!fDates.SNOEI) fDates.SNOEI = [];
+    //     fDates.SNOEI.push(dateStr);
+    // }
+    
+    // if(description.indexOf('chemisch') !== -1) {
+    //     if (!fDates.CHEMISCH) fDates.CHEMISCH = [];
+    //     fDates.CHEMISCH.push(dateStr);
+    // }
+
+    return fDates;
 }
 
 function generalImplementationWasteApi(postcode, housenumber, country, companyCode, hostName = 'wasteapi.ximmio.com')
