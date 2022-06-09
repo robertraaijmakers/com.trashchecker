@@ -840,7 +840,8 @@ function afvalkalenderRD4(postcode, housenumber, street, country) {
             for(var et in result.data.items[0])
             {
                 var entry = result.data.items[0][et];
-                var dateStr = entry.date.substring(8,10) + "-" + entry.date.substring(5,7) + "-" + entry.date.substring(0,4);
+                //var dateStr = entry.date.substring(8,10) + "-" + entry.date.substring(5,7) + "-" + entry.date.substring(0,4);
+                var dateStr = entry.date.substring(0,4) + "-" + entry.date.substring(5,7) + "-" + entry.date.substring(8,10)
 
                 switch(entry.type)
                 {
@@ -881,6 +882,7 @@ function afvalkalenderRD4(postcode, housenumber, street, country) {
                 }
             }
 
+            console.log(fDates);
             resolve(fDates);
         }).catch(function(error)
         {
