@@ -328,6 +328,20 @@ it('API - Afval App', function() {
         });
 });
 
+/*it('API - Mijn Blin - ERROR', function() {
+    var postcode = "5673RE";
+    var homenumber = 1111125;
+    var country = "NL";
+    var apiId = "mba";
+    var apiName = "API - Mijn Blink";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});*/
+
 function testAPI(apiId, apiName, postcode, homenumber, streetName, country)
 {
     var result = apiArray.find(o => o.id === apiId);

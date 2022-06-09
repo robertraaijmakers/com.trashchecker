@@ -34,7 +34,7 @@ function afvalRmn(postcode, housenumber, street, country) {
 }
 
 function afvalkalenderCure(postcode, housenumber, street, country) {
-    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cure-afvalbeheer.nl');
+    return Promise.reject(Error('Cure moved to mijn afvalwijzer.')); //newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cure-afvalbeheer.nl');
 }
 
 function afvalkalenderPeelEnMaas(postcode, housenumber, street, country) {
@@ -62,7 +62,7 @@ function GadGooiAndVechtstreek(postcode, housenumber, street, country) {
 }
 
 function afvalwijzerStadswerk072(postcode, housenumber, street, country) {
-    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'www.stadswerk072.nl');
+    return Promise.reject(Error('Stadswerk moved to HVC group.'));
 }
 
 function afvalwijzerPreZero(postcode, housenumber, street, country) {
@@ -148,15 +148,14 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
     return new Promise(function(resolve, reject)
     {
         retrieveIdentificationRequest.then(function(response)
-        {            
+        {
             var result = response.body;
             if(result.length <= 0)
             {
-                reject(new Error("Invalid zipcode for " + baseUrl));
+                return reject(new Error("Invalid zipcode for " + baseUrl));
             }
 
             var identificatie = result[0].bagid;
-            console.log(identificatie);
 
             var retrieveCalendar  = httpsPromise({
                 hostname: baseUrl,
@@ -1140,6 +1139,7 @@ function httpsPromise({body, ...options}) {
                         catch(error)
                         {
                             reject(new Error("Exception parsing JSON: " + err + " for base url " + baseUrl + " and zip code " + postcode));
+                            return;
                         }
                     break;
                     default:
@@ -1173,7 +1173,7 @@ apiList.push({ name: "Afval App", id: "afa", execute: afvalapp });
 apiList.push({ name: "Mijn Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
 apiList.push({ name: "Den Bosch Afvalstoffendienstkalender", id: "dbafw", execute: denBoschAfvalstoffendienstCalendar });
 apiList.push({ name: "Afvalwijzer Pre Zero", id: "arn", execute: afvalwijzerPreZero });
-apiList.push({ name: "Afvalkalender Cure", id: "acu", execute: afvalkalenderCure })
+apiList.push({ name: "Afvalkalender Cure", id: "acu", execute: afvalkalenderCure })                             // Deprecated as of 2022-06-09
 apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCyclus });
 apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
 apiList.push({ name: "Afvalkalender ZRD", id: "afzrd", execute: afvalkalenderZrd });
@@ -1195,7 +1195,7 @@ apiList.push({ name: "ACV", id: "acv", execute: acvAfvalkalender });
 apiList.push({ name: "GAD Gooi en Vechtstreek", id: "gad", execute: GadGooiAndVechtstreek });
 apiList.push({ name: "Area Reiniging", id: "arei", execute: areaReiniging });
 apiList.push({ name: "Reinigingsdienst Waardlanden", id: "rewl", execute: reinigingsdienstWaardlanden });
-apiList.push({ name: "Stadswerk072", id: "sw072", execute: afvalwijzerStadswerk072 });
+apiList.push({ name: "Stadswerk072", id: "sw072", execute: afvalwijzerStadswerk072 });                          // Deprecated as of 2022-06-09
 apiList.push({ name: "Almere", id: "alm", execute: almereAfvalkalender });
 apiList.push({ name: "Recycle App (BE)", id: "recbe", execute: recycleApp });
 
