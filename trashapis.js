@@ -326,7 +326,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                             fDates.GLAS.push(dateStr);
                             break;
                         default:
-                            fDates = verifyByName(fDates, elem.attribs.class.trim(), wasteDescription);
+                            fDates = verifyByName(fDates, elem.attribs.class.trim(), wasteDescription, dateStr);
                             console.log("Defaulted. Element not found: ", elem.attribs.class);
                             console.log("Trying to find date based on description: ", wasteDescription);
                     }
@@ -358,7 +358,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
     });
 }
 
-function verifyByName(fDates, className, description)
+function verifyByName(fDates, className, description, dateStr)
 {
     if(description === "" || typeof description === undefined)
     {

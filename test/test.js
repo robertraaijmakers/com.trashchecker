@@ -31,6 +31,20 @@ it('API - Afvalwijzer', function() {
         });
 });
 
+it('API - Afvalwijzer', function() {
+    var postcode = "1141SL";
+    var homenumber = 15;
+    var country = "NL";
+    var apiId = "afw";
+    var apiName = "API - Afvalwijzer";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 it('API - Nissewaard', function() {
     var postcode = "3204BJ";
     var homenumber = 5;
