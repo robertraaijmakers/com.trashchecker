@@ -367,9 +367,11 @@ function verifyByName(fDates, className, description, dateStr)
             if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
             fDates.TEXTIEL.push(dateStr);
         }
-
+        
         return fDates;
     }
+
+    description = description.toLowerCase();
 
     if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
         if (!fDates.GFT) fDates.GFT = [];

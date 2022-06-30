@@ -90,8 +90,8 @@
     "en": "Added better error handling and added new 6-week interval.",
     "nl": "Betere foutafhandeling en nu ook een 6-weekse interval beschikbaar als handmatige optie."
   },
-  "3.1.18": {
-    "en": "Added fix for afvalwijzer. #149",
-    "nl": "Betere afhandeling van afvalwijzer. #149"
+  "3.1.19": {
+    "en": "Added fix for afvalwijzer. #148, #149",
+    "nl": "Betere afhandeling van afvalwijzer. #148, #149"
   }
 }

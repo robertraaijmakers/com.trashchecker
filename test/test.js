@@ -31,9 +31,23 @@ it('API - Afvalwijzer', function() {
         });
 });
 
-it('API - Afvalwijzer', function() {
+it('API - Afvalwijzer - Manual Description', function() {
     var postcode = "1141SL";
     var homenumber = 15;
+    var country = "NL";
+    var apiId = "afw";
+    var apiName = "API - Afvalwijzer";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Afvalwijzer - Extra GFT', function() {
+    var postcode = "9321GZ";
+    var homenumber = 52;
     var country = "NL";
     var apiId = "afw";
     var apiName = "API - Afvalwijzer";
