@@ -311,6 +311,20 @@ it('API - Almere Ximmio', function() {
         });
 });
 
+it('API - Afvalkalender Den Haag', function() {
+    var postcode = "2552LJ";
+    var homenumber = 13;
+    var country = "NL";
+    var apiId = "hkdh";
+    var apiName = "API - Afvalkalender Den Haag";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 it('API - Recycle!', function() {
     var postcode = "9040";
     var homenumber = 116;

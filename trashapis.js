@@ -66,7 +66,7 @@ function afvalwijzerStadswerk072(postcode, housenumber, street, country) {
 }
 
 function afvalwijzerPreZero(postcode, housenumber, street, country) {
-    console.log("Checking Afvalwijzer Suez");
+    console.log("Checking Inzamelwijzer Pre Zero");
     return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelwijzer.prezero.nl')
 }
 
@@ -1250,35 +1250,37 @@ function httpsPromise({body, ...options}) {
 
 // Don't forget to add the ID and name to the option set in settings/index.html page as well! :)
 apiList.push({ name: "Afval App", id: "afa", execute: afvalapp });
-apiList.push({ name: "Mijn Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
-apiList.push({ name: "Den Bosch Afvalstoffendienstkalender", id: "dbafw", execute: denBoschAfvalstoffendienstCalendar });
-apiList.push({ name: "Afvalwijzer Pre Zero", id: "arn", execute: afvalwijzerPreZero });
-apiList.push({ name: "Afvalkalender Cure", id: "acu", execute: afvalkalenderCure })                             // Deprecated as of 2022-06-09
+apiList.push({ name: "Afvalkalender ACV", id: "acv", execute: acvAfvalkalender });
+apiList.push({ name: "Afvalkalender Almere", id: "alm", execute: almereAfvalkalender });
+apiList.push({ name: "Afvalkalender Circulus-Berkel", id: "acb", execute: circulusBerkel });
 apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCyclus });
-apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
-apiList.push({ name: "Afvalkalender ZRD", id: "afzrd", execute: afvalkalenderZrd });
-apiList.push({ name: "Twente Milieu", id: "twm", execute: twenteMilieu });
-apiList.push({ name: "Gemeente Hellendoorn", id: "geh", execute: gemeenteHellendoorn });
-apiList.push({ name: "Recyclemanager", id: "remg", execute: recycleManager });
-apiList.push({ name: "Afvalkalender Purmerend", id: "akpu", execute: afvalkalenderPurmerend})
-apiList.push({ name: "Huisvulkalender Den Haag", id: "hkdh", execute: huisvuilkalenderDenHaag})
+apiList.push({ name: "Afvalkalender DAR", id: "dar", execute: darAfvalkalender });
 apiList.push({ name: "Afvalkalender Meerlanden", id: "akm", execute: afvalkalenderMeerlanden });
 apiList.push({ name: "Afvalkalender Peel en Maas", id: "akpm", execute: afvalkalenderPeelEnMaas });
-apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderVenray });
-apiList.push({ name: "Afvalkalender Reinis", id: "aknw", execute: nissewaard });
-apiList.push({ name: "Inzamelkalender HVC", id: "hvc", execute: inzamelkalenderHVC });
-apiList.push({ name: "Dar Afvalkalender", id: "dar", execute: darAfvalkalender });
+apiList.push({ name: "Afvalkalender Purmerend", id: "akpu", execute: afvalkalenderPurmerend});
 apiList.push({ name: "Afvalkalender RD4", id: "rd4", execute: afvalkalenderRD4 });
-apiList.push({ name: "ROVA Afvalkalender", id: "rov", execute: rovaAfvalkalender });
-apiList.push({ name: "Afvalkalender Circulus-Berkel", id: "acb", execute: circulusBerkel });
-apiList.push({ name: "Mijn Blink Afvalkalender", id: "mba", execute: BlinkAfvalkalender });
-apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
-apiList.push({ name: "ACV", id: "acv", execute: acvAfvalkalender });
-apiList.push({ name: "GAD Gooi en Vechtstreek", id: "gad", execute: GadGooiAndVechtstreek });
+apiList.push({ name: "Afvalkalender Reinis", id: "aknw", execute: nissewaard });
+apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
+apiList.push({ name: "Afvalkalender ROVA", id: "rov", execute: rovaAfvalkalender });
+apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderVenray });
+apiList.push({ name: "Afvalkalender ZRD", id: "afzrd", execute: afvalkalenderZrd });
+apiList.push({ name: "Afvalwijzer Pre Zero", id: "arn", execute: afvalwijzerPreZero });
 apiList.push({ name: "Area Reiniging", id: "arei", execute: areaReiniging });
+apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
+apiList.push({ name: "Den Bosch Afvalstoffendienstkalender", id: "dbafw", execute: denBoschAfvalstoffendienstCalendar });
+apiList.push({ name: "GAD Gooi en Vechtstreek", id: "gad", execute: GadGooiAndVechtstreek });
+apiList.push({ name: "Gemeente Hellendoorn", id: "geh", execute: gemeenteHellendoorn });
+apiList.push({ name: "Huisvulkalender Den Haag", id: "hkdh", execute: huisvuilkalenderDenHaag});
+apiList.push({ name: "Inzamelkalender HVC", id: "hvc", execute: inzamelkalenderHVC });
+apiList.push({ name: "Mijn Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
+apiList.push({ name: "Mijn Blink Afvalkalender", id: "mba", execute: BlinkAfvalkalender });
+apiList.push({ name: "Recyclemanager", id: "remg", execute: recycleManager });
 apiList.push({ name: "Reinigingsdienst Waardlanden", id: "rewl", execute: reinigingsdienstWaardlanden });
-apiList.push({ name: "Stadswerk072", id: "sw072", execute: afvalwijzerStadswerk072 });                          // Deprecated as of 2022-06-09
-apiList.push({ name: "Almere", id: "alm", execute: almereAfvalkalender });
+apiList.push({ name: "Twente Milieu", id: "twm", execute: twenteMilieu });
+
 apiList.push({ name: "Recycle App (BE)", id: "recbe", execute: recycleApp });
+
+apiList.push({ name: "Afvalkalender Cure", id: "acu", execute: afvalkalenderCure })                             // Deprecated as of 2022-06-09
+apiList.push({ name: "Stadswerk072", id: "sw072", execute: afvalwijzerStadswerk072 });                          // Deprecated as of 2022-06-09
 
 module.exports = apiList;

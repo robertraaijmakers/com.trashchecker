@@ -93,5 +93,9 @@
   "3.1.19": {
     "en": "Added fix for afvalwijzer. #148, #149",
     "nl": "Betere afhandeling van afvalwijzer. #148, #149"
+  },
+  "3.1.20": {
+    "en": "Added support for Den Haag and Purmerend with many thanks to HugoKNL #93",
+    "nl": "Den Haag en Purmerend nu ook ondersteund met dank aan HugoKNL #93"
   }
 }
