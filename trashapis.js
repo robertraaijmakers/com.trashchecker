@@ -71,7 +71,6 @@ function afvalwijzerPreZero(postcode, housenumber, street, country) {
 }
 
 function afvalkalenderPurmerend(postcode, housenumber, street, country) {
-    console.log("Checking Afvalkalender Purmerend");
     return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.purmerend.nl')
 }
 
