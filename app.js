@@ -395,7 +395,7 @@ class TrashcanReminder extends Homey.App
 			var result = apiArray.find(o => o.id === apiId);
 			if(result == null || typeof result === 'undefined')
 			{
-				return Promise.error("API cannot be found.");
+				return Promise.reject(new Error("API cannot be found: " + apiId));
 			}
 			
 			// only load that API, this is so that we won't send requests to all data providers all the time.
