@@ -1,5 +1,5 @@
 Trashcan Reminder 2.0
-Homey will remind you to put the trash out! You can do this by providing a postal code, house number (currently NL only).
+Homey will remind you to put the trash out! You can do this by providing a postal code, house number (currently NL/BE only).
 
 Supported Cities
 A lot of cities are supported with this trashcan reminder. If your city is not supported you can always add your schedule manually.
