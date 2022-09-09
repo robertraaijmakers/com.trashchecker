@@ -337,6 +337,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                             fDates = verifyByName(fDates, elem.attribs.class.trim(), wasteDescription, dateStr);
                             console.log("Defaulted. Element not found: ", elem.attribs.class);
                             console.log("Trying to find date based on description: ", wasteDescription);
+                            break;            
                     }
 
                     elem = null; // clear memory leak?
@@ -386,7 +387,7 @@ function verifyByName(fDates, className, description, dateStr)
         fDates.GFT.push(dateStr);
     } 
     
-    if (description.indexOf('rest') !== -1) {
+    if (description.indexOf('rest') !== -1 && description.indexOf('etensresten') === -1) {
         if (!fDates.REST) fDates.REST = [];
         fDates.REST.push(dateStr);
     } 
@@ -419,7 +420,7 @@ function verifyByName(fDates, className, description, dateStr)
     if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
         if (!fDates.GROF) fDates.GROF = [];
         fDates.GROF.push(dateStr);
-    } 
+    }
     
     if(description.indexOf('glas') !== -1) {
         if (!fDates.GLAS) fDates.GLAS = [];
@@ -430,6 +431,11 @@ function verifyByName(fDates, className, description, dateStr)
         if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
         fDates.TEXTIEL.push(dateStr);
     }
+    
+    // if(description.indexOf('etensresten') !== -1) {
+    //     if (!fDates.FOOD) fDates.FOOD = [];
+    //     fDates.FOOD.push(dateStr);
+    // }
     
     // if(description.indexOf('takken') !== -1 || description.indexOf('snoei') !== -1) {
     //     if (!fDates.SNOEI) fDates.SNOEI = [];
