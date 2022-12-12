@@ -575,14 +575,15 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
         return Promise.reject(Error('Unsupported country'));
     }
 
-    var hostName = "recycleapp.be";
+    // API's moved to api.fostplus.be/recycle-public/app/v1 
+    var hostName = "api.fostplus.be";
     var accessConsumer = "recycleapp.be";
-    var accessSecret = "Crgja3EGWe8jdapyr4EEoMBgZACYYjRRcRpaMQrLDW9HJBvmgkfGQyYqLgeXPavAGvnJqkV87PBB2b8zx43q46sUgzqio4yRZbABhtKeagkVKypTEDjKfPgGycjLyJTtLHYpzwJgp4YmmCuJZN9ZmJY8CGEoFs8MKfdJpU9RjkEVfngmmk2LYD4QzFegLNKUbcCeAdEW";
+    var accessSecret = "8eTFgy3AQH0mzAcj3xMwaKnNyNnijEFIEegjgNpBHifqtQ4IEyWqmJGFz3ggKQ7B4vwUYS8xz8KwACZihCmboGb6brtVB3rpne2Ww5uUM2n3i4SKNUg6Vp7lhAS8INDUNH8Ll7WPhWRsQOXBCjVz5H8fr0q6fqZCosXdndbNeiNy73FqJBn794qKuUAPTFj8CuAbwI6Wom98g72Px1MPRYHwyrlHUbCijmDmA2zoWikn34LNTUZPd7kS0uuFkibkLxCc1PeOVYVHeh1xVxxwGBsMINWJEUiIBqZt9VybcHpUJTYzureqfund1aeJvmsUjwyOMhLSxj9MLQ07iTbvzQa6vbJdC0hTsqTlndccBRm9lkxzNpzJBPw8VpYSyS3AhaR2U1n4COZaJyFfUQ3LUBzdj5gV8QGVGCHMlvGJM0ThnRKENSWZLVZoHHeCBOkfgzp0xl0qnDtR8eJF0vLkFiKwjX7DImGoA8IjqOYygV3W9i9rIOfK";
 
     // Get access token
     var accessTokenRequest = httpsPromise({
         hostname: hostName,
-        path: '/api/app/v1/access-token',
+        path: '/recycle-public/app/v1/access-token',
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -601,7 +602,7 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
             // Validate zipcode request
             var validateZipCodeRequest = httpsPromise({
                 hostname: hostName,
-                path: `/api/app/v1/zipcodes?q=${postcode}`,
+                path: `/recycle-public/app/v1/zipcodes?q=${postcode}`,
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
@@ -631,7 +632,7 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                 // Validate street request
                 var validateStreetRequest = httpsPromise({
                     hostname: hostName,
-                    path: encodeURI(`/api/app/v1/streets?q=${street}&zipcodes=${zipcodeId}`),
+                    path: encodeURI(`/recycle-public/app/v1/streets?q=${street}&zipcodes=${zipcodeId}`),
                     headers: {
                     'Content-Type': 'application/json',
                     'User-Agent': 'Homey',
@@ -666,7 +667,7 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                     
                     var getTrashRequest = httpsPromise({
                         hostname: hostName,
-                        path: `/api/app/v1/collections?size=100&untilDate=${endDate}&fromDate=${startDate}&houseNumber=${housenumber}&streetId=${streetId}&zipcodeId=${zipcodeId}`,
+                        path: `/recycle-public/app/v1/collections?size=100&untilDate=${endDate}&fromDate=${startDate}&houseNumber=${housenumber}&streetId=${streetId}&zipcodeId=${zipcodeId}`,
                         headers: {
                             'Content-Type': 'application/json',
                             'User-Agent': 'Homey',
