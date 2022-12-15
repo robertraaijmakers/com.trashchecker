@@ -633,6 +633,7 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                 var validateStreetRequest = httpsPromise({
                     hostname: hostName,
                     path: encodeURI(`/recycle-public/app/v1/streets?q=${street}&zipcodes=${zipcodeId}`),
+                    method: "POST",
                     headers: {
                     'Content-Type': 'application/json',
                     'User-Agent': 'Homey',
