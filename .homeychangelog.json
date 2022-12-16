@@ -97,5 +97,9 @@
   "3.1.20": {
     "en": "Added support for Den Haag and Purmerend with many thanks to HugoKNL #93",
     "nl": "Den Haag en Purmerend nu ook ondersteund met dank aan HugoKNL #93"
+  },
+  "3.2.0": {
+    "en": "Small updates and bugfixes #154, #156, #157",
+    "nl": "Kleine updates en bugfixes #154, #156, #157"
   }
 }
