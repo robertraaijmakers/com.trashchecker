@@ -531,6 +531,13 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                     for (var j = 0; j < Object.keys(calendarResult.dataList[i].pickupDates).length; j++) {
                         var date = formatDate(calendarResult.dataList[i].pickupDates[j]);
                         switch (calendarResult.dataList[i]._pickupTypeText) {
+                            case "GREENGREY":
+                            case "GREYGREEN":
+                                if (!fDates.REST) fDates.REST = [];
+                                if (!fDates.GFT) fDates.GFT = [];
+                                fDates.REST.push(date);
+                                fDates.GFT.push(date);
+                                break;
                             case "GREY":
                                 if (!fDates.REST) fDates.REST = [];
                                 fDates.REST.push(date);

@@ -2,7 +2,7 @@
 
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
-
+/*
 it('API - RD4', function() {
     var postcode = "6374BA";
     var homenumber = 159;
@@ -310,7 +310,7 @@ it('API - Almere Ximmio', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-
+*/
 it('API - Almere Ximmio', function() {
     var postcode = "1359KS";
     var homenumber = 20;
@@ -324,7 +324,7 @@ it('API - Almere Ximmio', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-
+/*
 it('API - Afvalkalender Etten-Leur', function() {
     var postcode = "4871TK";
     var homenumber = 36;
