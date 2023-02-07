@@ -78,6 +78,10 @@ function huisvuilkalenderDenHaag(postcode, housenumber, street, country) {
     return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'huisvuilkalender.denhaag.nl')
 }
 
+function huisvuilkalenderEttenLeur(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'www.afval3xbeter.nl')
+}
+
 function afvalkalenderMeerlanden(postcode, housenumber, street, country) {
     console.log("Checking Meerlanden");
     return generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45", "wasteprod2api.ximmio.com");
@@ -1271,6 +1275,7 @@ apiList.push({ name: "Afvalkalender Almere", id: "alm", execute: almereAfvalkale
 apiList.push({ name: "Afvalkalender Circulus-Berkel", id: "acb", execute: circulusBerkel });
 apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCyclus });
 apiList.push({ name: "Afvalkalender DAR", id: "dar", execute: darAfvalkalender });
+apiList.push({ name: "Afvalkalender Etten-Leur", id: "akel", execute: huisvuilkalenderEttenLeur });
 apiList.push({ name: "Afvalkalender Meerlanden", id: "akm", execute: afvalkalenderMeerlanden });
 apiList.push({ name: "Afvalkalender Peel en Maas", id: "akpm", execute: afvalkalenderPeelEnMaas });
 apiList.push({ name: "Afvalkalender Purmerend", id: "akpu", execute: afvalkalenderPurmerend});

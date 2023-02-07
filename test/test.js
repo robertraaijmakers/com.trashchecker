@@ -184,7 +184,7 @@ it('API - Circulus Berkel', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-/*
+
 it('API - Mijn Blink', function() {
     var postcode = "5673RE";
     var homenumber = 2;
@@ -302,7 +302,35 @@ it('API - Almere Ximmio', function() {
     var homenumber = 10;
     var country = "NL";
     var apiId = "alm";
-    var apiName = "API - Almere Ximmio";
+    var apiName = "API - Almere Ximmio - 1";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Almere Ximmio', function() {
+    var postcode = "1359KS";
+    var homenumber = 20;
+    var country = "NL";
+    var apiId = "alm";
+    var apiName = "API - Almere Ximmio - 2";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Afvalkalender Etten-Leur', function() {
+    var postcode = "4871TK";
+    var homenumber = 36;
+    var country = "NL";
+    var apiId = "akel";
+    var apiName = "API - Afvalkalender Etten-Leur";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
