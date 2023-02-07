@@ -78,6 +78,10 @@ function huisvuilkalenderDenHaag(postcode, housenumber, street, country) {
     return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'huisvuilkalender.denhaag.nl')
 }
 
+function huisvuilkalenderEttenLeur(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'www.afval3xbeter.nl')
+}
+
 function afvalkalenderMeerlanden(postcode, housenumber, street, country) {
     console.log("Checking Meerlanden");
     return generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45", "wasteprod2api.ximmio.com");
@@ -333,10 +337,16 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                             if (!fDates.GLAS) fDates.GLAS = [];
                             fDates.GLAS.push(dateStr);
                             break;
+                        case 'kerst':
+                        case 'kerstbomen':
+                            if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
+                            fDates.KERSTBOOM.push(dateStr);
+                            break;
                         default:
                             fDates = verifyByName(fDates, elem.attribs.class.trim(), wasteDescription, dateStr);
                             console.log("Defaulted. Element not found: ", elem.attribs.class);
                             console.log("Trying to find date based on description: ", wasteDescription);
+                            break;            
                     }
 
                     elem = null; // clear memory leak?
@@ -386,7 +396,7 @@ function verifyByName(fDates, className, description, dateStr)
         fDates.GFT.push(dateStr);
     } 
     
-    if (description.indexOf('rest') !== -1) {
+    if (description.indexOf('rest') !== -1 && description.indexOf('etensresten') === -1) {
         if (!fDates.REST) fDates.REST = [];
         fDates.REST.push(dateStr);
     } 
@@ -419,7 +429,7 @@ function verifyByName(fDates, className, description, dateStr)
     if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
         if (!fDates.GROF) fDates.GROF = [];
         fDates.GROF.push(dateStr);
-    } 
+    }
     
     if(description.indexOf('glas') !== -1) {
         if (!fDates.GLAS) fDates.GLAS = [];
@@ -430,6 +440,11 @@ function verifyByName(fDates, className, description, dateStr)
         if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
         fDates.TEXTIEL.push(dateStr);
     }
+    
+    // if(description.indexOf('etensresten') !== -1) {
+    //     if (!fDates.FOOD) fDates.FOOD = [];
+    //     fDates.FOOD.push(dateStr);
+    // }
     
     // if(description.indexOf('takken') !== -1 || description.indexOf('snoei') !== -1) {
     //     if (!fDates.SNOEI) fDates.SNOEI = [];
@@ -516,6 +531,13 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                     for (var j = 0; j < Object.keys(calendarResult.dataList[i].pickupDates).length; j++) {
                         var date = formatDate(calendarResult.dataList[i].pickupDates[j]);
                         switch (calendarResult.dataList[i]._pickupTypeText) {
+                            case "GREENGREY":
+                            case "GREYGREEN":
+                                if (!fDates.REST) fDates.REST = [];
+                                if (!fDates.GFT) fDates.GFT = [];
+                                fDates.REST.push(date);
+                                fDates.GFT.push(date);
+                                break;
                             case "GREY":
                                 if (!fDates.REST) fDates.REST = [];
                                 fDates.REST.push(date);
@@ -575,14 +597,15 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
         return Promise.reject(Error('Unsupported country'));
     }
 
-    var hostName = "recycleapp.be";
+    // API's moved to api.fostplus.be/recycle-public/app/v1 
+    var hostName = "api.fostplus.be";
     var accessConsumer = "recycleapp.be";
-    var accessSecret = "Crgja3EGWe8jdapyr4EEoMBgZACYYjRRcRpaMQrLDW9HJBvmgkfGQyYqLgeXPavAGvnJqkV87PBB2b8zx43q46sUgzqio4yRZbABhtKeagkVKypTEDjKfPgGycjLyJTtLHYpzwJgp4YmmCuJZN9ZmJY8CGEoFs8MKfdJpU9RjkEVfngmmk2LYD4QzFegLNKUbcCeAdEW";
+    var accessSecret = "8eTFgy3AQH0mzAcj3xMwaKnNyNnijEFIEegjgNpBHifqtQ4IEyWqmJGFz3ggKQ7B4vwUYS8xz8KwACZihCmboGb6brtVB3rpne2Ww5uUM2n3i4SKNUg6Vp7lhAS8INDUNH8Ll7WPhWRsQOXBCjVz5H8fr0q6fqZCosXdndbNeiNy73FqJBn794qKuUAPTFj8CuAbwI6Wom98g72Px1MPRYHwyrlHUbCijmDmA2zoWikn34LNTUZPd7kS0uuFkibkLxCc1PeOVYVHeh1xVxxwGBsMINWJEUiIBqZt9VybcHpUJTYzureqfund1aeJvmsUjwyOMhLSxj9MLQ07iTbvzQa6vbJdC0hTsqTlndccBRm9lkxzNpzJBPw8VpYSyS3AhaR2U1n4COZaJyFfUQ3LUBzdj5gV8QGVGCHMlvGJM0ThnRKENSWZLVZoHHeCBOkfgzp0xl0qnDtR8eJF0vLkFiKwjX7DImGoA8IjqOYygV3W9i9rIOfK";
 
     // Get access token
     var accessTokenRequest = httpsPromise({
         hostname: hostName,
-        path: '/api/app/v1/access-token',
+        path: '/recycle-public/app/v1/access-token',
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -601,7 +624,7 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
             // Validate zipcode request
             var validateZipCodeRequest = httpsPromise({
                 hostname: hostName,
-                path: `/api/app/v1/zipcodes?q=${postcode}`,
+                path: `/recycle-public/app/v1/zipcodes?q=${postcode}`,
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
@@ -631,7 +654,8 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                 // Validate street request
                 var validateStreetRequest = httpsPromise({
                     hostname: hostName,
-                    path: encodeURI(`/api/app/v1/streets?q=${street}&zipcodes=${zipcodeId}`),
+                    path: encodeURI(`/recycle-public/app/v1/streets?q=${street}&zipcodes=${zipcodeId}`),
+                    method: "POST",
                     headers: {
                     'Content-Type': 'application/json',
                     'User-Agent': 'Homey',
@@ -666,7 +690,7 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                     
                     var getTrashRequest = httpsPromise({
                         hostname: hostName,
-                        path: `/api/app/v1/collections?size=100&untilDate=${endDate}&fromDate=${startDate}&houseNumber=${housenumber}&streetId=${streetId}&zipcodeId=${zipcodeId}`,
+                        path: `/recycle-public/app/v1/collections?size=100&untilDate=${endDate}&fromDate=${startDate}&houseNumber=${housenumber}&streetId=${streetId}&zipcodeId=${zipcodeId}`,
                         headers: {
                             'Content-Type': 'application/json',
                             'User-Agent': 'Homey',
@@ -1046,6 +1070,9 @@ function circulusBerkel(postcode, homenumber, street, country)
                             case 'best':
                                 key = 'TEXTIEL';
                                 break;
+                            case 'kerst':
+                                key = 'KERSTBOOM';
+                                break;
                             default:
                                 key = key.toUpperCase();
                                 break;
@@ -1255,6 +1282,7 @@ apiList.push({ name: "Afvalkalender Almere", id: "alm", execute: almereAfvalkale
 apiList.push({ name: "Afvalkalender Circulus-Berkel", id: "acb", execute: circulusBerkel });
 apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCyclus });
 apiList.push({ name: "Afvalkalender DAR", id: "dar", execute: darAfvalkalender });
+apiList.push({ name: "Afvalkalender Etten-Leur", id: "akel", execute: huisvuilkalenderEttenLeur });
 apiList.push({ name: "Afvalkalender Meerlanden", id: "akm", execute: afvalkalenderMeerlanden });
 apiList.push({ name: "Afvalkalender Peel en Maas", id: "akpm", execute: afvalkalenderPeelEnMaas });
 apiList.push({ name: "Afvalkalender Purmerend", id: "akpu", execute: afvalkalenderPurmerend});

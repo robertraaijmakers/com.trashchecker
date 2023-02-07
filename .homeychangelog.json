@@ -97,5 +97,20 @@
   "3.1.20": {
     "en": "Added support for Den Haag and Purmerend with many thanks to HugoKNL #93",
     "nl": "Den Haag en Purmerend nu ook ondersteund met dank aan HugoKNL #93"
+  },
+  "3.1.21": {
+    "en": "Updated API for Belgium"
+  },
+  "3.2.0": {
+    "en": "Small updates and bugfixes #154, #156, #157",
+    "nl": "Kleine updates en bugfixes #154, #156, #157"
+  },
+  "3.2.1": {
+    "en": "A holiday update for next year, added parsing of kerstbomen to extra APIs #164",
+    "nl": "Een extratje voor volgend jaar, kerstbomen nu in nog meer gemeentes ondersteund #164"
+  },
+  "3.2.3": {
+    "en": "Extended support in Almere for the Duobak (green + grey). Added support for Etten-Leur who switched APIs.",
+    "nl": "Etten-Leur wordt nu (weer) ondersteund na overstap van leverancier. Almere is uitgebreid en de duobak wordt nu herkend als groen en grijs."
   }
 }

@@ -5,8 +5,10 @@
     "en": "Trashcan Reminder 2.0",
     "nl": "Afval Herinnering 2.0"
   },
-  "version": "3.1.20",
-  "platforms": ["local"],
+  "version": "3.2.3",
+  "platforms": [
+    "local"
+  ],
   "compatibility": ">=5.0",
   "author": {
     "name": "Robert Raaijmakers",
@@ -48,12 +50,10 @@
   "support": "https://robertraaijmakers.github.io/com.trashchecker/",
   "homeyCommunityTopicId": 10410,
   "source": "https://github.com/robertraaijmakers/com.trashchecker",
-  "api":
-  {
-    "validateUserData":
-    {
+  "api": {
+    "validateUserData": {
       "method": "POST",
-      "path": "/" 
+      "path": "/"
     }
   }
 }
