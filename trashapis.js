@@ -333,6 +333,11 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                             if (!fDates.GLAS) fDates.GLAS = [];
                             fDates.GLAS.push(dateStr);
                             break;
+                        case 'kerst':
+                        case 'kerstbomen':
+                            if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
+                            fDates.KERSTBOOM.push(dateStr);
+                            break;
                         default:
                             fDates = verifyByName(fDates, elem.attribs.class.trim(), wasteDescription, dateStr);
                             console.log("Defaulted. Element not found: ", elem.attribs.class);
@@ -1053,6 +1058,9 @@ function circulusBerkel(postcode, homenumber, street, country)
                                 break;
                             case 'best':
                                 key = 'TEXTIEL';
+                                break;
+                            case 'kerst':
+                                key = 'KERSTBOOM';
                                 break;
                             default:
                                 key = key.toUpperCase();

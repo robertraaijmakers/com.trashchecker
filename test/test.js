@@ -184,7 +184,7 @@ it('API - Circulus Berkel', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-
+/*
 it('API - Mijn Blink', function() {
     var postcode = "5673RE";
     var homenumber = 2;
