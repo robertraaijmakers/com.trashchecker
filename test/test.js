@@ -324,6 +324,23 @@ it('API - Almere Ximmio', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
+
+it('API - Afvalkalender RMN', function() {
+    var postcode = "3768MJ";
+    var homenumber = 40;
+    var country = "NL";
+    var apiId = "afrm";
+    var apiName = "API - Afvalkalender RMN";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+
+
 /*
 it('API - Afvalkalender Etten-Leur', function() {
     var postcode = "4871TK";
@@ -398,7 +415,7 @@ it('API - Afval App', function() {
         });
 });
 
-/*it('API - Mijn Blin - ERROR', function() {
+/*it('API - Mijn Blink - ERROR', function() {
     var postcode = "5673RE";
     var homenumber = 1111125;
     var country = "NL";

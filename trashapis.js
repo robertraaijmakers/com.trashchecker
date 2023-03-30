@@ -30,7 +30,7 @@ function afvalkalenderZrd(postcode, housenumber, street, country) {
 }
 
 function afvalRmn(postcode, housenumber, street, country) {
-    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl');
+    return Promise.reject(Error('RMN is not supported anymore due to a new API.'));
 }
 
 function afvalkalenderCure(postcode, housenumber, street, country) {

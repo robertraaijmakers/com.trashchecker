@@ -112,5 +112,9 @@
   "3.2.3": {
     "en": "Extended support in Almere for the Duobak (green + grey). Added support for Etten-Leur who switched APIs.",
     "nl": "Etten-Leur wordt nu (weer) ondersteund na overstap van leverancier. Almere is uitgebreid en de duobak wordt nu herkend als groen en grijs."
+  },
+  "3.2.4": {
+    "en": "Removed RMN due to API change.",
+    "nl": "Sorry, heb RMN uit de app moeten halen omdat hun data niet meer toegankelijk is."
   }
 }
