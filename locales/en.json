@@ -175,7 +175,8 @@
 		"trashcollection": {
 			"today": "Collected Today",
 			"tomorrow": "Collected Tomorrow",
-			"dayaftertomorrow": "Collected Day After Tomorrow"
+			"dayaftertomorrow": "Collected Day After Tomorrow",
+			"advancedcollectiondates": "Collection Days (JSON)"
 		}
 	}
 }

@@ -116,5 +116,9 @@
   "3.2.4": {
     "en": "Removed RMN due to API change.",
     "nl": "Sorry, heb RMN uit de app moeten halen omdat hun data niet meer toegankelijk is."
+  },
+  "3.2.6": {
+    "en": "RMN is back in the game!",
+    "nl": "Een slim persoon heeft de RMN API ontleed en op dit moment werkt het weer, BAR gebruikt dezelfde, dus deze ook toegevoegd (geen garanties, maar geniet ervan zolang het kan)!"
   }
 }

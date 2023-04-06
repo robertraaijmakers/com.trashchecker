@@ -175,7 +175,8 @@
 		"trashcollection": {
 			"today": "Vandaag opgehaald",
 			"tomorrow": "Morgen opgehaald",
-			"dayaftertomorrow": "Overmorgen opgehaald"
+			"dayaftertomorrow": "Overmorgen opgehaald",
+			"advancedcollectiondates": "Ophaaldagen (JSON)"
 		}
 	}
 }

@@ -175,7 +175,8 @@
 		"trashcollection": {
 			"today": "Hämtas idag",
 			"tomorrow": "Hämtas imorgon",
-			"dayaftertomorrow": "Hämtas i övermorgon"
+			"dayaftertomorrow": "Hämtas i övermorgon",
+			"advancedcollectiondates": "Samlingsdagar (JSON)"
 		}
 	}
 }

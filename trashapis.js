@@ -30,7 +30,11 @@ function afvalkalenderZrd(postcode, housenumber, street, country) {
 }
 
 function afvalRmn(postcode, housenumber, street, country) {
-    return Promise.reject(Error('RMN is not supported anymore due to a new API.'));
+    return generalImplementationBurgerportaal(postcode, housenumber, country, '138204213564933597');
+}
+
+function afvalkalenderBar(postcode, housenumber, street, country) {
+    return generalImplementationBurgerportaal(postcode, housenumber, country, '138204213564933497');
 }
 
 function afvalkalenderCure(postcode, housenumber, street, country) {
@@ -772,6 +776,164 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
     });
 }
 
+function generalImplementationBurgerportaal(zipcode, housenumber, country, organisationId = '138204213564933597')
+{
+    var fDates = {};    
+    if (country !== "NL") {
+        console.log('unsupported country');
+        return Promise.reject(Error('Unsupported country'));
+    }
+
+    var hostName = "europe-west3-burgerportaal-production.cloudfunctions.net";
+    var userToken = "AIzaSyA6NkRqJypTfP-cjWzrZNFJzPUbBaGjOdk";
+
+    // Get access token
+    var idTokenRequest = httpsPromise({
+        hostname: 'www.googleapis.com',
+        path: `/identitytoolkit/v3/relyingparty/signupNewUser?key=${userToken}`,
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Homey'
+        }
+    });
+
+    return new Promise(function(resolve, reject)
+    {
+        idTokenRequest.then(function(response)
+        {
+            var refreshToken = response.body.refreshToken;
+
+            // Retrieve access token
+            var post_data = '?&grant_type=refresh_token&refresh_token=' + refreshToken;
+            var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': Buffer.byteLength(post_data) }
+            var accessTokenRequest = httpsPromise({
+                hostname: 'securetoken.googleapis.com',
+                path: `/v1/token?key=${userToken}`,
+                method: 'POST',
+                body: post_data,
+                headers: headers
+            });
+
+            accessTokenRequest.then(function(response)
+            {
+                var accessToken = response.body.access_token;
+
+                // Retrieve address ID
+                var addressIdRequest = httpsPromise({
+                    hostname: hostName,
+                    path: `/exposed/organisations/${organisationId}/address?zipcode=${zipcode}&housenumber=${housenumber}`,
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'User-Agent': 'Homey',
+                        'Authorization': accessToken,
+                    }
+                });
+                
+                addressIdRequest.then(function(response)
+                {
+                    var result = response.body;
+                    if(result.length <= 0)
+                    {
+                        reject(new Error("No zipcode found for: " + zipcode));
+                        return;
+                    }
+
+                    if(result.length > 1)
+                    {
+                        reject(new Error("Multiple zipcode entries found for: " + zipcode));
+                        return;
+                    }
+
+                    var addressId = result[0].addressId;
+
+                    // Validate street request
+                    var getTrashRequest = httpsPromise({
+                        hostname: hostName,
+                        path: `/exposed/organisations/${organisationId}/address/${addressId}/calendar`,
+                        method: "GET",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'User-Agent': 'Homey',
+                            'Authorization': accessToken,
+                        }
+                    });
+    
+                    getTrashRequest.then(function(response)
+                    {
+                        var result = response.body;
+                        if(result.length <= 0)
+                        {
+                            reject(new Error("No trash data found for: " + getTrashRequest.path));
+                            return;
+                        }
+
+                        for (let i in result) {
+                            const entry = result[i];
+                            const dateStr = entry.collectionDate.substr(0,10);
+
+                            var description = entry.fraction.toLowerCase();
+
+                            if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
+                                if (!fDates.GFT) fDates.GFT = [];
+                                fDates.GFT.push(dateStr);
+                            } else if (description.indexOf('pmdrest') !== -1) {
+                                if (!fDates.REST) fDates.REST = [];
+                                if (!fDates.PMD) fDates.PMD = [];
+                                fDates.REST.push(dateStr);
+                                fDates.PMD.push(dateStr);
+                            } else if (description.indexOf('rest') !== -1) {
+                                if (!fDates.REST) fDates.REST = [];
+                                fDates.REST.push(dateStr);
+                            } else if (description.indexOf('pmd') !== -1 || description.indexOf('pd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
+                                if (!fDates.PMD) fDates.PMD = [];
+                                fDates.PMD.push(dateStr);
+                            } else if (description.indexOf('plastic') !== -1) {
+                                if (!fDates.PLASTIC) fDates.PLASTIC = [];
+                                fDates.PLASTIC.push(dateStr);
+                            }  else if (description.indexOf('papier') !== -1 || description.indexOf('opk') !== -1) {
+                                if (!fDates.PAPIER) fDates.PAPIER = [];
+                                fDates.PAPIER.push(dateStr);
+                            } else if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1) {
+                                if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+                                fDates.TEXTIEL.push(dateStr);
+                            } else if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
+                                if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
+                                fDates.KERSTBOOM.push(dateStr);
+                            } else if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
+                                if (!fDates.GROF) fDates.GROF = [];
+                                fDates.GROF.push(dateStr);
+                            } else if(description.indexOf('glas') !== -1) {
+                                if (!fDates.GLAS) fDates.GLAS = [];
+                                fDates.GLAS.push(dateStr);
+                            } else {
+                                console.log("Unknown description: " + description);
+                            }
+                        }
+                        
+                        console.log(fDates);
+                        resolve(fDates);
+                        return;
+                    }).catch(function(error)
+                    {
+                        reject(new Error("Can't retrieve trash data: " + error));
+                    });
+                }).catch(function(error)
+                {
+                    reject(new Error("Can't validate address: " + error));
+                });
+            }).catch(function(error)
+            {
+                reject(new Error("Can't retrieve access token: " + error));
+            });
+        }).catch(function(error)
+        {
+            reject(new Error("Can't retrieve ID token: " + error));
+        });
+    });
+}
+
 /**
  * Vendor specific API implementations
  */
@@ -1279,6 +1441,7 @@ function httpsPromise({body, ...options}) {
 apiList.push({ name: "Afval App", id: "afa", execute: afvalapp });
 apiList.push({ name: "Afvalkalender ACV", id: "acv", execute: acvAfvalkalender });
 apiList.push({ name: "Afvalkalender Almere", id: "alm", execute: almereAfvalkalender });
+apiList.push({ name: "Afvalkalender BAR", id: "afbar", execute: afvalkalenderBar });
 apiList.push({ name: "Afvalkalender Circulus-Berkel", id: "acb", execute: circulusBerkel });
 apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCyclus });
 apiList.push({ name: "Afvalkalender DAR", id: "dar", execute: darAfvalkalender });
