@@ -26,7 +26,7 @@ function afvalkalenderCyclus(postcode, housenumber, street, country) {
 }
 
 function afvalkalenderZrd(postcode, housenumber, street, country) {
-    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.zrd.nl');
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'zrd.nl');
 }
 
 function afvalRmn(postcode, housenumber, street, country) {
@@ -181,6 +181,8 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
 
             retrieveCalendar.then(function(response)
             {
+                console.log(`response: ${response.body}`);
+
                 var icalResult = response.body;
                 const dates = {};
                 const entries = ical.parseICS(icalResult);

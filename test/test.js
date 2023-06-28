@@ -143,6 +143,20 @@ it('API - Afvalwijzer', function() {
         });
 });
 
+it('API - ZRD', function() {
+    var postcode = "4301LB";
+    var homenumber = 7;
+    var country = "NL";
+    var apiId = "afzrd";
+    var apiName = "API - ZRD";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 it('API - Mijn Blink', function() {
     var postcode = "5673RE";
     var homenumber = 2;
