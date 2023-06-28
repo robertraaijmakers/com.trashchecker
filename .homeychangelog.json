@@ -120,5 +120,9 @@
   "3.2.6": {
     "en": "RMN is back in the game!",
     "nl": "Een slim persoon heeft de RMN API ontleed en op dit moment werkt het weer, BAR gebruikt dezelfde, dus deze ook toegevoegd (geen garanties, maar geniet ervan zolang het kan)!"
+  },
+  "3.2.7": {
+    "en": "Updated ZRD url",
+    "nl": "ZRD bijgewerkt"
   }
 }

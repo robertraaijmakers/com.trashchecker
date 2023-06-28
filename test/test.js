@@ -144,8 +144,8 @@ it('API - Afvalwijzer', function() {
 });
 
 it('API - ZRD', function() {
-    var postcode = "4301LB";
-    var homenumber = 7;
+    var postcode = "4569AD";
+    var homenumber = 26;
     var country = "NL";
     var apiId = "afzrd";
     var apiName = "API - ZRD";
