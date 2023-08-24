@@ -1020,8 +1020,8 @@ function afvalkalenderRD4(postcode, housenumber, street, country) {
         return Promise.reject(Error('Unsupported country'));
     }
 
-    var onlyHouseNumber = housenumber.match(/\d+/g);
-    var numberAddition = housenumber.match(/[a-zA-Z]+/g);
+    var onlyHouseNumber = (housenumber+"").match(/\d+/g);
+    var numberAddition = (housenumber+"").match(/[a-zA-Z]+/g);
     var queryAddition = "";
 
     if(numberAddition !== null && numberAddition.length > 0 && numberAddition[0] !== null)

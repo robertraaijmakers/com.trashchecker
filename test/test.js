@@ -17,6 +17,21 @@ it('API - RD4', function() {
         });
 });
 
+
+it('API - RD4 - Toevoeging', function() {
+    var postcode = "6471CD";
+    var homenumber = "57A";
+    var country = "NL";
+    var apiId = "rd4";
+    var apiName = "API - RD4 - Toevoeging";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 it('API - Afvalwijzer', function() {
     var postcode = "9681TP";
     var homenumber = 5;
