@@ -124,5 +124,9 @@
   "3.2.7": {
     "en": "Updated ZRD url",
     "nl": "ZRD bijgewerkt"
+  },
+  "3.2.8": {
+    "en": "Updated RD4 to support house number extensions",
+    "nl": "RD4 bijgewerkt zodat deze huisnummer toevoegingen ondersteund"
   }
 }

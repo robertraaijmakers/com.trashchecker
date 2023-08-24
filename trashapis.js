@@ -1020,10 +1020,19 @@ function afvalkalenderRD4(postcode, housenumber, street, country) {
         return Promise.reject(Error('Unsupported country'));
     }
 
+    var onlyHouseNumber = housenumber.match(/\d+/g);
+    var numberAddition = housenumber.match(/[a-zA-Z]+/g);
+    var queryAddition = "";
+
+    if(numberAddition !== null && numberAddition.length > 0 && numberAddition[0] !== null)
+    {
+        queryAddition = "&house_number_extension=" + numberAddition;
+    }
+
     // Retrieve recyclemanager data
     var getRecycleData = httpsPromise({
         hostname: 'data.rd4.nl',
-        path: `/api/v1/waste-calendar?postal_code=${postcode.substring(0,4)}+${postcode.substring(4,6)}&house_number=${housenumber}&year=${d.getFullYear()}&types[]=residual_waste&types[]=gft&types[]=paper&types[]=pruning_waste&types[]=pmd&types[]=best_bag&types[]=christmas_trees`,
+        path: `/api/v1/waste-calendar?postal_code=${postcode.substring(0,4)}+${postcode.substring(4,6)}&house_number=${onlyHouseNumber[0]}${queryAddition}&year=${d.getFullYear()}&types[]=residual_waste&types[]=gft&types[]=paper&types[]=pruning_waste&types[]=pmd&types[]=best_bag&types[]=christmas_trees`,
         method: "GET",
         headers: {
           'Content-Type': 'application/json'
