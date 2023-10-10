@@ -128,5 +128,9 @@
   "3.2.8": {
     "en": "Updated RD4 to support house number extensions",
     "nl": "RD4 bijgewerkt zodat deze huisnummer toevoegingen ondersteund"
+  },
+  "3.2.9": {
+    "en": "Added Westland",
+    "nl": "Westland wordt nu ondersteund"
   }
 }
