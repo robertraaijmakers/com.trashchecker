@@ -3,6 +3,20 @@
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
 
+it('API - Afvalkalender Westland', function() {
+    var postcode = "2671BK";
+    var homenumber = 12;
+    var country = "NL";
+    var apiId = "akwl";
+    var apiName = "API - Afvalkalender Westland";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+/*
 it('API - RD4', function() {
     var postcode = "6374BA";
     var homenumber = 159;

@@ -129,6 +129,12 @@ function areaReiniging(postcode, housenumber, street, country)
     return generalImplementationWasteApi(postcode, housenumber, country, "adc418da-d19b-11e5-ab30-625662870761");
 }
 
+function afvalKalenderWestland(postcode, housenumber, street, country)
+{
+    console.log("Checking Afvalkalender Westland");
+    return generalImplementationWasteApi(postcode, housenumber, country, "6fc75608-126a-4a50-9241-a002ce8c8a6c", "wasteapi2.ximmio.com");
+}
+
 function reinigingsdienstWaardlanden(postcode, housenumber, street, country)
 {
     console.log("Checking Reinigingsdienst Waardlanden");
@@ -467,7 +473,7 @@ function verifyByName(fDates, className, description, dateStr)
 
 function generalImplementationWasteApi(postcode, housenumber, country, companyCode, hostName = 'wasteapi.ximmio.com')
 {
-    console.log(`Checking company code ${companyCode}.`);
+    console.log(`Checking company code ${companyCode} for hostname ${hostName}.`);
 
     if (country !== "NL") {
         console.log('unsupported country');
@@ -1465,6 +1471,7 @@ apiList.push({ name: "Afvalkalender Reinis", id: "aknw", execute: nissewaard });
 apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
 apiList.push({ name: "Afvalkalender ROVA", id: "rov", execute: rovaAfvalkalender });
 apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderVenray });
+apiList.push({ name: "Afvalkalender Westland", id: "akwl", execute: afvalKalenderWestland });
 apiList.push({ name: "Afvalkalender ZRD", id: "afzrd", execute: afvalkalenderZrd });
 apiList.push({ name: "Afvalwijzer Pre Zero", id: "arn", execute: afvalwijzerPreZero });
 apiList.push({ name: "Area Reiniging", id: "arei", execute: areaReiniging });
