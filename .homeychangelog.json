@@ -132,5 +132,9 @@
   "3.2.9": {
     "en": "Added Westland",
     "nl": "Westland wordt nu ondersteund"
+  },
+  "3.2.10": {
+    "en": "Added gemeente Meppel",
+    "nl": "Gemeente Meppel wordt nu ondersteund"
   }
 }
