@@ -111,6 +111,11 @@ function gemeenteHellendoorn(postcode, housenumber, street, country) {
     return generalImplementationWasteApi(postcode, housenumber, country, "24434f5b-7244-412b-9306-3a2bd1e22bc1", "wasteapi.ximmio.com");
 }
 
+function gemeenteMeppel(postcode, housenumber, street, country) {
+    console.log("Checking Gemeente Meppel");
+    return generalImplementationWasteApi(postcode, housenumber, country, "b7a594c7-2490-4413-88f9-94749a3ec62a", "wasteapi.ximmio.com");
+}
+
 function acvAfvalkalender(postcode, housenumber, street, country)
 {
     console.log("Checking ACV afvalkalender");
@@ -1479,6 +1484,7 @@ apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
 apiList.push({ name: "Den Bosch Afvalstoffendienstkalender", id: "dbafw", execute: denBoschAfvalstoffendienstCalendar });
 apiList.push({ name: "GAD Gooi en Vechtstreek", id: "gad", execute: GadGooiAndVechtstreek });
 apiList.push({ name: "Gemeente Hellendoorn", id: "geh", execute: gemeenteHellendoorn });
+apiList.push({ name: "Gemeente Meppel", id: "gem", execute: gemeenteMeppel });
 apiList.push({ name: "Huisvulkalender Den Haag", id: "hkdh", execute: huisvuilkalenderDenHaag});
 apiList.push({ name: "Inzamelkalender HVC", id: "hvc", execute: inzamelkalenderHVC });
 apiList.push({ name: "Mijn Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });
