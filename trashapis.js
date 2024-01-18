@@ -37,6 +37,10 @@ function afvalkalenderBar(postcode, housenumber, street, country) {
     return generalImplementationBurgerportaal(postcode, housenumber, country, '138204213564933497');
 }
 
+function afvalkalenderAssen(postcode, housenumber, street, country) {
+    return generalImplementationBurgerportaal(postcode, housenumber, country, '138204213565303512');
+}
+
 function afvalkalenderCure(postcode, housenumber, street, country) {
     return Promise.reject(Error('Cure moved to mijn afvalwijzer.')); //newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cure-afvalbeheer.nl');
 }
@@ -89,6 +93,11 @@ function huisvuilkalenderEttenLeur(postcode, housenumber, street, country) {
 function afvalkalenderMeerlanden(postcode, housenumber, street, country) {
     console.log("Checking Meerlanden");
     return generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45", "wasteprod2api.ximmio.com");
+}
+
+function afvalkalenderAvri(postcode, housenumber, street, country) {
+    console.log("Checking Avri");
+    return generalImplementationWasteApi(postcode, housenumber, country, "78cd4156-394b-413d-8936-d407e334559a", "wasteapi.ximmio.com");
 }
 
 function afvalAvalex(postcode, housenumber, street, country) {
@@ -1481,8 +1490,10 @@ apiList.push({ name: "Afvalkalender ZRD", id: "afzrd", execute: afvalkalenderZrd
 apiList.push({ name: "Afvalwijzer Pre Zero", id: "arn", execute: afvalwijzerPreZero });
 apiList.push({ name: "Area Reiniging", id: "arei", execute: areaReiniging });
 apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
+apiList.push({ name: "Avri", id: "avr", execute: afvalkalenderAvri });
 apiList.push({ name: "Den Bosch Afvalstoffendienstkalender", id: "dbafw", execute: denBoschAfvalstoffendienstCalendar });
 apiList.push({ name: "GAD Gooi en Vechtstreek", id: "gad", execute: GadGooiAndVechtstreek });
+apiList.push({ name: "Gemeente Assen", id: "gemas", execute: afvalkalenderAssen });
 apiList.push({ name: "Gemeente Hellendoorn", id: "geh", execute: gemeenteHellendoorn });
 apiList.push({ name: "Gemeente Meppel", id: "gem", execute: gemeenteMeppel });
 apiList.push({ name: "Huisvulkalender Den Haag", id: "hkdh", execute: huisvuilkalenderDenHaag});

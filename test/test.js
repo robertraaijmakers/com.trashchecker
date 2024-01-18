@@ -16,6 +16,36 @@ it('API - Afvalkalender Westland', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
+
+it('API - Afvalkalender AVRI', function() {
+    var postcode = "4002AK";
+    var homenumber = 14;
+    var country = "NL";
+    var apiId = "avr";
+    var apiName = "API - Afvalkalender AVRI";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Afvalkalender Assen', function() {
+    var postcode = "9402JW";
+    var homenumber = 254;
+    var country = "NL";
+    var apiId = "gemas";
+    var apiName = "API - Afvalkalender Assen";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+
 /*
 it('API - RD4', function() {
     var postcode = "6374BA";
