@@ -112,5 +112,33 @@
   "3.2.3": {
     "en": "Extended support in Almere for the Duobak (green + grey). Added support for Etten-Leur who switched APIs.",
     "nl": "Etten-Leur wordt nu (weer) ondersteund na overstap van leverancier. Almere is uitgebreid en de duobak wordt nu herkend als groen en grijs."
+  },
+  "3.2.4": {
+    "en": "Removed RMN due to API change.",
+    "nl": "Sorry, heb RMN uit de app moeten halen omdat hun data niet meer toegankelijk is."
+  },
+  "3.2.6": {
+    "en": "RMN is back in the game!",
+    "nl": "Een slim persoon heeft de RMN API ontleed en op dit moment werkt het weer, BAR gebruikt dezelfde, dus deze ook toegevoegd (geen garanties, maar geniet ervan zolang het kan)!"
+  },
+  "3.2.7": {
+    "en": "Updated ZRD url",
+    "nl": "ZRD bijgewerkt"
+  },
+  "3.2.8": {
+    "en": "Updated RD4 to support house number extensions",
+    "nl": "RD4 bijgewerkt zodat deze huisnummer toevoegingen ondersteund"
+  },
+  "3.2.9": {
+    "en": "Added Westland",
+    "nl": "Westland wordt nu ondersteund"
+  },
+  "3.2.10": {
+    "en": "Added gemeente Meppel, gemeente Assen and Avri",
+    "nl": "Gemeente Meppel, Gemeente Assen & AVRI worden nu ondersteund"
+  },
+  "3.2.11": {
+    "en": "Fix for belgium addresses with recycle BE",
+    "nl": "Added better support for Belgium recycle BE"
   }
 }

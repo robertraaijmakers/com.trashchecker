@@ -17,6 +17,7 @@ class TrashcanReminder extends Homey.App
 		this.trashTokenDayAfterTomorrow = null;
 		this.intervalRefreshToken = null;
 		this.collectingDaysSet = false;
+		this.trashTokenAdvancedCollectionDates = null;
 
 		// Update manual input dates when settings change.
 		this.homey.settings.on('set', this.onSettingsChanged.bind(this));
@@ -41,9 +42,15 @@ class TrashcanReminder extends Homey.App
 			title: this.homey.__('tokens.trashcollection.dayaftertomorrow')
 		});
 
+		let trashCollectionTokenAdvancedCollectionDates = await this.homey.flow.createToken( 'trash_collection_token_advancedcollectiondates', {
+			type: 'string',
+			title: this.homey.__('tokens.trashcollection.advancedcollectiondates')
+		});
+
 		this.trashTokenToday = trashCollectionTokenToday;
 		this.trashTokenTomorrow = trashCollectionTokenTomorrow;
 		this.trashTokenDayAfterTomorrow = trashCollectionTokenDayAfterTomorrow;
+		this.trashTokenAdvancedCollectionDates = trashCollectionTokenAdvancedCollectionDates;
 
 		// Manually kick off data retrieval
 		this.onUpdateData(true, false);
@@ -259,6 +266,16 @@ class TrashcanReminder extends Homey.App
 		else
 		{
 			console.log("Trash token day after tomorrow is empty");
+		}
+
+		if(this.trashTokenAdvancedCollectionDates !== null)
+		{	
+			console.log("Label advanced collection dates is updated");
+			result = this.trashTokenAdvancedCollectionDates.setValue(JSON.stringify(dates));
+		}
+		else
+		{
+			console.log("No advanced label present");
 		}
 
 		return result;

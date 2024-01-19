@@ -26,11 +26,19 @@ function afvalkalenderCyclus(postcode, housenumber, street, country) {
 }
 
 function afvalkalenderZrd(postcode, housenumber, street, country) {
-    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.zrd.nl');
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'zrd.nl');
 }
 
 function afvalRmn(postcode, housenumber, street, country) {
-    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'inzamelschema.rmn.nl');
+    return generalImplementationBurgerportaal(postcode, housenumber, country, '138204213564933597');
+}
+
+function afvalkalenderBar(postcode, housenumber, street, country) {
+    return generalImplementationBurgerportaal(postcode, housenumber, country, '138204213564933497');
+}
+
+function afvalkalenderAssen(postcode, housenumber, street, country) {
+    return generalImplementationBurgerportaal(postcode, housenumber, country, '138204213565303512');
 }
 
 function afvalkalenderCure(postcode, housenumber, street, country) {
@@ -87,6 +95,11 @@ function afvalkalenderMeerlanden(postcode, housenumber, street, country) {
     return generalImplementationWasteApi(postcode, housenumber, country, "800bf8d7-6dd1-4490-ba9d-b419d6dc8a45", "wasteprod2api.ximmio.com");
 }
 
+function afvalkalenderAvri(postcode, housenumber, street, country) {
+    console.log("Checking Avri");
+    return generalImplementationWasteApi(postcode, housenumber, country, "78cd4156-394b-413d-8936-d407e334559a", "wasteapi.ximmio.com");
+}
+
 function afvalAvalex(postcode, housenumber, street, country) {
     console.log("Checking Avalex");
     return generalImplementationWasteApi(postcode, housenumber, country, 'f7a74ad1-fdbf-4a43-9f91-44644f4d4222', "wasteprod2api.ximmio.com");
@@ -107,6 +120,11 @@ function gemeenteHellendoorn(postcode, housenumber, street, country) {
     return generalImplementationWasteApi(postcode, housenumber, country, "24434f5b-7244-412b-9306-3a2bd1e22bc1", "wasteapi.ximmio.com");
 }
 
+function gemeenteMeppel(postcode, housenumber, street, country) {
+    console.log("Checking Gemeente Meppel");
+    return generalImplementationWasteApi(postcode, housenumber, country, "b7a594c7-2490-4413-88f9-94749a3ec62a", "wasteapi.ximmio.com");
+}
+
 function acvAfvalkalender(postcode, housenumber, street, country)
 {
     console.log("Checking ACV afvalkalender");
@@ -123,6 +141,12 @@ function areaReiniging(postcode, housenumber, street, country)
 {
     console.log("Checking Area Reiniging");
     return generalImplementationWasteApi(postcode, housenumber, country, "adc418da-d19b-11e5-ab30-625662870761");
+}
+
+function afvalKalenderWestland(postcode, housenumber, street, country)
+{
+    console.log("Checking Afvalkalender Westland");
+    return generalImplementationWasteApi(postcode, housenumber, country, "6fc75608-126a-4a50-9241-a002ce8c8a6c", "wasteapi2.ximmio.com");
 }
 
 function reinigingsdienstWaardlanden(postcode, housenumber, street, country)
@@ -177,6 +201,8 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
 
             retrieveCalendar.then(function(response)
             {
+                console.log(`response: ${response.body}`);
+
                 var icalResult = response.body;
                 const dates = {};
                 const entries = ical.parseICS(icalResult);
@@ -461,7 +487,7 @@ function verifyByName(fDates, className, description, dateStr)
 
 function generalImplementationWasteApi(postcode, housenumber, country, companyCode, hostName = 'wasteapi.ximmio.com')
 {
-    console.log(`Checking company code ${companyCode}.`);
+    console.log(`Checking company code ${companyCode} for hostname ${hostName}.`);
 
     if (country !== "NL") {
         console.log('unsupported country');
@@ -654,7 +680,7 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                 // Validate street request
                 var validateStreetRequest = httpsPromise({
                     hostname: hostName,
-                    path: encodeURI(`/recycle-public/app/v1/streets?q=${street}&zipcodes=${zipcodeId}`),
+                    path: encodeURI(`/recycle-public/app/v1/streets?q=${street.trim()}&zipcodes=${zipcodeId}`),
                     method: "POST",
                     headers: {
                     'Content-Type': 'application/json',
@@ -669,13 +695,13 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                     var result = response.body;
                     if(result.items.length <= 0)
                     {
-                        reject(new Error("No street found for: " + street));
+                        reject(new Error("No street found for: " + street.trim()));
                         return;
                     }
 
                     if(result.items.length > 1)
                     {
-                        reject(new Error("Multiple streets found for: " + street));
+                        reject(new Error("Multiple streets found for: " + street.trim()));
                         return;
                     }
 
@@ -713,6 +739,8 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                             const dateStr = entry.timestamp.substr(0,10);
 
                             var description = "";
+                            if(entry.type !== 'collection') continue;
+
                             try {
                                 description = entry.fraction.name.nl.toLowerCase().trim();
                             } catch(Exception) {
@@ -768,6 +796,164 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
         }).catch(function(error)
         {
             reject(new Error("Can't retrieve access token: " + error));
+        });
+    });
+}
+
+function generalImplementationBurgerportaal(zipcode, housenumber, country, organisationId = '138204213564933597')
+{
+    var fDates = {};    
+    if (country !== "NL") {
+        console.log('unsupported country');
+        return Promise.reject(Error('Unsupported country'));
+    }
+
+    var hostName = "europe-west3-burgerportaal-production.cloudfunctions.net";
+    var userToken = "AIzaSyA6NkRqJypTfP-cjWzrZNFJzPUbBaGjOdk";
+
+    // Get access token
+    var idTokenRequest = httpsPromise({
+        hostname: 'www.googleapis.com',
+        path: `/identitytoolkit/v3/relyingparty/signupNewUser?key=${userToken}`,
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Homey'
+        }
+    });
+
+    return new Promise(function(resolve, reject)
+    {
+        idTokenRequest.then(function(response)
+        {
+            var refreshToken = response.body.refreshToken;
+
+            // Retrieve access token
+            var post_data = '?&grant_type=refresh_token&refresh_token=' + refreshToken;
+            var headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': Buffer.byteLength(post_data) }
+            var accessTokenRequest = httpsPromise({
+                hostname: 'securetoken.googleapis.com',
+                path: `/v1/token?key=${userToken}`,
+                method: 'POST',
+                body: post_data,
+                headers: headers
+            });
+
+            accessTokenRequest.then(function(response)
+            {
+                var accessToken = response.body.access_token;
+
+                // Retrieve address ID
+                var addressIdRequest = httpsPromise({
+                    hostname: hostName,
+                    path: `/exposed/organisations/${organisationId}/address?zipcode=${zipcode}&housenumber=${housenumber}`,
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'User-Agent': 'Homey',
+                        'Authorization': accessToken,
+                    }
+                });
+                
+                addressIdRequest.then(function(response)
+                {
+                    var result = response.body;
+                    if(result.length <= 0)
+                    {
+                        reject(new Error("No zipcode found for: " + zipcode));
+                        return;
+                    }
+
+                    if(result.length > 1)
+                    {
+                        reject(new Error("Multiple zipcode entries found for: " + zipcode));
+                        return;
+                    }
+
+                    var addressId = result[0].addressId;
+
+                    // Validate street request
+                    var getTrashRequest = httpsPromise({
+                        hostname: hostName,
+                        path: `/exposed/organisations/${organisationId}/address/${addressId}/calendar`,
+                        method: "GET",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'User-Agent': 'Homey',
+                            'Authorization': accessToken,
+                        }
+                    });
+    
+                    getTrashRequest.then(function(response)
+                    {
+                        var result = response.body;
+                        if(result.length <= 0)
+                        {
+                            reject(new Error("No trash data found for: " + getTrashRequest.path));
+                            return;
+                        }
+
+                        for (let i in result) {
+                            const entry = result[i];
+                            const dateStr = entry.collectionDate.substr(0,10);
+
+                            var description = entry.fraction.toLowerCase();
+
+                            if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
+                                if (!fDates.GFT) fDates.GFT = [];
+                                fDates.GFT.push(dateStr);
+                            } else if (description.indexOf('pmdrest') !== -1) {
+                                if (!fDates.REST) fDates.REST = [];
+                                if (!fDates.PMD) fDates.PMD = [];
+                                fDates.REST.push(dateStr);
+                                fDates.PMD.push(dateStr);
+                            } else if (description.indexOf('rest') !== -1) {
+                                if (!fDates.REST) fDates.REST = [];
+                                fDates.REST.push(dateStr);
+                            } else if (description.indexOf('pmd') !== -1 || description.indexOf('pd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
+                                if (!fDates.PMD) fDates.PMD = [];
+                                fDates.PMD.push(dateStr);
+                            } else if (description.indexOf('plastic') !== -1) {
+                                if (!fDates.PLASTIC) fDates.PLASTIC = [];
+                                fDates.PLASTIC.push(dateStr);
+                            }  else if (description.indexOf('papier') !== -1 || description.indexOf('opk') !== -1) {
+                                if (!fDates.PAPIER) fDates.PAPIER = [];
+                                fDates.PAPIER.push(dateStr);
+                            } else if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1) {
+                                if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+                                fDates.TEXTIEL.push(dateStr);
+                            } else if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
+                                if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
+                                fDates.KERSTBOOM.push(dateStr);
+                            } else if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
+                                if (!fDates.GROF) fDates.GROF = [];
+                                fDates.GROF.push(dateStr);
+                            } else if(description.indexOf('glas') !== -1) {
+                                if (!fDates.GLAS) fDates.GLAS = [];
+                                fDates.GLAS.push(dateStr);
+                            } else {
+                                console.log("Unknown description: " + description);
+                            }
+                        }
+                        
+                        console.log(fDates);
+                        resolve(fDates);
+                        return;
+                    }).catch(function(error)
+                    {
+                        reject(new Error("Can't retrieve trash data: " + error));
+                    });
+                }).catch(function(error)
+                {
+                    reject(new Error("Can't validate address: " + error));
+                });
+            }).catch(function(error)
+            {
+                reject(new Error("Can't retrieve access token: " + error));
+            });
+        }).catch(function(error)
+        {
+            reject(new Error("Can't retrieve ID token: " + error));
         });
     });
 }
@@ -856,10 +1042,19 @@ function afvalkalenderRD4(postcode, housenumber, street, country) {
         return Promise.reject(Error('Unsupported country'));
     }
 
+    var onlyHouseNumber = (housenumber+"").match(/\d+/g);
+    var numberAddition = (housenumber+"").match(/[a-zA-Z]+/g);
+    var queryAddition = "";
+
+    if(numberAddition !== null && numberAddition.length > 0 && numberAddition[0] !== null)
+    {
+        queryAddition = "&house_number_extension=" + numberAddition;
+    }
+
     // Retrieve recyclemanager data
     var getRecycleData = httpsPromise({
         hostname: 'data.rd4.nl',
-        path: `/api/v1/waste-calendar?postal_code=${postcode.substring(0,4)}+${postcode.substring(4,6)}&house_number=${housenumber}&year=${d.getFullYear()}&types[]=residual_waste&types[]=gft&types[]=paper&types[]=pruning_waste&types[]=pmd&types[]=best_bag&types[]=christmas_trees`,
+        path: `/api/v1/waste-calendar?postal_code=${postcode.substring(0,4)}+${postcode.substring(4,6)}&house_number=${onlyHouseNumber[0]}${queryAddition}&year=${d.getFullYear()}&types[]=residual_waste&types[]=gft&types[]=paper&types[]=pruning_waste&types[]=pmd&types[]=best_bag&types[]=christmas_trees`,
         method: "GET",
         headers: {
           'Content-Type': 'application/json'
@@ -1279,6 +1474,7 @@ function httpsPromise({body, ...options}) {
 apiList.push({ name: "Afval App", id: "afa", execute: afvalapp });
 apiList.push({ name: "Afvalkalender ACV", id: "acv", execute: acvAfvalkalender });
 apiList.push({ name: "Afvalkalender Almere", id: "alm", execute: almereAfvalkalender });
+apiList.push({ name: "Afvalkalender BAR", id: "afbar", execute: afvalkalenderBar });
 apiList.push({ name: "Afvalkalender Circulus-Berkel", id: "acb", execute: circulusBerkel });
 apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCyclus });
 apiList.push({ name: "Afvalkalender DAR", id: "dar", execute: darAfvalkalender });
@@ -1291,13 +1487,17 @@ apiList.push({ name: "Afvalkalender Reinis", id: "aknw", execute: nissewaard });
 apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
 apiList.push({ name: "Afvalkalender ROVA", id: "rov", execute: rovaAfvalkalender });
 apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderVenray });
+apiList.push({ name: "Afvalkalender Westland", id: "akwl", execute: afvalKalenderWestland });
 apiList.push({ name: "Afvalkalender ZRD", id: "afzrd", execute: afvalkalenderZrd });
 apiList.push({ name: "Afvalwijzer Pre Zero", id: "arn", execute: afvalwijzerPreZero });
 apiList.push({ name: "Area Reiniging", id: "arei", execute: areaReiniging });
 apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
+apiList.push({ name: "Avri", id: "avr", execute: afvalkalenderAvri });
 apiList.push({ name: "Den Bosch Afvalstoffendienstkalender", id: "dbafw", execute: denBoschAfvalstoffendienstCalendar });
 apiList.push({ name: "GAD Gooi en Vechtstreek", id: "gad", execute: GadGooiAndVechtstreek });
+apiList.push({ name: "Gemeente Assen", id: "gemas", execute: afvalkalenderAssen });
 apiList.push({ name: "Gemeente Hellendoorn", id: "geh", execute: gemeenteHellendoorn });
+apiList.push({ name: "Gemeente Meppel", id: "gem", execute: gemeenteMeppel });
 apiList.push({ name: "Huisvulkalender Den Haag", id: "hkdh", execute: huisvuilkalenderDenHaag});
 apiList.push({ name: "Inzamelkalender HVC", id: "hvc", execute: inzamelkalenderHVC });
 apiList.push({ name: "Mijn Afvalwijzer", id: "afw", execute: mijnAfvalWijzer });

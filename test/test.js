@@ -2,13 +2,102 @@
 
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
+
+
+it('API - Afvalkalender Recycle BE - 1', function() {
+    var postcode = "8930";
+    var homenumber = 58;
+    var country = "BE";
+    var street = "Rozenstraat"
+    var apiId = "recbe";
+    var apiName = "API - Recycle BE";
+
+    return testAPI(apiId, apiName, postcode, homenumber, street, country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Afvalkalender Recycle BE - 2', function() {
+    var postcode = "1731";
+    var homenumber = 30;
+    var country = "BE";
+    var street = "Plataanlaan"
+    var apiId = "recbe";
+    var apiName = "API - Recycle BE";
+
+    return testAPI(apiId, apiName, postcode, homenumber, street, country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 /*
+it('API - Afvalkalender Westland', function() {
+    var postcode = "2671BK";
+    var homenumber = 12;
+    var country = "NL";
+    var apiId = "akwl";
+    var apiName = "API - Afvalkalender Westland";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Afvalkalender AVRI', function() {
+    var postcode = "4002AK";
+    var homenumber = 14;
+    var country = "NL";
+    var apiId = "avr";
+    var apiName = "API - Afvalkalender AVRI";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Afvalkalender Assen', function() {
+    var postcode = "9402JW";
+    var homenumber = 254;
+    var country = "NL";
+    var apiId = "gemas";
+    var apiName = "API - Afvalkalender Assen";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 it('API - RD4', function() {
     var postcode = "6374BA";
     var homenumber = 159;
     var country = "NL";
     var apiId = "rd4";
     var apiName = "API - RD4";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+
+it('API - RD4 - Toevoeging', function() {
+    var postcode = "6471CD";
+    var homenumber = "57A";
+    var country = "NL";
+    var apiId = "rd4";
+    var apiName = "API - RD4 - Toevoeging";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
@@ -135,6 +224,20 @@ it('API - Afvalwijzer', function() {
     var country = "NL";
     var apiId = "afw";
     var apiName = "API - Afvalwijzer";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - ZRD', function() {
+    var postcode = "4569AD";
+    var homenumber = 26;
+    var country = "NL";
+    var apiId = "afzrd";
+    var apiName = "API - ZRD";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
@@ -310,7 +413,7 @@ it('API - Almere Ximmio', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-*/
+
 it('API - Almere Ximmio', function() {
     var postcode = "1359KS";
     var homenumber = 20;
@@ -324,7 +427,21 @@ it('API - Almere Ximmio', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-/*
+
+it('API - Afvalkalender RMN', function() {
+    var postcode = "3768MJ";
+    var homenumber = 40;
+    var country = "NL";
+    var apiId = "afrm";
+    var apiName = "API - Afvalkalender RMN";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 it('API - Afvalkalender Etten-Leur', function() {
     var postcode = "4871TK";
     var homenumber = 36;
@@ -398,7 +515,7 @@ it('API - Afval App', function() {
         });
 });
 
-/*it('API - Mijn Blin - ERROR', function() {
+/*it('API - Mijn Blink - ERROR', function() {
     var postcode = "5673RE";
     var homenumber = 1111125;
     var country = "NL";
