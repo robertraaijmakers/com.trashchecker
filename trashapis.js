@@ -680,7 +680,7 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                 // Validate street request
                 var validateStreetRequest = httpsPromise({
                     hostname: hostName,
-                    path: encodeURI(`/recycle-public/app/v1/streets?q=${street}&zipcodes=${zipcodeId}`),
+                    path: encodeURI(`/recycle-public/app/v1/streets?q=${street.trim()}&zipcodes=${zipcodeId}`),
                     method: "POST",
                     headers: {
                     'Content-Type': 'application/json',
@@ -695,13 +695,13 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                     var result = response.body;
                     if(result.items.length <= 0)
                     {
-                        reject(new Error("No street found for: " + street));
+                        reject(new Error("No street found for: " + street.trim()));
                         return;
                     }
 
                     if(result.items.length > 1)
                     {
-                        reject(new Error("Multiple streets found for: " + street));
+                        reject(new Error("Multiple streets found for: " + street.trim()));
                         return;
                     }
 
@@ -739,6 +739,8 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                             const dateStr = entry.timestamp.substr(0,10);
 
                             var description = "";
+                            if(entry.type !== 'collection') continue;
+
                             try {
                                 description = entry.fraction.name.nl.toLowerCase().trim();
                             } catch(Exception) {

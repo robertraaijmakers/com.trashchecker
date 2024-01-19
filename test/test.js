@@ -3,6 +3,38 @@
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
 
+
+it('API - Afvalkalender Recycle BE - 1', function() {
+    var postcode = "8930";
+    var homenumber = 58;
+    var country = "BE";
+    var street = "Rozenstraat"
+    var apiId = "recbe";
+    var apiName = "API - Recycle BE";
+
+    return testAPI(apiId, apiName, postcode, homenumber, street, country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Afvalkalender Recycle BE - 2', function() {
+    var postcode = "1731";
+    var homenumber = 30;
+    var country = "BE";
+    var street = "Plataanlaan"
+    var apiId = "recbe";
+    var apiName = "API - Recycle BE";
+
+    return testAPI(apiId, apiName, postcode, homenumber, street, country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+/*
 it('API - Afvalkalender Westland', function() {
     var postcode = "2671BK";
     var homenumber = 12;
@@ -45,8 +77,6 @@ it('API - Afvalkalender Assen', function() {
         });
 });
 
-
-/*
 it('API - RD4', function() {
     var postcode = "6374BA";
     var homenumber = 159;

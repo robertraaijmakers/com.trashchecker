@@ -136,5 +136,9 @@
   "3.2.10": {
     "en": "Added gemeente Meppel, gemeente Assen and Avri",
     "nl": "Gemeente Meppel, Gemeente Assen & AVRI worden nu ondersteund"
+  },
+  "3.2.11": {
+    "en": "Fix for belgium addresses with recycle BE",
+    "nl": "Added better support for Belgium recycle BE"
   }
 }
