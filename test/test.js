@@ -34,6 +34,21 @@ it('API - Afvalkalender Recycle BE - 2', function() {
         });
 });
 
+it('API - Afvalkalender Recycle BE - 3', function() {
+    var postcode = "9100";
+    var homenumber = 87;
+    var country = "BE";
+    var street = "Paddeschootdreef"
+    var apiId = "recbe";
+    var apiName = "API - Recycle BE";
+
+    return testAPI(apiId, apiName, postcode, homenumber, street, country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 /*
 it('API - Afvalkalender Westland', function() {
     var postcode = "2671BK";

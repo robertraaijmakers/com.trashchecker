@@ -140,5 +140,9 @@
   "3.2.11": {
     "en": "Fix for belgium addresses with recycle BE",
     "nl": "Added better support for Belgium recycle BE"
+  },
+  "3.2.12": {
+    "en": "Fix for belgium addresses with recycle BE",
+    "nl": "Nieuwe sleutel waardoor Recycle BE adressen weer werken"
   }
 }
