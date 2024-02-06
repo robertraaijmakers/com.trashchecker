@@ -360,6 +360,7 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
                             fDates.TEXTIEL.push(dateStr);
                             break;
                         case 'glas':
+                        case 'milieubus':
                             if (!fDates.GLAS) fDates.GLAS = [];
                             fDates.GLAS.push(dateStr);
                             break;
