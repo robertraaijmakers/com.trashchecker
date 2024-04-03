@@ -144,5 +144,9 @@
   "3.2.13": {
     "en": "Fix for belgium addresses with recycle BE",
     "nl": "Nieuwe sleutel waardoor Recycle BE adressen weer werken"
+  },
+  "3.2.14": {
+    "en": "Added Súdwest-Fryslân",
+    "nl": "Súdwest-Fryslân is nu toegevoegd"
   }
 }
