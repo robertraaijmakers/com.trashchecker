@@ -557,6 +557,21 @@ it('API - Afval App', function() {
         });
 });*/
 
+
+it('API - Afvalkalender Súdwest-Fryslân', function() {
+    var postcode = "9021CK";
+    var homenumber = 27;
+    var country = "NL";
+    var apiId = "swf";
+    var apiName = "API - Afvalkalender Súdwest-Fryslân'";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 function testAPI(apiId, apiName, postcode, homenumber, streetName, country)
 {
     var result = apiArray.find(o => o.id === apiId);
