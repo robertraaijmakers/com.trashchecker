@@ -18,7 +18,7 @@ function denBoschAfvalstoffendienstCalendar(postcode, housenumber, street, count
 }
 
 function rovaAfvalkalender(postcode, housenumber, street, country) {
-    return generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country, "inzamelkalender.rova.nl");
+    return rovaWasteCalendar(postcode, housenumber, country, "www.rova.nl", "/api/waste-calendar/year");
 }
 
 function afvalkalenderCyclus(postcode, housenumber, street, country) {
@@ -159,6 +159,10 @@ function recycleApp(postcode, housenumber, street, country)
 {
     console.log("Checking Recycle App");
     return generalImplementationRecycleApp(postcode, housenumber, street, country);
+}
+
+function afvalkalenderSudwestFryslan(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, "afvalkalender.sudwestfryslan.nl");
 }
 
 /**
@@ -401,89 +405,6 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
             reject(error);
         });
     });
-}
-
-function verifyByName(fDates, className, description, dateStr)
-{
-    if(description === "" || typeof description === undefined)
-    {
-        if(className == "dhm")
-        {
-            if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
-            fDates.TEXTIEL.push(dateStr);
-        }
-        
-        return fDates;
-    }
-
-    description = description.toLowerCase();
-
-    if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
-        if (!fDates.GFT) fDates.GFT = [];
-        fDates.GFT.push(dateStr);
-    } 
-    
-    if (description.indexOf('rest') !== -1 && description.indexOf('etensresten') === -1) {
-        if (!fDates.REST) fDates.REST = [];
-        fDates.REST.push(dateStr);
-    } 
-    
-    if (description.indexOf('pmd') !== -1 || description.indexOf('pd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
-        if (!fDates.PMD) fDates.PMD = [];
-        fDates.PMD.push(dateStr);
-    } 
-    
-    if (description.indexOf('plastic') !== -1) {
-        if (!fDates.PLASTIC) fDates.PLASTIC = [];
-        fDates.PLASTIC.push(dateStr);
-    }
-    
-    if (description.indexOf('papier') !== -1) {
-        if (!fDates.PAPIER) fDates.PAPIER = [];
-        fDates.PAPIER.push(dateStr);
-    } 
-    
-    if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1) {
-        if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
-        fDates.TEXTIEL.push(dateStr);
-    } 
-    
-    if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
-        if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
-        fDates.KERSTBOOM.push(dateStr);
-    } 
-    
-    if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1) {
-        if (!fDates.GROF) fDates.GROF = [];
-        fDates.GROF.push(dateStr);
-    }
-    
-    if(description.indexOf('glas') !== -1) {
-        if (!fDates.GLAS) fDates.GLAS = [];
-        fDates.GLAS.push(dateStr);
-    }
-    
-    if(description.indexOf('retour') !== -1) {      // Marking retourstoffen as textiel to make sure it can be identified
-        if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
-        fDates.TEXTIEL.push(dateStr);
-    }
-    
-    // if(description.indexOf('etensresten') !== -1) {
-    //     if (!fDates.FOOD) fDates.FOOD = [];
-    //     fDates.FOOD.push(dateStr);
-    // }
-    
-    // if(description.indexOf('takken') !== -1 || description.indexOf('snoei') !== -1) {
-    //     if (!fDates.SNOEI) fDates.SNOEI = [];
-    //     fDates.SNOEI.push(dateStr);
-    // }
-    
-    // if(description.indexOf('chemisch') !== -1) {
-    //     if (!fDates.CHEMISCH) fDates.CHEMISCH = [];
-    //     fDates.CHEMISCH.push(dateStr);
-    // }
-
-    return fDates;
 }
 
 function generalImplementationWasteApi(postcode, housenumber, country, companyCode, hostName = 'wasteapi.ximmio.com')
@@ -1054,7 +975,7 @@ function afvalkalenderRD4(postcode, housenumber, street, country) {
 
     // Retrieve recyclemanager data
     var getRecycleData = httpsPromise({
-        hostname: 'data.rd4.nl',
+        hostname: "data.rd4.nl",
         path: `/api/v1/waste-calendar?postal_code=${postcode.substring(0,4)}+${postcode.substring(4,6)}&house_number=${onlyHouseNumber[0]}${queryAddition}&year=${d.getFullYear()}&types[]=residual_waste&types[]=gft&types[]=paper&types[]=pruning_waste&types[]=pmd&types[]=best_bag&types[]=christmas_trees`,
         method: "GET",
         headers: {
@@ -1110,6 +1031,57 @@ function afvalkalenderRD4(postcode, housenumber, street, country) {
                     default:
                         console.log('Defaulted. Element not found:', entry.type);
                 }
+            }
+
+            console.log(fDates);
+            resolve(fDates);
+        }).catch(function(error)
+        {
+            reject(new Error('Invalid location: ' + error));
+        });
+    });
+}
+
+function rovaWasteCalendar(postcode, housenumber, country, hostname, startPath) {
+    console.log("Checking afvalkalender Rova");
+
+    var fDates = {};  
+    const d = new Date(); 
+    if (country !== "NL") {
+        return Promise.reject(Error('Unsupported country'));
+    }
+
+    var onlyHouseNumber = (housenumber+"").match(/\d+/g);
+    var numberAddition = (housenumber+"").match(/[a-zA-Z]+/g);
+    var queryAddition = "";
+
+    if(numberAddition !== null && numberAddition.length > 0 && numberAddition[0] !== null)
+    {
+        queryAddition = "&addition=" + numberAddition;
+    }
+
+    var fullPath = `${startPath}?postalcode=${postcode}&year=${d.getFullYear()}${queryAddition}&houseNumber=${onlyHouseNumber[0]}&types[]=residual_waste&types[]=gft&types[]=paper&types[]=pruning_waste&types[]=pmd&types[]=best_bag&types[]=christmas_trees`;
+
+    // Retrieve rova data
+    var getRecycleData = httpsPromise({
+        hostname: hostname,
+        path: fullPath,
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json'
+        }
+    });
+
+    return new Promise(function(resolve, reject)
+    {
+        getRecycleData.then(function(response)
+        {
+            var result = response.body;
+            for(var et in result)
+            {
+                var entry = result[et];
+                var dateStr = entry.date.substring(0,4) + "-" + entry.date.substring(5,7) + "-" + entry.date.substring(8,10)
+                verifyByName(fDates, entry.wasteType.code, entry.wasteType.title, dateStr);
             }
 
             console.log(fDates);
@@ -1467,6 +1439,99 @@ function httpsPromise({body, ...options}) {
     });
 }
 
+function verifyByName(fDates, className, description, dateStr)
+{
+    var pushed = false;
+
+    if(description === "" || typeof description === undefined)
+    {
+        if(className == "dhm")
+        {
+            if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+            fDates.TEXTIEL.push(dateStr);
+        }
+        
+        return fDates;
+    }
+
+    description = description.toLowerCase();
+
+    if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
+        if (!fDates.GFT) fDates.GFT = [];
+        fDates.GFT.push(dateStr);
+        pushed = true;
+    } 
+    
+    if (description.indexOf('rest') !== -1 && description.indexOf('etensresten') === -1 && description.indexOf('residual') === -1) {
+        if (!fDates.REST) fDates.REST = [];
+        fDates.REST.push(dateStr);
+        pushed = true;
+    } 
+    
+    if (description.indexOf('pmd') !== -1 || description.indexOf('pd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {
+        if (!fDates.PMD) fDates.PMD = [];
+        fDates.PMD.push(dateStr);
+        pushed = true;
+    } 
+    
+    if (description.indexOf('plastic') !== -1) {
+        if (!fDates.PLASTIC) fDates.PLASTIC = [];
+        fDates.PLASTIC.push(dateStr);
+        pushed = true;
+    }
+    
+    if (description.indexOf('papier') !== -1 || description.indexOf('paper') !== -1) {
+        if (!fDates.PAPIER) fDates.PAPIER = [];
+        fDates.PAPIER.push(dateStr);
+        pushed = true;
+    } 
+    
+    if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1 || description.indexOf('best') !== -1) {
+        if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
+        fDates.TEXTIEL.push(dateStr);
+        pushed = true;
+    } 
+    
+    if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1 || description.indexOf('christmas') !== -1) {
+        if (!fDates.KERSTBOOM) fDates.KERSTBOOM = [];
+        fDates.KERSTBOOM.push(dateStr);
+        pushed = true;
+    } 
+    
+    if(description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1 || description.indexOf('pruning') !== -1) {
+        if (!fDates.GROF) fDates.GROF = [];
+        fDates.GROF.push(dateStr);
+        pushed = true;
+    }
+    
+    if(description.indexOf('glas') !== -1) {
+        if (!fDates.GLAS) fDates.GLAS = [];
+        fDates.GLAS.push(dateStr);
+        pushed = true;
+    }
+    
+    // if(description.indexOf('etensresten') !== -1) {
+    //     if (!fDates.FOOD) fDates.FOOD = [];
+    //     fDates.FOOD.push(dateStr);
+    // }
+    
+    // if(description.indexOf('takken') !== -1 || description.indexOf('snoei') !== -1) {
+    //     if (!fDates.SNOEI) fDates.SNOEI = [];
+    //     fDates.SNOEI.push(dateStr);
+    // }
+    
+    // if(description.indexOf('chemisch') !== -1) {
+    //     if (!fDates.CHEMISCH) fDates.CHEMISCH = [];
+    //     fDates.CHEMISCH.push(dateStr);
+    // }
+
+    if(pushed != true) {
+        console.log(description);
+    }
+
+    return fDates;
+}
+
 /**
  * List of providers consuming different API implementations
  */
@@ -1487,6 +1552,7 @@ apiList.push({ name: "Afvalkalender RD4", id: "rd4", execute: afvalkalenderRD4 }
 apiList.push({ name: "Afvalkalender Reinis", id: "aknw", execute: nissewaard });
 apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
 apiList.push({ name: "Afvalkalender ROVA", id: "rov", execute: rovaAfvalkalender });
+apiList.push({ name: "Afvalkalender Súdwest-Fryslân", id: "swf", execute: afvalkalenderSudwestFryslan });
 apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderVenray });
 apiList.push({ name: "Afvalkalender Westland", id: "akwl", execute: afvalKalenderWestland });
 apiList.push({ name: "Afvalkalender ZRD", id: "afzrd", execute: afvalkalenderZrd });

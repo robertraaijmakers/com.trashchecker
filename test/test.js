@@ -3,7 +3,7 @@
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
 
-
+/*
 it('API - Mijn Afvalwijzer', function() {
     var postcode = "9821TT";
     var homenumber = 9;
@@ -17,7 +17,7 @@ it('API - Mijn Afvalwijzer', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-/*
+
 it('API - Afvalkalender Recycle BE - 1', function() {
     var postcode = "8930";
     var homenumber = 58;
@@ -104,7 +104,7 @@ it('API - Afvalkalender Assen', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-
+*/
 it('API - RD4', function() {
     var postcode = "6374BA";
     var homenumber = 159;
@@ -118,7 +118,7 @@ it('API - RD4', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-
+/*
 
 it('API - RD4 - Toevoeging', function() {
     var postcode = "6471CD";
@@ -358,12 +358,26 @@ it('API - Afvalwijzer', function() {
         });
 });
 
-it('API - Afvalwijzer', function() {
+it('API - Afvalwijzer - Den Bosch', function() {
     var postcode = "5231PB";
     var homenumber = 4;
     var country = "NL";
     var apiId = "dbafw";
-    var apiName = "API - Afvalwijzer";
+    var apiName = "API - Afvalwijzer - Den Bosch";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Afvalwijzer - Rova', function() {
+    var postcode = "3824GL";
+    var homenumber = 11;
+    var country = "NL";
+    var apiId = "rov";
+    var apiName = "API - Afvalwijzer - Rova";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
@@ -549,6 +563,21 @@ it('API - Afval App', function() {
     var country = "NL";
     var apiId = "mba";
     var apiName = "API - Mijn Blink";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+
+it('API - Afvalkalender Súdwest-Fryslân', function() {
+    var postcode = "9021CK";
+    var homenumber = 27;
+    var country = "NL";
+    var apiId = "swf";
+    var apiName = "API - Afvalkalender Súdwest-Fryslân'";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
