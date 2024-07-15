@@ -152,6 +152,9 @@
   "3.2.15": {
     "en": "Added fix for ROVA",
     "nl": "ROVA is working again"
-
+  },
+  "3.2.16": {
+    "en": "Added fix for Cyclus",
+    "nl": "Cyclus is working again"
   }
 }

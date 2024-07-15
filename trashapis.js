@@ -22,7 +22,7 @@ function rovaAfvalkalender(postcode, housenumber, street, country) {
 }
 
 function afvalkalenderCyclus(postcode, housenumber, street, country) {
-    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afvalkalender.cyclusnv.nl');
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'cyclusnv.nl');
 }
 
 function afvalkalenderZrd(postcode, housenumber, street, country) {

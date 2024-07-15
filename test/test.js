@@ -586,13 +586,26 @@ it('API - Afvalkalender Súdwest-Fryslân', function() {
         });
 });*/
 
-
 it('API - Afvalkalender Súdwest-Fryslân', function() {
     var postcode = "9021CK";
     var homenumber = 27;
     var country = "NL";
     var apiId = "swf";
     var apiName = "API - Afvalkalender Súdwest-Fryslân'";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Afvalkalender Cyclus Gouda', function() {
+    var postcode = "2806KL";
+    var homenumber = 26;
+    var country = "NL";
+    var apiId = "afc";
+    var apiName = "API - Afvalkalender Cyclus Gouda'";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
