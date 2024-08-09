@@ -614,6 +614,20 @@ it('API - Afvalkalender Cyclus Gouda', function() {
         });
 });
 
+it('API - RWM', function() {
+    var postcode = "6191CE";
+    var homenumber = 20;
+    var country = "NL";
+    var apiId = "rwm";
+    var apiName = "API - RWM'";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 function testAPI(apiId, apiName, postcode, homenumber, streetName, country)
 {
     var result = apiArray.find(o => o.id === apiId);

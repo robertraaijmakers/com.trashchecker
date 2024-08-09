@@ -29,6 +29,10 @@ function afvalkalenderZrd(postcode, housenumber, street, country) {
     return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'zrd.nl');
 }
 
+function afvalkalenderRwm(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'rwm.nl');
+}
+
 function afvalRmn(postcode, housenumber, street, country) {
     return generalImplementationBurgerportaal(postcode, housenumber, country, '138204213564933597');
 }
@@ -1552,6 +1556,7 @@ apiList.push({ name: "Afvalkalender RD4", id: "rd4", execute: afvalkalenderRD4 }
 apiList.push({ name: "Afvalkalender Reinis", id: "aknw", execute: nissewaard });
 apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
 apiList.push({ name: "Afvalkalender ROVA", id: "rov", execute: rovaAfvalkalender });
+apiList.push({ name: "Afvalkalender RWM", id: "rwm", execute: afvalkalenderRwm });
 apiList.push({ name: "Afvalkalender Súdwest-Fryslân", id: "swf", execute: afvalkalenderSudwestFryslan });
 apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderVenray });
 apiList.push({ name: "Afvalkalender Westland", id: "akwl", execute: afvalKalenderWestland });

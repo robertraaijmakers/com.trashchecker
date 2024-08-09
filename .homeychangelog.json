@@ -156,5 +156,9 @@
   "3.2.16": {
     "en": "Added fix for Cyclus",
     "nl": "Cyclus is working again"
+  },
+  "3.2.17": {
+    "en": "Added RWM garbage",
+    "nl": "RWM afval en reiniging wordt nu ook ondersteund"
   }
 }
