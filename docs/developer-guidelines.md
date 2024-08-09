@@ -14,19 +14,19 @@ function yourTrashCollectionProviderName(postcode, housenumber, street, country)
 First you should check if the provided data is valid. If this isn't the case, return a promise with an error ( or anything 'truthy' ). In the case that the data is valid you should proceed with retrieving the trash dates and return a promise with the valid dates. The dates should be in the following format:
 <pre><code>
 let dates = {
-	REST: ['29-12-2016',
-			'01-12-2016',
-			'03-11-2016',
-			'06-10-2016',
-		    '08-09-2016',
-			'11-08-2016'],
-	GFT: [ '14-07-2016',
-			'16-06-2016',
-		    '19-05-2016',
-		    '21-04-2016',
-		    '24-03-2016',
-		    '25-02-2016',
-			'28-01-2016'] }
+	REST: ['2016-12-29',
+			'2016-12-01',
+			'2016-11-03',
+			'2016-06-10',
+		    '2016-09-08',
+			'2016-08-11'],
+	GFT: [ '2016-07-14',
+			'2016-06-16',
+		    '2016-05-19',
+		    '2016-04-21',
+		    '2016-03-24',
+		    '2016-02-25',
+			'2016-01-28'] }
 </code></pre>
 
 Currently the supported trash types are (these are also the required property names):
