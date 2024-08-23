@@ -157,8 +157,8 @@
     "en": "Added fix for Cyclus",
     "nl": "Cyclus is working again"
   },
-  "3.2.18": {
-    "en": "Added RWM garbage",
-    "nl": "RWM afval en reiniging wordt nu ook ondersteund"
+  "3.2.19": {
+    "en": "Added RWM garbage, added GFT and area collection (under Textile) for Recycleapp",
+    "nl": "RWM afval en reiniging wordt nu ook ondersteund, toevoegingen voor Recycleapp"
   }
 }

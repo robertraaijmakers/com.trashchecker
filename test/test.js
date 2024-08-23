@@ -61,8 +61,23 @@ it('API - Afvalkalender Recycle BE - 3', function() {
         {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
-});
+});*/
 
+it('API - Afvalkalender Recycle BE - 4', function() {
+    var postcode = "8470";
+    var homenumber = 64;
+    var country = "BE";
+    var street = "Voetweg"
+    var apiId = "recbe";
+    var apiName = "API - Recycle BE";
+
+    return testAPI(apiId, apiName, postcode, homenumber, street, country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+/*
 it('API - Afvalkalender Westland', function() {
     var postcode = "2671BK";
     var homenumber = 12;
@@ -104,7 +119,7 @@ it('API - Afvalkalender Assen', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-*/
+
 it('API - RD4', function() {
     var postcode = "6374BA";
     var homenumber = 159;
@@ -118,7 +133,6 @@ it('API - RD4', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-/*
 
 it('API - RD4 - Toevoeging', function() {
     var postcode = "6471CD";
@@ -584,7 +598,7 @@ it('API - Afvalkalender Súdwest-Fryslân', function() {
         {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
-});*/
+});
 
 it('API - Afvalkalender Súdwest-Fryslân', function() {
     var postcode = "9021CK";
@@ -626,7 +640,7 @@ it('API - RWM', function() {
         {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
-});
+});*/
 
 function testAPI(apiId, apiName, postcode, homenumber, streetName, country)
 {

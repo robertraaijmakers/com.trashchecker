@@ -673,7 +673,7 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                                 description = entry.fraction.name.fr.toLowerCase().trim();
                             }
 
-                            if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1) {
+                            if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1 || description.indexOf('gf(t)') !== -1) {
                                 if (!fDates.GFT) fDates.GFT = [];
                                 fDates.GFT.push(dateStr);
                             } else if (description.indexOf('rest') !== -1) {
@@ -688,7 +688,7 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                             }  else if (description.indexOf('papier') !== -1) {
                                 if (!fDates.PAPIER) fDates.PAPIER = [];
                                 fDates.PAPIER.push(dateStr);
-                            } else if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1) {
+                            } else if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1 ||  description.indexOf('wijkinzameling') !== -1) {
                                 if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
                                 fDates.TEXTIEL.push(dateStr);
                             } else if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
