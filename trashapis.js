@@ -676,7 +676,7 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                             if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1 || description.indexOf('gf(t)') !== -1) {
                                 if (!fDates.GFT) fDates.GFT = [];
                                 fDates.GFT.push(dateStr);
-                            } else if (description.indexOf('rest') !== -1) {
+                            } else if (description.indexOf('rest') !== -1 || description.indexOf('huisvuil') !== -1) {
                                 if (!fDates.REST) fDates.REST = [];
                                 fDates.REST.push(dateStr);
                             } else if (description.indexOf('pmd') !== -1 || description.indexOf('pd') !== -1 || description.indexOf('metaal') !== -1 || description.indexOf('drankkartons') !== -1) {

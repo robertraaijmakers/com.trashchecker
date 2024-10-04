@@ -151,6 +151,7 @@
 			},
 			"timeindicator":
 			{
+				"t-1": "Yesterday",
 				"t0": "Today",
 				"t1": "Tomorrow",
 				"t2": "The day after tomorrow"

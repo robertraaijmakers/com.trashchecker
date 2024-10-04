@@ -1,0 +1,186 @@
+<html>
+  <head>
+    <style>
+      .trashContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap; 
+      }
+
+      .trash-item-container {
+        margin: 10px 15px;
+      }
+
+      .dot {
+        height: 75px;
+        width: 75px;
+        background-color: #bbb;
+        border-radius: 50%;
+        font-weight: bold;
+        color: white;
+        padding: 35px 0px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .trash-date {
+        margin: 10px 0px;
+        padding: 0px;
+        text-align: center;
+      }
+
+      .dot-type-GFT {
+        background-color: #3a9600;
+      }
+
+      .dot-type-PLASTIC {
+        background-color: #ffa203;
+      }
+
+      .dot-type-PAPIER {
+        background-color: #060367;
+      }
+
+      .dot-type-PMD {
+        background-color: #ffa203;
+      }
+
+      .dot-type-REST {
+        background-color: #787878;
+      }
+
+      .dot-type-TEXTIEL {
+        background-color: #6c0014;
+      }
+
+      .dot-type-GROF {
+        background-color: #292929;
+      }
+
+      .dot-type-KERSTBOOM {
+        background-color: #59bd1b;
+      }
+
+      .dot-type-GLAS {
+        background-color: #00cdae;
+      }
+    </style>
+  </head>
+
+  <body class="homey-widget-full">
+    <div id="trashCollections" class="trashContainer">
+    </div>
+
+    <script type="text/javascript">
+      function getNextCollectionDays(trashData) {
+        const currentDate = new Date();
+
+        // Create a new Date object for yesterday
+        const compareDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+        compareDate.setDate(currentDate.getDate() - 1);
+
+        let trashCollectionArray = [];
+
+        // Loop through each trash type
+        for (let trashType in trashData) {
+          const trashDates = trashData[trashType];
+
+          // Parse and sort dates
+          const dates = trashData[trashType]
+            .map(date => new Date(date))  // Convert to Date objects
+            .filter(date => date >= compareDate) // Filter only today & future days
+            .sort((a, b) => a - b); // Sort by ascending order
+
+          if(dates.length >= 1) {
+            trashCollectionArray.push({
+                trashType: trashType,
+                nextDates: dates.slice(0, 2).map(date => date.toISOString().split('T')[0])
+            });
+          }
+        }
+
+        // Sort trashCollectionArray by the earliest first collection date
+        trashCollectionArray.sort((a, b) => new Date(a.nextDates[0]) - new Date(b.nextDates[0]));
+
+        // Construct the sorted nextCollectionDays object
+        let nextCollectionDays = {};
+        trashCollectionArray.forEach(item => {
+            nextCollectionDays[item.trashType] = item.nextDates;
+        });
+
+        return nextCollectionDays;
+      }
+
+      function getFormattedDate(firstDateStr) {
+        const currentDate = new Date();
+        const firstDate = new Date(firstDateStr);
+
+        // Get today's date at midnight for accurate comparison
+        const today = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+        
+        // Create yesterday's and tomorrow's dates
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        // Compare firstDate with today, yesterday, and tomorrow
+        if (firstDate.toDateString() === yesterday.toDateString()) {
+            return Homey.__("speech.output.timeindicator.t-1");
+        } else if (firstDate.toDateString() === today.toDateString()) {
+            return Homey.__("speech.output.timeindicator.t0");
+        } else if (firstDate.toDateString() === tomorrow.toDateString()) {
+            return Homey.__("speech.output.timeindicator.t1");
+        } else {
+            // Options to format the date as day and short month name
+            const options = { day: 'numeric', month: 'short' };
+
+            // Format the date to "12 Oct"
+            return firstDate.toLocaleDateString(undefined, options);
+        }
+      }
+
+      function onHomeyReady(Homey) {
+        init(Homey);        
+      }
+
+      function init(Homey) {
+        const widgetSetting = Homey.getSettings();
+
+        // Fetch something from your app.
+        Homey.api("GET", "/").then((response) => {
+          const trashCollectionDays = response;
+          const trashData = getNextCollectionDays(trashCollectionDays);
+
+          const tbody = document.querySelector('#trashCollections');
+          tbody.innerHTML = '';
+          let counter = 0;
+
+          for (let trashType in trashData) {
+            if (counter >= widgetSetting['max-items']) continue;
+            counter += 1;
+
+            let trashElement = `<div class="trash-item-container">`;
+
+            const firstDate = trashData[trashType][0];
+            const displayDate = getFormattedDate(firstDate);
+
+            trashElement += `<span class="dot dot-type-${trashType}"><img src="trash-${trashType}.svg" /></span>`;
+            trashElement += `<p class="trash-date">${displayDate}</p>`;
+            
+            trashElement += '</div>';
+            tbody.innerHTML += trashElement;
+          }
+
+          Homey.ready({ height: widgetSetting['list-height']*135 });
+        }).catch((error) => {
+            console.error(error);
+        });
+      }
+    </script>
+  </body>
+</html>

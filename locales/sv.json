@@ -151,6 +151,7 @@
 			},
 			"timeindicator":
 			{
+				"t-1": "i går",
 				"t0": "idag",
 				"t1": "imorgon",
 				"t2": "i övermorgon"

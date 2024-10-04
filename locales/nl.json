@@ -151,6 +151,7 @@
 			},
 			"timeindicator":
 			{
+				"t-1": "Gisteren",
 				"t0": "Vandaag",
 				"t1": "Morgen",
 				"t2": "Overmorgen"

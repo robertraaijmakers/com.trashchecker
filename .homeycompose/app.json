@@ -5,11 +5,11 @@
     "en": "Trashcan Reminder 2.0",
     "nl": "Afval Herinnering 2.0"
   },
-  "version": "3.2.19",
+  "version": "4.0.0",
   "platforms": [
     "local"
   ],
-  "compatibility": ">=5.0",
+  "compatibility": ">=12.1.0",
   "author": {
     "name": "Robert Raaijmakers",
     "email": "dutchfighter@live.nl"

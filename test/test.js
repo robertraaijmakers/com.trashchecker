@@ -642,6 +642,21 @@ it('API - RWM', function() {
         });
 });*/
 
+it('API - RWM', function() {
+    var postcode = "2650";
+    var homenumber = 24;
+    var country = "BE";
+    var street = "De Pelgrim"
+    var apiId = "recbe";
+    var apiName = "API - RWM'";
+
+    return testAPI(apiId, apiName, postcode, homenumber, street, country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 function testAPI(apiId, apiName, postcode, homenumber, streetName, country)
 {
     var result = apiArray.find(o => o.id === apiId);

@@ -59,3 +59,6 @@ If you want to create a flow that notifies you what type of trash is collected t
 If you want to create a flow that notifies you what type of trash is collected tomorrow, use the "tomorrow" tag.
 If you want to create a flow that notifies you what type of trash is collected the day after tomorrow, use the "day after tomorrow" tag.
 Plase note that the tags are independent from the "What type of trash is collected on << day >>" card available in the "and" column.
+
+## Widgets
+There is one widget available that displays the trash that is collected next. You can configure the height and amount of items to display through the widget configuration.

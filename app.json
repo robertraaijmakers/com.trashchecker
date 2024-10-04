@@ -6,11 +6,11 @@
     "en": "Trashcan Reminder 2.0",
     "nl": "Afval Herinnering 2.0"
   },
-  "version": "3.2.19",
+  "version": "4.0.0",
   "platforms": [
     "local"
   ],
-  "compatibility": ">=5.0",
+  "compatibility": ">=12.1.0",
   "author": {
     "name": "Robert Raaijmakers",
     "email": "dutchfighter@live.nl"
@@ -53,7 +53,7 @@
   },
   "homepage": "https://robertraaijmakers.github.io/com.trashchecker/",
   "support": "https://robertraaijmakers.github.io/com.trashchecker/",
-  "homeyCommunityTopicId": 10410,
+  "homeyCommunityTopicId": 114178,
   "source": "https://github.com/robertraaijmakers/com.trashchecker",
   "api": {
     "validateUserData": {
@@ -200,5 +200,59 @@
         ]
       }
     ]
+  },
+  "widgets": {
+    "trash-reminder-list": {
+      "name": {
+        "en": "Trash Reminder List View"
+      },
+      "settings": [
+        {
+          "id": "list-height",
+          "type": "number",
+          "value": 1,
+          "min": 1,
+          "max": 3,
+          "units": {
+            "en": "rows",
+            "nl": "regels"
+          },
+          "title": {
+            "en": "Trash Heights",
+            "nl": "Aantal Afvalregels"
+          },
+          "hint": {
+            "en": "The amount of trash type lines to be visible in one view. Determines the widget height.",
+            "nl": "Aantal afvalregels wat zichtbaar is in één overzicht. Bepaald de hoogte van de widget."
+          }
+        },
+        {
+          "id": "max-items",
+          "type": "number",
+          "value": 3,
+          "min": 1,
+          "max": 9,
+          "units": {
+            "en": "trash types",
+            "nl": "afvaltypes"
+          },
+          "title": {
+            "en": "Total Items",
+            "nl": "Aantal Items"
+          },
+          "hint": {
+            "en": "The total amount of trash items rendered in a single view.",
+            "nl": "Het totaal aantal items wat getoond wordt in één enkele widget."
+          }
+        }
+      ],
+      "api": {
+        "getSettings": {
+          "method": "GET",
+          "path": "/"
+        }
+      },
+      "id": "trash-reminder-list"
+    }
   }
 }
