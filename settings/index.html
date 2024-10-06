@@ -4,31 +4,36 @@
 </head>
 
 <body>
-	<h1 data-i18n="settings.title"></h1>
-    <p data-i18n="settings.description"></p>
-	<!--<p>Sorry RMN is not supported anymore! They updated their API and made it impossible to reach the data. View <a href="https://github.com/robertraaijmakers/com.trashchecker/issues/167">this topic to read more</a>.</p>-->
-	<fieldset>
-		<legend data-i18n="settings.title"></legend>
-        <div class="field row">
-            <label for="postcode" data-i18n="settings.postcode"></label>
-            <input placeholder="1234AB" id="postcode" maxlength="6" type="text" value=""/>
+	<header class="homey-header">
+		<h1 class="homey-title" data-i18n="settings.title">
+			<!-- This will be filled with the translated string with key 'settings.title'. -->
+		</h1>
+		<p class="homey-subtitle" data-i18n="settings.description">
+			<!-- This field will also be translated -->
+		</p>
+	</header>
+	<fieldset class="homey-form-fieldset">
+		<legend class="homey-form-legend" data-i18n="settings.title"></legend>
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="postcode" data-i18n="settings.postcode"></label>
+            <input class="homey-form-input" placeholder="1234AB" id="postcode" maxlength="6" type="text" value=""/>
         </div>
-		<div class="field row" id="streetName_div">
-            <label for="streetName" data-i18n="settings.streetname"></label>
-            <input placeholder="Van Homeystraat" id="streetName" type="text" value=""/>
+		<div class="homey-form-group" id="streetName_div">
+            <label class="homey-form-label" for="streetName" data-i18n="settings.streetname"></label>
+            <input class="homey-form-input" placeholder="Van Homeystraat" id="streetName" type="text" value=""/>
         </div>
-        <div class="field row">
-            <label for="number" data-i18n="settings.hnumber"></label>
-            <input placeholder="42" id="number" type="text" value=""/>
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="number" data-i18n="settings.hnumber"></label>
+            <input class="homey-form-input" placeholder="42" id="number" type="text" value=""/>
         </div>
-        <div class="field row">
-			<label for="country" data-i18n="settings.country"></label>
-			<input style="width:10px" checked="checked" id="NL" name="country" type="radio" value="NL"/><span class="name">NL</span>
-			<input style="width:10px" id="BE" name="country" type="radio" value="NL"/><span class="name">BE</span>
+        <div class="homey-form-group">
+			<label class="homey-form-label" for="country" data-i18n="settings.country"></label>
+			<input class="homey-form-radio" style="width:10px" checked="checked" id="NL" name="country" type="radio" value="NL"/><span class="name">NL</span>
+			<input class="homey-form-radio" style="width:10px" id="BE" name="country" type="radio" value="NL"/><span class="name">BE</span>
         </div>
-        <div class="field row">
-			<label for="api" data-i18n="settings.api"></label>
-			<select id="api">
+        <div class="homey-form-group">
+			<label class="homey-form-label" for="api" data-i18n="settings.api"></label>
+			<select class="homey-form-select" id="api">
 				<option value="" data-i18n="settings.unknown"></option>
 				<option value="afa">Afval App (NL)</option>
 				<option value="acv">Afvalkalender ACV (NL)</option>
@@ -72,17 +77,17 @@
         <span id="resp" title="Details?" onclick="document.getElementById('respDates').style='display: block;'"></span>
         <span id="respDates" style="display: none;"></span>
     </fieldset>
-    <button id="apiSave" class="right" data-i18n="settings.save" ></button>
+    <button id="apiSave" class="homey-button-primary-full" data-i18n="settings.save" ></button>
 	<br /><br />
 
-	<fieldset id="manual_input">
-		<legend data-i18n="settings.titlemanualinput"></legend>
+	<fieldset id="manual_input" class="homey-form-fieldset">
+		<legend class="homey-form-legend" data-i18n="settings.titlemanualinput"></legend>
 
 		<!-- GFT -->
-		<div class="field row">
-			<label for="gft" data-i18n="settings.gft"></label>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="gft" data-i18n="settings.gft"></label>
 			<div>
-				<select name="gft[option]" id="gft_option">
+				<select class="homey-form-select" name="gft[option]" id="gft_option">
 					<option value="-1" data-i18n="settings.interval.na"></option>
 					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
@@ -100,7 +105,7 @@
 				</select>
 			</div>
 			<div id="gft_day_div">
-				<select style="margin-left: 5px;" name="gft[day_of_week]" id="gft_dayofweek">
+				<select class="homey-form-select" style="margin-left: 5px;" name="gft[day_of_week]" id="gft_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
 					<option value="3" data-i18n="settings.dayofweek.we"></option>
@@ -111,7 +116,7 @@
 				</select>
 			</div>
 			<div>
-				<select style="display:none; margin-left: 5px;" name="gft[option_extension]" id="gft_option_extension">
+				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="gft[option_extension]" id="gft_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
 					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
@@ -120,15 +125,15 @@
 			</div>
 			<div id="gft_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
-				<input style="display: inline; margin-left: 5px;" type="date" name="gft[startdate]" id="gft_startdate"></input>
+				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="gft[startdate]" id="gft_startdate"></input>
 			</div>
         </div>
 
 		<!-- REST -->
-		<div class="field row">
-			<label for="rest" data-i18n="settings.rest"></label>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="rest" data-i18n="settings.rest"></label>
 			<div>
-				<select name="rest[option]" id="rest_option">
+				<select class="homey-form-select" name="rest[option]" id="rest_option">
 					<option value="-1" data-i18n="settings.interval.na"></option>
 					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
@@ -146,7 +151,7 @@
 				</select>
 			</div>
 			<div id="rest_day_div">
-				<select style="margin-left: 5px;" name="rest[day_of_week]" id="rest_dayofweek">
+				<select class="homey-form-select" style="margin-left: 5px;" name="rest[day_of_week]" id="rest_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
 					<option value="3" data-i18n="settings.dayofweek.we"></option>
@@ -157,7 +162,7 @@
 				</select>
 			</div>
 			<div>
-				<select style="display:none; margin-left: 5px;" name="rest[option_extension]" id="rest_option_extension">
+				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="rest[option_extension]" id="rest_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
 					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
@@ -166,15 +171,15 @@
 			</div>
 			<div id="rest_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
-				<input style="display: inline; margin-left: 5px;" type="date" name="rest[startdate]" id="rest_startdate"></input>
+				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="rest[startdate]" id="rest_startdate"></input>
 			</div>
         </div>
 
 		<!-- PAPER -->
-		<div class="field row">
-			<label for="paper" data-i18n="settings.paper"></label>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="paper" data-i18n="settings.paper"></label>
 			<div>
-				<select name="paper[option]" id="paper_option">
+				<select class="homey-form-select" name="paper[option]" id="paper_option">
 					<option value="-1" data-i18n="settings.interval.na"></option>
 					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
@@ -192,7 +197,7 @@
 				</select>
 			</div>
 			<div id="paper_day_div">
-				<select style="margin-left: 5px;" name="paper[day_of_week]" id="paper_dayofweek">
+				<select class="homey-form-select" style="margin-left: 5px;" name="paper[day_of_week]" id="paper_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
 					<option value="3" data-i18n="settings.dayofweek.we"></option>
@@ -203,7 +208,7 @@
 				</select>
 			</div>
 			<div>
-				<select style="display:none; margin-left: 5px;" name="paper[option_extension]" id="paper_option_extension">
+				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="paper[option_extension]" id="paper_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
 					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
@@ -212,15 +217,15 @@
 			</div>
 			<div id="paper_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
-				<input style="display: inline; margin-left: 5px;" type="date" name="paper[startdate]" id="paper_startdate"></input>
+				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="paper[startdate]" id="paper_startdate"></input>
 			</div>
         </div>
 
 		<!-- PLASTIC -->
-		<div class="field row">
-			<label for="plastic" data-i18n="settings.plastic"></label>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="plastic" data-i18n="settings.plastic"></label>
 			<div>
-				<select name="plastic[option]" id="plastic_option">
+				<select class="homey-form-select" name="plastic[option]" id="plastic_option">
 					<option value="-1" data-i18n="settings.interval.na"></option>
 					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
@@ -238,7 +243,7 @@
 				</select>
 			</div>
 			<div id="plastic_day_div">
-				<select style="margin-left: 5px;" name="plastic[day_of_week]" id="plastic_dayofweek">
+				<select class="homey-form-select" style="margin-left: 5px;" name="plastic[day_of_week]" id="plastic_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
 					<option value="3" data-i18n="settings.dayofweek.we"></option>
@@ -249,7 +254,7 @@
 				</select>
 			</div>
 			<div>
-				<select style="display:none; margin-left: 5px;" name="plastic[option_extension]" id="plastic_option_extension">
+				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="plastic[option_extension]" id="plastic_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
 					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
@@ -258,15 +263,15 @@
 			</div>
 			<div id="plastic_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
-				<input style="display: inline; margin-left: 5px;" type="date" name="plastic[startdate]" id="plastic_startdate"></input>
+				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="plastic[startdate]" id="plastic_startdate"></input>
 			</div>
         </div>
 
 		<!-- PMD -->
-		<div class="field row">
-			<label for="pmd" data-i18n="settings.pmd"></label>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="pmd" data-i18n="settings.pmd"></label>
 			<div>
-				<select name="pmd[option]" id="pmd_option">
+				<select class="homey-form-select" name="pmd[option]" id="pmd_option">
 					<option value="-1" data-i18n="settings.interval.na"></option>
 					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
@@ -284,7 +289,7 @@
 				</select>
 			</div>
 			<div id="pmd_day_div">
-				<select style="margin-left: 5px;" name="pmd[day_of_week]" id="pmd_dayofweek">
+				<select class="homey-form-select" style="margin-left: 5px;" name="pmd[day_of_week]" id="pmd_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
 					<option value="3" data-i18n="settings.dayofweek.we"></option>
@@ -295,7 +300,7 @@
 				</select>
 			</div>
 			<div>
-				<select style="display:none; margin-left: 5px;" name="pmd[option_extension]" id="pmd_option_extension">
+				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="pmd[option_extension]" id="pmd_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
 					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
@@ -304,15 +309,15 @@
 			</div>
 			<div style="float: left;" id="pmd_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
-				<input style="display: inline; margin-left: 5px;" type="date" name="pmd[startdate]" id="pmd_startdate"></input>
+				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="pmd[startdate]" id="pmd_startdate"></input>
 			</div>
         </div>
 
 		<!-- TEXTILE -->
-		<div class="field row">
-			<label for="textile" data-i18n="settings.textile"></label>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="textile" data-i18n="settings.textile"></label>
 			<div>
-				<select name="textile[option]" id="textile_option">
+				<select class="homey-form-select" name="textile[option]" id="textile_option">
 					<option value="-1" data-i18n="settings.interval.na"></option>
 					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
@@ -330,7 +335,7 @@
 				</select>
 			</div>
 			<div id="textile_day_div">
-				<select style="margin-left: 5px;" name="textile[day_of_week]" id="textile_dayofweek">
+				<select class="homey-form-select" style="margin-left: 5px;" name="textile[day_of_week]" id="textile_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
 					<option value="3" data-i18n="settings.dayofweek.we"></option>
@@ -341,7 +346,7 @@
 				</select>
 			</div>
 			<div>
-				<select style="display:none; margin-left: 5px;" name="textile[option_extension]" id="textile_option_extension">
+				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="textile[option_extension]" id="textile_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
 					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
@@ -350,15 +355,15 @@
 			</div>
 			<div id="textile_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
-				<input style="display: inline; margin-left: 5px;" type="date" name="textile[startdate]" id="textile_startdate"></input>
+				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="textile[startdate]" id="textile_startdate"></input>
 			</div>
         </div>
 
 		<!-- BULKY / GROF VUIL -->
-		<div class="field row">
-			<label for="bulky" data-i18n="settings.bulky"></label>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="bulky" data-i18n="settings.bulky"></label>
 			<div>
-				<select name="bulky[option]" id="bulky_option">
+				<select class="homey-form-select" name="bulky[option]" id="bulky_option">
 					<option value="-1" data-i18n="settings.interval.na"></option>
 					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
@@ -376,7 +381,7 @@
 				</select>
 			</div>
 			<div id="bulky_day_div">
-				<select style="margin-left: 5px;" name="bulky[day_of_week]" id="bulky_dayofweek">
+				<select class="homey-form-select" style="margin-left: 5px;" name="bulky[day_of_week]" id="bulky_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
 					<option value="3" data-i18n="settings.dayofweek.we"></option>
@@ -387,7 +392,7 @@
 				</select>
 			</div>
 			<div>
-				<select style="display:none; margin-left: 5px;" name="bulky[option_extension]" id="bulky_option_extension">
+				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="bulky[option_extension]" id="bulky_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
 					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
@@ -396,15 +401,15 @@
 			</div>
 			<div id="bulky_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
-				<input style="display: inline; margin-left: 5px;" type="date" name="bulky[startdate]" id="bulky_startdate"></input>
+				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="bulky[startdate]" id="bulky_startdate"></input>
 			</div>
         </div>
 
 		<!-- GLASS -->
-		<div class="field row">
-			<label for="glas" data-i18n="settings.glas"></label>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="glas" data-i18n="settings.glas"></label>
 			<div>
-				<select name="glas[option]" id="glas_option">
+				<select class="homey-form-select" name="glas[option]" id="glas_option">
 					<option value="-1" data-i18n="settings.interval.na"></option>
 					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
@@ -422,7 +427,7 @@
 				</select>
 			</div>
 			<div id="glas_day_div">
-				<select style="margin-left: 5px;" name="glas[day_of_week]" id="glas_dayofweek">
+				<select class="homey-form-select" style="margin-left: 5px;" name="glas[day_of_week]" id="glas_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
 					<option value="3" data-i18n="settings.dayofweek.we"></option>
@@ -433,7 +438,7 @@
 				</select>
 			</div>
 			<div>
-				<select style="display:none; margin-left: 5px;" name="glas[option_extension]" id="glas_option_extension">
+				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="glas[option_extension]" id="glas_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
 					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
@@ -442,104 +447,104 @@
 			</div>
 			<div id="glas_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
-				<input style="display: inline; margin-left: 5px;" type="date" name="glas[startdate]" id="glas_startdate"></input>
+				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="glas[startdate]" id="glas_startdate"></input>
 			</div>
         </div>
     </fieldset>
-    <button id="manualSettingsSave" class="right" data-i18n="settings.save" ></button>
+    <button id="manualSettingsSave" class="homey-button-primary-full" data-i18n="settings.save" ></button>
 	<br /><br />
 
-	<h2 data-i18n="settings.labeltitle"></h2>
-    <p style="display:block" data-i18n="settings.labeldescription"></p>
-	<fieldset id="label_input">
-		<div class="field row">
-			<label for="labelGeneric" data-i18n="settings.labelgeneric"></label>
-			<input type="text" id="labelGeneric" name="label[generic]" />
+	<fieldset class="homey-form-fieldset">
+		<legend class="homey-form-legend" data-i18n="settings.labeltitle" id="label_input"></legend>
+		<p data-i18n="settings.labeldescription"></p>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelGeneric" data-i18n="settings.labelgeneric"></label>
+			<input class="homey-form-input" type="text" id="labelGeneric" name="label[generic]" />
 			<p data-i18n="settings.genericlabelhelper"></p>
 			<p id="exampleMultiple"></p>
         </div>
-		<div class="field row">
-			<label for="labelTimeIndicator" data-i18n="settings.timeindicator"></label>
-			<select name="labelDay" id="labelTimeIndicator">
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelTimeIndicator" data-i18n="settings.timeindicator"></label>
+			<select class="homey-form-select" name="labelDay" id="labelTimeIndicator">
 				<option value="0" data-i18n="speech.output.timeindicator.t0"></option>
 				<option value="1" data-i18n="speech.output.timeindicator.t1"></option>
 				<option value="2" data-i18n="speech.output.timeindicator.t2"></option>
 			</select>
+			<p data-i18n="settings.timeindicatorDescription"></p>
         </div>
-		<div class="field row">
-			<label for="labelsGft" data-i18n="settings.gft"></label>
-			<input type="text" id="labelGft" name="label[gft]" />
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelsGft" data-i18n="settings.gft"></label>
+			<input class="homey-form-input" type="text" id="labelGft" name="label[gft]" />
 			<p id="exampleGft"></p>
         </div>
-		<div class="field row">
-			<label for="labelRest" data-i18n="settings.rest"></label>
-			<input type="text" id="labelRest" name="label[rest]" />
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelRest" data-i18n="settings.rest"></label>
+			<input class="homey-form-input" class="homey-form-input" type="text" id="labelRest" name="label[rest]" />
 			<p id="exampleRest"></p>
         </div>
-		<div class="field row">
-			<label for="labelPapier" data-i18n="settings.paper"></label>
-			<input type="text" id="labelPapier" name="label[papier]" />
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelPapier" data-i18n="settings.paper"></label>
+			<input class="homey-form-input" type="text" id="labelPapier" name="label[papier]" />
 			<p id="examplePapier"></p>
         </div>
-		<div class="field row">
-			<label for="labelPlastic" data-i18n="settings.plastic"></label>
-			<input type="text" id="labelPlastic" name="label[plastic]" />
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelPlastic" data-i18n="settings.plastic"></label>
+			<input class="homey-form-input" type="text" id="labelPlastic" name="label[plastic]" />
 			<p id="examplePlastic"></p>
         </div>
-		<div class="field row">
-			<label for="labelPmd" data-i18n="settings.pmd"></label>
-			<input type="text" id="labelPmd" name="label[pmd]" />
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelPmd" data-i18n="settings.pmd"></label>
+			<input class="homey-form-input" type="text" id="labelPmd" name="label[pmd]" />
 			<p id="examplePmd"></p>
         </div>
-		<div class="field row">
-			<label for="labelTextiel" data-i18n="settings.textile"></label>
-			<input type="text" id="labelTextiel" name="label[textiel]" />
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelTextiel" data-i18n="settings.textile"></label>
+			<input class="homey-form-input" type="text" id="labelTextiel" name="label[textiel]" />
 			<p id="exampleTextiel"></p>
         </div>
-		<div class="field row">
-			<label for="labelGrof" data-i18n="settings.bulky"></label>
-			<input type="text" id="labelGrof" name="label[grof]" />
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelGrof" data-i18n="settings.bulky"></label>
+			<input class="homey-form-input" type="text" id="labelGrof" name="label[grof]" />
 			<p id="exampleGrof"></p>
         </div>
-		<div class="field row">
-			<label for="labelGlas" data-i18n="settings.glas"></label>
-			<input type="text" id="labelGlas" name="label[glas]" />
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelGlas" data-i18n="settings.glas"></label>
+			<input class="homey-form-input" type="text" id="labelGlas" name="label[glas]" />
 			<p id="exampleGlas"></p>
         </div>
-		<div class="field row">
-			<label for="labelKerstboom" data-i18n="settings.christmas"></label>
-			<input type="text" id="labelKerstboom" name="label[kerstboom]" />
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelKerstboom" data-i18n="settings.christmas"></label>
+			<input class="homey-form-input" class="homey-form-input" type="text" id="labelKerstboom" name="label[kerstboom]" />
 			<p id="exampleKerstboom"></p>
         </div>
-		<div class="field row">
-			<label for="labelNone" data-i18n="settings.none"></label>
-			<input type="text" id="labelNone" name="label[none]" />
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelNone" data-i18n="settings.none"></label>
+			<input class="homey-form-input" type="text" id="labelNone" name="label[none]" />
 			<p id="exampleNone"></p>
         </div>
 	</fieldset>
-	<button id="labelInput" class="right" style="display:block" data-i18n="settings.saveLabelInput" ></button>
-	<br /><br />
+	<button id="labelInput" class="homey-button-primary-full" style="display:block" data-i18n="settings.saveLabelInput" ></button>
 	<br /><br />
 
-	<h2 data-i18n="settings.manualdata.title"></h2>
-	<p style="display:block" data-i18n="settings.manualdata.description"></p>
-	<fieldset id="debug_settings">
-		<div class="field row">
-			<label for="manualDataEntry" data-i18n="settings.manualdata.entryFieldLabel"></label>
-			<textarea id="manualDataEntry" name="manualDataEntry" width="100%" rows="10"></textarea>
+	<fieldset id="debug_settings" class="homey-form-fieldset">
+		<legend class="homey-form-legend" data-i18n="settings.manualdata.title"></legend>
+		<p style="display:block" data-i18n="settings.manualdata.description"></p>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="manualDataEntry" data-i18n="settings.manualdata.entryFieldLabel"></label>
+			<textarea class="homey-form-textarea" id="manualDataEntry" name="manualDataEntry" width="100%" rows="10"></textarea>
 		</div>
 		<span id="respManualDataEntry"></span>
 	</fieldset>
-	<button id="saveManaulDataEntry" class="right" style="display:block" data-i18n="settings.manualdata.save" ></button>
+	<button id="saveManaulDataEntry" class="homey-button-primary-full" style="display:block" data-i18n="settings.manualdata.save" ></button>
 	<br /><br />
 
-	<h2 data-i18n="debug.labeltitle"></h2>
-	<p style="display:block" data-i18n="debug.labeldescription"></p>
-	<fieldset id="debug_settings">
-		<div class="field row" id="respDatesDebug">
+	<fieldset id="debug_settings" class="homey-form-fieldset">
+		<legend class="homey-form-legend" data-i18n="debug.labeltitle"></legend>
+		<p style="display:block" data-i18n="debug.labeldescription"></p>
+		<div class="homey-form-group" id="respDatesDebug">
         </div>
 	</fieldset>
-	<button id="refreshDebugInformation" class="right" style="display:block" data-i18n="settings.refreshDebugInformation" ></button>
+	<button id="refreshDebugInformation" class="homey-button-primary-full" style="display:block" data-i18n="settings.refreshDebugInformation" ></button>
 	<br /><br />
 
 	<script type="text/javascript">
@@ -552,21 +557,25 @@
 				save( Homey );
 				return false; // cancels save event! (we don't need the real button event to be handled).
 			});
+
 			document.getElementById("manualSettingsSave").addEventListener("click", function(elem)
 			{
 				save( Homey );
 				return false; // cancels save event! (we don't need the real button event to be handled).
 			});
+
 			document.getElementById("labelInput").addEventListener("click", function(elem)
 			{
 				saveLabelInput( Homey );
 				return false; // cancels save event! (we don't need the real button event to be handled).
 			});
+
 			document.getElementById("saveManaulDataEntry").addEventListener("click", function(elem)
 			{
 				saveManaulEntryData( Homey );
 				return false; // cancels save event! (we don't need the real button event to be handled).
 			});
+
 			document.getElementById("refreshDebugInformation").addEventListener("click", function(elem)
 			{
 				retrieveCollectionDaysDebug( Homey );

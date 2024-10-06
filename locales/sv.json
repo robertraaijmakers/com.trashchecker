@@ -1,7 +1,7 @@
 {
 	"title": "Trash Checker",
 	"settings": {
-		"title": "Trashcan Reminder 2.0 Settings",
+		"title": "Trashcan Reminder Settings",
 		"description":"OBS! Vänligen notera att alla återvinningsföretag finns inte med. Du kan testa tillgängligheten för ditt återvinningsföretag genom att ang postnummer och gatunummer för att se om det är tillgängligt. Om adressen inte är tillgänglig så kan du alltid lägga in ditt schema manuellt i inställingarn nedan och ändå få full funktionalitet för appen!",
 		"postcode": "Postnummer",
 		"hnumber": "Husnummer",
@@ -73,7 +73,8 @@
 		"labelgeneric": "Global 'tag-mening'",
 		"genericlabelhelper": "Variabler som kan användas i den globala tag-meningen är __time__, __type__, __plural__.",
 		"labelplaceholder": "hämtas idag",
-		"timeindicator": "Sopor som hämtas"
+		"timeindicator": "Global etiketttyp",
+		"timeindicatorDescription": "Detta används för att visa exemplen under inställningarna. Du kan alltså i förväg se vilken text som kan förekomma i någon av de tre etiketterna."
 	},
 	"speech":
 	{
@@ -178,6 +179,20 @@
 			"tomorrow": "Hämtas imorgon",
 			"dayaftertomorrow": "Hämtas i övermorgon",
 			"advancedcollectiondates": "Samlingsdagar (JSON)"
+		}
+	},
+	"widgets":
+	{
+		"trashType": {
+			"GFT": "komposten",
+			"REST": "restavfallet",
+			"PLASTIC": "plastavfal",
+			"PMD": "plast, metall",
+			"PAPIER": "papper & papp",
+			"TEXTIEL": "textilier",
+			"GROF": "grovsopor",
+			"GLAS": "glas",
+			"KERSTBOOM": "julgranen"
 		}
 	}
 }

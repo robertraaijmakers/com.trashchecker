@@ -1,7 +1,7 @@
 {
 	"title": "Trash Checker",
 	"settings": {
-		"title": "Trashcan Reminder 2.0 Settings",
+		"title": "Trashcan Reminder Settings",
 		"description":"Please note that not all cities are supported. You can check availability by providing your postal code and house number to see if it's supported. If the address isn't supported, you can always add the pattern via the manual input settings below and still be able to use the full functionalities of the app!",
 		"postcode": "Postal Code",
 		"hnumber": "House Number",
@@ -73,7 +73,8 @@
 		"labelgeneric": "Global tag sentence",
 		"genericlabelhelper": "Variables that can be used in the global tag sentence are __time__, __type__, __plural__.",
 		"labelplaceholder": "is collected today",
-		"timeindicator": "Type collected"
+		"timeindicator": "Global Label Type",
+		"timeindicatorDescription": "This is used to render the examples below your label settings, to give a sneak preview of the text available through the three global labels."
 	},
 	"speech":
 	{
@@ -178,6 +179,20 @@
 			"tomorrow": "Collected Tomorrow",
 			"dayaftertomorrow": "Collected Day After Tomorrow",
 			"advancedcollectiondates": "Collection Days (JSON)"
+		}
+	},
+	"widgets":
+	{
+		"trashType": {
+			"GFT": "Organic",
+			"REST": "Rest",
+			"PLASTIC": "Plactic",
+			"PMD": "PMD",
+			"PAPIER": "Paper",
+			"TEXTIEL": "Textile",
+			"GROF": "Bulky",
+			"GLAS": "Glass",
+			"KERSTBOOM": "Christmas Tree"
 		}
 	}
 }

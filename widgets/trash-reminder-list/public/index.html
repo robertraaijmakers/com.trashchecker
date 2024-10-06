@@ -3,13 +3,19 @@
     <style>
       .trashContainer {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap; 
+        justify-content: space-between;  /* Space between the two items */
+        flex-wrap: wrap;  /* Allows items to wrap to the next line */
       }
 
       .trash-item-container {
-        margin: 10px 15px;
+        margin: 10px 0px;
+        flex: 1 1 30%; /* Each item takes 30% of the width (adjust as needed) */
+        max-width: 30%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column; /* Ensures elements inside stack vertically */
+        align-items: center; /* Center items horizontally within the container */
+        text-align: center; /* Ensures text aligns in the center */
       }
 
       .dot {
@@ -19,17 +25,71 @@
         border-radius: 50%;
         font-weight: bold;
         color: white;
-        padding: 35px 0px;
-
         display: flex;
-        justify-content: center;
-        align-items: center;
+        justify-content: center; /* Horizontally center the content inside the dot */
+        align-items: center; /* Vertically center the content inside the dot */
       }
 
       .trash-date {
         margin: 10px 0px;
         padding: 0px;
         text-align: center;
+      }
+
+      .trashContainer.triple .trash-item-container {
+          flex: 1 1 30%;
+          max-width: 30%;
+      }
+
+      .trashContainer.quad .trash-item-container {
+          flex: 1 1 45%;
+          max-width: 45%;
+      }
+
+      .trash-item-container-compact {
+        display: flex;
+        align-items: center;  /* Vertically center the dot and text */
+        justify-content: flex-start;  /* Align items to the left */
+        width: 40%;  /* Each container takes about half the width */
+        margin: 5px 10px 10px 10px;  /* Add some spacing between items */
+        box-sizing: border-box;
+      }
+
+      /* Dot styling - aligned to the left */
+      .dot-compact {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background-color: #bbb;
+          margin-right: 10px;  /* Adds spacing between the dot and text */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+
+      .dot-compact img {
+        width: 17px;
+        height: 17px;
+      }
+
+      /* Container for date titles */
+      .trash-date-container {
+          display: flex;
+          flex-direction: column;  /* Stack title and subtitle vertically */
+          justify-content: center;  /* Vertically center the text */
+          margin-top: 5px;
+      }
+
+      /* Title and subtitle styling */
+      .trash-date-title {
+          margin: 0;
+          font-weight: bold;
+          font-size: 12px;
+      }
+
+      .trash-date-subtitle {
+          margin: 0;
+          font-size: 11px;
       }
 
       .dot-type-GFT {
@@ -70,51 +130,12 @@
     </style>
   </head>
 
-  <body class="homey-widget-full">
+  <body class="homey-widget-full my-custom-body">
     <div id="trashCollections" class="trashContainer">
     </div>
 
     <script type="text/javascript">
-      function getNextCollectionDays(trashData) {
-        const currentDate = new Date();
-
-        // Create a new Date object for yesterday
-        const compareDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
-        compareDate.setDate(currentDate.getDate() - 1);
-
-        let trashCollectionArray = [];
-
-        // Loop through each trash type
-        for (let trashType in trashData) {
-          const trashDates = trashData[trashType];
-
-          // Parse and sort dates
-          const dates = trashData[trashType]
-            .map(date => new Date(date))  // Convert to Date objects
-            .filter(date => date >= compareDate) // Filter only today & future days
-            .sort((a, b) => a - b); // Sort by ascending order
-
-          if(dates.length >= 1) {
-            trashCollectionArray.push({
-                trashType: trashType,
-                nextDates: dates.slice(0, 2).map(date => date.toISOString().split('T')[0])
-            });
-          }
-        }
-
-        // Sort trashCollectionArray by the earliest first collection date
-        trashCollectionArray.sort((a, b) => new Date(a.nextDates[0]) - new Date(b.nextDates[0]));
-
-        // Construct the sorted nextCollectionDays object
-        let nextCollectionDays = {};
-        trashCollectionArray.forEach(item => {
-            nextCollectionDays[item.trashType] = item.nextDates;
-        });
-
-        return nextCollectionDays;
-      }
-
-      function getFormattedDate(firstDateStr) {
+      function getFormattedDate(firstDateStr, monthStyle) {
         const currentDate = new Date();
         const firstDate = new Date(firstDateStr);
 
@@ -137,7 +158,7 @@
             return Homey.__("speech.output.timeindicator.t1");
         } else {
             // Options to format the date as day and short month name
-            const options = { day: 'numeric', month: 'short' };
+            const options = { day: 'numeric', month: monthStyle };
 
             // Format the date to "12 Oct"
             return firstDate.toLocaleDateString(undefined, options);
@@ -153,30 +174,57 @@
 
         // Fetch something from your app.
         Homey.api("GET", "/").then((response) => {
-          const trashCollectionDays = response;
-          const trashData = getNextCollectionDays(trashCollectionDays);
-
           const tbody = document.querySelector('#trashCollections');
           tbody.innerHTML = '';
           let counter = 0;
+          let usedTypes = {};
+          let rowHeight = 130;
 
-          for (let trashType in trashData) {
+          for (let index in response) {
+            const trashItem = response[index];
+            const monthStyle = widgetSetting['layout-type'] === 'compact' ? 'long' : 'short';
+            const displayDate = getFormattedDate(trashItem.date, monthStyle);
+
             if (counter >= widgetSetting['max-items']) continue;
+            if (widgetSetting[`type-${trashItem.type}`] === false) continue;
+            if (widgetSetting['single-types'] === true && typeof usedTypes[trashItem.type] !== 'undefined') continue;
+
+            usedTypes[trashItem.type] = 'used';
             counter += 1;
 
-            let trashElement = `<div class="trash-item-container">`;
+            if (widgetSetting['layout-type'] === 'large') {
+              tbody.innerHTML += `
+              <div class="trash-item-container">
+                <span class="dot dot-type-${trashItem.type}"><img src="trash-${trashItem.type}.svg" /></span>
+                <p class="trash-date">${displayDate}</p>
+              </div>`;
+            } else {
 
-            const firstDate = trashData[trashType][0];
-            const displayDate = getFormattedDate(firstDate);
+              // Get trash description
+              const trashTypeText = Homey.__(`widgets.trashType.${trashItem.type}`);
+              rowHeight = 50;
 
-            trashElement += `<span class="dot dot-type-${trashType}"><img src="trash-${trashType}.svg" /></span>`;
-            trashElement += `<p class="trash-date">${displayDate}</p>`;
-            
-            trashElement += '</div>';
-            tbody.innerHTML += trashElement;
+              tbody.innerHTML += `
+              <div class="trash-item-container-compact">
+                <span class="dot-compact dot-type-${trashItem.type}"><img src="trash-${trashItem.type}.svg" /></span>
+                <div class="trash-date-container">
+                  <p class="trash-date-title">${trashTypeText}</p>
+                  <p class="homey-text-small-light trash-date-subtitle">${displayDate}</p>
+                </div>
+              </div>`;
+            }
           }
 
-          Homey.ready({ height: widgetSetting['list-height']*135 });
+          const container = document.querySelector('#trashCollections');
+          const items = container.querySelectorAll('.trash-item-container');
+          container.classList.remove('triple', 'quad');
+          if (items.length === 4) {
+            container.classList.add('quad'); // Add the 'quad' class if there are 4 items
+          } else {
+            container.classList.add('triple');
+          }
+
+          Homey.ready({ height: widgetSetting['list-height'] * rowHeight });
         }).catch((error) => {
             console.error(error);
         });

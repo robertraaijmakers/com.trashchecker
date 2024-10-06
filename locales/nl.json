@@ -1,7 +1,7 @@
 {
 	"title": "Trash Checker",
 	"settings": {
-		"title": "Trashcan Reminder 2.0 Settings",
+		"title": "Trashcan Reminder Settings",
 		"description":"Helaas worden niet alle postcodes ondersteund, voer hieronder je postcode en huisnummer in om te zien of ze ondersteund worden. Zo niet, dan kan je altijd de handmatige invoer toepassen waardoor je toch de volledige functionaliteit van de app kan gebruiken!",
 		"postcode": "Postcode",
 		"hnumber": "Huisnummer",
@@ -73,7 +73,8 @@
 		"labelgeneric": "Zin in globale tag",
 		"genericlabelhelper": "Variabelen die in de globale tag zin gebruikt kunnen worden zijn __time__, __type__, __plural__.",
 		"labelplaceholder": "wordt vandaag opgehaald",
-		"timeindicator": "Ophaal type"
+		"timeindicator": "Globaal Label Type",
+		"timeindicatorDescription": "Deze wordt gebruikt om de voorbeelden te tonen onder de instellingen. Zodat je alvast kan zien welke tekst er in één van de drie labels kan komen."
 	},
 	"speech":
 	{
@@ -178,6 +179,20 @@
 			"tomorrow": "Morgen opgehaald",
 			"dayaftertomorrow": "Overmorgen opgehaald",
 			"advancedcollectiondates": "Ophaaldagen (JSON)"
+		}
+	},
+	"widgets":
+	{
+		"trashType": {
+			"GFT": "GFT",
+			"REST": "Rest",
+			"PLASTIC": "Plactic",
+			"PMD": "PMD",
+			"PAPIER": "Papier",
+			"TEXTIEL": "Textiel",
+			"GROF": "Grof",
+			"GLAS": "Glas",
+			"KERSTBOOM": "Kerstboom"
 		}
 	}
 }
