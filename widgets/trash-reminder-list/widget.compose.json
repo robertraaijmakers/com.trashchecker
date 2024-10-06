@@ -43,8 +43,8 @@
         "nl": "regels"
       },
       "title": {
-        "en": "Trash Heights",
-        "nl": "Aantal Afvalregels"
+        "en": "Widget Height",
+        "nl": "Widget Hoogte"
       },
       "hint": {
         "en": "The amount of trash type lines to be visible in one view. Determines the widget height.",
@@ -93,7 +93,7 @@
       "type": "checkbox",
       "value": true,
       "title": {
-        "en": "Show GFT?",
+        "en": "Show Organic?",
         "nl": "Toon GFT?"
       }
     },

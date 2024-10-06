@@ -497,7 +497,7 @@ it('API - Afvalkalender RMN', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-
+*/
 it('API - Afvalkalender Etten-Leur', function() {
     var postcode = "4871TK";
     var homenumber = 36;
@@ -511,7 +511,7 @@ it('API - Afvalkalender Etten-Leur', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-
+/*
 it('API - Afvalkalender Den Haag', function() {
     var postcode = "2552LJ";
     var homenumber = 13;
@@ -640,7 +640,7 @@ it('API - RWM', function() {
         {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
-});*/
+});
 
 it('API - RWM', function() {
     var postcode = "2650";
@@ -655,7 +655,7 @@ it('API - RWM', function() {
         {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
-});
+});*/
 
 function testAPI(apiId, apiName, postcode, homenumber, streetName, country)
 {

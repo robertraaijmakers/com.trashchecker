@@ -91,7 +91,7 @@ function huisvuilkalenderDenHaag(postcode, housenumber, street, country) {
 }
 
 function huisvuilkalenderEttenLeur(postcode, housenumber, street, country) {
-    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'www.afval3xbeter.nl')
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'afval3xbeter.nl')
 }
 
 function afvalkalenderMeerlanden(postcode, housenumber, street, country) {
