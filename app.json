@@ -7,7 +7,7 @@
     "nl": "Afval Herinnering 2.0",
     "sv": "Avfallspåminnelse 2.0"
   },
-  "version": "4.0.2",
+  "version": "4.0.3",
   "platforms": [
     "local"
   ],
@@ -282,6 +282,15 @@
           "title": {
             "en": "Show types once?",
             "nl": "Toon types maar één keer?"
+          }
+        },
+        {
+          "id": "display-yesterday",
+          "type": "checkbox",
+          "value": false,
+          "title": {
+            "en": "Display yesterday?",
+            "nl": "Toon gisteren?"
           }
         },
         {

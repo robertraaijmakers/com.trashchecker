@@ -80,6 +80,15 @@
       }
     },
     {
+      "id": "display-yesterday",
+      "type": "checkbox",
+      "value": false,
+      "title": {
+        "en": "Display yesterday?",
+        "nl": "Toon gisteren?"
+      }
+    },
+    {
       "id": "type-GFT",
       "type": "checkbox",
       "value": true,

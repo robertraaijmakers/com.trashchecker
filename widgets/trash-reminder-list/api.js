@@ -1,11 +1,14 @@
 'use strict';
 
 module.exports = {
-  async getSettings({ homey }) {
+  async getSettings({ homey, query  }) {
     const trashData =  homey.settings.get(`collectingDays`);
 
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0); // Set to midnight for accurate comparison
+    if(query.displayYesterday === 'true') {
+      currentDate.setDate(currentDate.getDate() - 1);
+    }
 
     let firstDatesPerType = [];
     let remainingDates = [];

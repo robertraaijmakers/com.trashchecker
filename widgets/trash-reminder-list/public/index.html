@@ -171,9 +171,10 @@
 
       function init(Homey) {
         const widgetSetting = Homey.getSettings();
-
+        const showYesterday = widgetSetting['display-yesterday'];
+        
         // Fetch something from your app.
-        Homey.api("GET", "/").then((response) => {
+        Homey.api("GET", `/?displayYesterday=${showYesterday}`).then((response) => {
           const tbody = document.querySelector('#trashCollections');
           tbody.innerHTML = '';
           let counter = 0;
