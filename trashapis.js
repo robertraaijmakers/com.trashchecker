@@ -1230,6 +1230,8 @@ function circulusBerkel(postcode, homenumber, street, country)
                             case 'rest':
                                 key = key.toUpperCase();
                                 break;
+                            case 'restafr':
+                                key = "REST";
                             case 'drocodev':
                                 key = "PLASTIC";
                                 break;
@@ -1240,6 +1242,7 @@ function circulusBerkel(postcode, homenumber, street, country)
                                 key = 'PAPIER';
                                 break;
                             case 'best':
+                            case 'bestafr':
                                 key = 'TEXTIEL';
                                 break;
                             case 'kerst':
