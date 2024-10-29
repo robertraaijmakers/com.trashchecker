@@ -455,7 +455,7 @@ it('API - Afval App', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
   });
-
+*/
 it('API - Almere Ximmio', function() {
     var postcode = "1324AM";
     var homenumber = 10;
@@ -469,7 +469,6 @@ it('API - Almere Ximmio', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-
 it('API - Almere Ximmio', function() {
     var postcode = "1359KS";
     var homenumber = 20;
@@ -484,6 +483,7 @@ it('API - Almere Ximmio', function() {
         });
 });
 
+/*
 it('API - Afvalkalender RMN', function() {
     var postcode = "3768MJ";
     var homenumber = 40;

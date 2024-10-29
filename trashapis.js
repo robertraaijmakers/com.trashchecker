@@ -491,6 +491,7 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                                 fDates.GFT.push(date);
                                 break;
                             case "GREY":
+                            case "BULKYRESTWASTE":
                                 if (!fDates.REST) fDates.REST = [];
                                 fDates.REST.push(date);
                                 break;
@@ -519,6 +520,9 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                             case "GLASS":
                                 if (!fDates.GLAS) fDates.GLAS = [];
                                 fDates.GLAS.push(date);
+                                break;
+                            default:
+                                console.log(calendarResult.dataList[i]._pickupTypeText);
                                 break;
                         }
                     }
