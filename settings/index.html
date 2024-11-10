@@ -28,8 +28,10 @@
         </div>
         <div class="homey-form-group">
 			<label class="homey-form-label" for="country" data-i18n="settings.country"></label>
-			<input class="homey-form-radio" style="width:10px" checked="checked" id="NL" name="country" type="radio" value="NL"/><span class="name">NL</span>
-			<input class="homey-form-radio" style="width:10px" id="BE" name="country" type="radio" value="NL"/><span class="name">BE</span>
+			<select class="homey-form-select" id="country">
+				<option value="NL">NL</option>
+				<option value="BE">BE</option>
+			</select>
         </div>
         <div class="homey-form-group">
 			<label class="homey-form-label" for="api" data-i18n="settings.api"></label>
@@ -612,8 +614,8 @@
 			document.getElementById("labelKerstboom").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelNone").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelGeneric").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-
-			document.getElementById("BE").addEventListener("change", function(elem) { ToggleFieldsBasedOnCountry( Homey ); });
+			
+			document.getElementById("country").addEventListener("change", function(elem) { ToggleFieldsBasedOnCountry( Homey ); });
 
 			var respDates = document.getElementById("respDatesDebug");
 				respDates.style.color = 'black';
@@ -669,9 +671,9 @@
         		}
 
         		if(country == 'NL' || country == 'BE') {
-        			document.getElementById(country).checked = true;
+        			document.getElementById('country').value = country;
         		} else {
-        			document.getElementById('NL').checked = true;
+        			document.getElementById('country').value = "NL";
         		}
         	});
 
@@ -929,13 +931,7 @@
         	var num = document.getElementById('number').value;
         	var streetName = document.getElementById('streetName').value;
 			var apiSelected = document.getElementById('api').value;
-
-        	var country = null;
-        	if(document.getElementById('NL').checked) {
-            	country = 'NL';
-            } else if(document.getElementById('BE').checked) {
-            	country = 'BE';
-            }
+        	var country = document.getElementById('country').value;
 
 			if(apiSelected == "") { apiSelected = null; }
 			if(pc == "") { pc = null; }
@@ -1225,11 +1221,22 @@
 		}
 
 		// Toggle street name
+		var optionSetStore = null;
 		function ToggleFieldsBasedOnCountry(Homey)
 		{
-			if(document.getElementById('NL').checked) {
+			const countrySelected = document.getElementById('country').value;
+			// const ddl = document.getElementById('country');
+
+			// if(optionSetStore === null) {
+			// 	optionSetStore = new Array();
+			// 	for (i = 0; i < ddl.options.length; i++) {
+			// 		optionSetStore[i] = ddl .options[i].value;
+			// 	}
+			// }
+
+			if(countrySelected === 'NL') {
             	document.getElementById("streetName_div").style.display = 'none';
-            } else if(document.getElementById('BE').checked) {
+            } else if(countrySelected === 'BE') {
             	document.getElementById("streetName_div").style.display = 'block';
             }
 		}

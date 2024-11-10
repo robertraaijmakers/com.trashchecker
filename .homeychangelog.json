@@ -161,7 +161,7 @@
     "en": "Added RWM garbage, added GFT and area collection (under Textile) for Recycleapp",
     "nl": "RWM afval en reiniging wordt nu ook ondersteund, toevoegingen voor Recycleapp"
   },
-  "4.0.6": {
+  "4.0.7": {
     "en": "Added support for widgets! Now display the next collection days right on your dashboard.",
     "nl": "Ondersteuning voor widgets toegevoegd! Toon de eerstvolgende ophaaldata direct op je dashboard."
   }
