@@ -7,11 +7,11 @@
     "nl": "Afval Herinnering 2.0",
     "sv": "Avfallspåminnelse 2.0"
   },
-  "version": "4.0.7",
+  "version": "4.0.8",
   "platforms": [
     "local"
   ],
-  "compatibility": ">=12.1.0",
+  "compatibility": ">=12.1.2",
   "author": {
     "name": "Robert Raaijmakers",
     "email": "dutchfighter@live.nl"
@@ -206,6 +206,7 @@
         "en": "Trash Overview",
         "nl": "Afval Overzicht"
       },
+      "transparent": true,
       "settings": [
         {
           "id": "layout-type",

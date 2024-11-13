@@ -8,14 +8,28 @@
       }
 
       .trash-item-container {
-        margin: 10px 0px 0px 0px;
-        flex: 1 1 30%; /* Each item takes 30% of the width (adjust as needed) */
-        max-width: 30%;
-        box-sizing: border-box;
+        flex: 1 1 33%; /* Each item takes 30% of the width (adjust as needed) */
+        max-width: 22%;
         display: flex;
         flex-direction: column; /* Ensures elements inside stack vertically */
         align-items: center; /* Center items horizontally within the container */
         text-align: center; /* Ensures text aligns in the center */
+
+        margin: 0px 0px var(--homey-su-3) 0px;  /* Add some spacing between items */
+        box-sizing: border-box;
+        padding: var(--homey-su) var(--homey-su-2);
+        background-color: var(--homey-background-color);
+        border-radius: var(--homey-border-radius-default);
+      }
+
+      .trashContainer.triple .trash-item-container {
+          flex: 1 1 33%;
+          max-width: 31%;
+      }
+
+      .trashContainer.quad .trash-item-container {
+          flex: 1 1 25%;
+          max-width: 23%;
       }
 
       .dot-large {
@@ -36,28 +50,21 @@
       }
 
       .trash-date {
-        margin: 0px 0px;
-        padding: 5px 0px 0px 0px;
+        margin: 2px 0px 0px 0px;
+        padding: 6px 0px 0px 0px;
         text-align: center;
-      }
-
-      .trashContainer.triple .trash-item-container {
-          flex: 1 1 24%;
-          max-width: 324%;
-      }
-
-      .trashContainer.quad .trash-item-container {
-          flex: 1 1 24%;
-          max-width: 324%;
       }
 
       .trash-item-container-compact {
         display: flex;
         align-items: center;  /* Vertically center the dot and text */
         justify-content: flex-start;  /* Align items to the left */
-        width: 40%;  /* Each container takes about half the width */
-        margin: 5px 10px 0px 10px;  /* Add some spacing between items */
+        width: 48%;  /* Each container takes about half the width */
+        margin: 0px 0px var(--homey-su-3) 0px;  /* Add some spacing between items */
         box-sizing: border-box;
+        padding: var(--homey-su) var(--homey-su-2);
+        background-color: var(--homey-background-color);
+        border-radius: var(--homey-border-radius-default);
       }
 
       /* Dot styling - aligned to the left */
@@ -88,8 +95,9 @@
       /* Title and subtitle styling */
       .trash-date-title {
           margin: 0;
-          font-weight: bold;
-          font-size: 12px;
+          font-weight: var(--homey-font-weight-medium);
+          font-size: var(--homey-font-size-small);
+          line-height: var(--homey-font-size-small);
       }
 
       .trash-date-subtitle {
@@ -132,8 +140,14 @@
       .dot-type-GLAS {
         background-color: #00cdae;
       }
+
+      .my-custom-body {
+        background-color: transparent;
+        overflow-x: auto;
+      }
       
       .my-custom-body-overflow-hidden {
+        background-color: transparent;
         overflow: hidden;
       }
     </style>
@@ -188,7 +202,7 @@
           tbody.innerHTML = '';
           let counter = 0;
           let usedTypes = {};
-          let rowHeight = 80;
+          let rowHeight = 88;
           let itemsPerRow = 4;
 
           for (let index in response) {
@@ -212,7 +226,7 @@
             } else {
 
               const trashTypeText = Homey.__(`widgets.trashType.${trashItem.type}`);
-              rowHeight = 40;
+              rowHeight = 57;
               itemsPerRow = 2;
 
               tbody.innerHTML += `
@@ -226,10 +240,14 @@
             }
           }
 
-          if(widgetSetting['layout-type'] === 'large') {
+          if(widgetSetting['layout-type'] === 'large' && counter % 3 === 0) itemsPerRow = 3;
+
+          if(widgetSetting['layout-type'] === 'large' && itemsPerRow === 4) {
+            tbody.classList.remove('triple');
             tbody.classList.add('quad');
-          }  else {
+          } else if(widgetSetting['layout-type'] === 'large') {
             tbody.classList.remove('quad');
+            tbody.classList.add('triple');
           }
 
           const dBody = document.querySelector('#main-body');
@@ -241,7 +259,7 @@
             dBody.classList.add('my-custom-body-overflow-hidden'); // Make the widget not overflow
           }
 
-          Homey.ready({ height: (widgetSetting['list-height'] * rowHeight) + 10 });
+          Homey.ready({ height: ((widgetSetting['list-height'] * rowHeight) + (widgetSetting['list-height']-1 * 10)) });
         }).catch((error) => {
             console.error(error);
         });

@@ -3,6 +3,7 @@
     "en": "Trash Overview",
     "nl": "Afval Overzicht"
   },
+  "transparent": true,
   "settings": [
     {
       "id": "layout-type",
