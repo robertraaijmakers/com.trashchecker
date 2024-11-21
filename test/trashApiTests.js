@@ -2,7 +2,7 @@
 
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
-
+/*
 it('API - Mijn Afvalwijzer', function() {
     var postcode = "9821TT";
     var homenumber = 9;

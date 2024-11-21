@@ -76,6 +76,14 @@
 				<option value="recbe">Recycle! App (BE)</option>
 			</select>
         </div>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="cleanApi" data-i18n="settings.cleanApi"></label>
+			<select class="homey-form-select" id="cleanApi">
+				<option value="not-applicable" data-i18n="settings.notapplicable"></option>
+				<option value="" data-i18n="settings.unknown"></option>
+				<option value="cpfs">Clean Profs (NL)</option>
+			</select>
+        </div>
         <span id="resp" title="Details?" onclick="document.getElementById('respDates').style='display: block;'"></span>
         <span id="respDates" style="display: none;"></span>
     </fieldset>
@@ -686,6 +694,15 @@
         		document.getElementById("api").value = apiId;
         	});
 
+        	Homey.get('cleanApiId',function(err, cleanApiId)
+        	{
+        		if(err){
+        			return console.error(err);
+        		}
+
+        		document.getElementById("cleanApi").value = cleanApiId;
+        	});
+
 			Homey.get('manualEntryData',function(err, manualEntryData)
 			{
 				console.log(manualEntryData);
@@ -931,12 +948,14 @@
         	var num = document.getElementById('number').value;
         	var streetName = document.getElementById('streetName').value;
 			var apiSelected = document.getElementById('api').value;
+			var cleanApiSelected = document.getElementById('cleanApi').value;
         	var country = document.getElementById('country').value;
 
-			if(apiSelected == "") { apiSelected = null; }
-			if(pc == "") { pc = null; }
-			if(num == "") { num = null; }
-			if(streetName == "") { streetName = null; }
+			if(apiSelected === "") { apiSelected = null; }
+			if(cleanApiSelected === "") { cleanApiSelected = null; }
+			if(pc === "") { pc = null; }
+			if(num === "") { num = null; }
+			if(streetName === "") { streetName = null; }
 
 			if(pc == null || num == null)
 			{
@@ -944,6 +963,7 @@
 				Homey.set('hnumber', '');
 				Homey.set('country', 'NL');
 				Homey.set('apiId', '');
+				Homey.set('cleanApiId', 'not-applicable');
 				Homey.set('streetName', '');
 
 				resp.innerHTML = Homey.__('settings.manualonly');
@@ -952,7 +972,7 @@
 				return;
 			}
 
-        	Homey.api('POST', '/', {
+        	Homey.api('POST', '/trashcollection', {
         		"postcode":pc,
         		"housenumber":num,
 				"streetName":streetName,
@@ -990,6 +1010,45 @@
 				}
 
 				retrieveCollectionDaysDebug( Homey );
+        		console.log(result);
+        	});
+
+			Homey.api('POST', '/clean', {
+        		"postcode":pc,
+        		"housenumber":num,
+				"streetName":streetName,
+        		"country":country,
+				"cleanApiId": cleanApiSelected
+        	}, function(err, result) {
+        		if(err) { return console.log(err); }
+
+				if(result)
+				{
+					// Retrieve API id & gdates from settings
+					Homey.get('cleanApiId', function(err, cleanApiId)
+					{
+						if(err)
+						{
+							// resp.style.color = 'red';
+							return;
+						}
+
+						document.getElementById("cleanApi").value = cleanApiId;
+
+						if (cleanApiId !== 'not-applicable') {
+							resp.innerHTML += '<br />' + Homey.__('settings.updateCleaning');
+						}
+
+						//respDates.innerHTML = "<br />API ID: " + apiId + respDates.innerHTML;
+					});
+				}
+				else
+				{
+					// resp.innerHTML = Homey.__('settings.fail');
+					// resp.style.color = 'red';
+				}
+
+				// retrieveCollectionDaysDebug( Homey );
         		console.log(result);
         	});
         }

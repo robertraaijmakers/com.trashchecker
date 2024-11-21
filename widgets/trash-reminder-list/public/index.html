@@ -20,6 +20,8 @@
         padding: var(--homey-su) var(--homey-su-2);
         background-color: var(--homey-background-color);
         border-radius: var(--homey-border-radius-default);
+        
+        position: relative;
       }
 
       .trashContainer.triple .trash-item-container {
@@ -65,6 +67,7 @@
         padding: var(--homey-su) var(--homey-su-2);
         background-color: var(--homey-background-color);
         border-radius: var(--homey-border-radius-default);
+        position: relative;
       }
 
       /* Dot styling - aligned to the left */
@@ -95,7 +98,7 @@
       /* Title and subtitle styling */
       .trash-date-title {
           margin: 0;
-          font-weight: var(--homey-font-weight-medium);
+          font-weight: var(--homey-font-weight-light);
           font-size: var(--homey-font-size-small);
           line-height: var(--homey-font-size-small);
       }
@@ -150,6 +153,18 @@
         background-color: transparent;
         overflow: hidden;
       }
+
+      .cleaning-icon {
+        position: absolute; /* Position relative to the container */
+        top: 5px; /* Adjust distance from the top */
+        right: 5px; /* Adjust distance from the right */
+        font-size: 32px; /* Adjust the size */
+        color: green; /* Icon color */
+      }
+
+      .trash-item-container-compact .cleaning-icon {
+        font-size: 28px; /* Adjust the size */
+      }
     </style>
   </head>
 
@@ -181,7 +196,7 @@
             return Homey.__("speech.output.timeindicator.t1");
         } else {
             // Options to format the date as day and short month name
-            const options = { day: 'numeric', month: monthStyle };
+            const options = { weekday: 'short', day: 'numeric', month: monthStyle };
 
             // Format the date to "12 Oct"
             return firstDate.toLocaleDateString(undefined, options);
@@ -222,6 +237,7 @@
               <div class="trash-item-container">
                 <span class="dot-large dot-type-${trashItem.type}"><img src="trash-${trashItem.type}.svg" /></span>
                 <p class="trash-date-title trash-date">${displayDate}</p>
+                ${trashItem.isCleaned ? '<span class="cleaning-icon">🫧</span>' : ''}
               </div>`;
             } else {
 
@@ -236,6 +252,7 @@
                   <p class="trash-date-title">${trashTypeText}</p>
                   <p class="homey-text-small-light trash-date-subtitle">${displayDate}</p>
                 </div>
+                ${trashItem.isCleaned ? '<span class="cleaning-icon">🫧</span>' : ''}
               </div>`;
             }
           }
