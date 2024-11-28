@@ -164,5 +164,9 @@
   "4.0.4": {
     "en": "Added support for widgets! Now display the next collection days right on your dashboard.",
     "nl": "Ondersteuning voor widgets toegevoegd! Toon de eerstvolgende apphaaldata direct op je dashboard."
+  },
+  "4.0.5": {
+    "en": "Added Montferland",
+    "nl": "Montferland wordt nu ondersteund."
   }
 }

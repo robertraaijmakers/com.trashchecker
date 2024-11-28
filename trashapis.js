@@ -169,6 +169,10 @@ function afvalkalenderSudwestFryslan(postcode, housenumber, street, country) {
     return newGeneralAfvalkalendersNederland(postcode, housenumber, country, "afvalkalender.sudwestfryslan.nl");
 }
 
+function afvalwijzerMontferland(postcode, housenumber, street, country) {
+    return afvalwijzerMontferlandApiImplementation(postcode, housenumber, country, "appapi.montferland.info");
+}
+
 /**
  * General implementation of the afvalkalender API used by a lot of different vendors.
  */
@@ -1278,6 +1282,116 @@ function circulusBerkel(postcode, homenumber, street, country)
     });
 }
 
+function afvalwijzerMontferlandApiImplementation(postcode, housenumber, country, baseUrl) {
+    console.log("Checking afvalwijzer Montferland with URL: " + baseUrl);
+
+    if (country !== "NL") {
+        console.log("Unsupported country");
+        return Promise.reject(new Error("Unsupported country"));
+    }
+
+    let onlyHouseNumber = `${housenumber}`.match(/\d+/g);
+    let numberAddition = `${housenumber}`.match(/[a-zA-Z]+/g);
+
+    if (onlyHouseNumber === null || onlyHouseNumber.length === 0) {
+        console.log("Invalid house number");
+        return Promise.reject(new Error("Invalid house number"));
+    }
+
+    onlyHouseNumber = onlyHouseNumber[0];
+
+    if (numberAddition === null || numberAddition.length === 0) {
+        numberAddition = "";
+    }
+
+    const getGarbageList = httpsPromise({
+        hostname: baseUrl,
+        path: `/api/v1/garbage/${postcode}/${onlyHouseNumber}/${numberAddition}`,
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "authToken": "77FE5F8B-9051-4B05-A525-C7CCCD42236F"
+        }
+    });
+
+    return new Promise(function (resolve, reject) {
+        getGarbageList.then(function (response) {
+            const fDates = {};
+            const result = response.body;
+
+            if (result.errorCode === 100) {
+                console.log("Auth token is invalid, it might have changed");
+                return reject(new Error("auth token is invalid, it might have changed"));
+            } else if (result.errorCode === 2002) {
+                console.log("Address is not supported");
+                return reject(new Error("Address is not supported"));
+            } else if (result.collections.length === 0) {
+                console.log("No garbage data found");
+                return reject(new Error("No garbage data found"));
+            }
+
+            /*
+                Fraction mapping:
+                Rest = 1
+                GFT = 2
+                Paper = 3
+                PMD = 10
+             */
+
+            for (const collection of result.collections) {
+                const date = collection.collectionDate.split("T")[0] || null; // get rid of the time part
+
+                if (date === null || isNaN(Date.parse(date))) {
+                    console.log(`Unable to parse date: ${date}`);
+                    continue;
+                }
+
+                switch (collection.fraction) {
+                    case 1:
+                        if (!fDates.REST) {
+                            fDates.REST = [];
+                        }
+
+                        fDates.REST.push(date);
+                        break;
+
+                    case 2:
+                        if (!fDates.GFT) {
+                            fDates.GFT = [];
+                        }
+
+                        fDates.GFT.push(date);
+                        break;
+
+                    case 3:
+                        if (!fDates.PAPIER) {
+                            fDates.PAPIER = [];
+                        }
+
+                        fDates.PAPIER.push(date);
+                        break;
+
+                    case 10:
+                        if (!fDates.PMD) {
+                            fDates.PMD = [];
+                        }
+
+                        fDates.PMD.push(date);
+                        break;
+
+                    default:
+                        console.log(`Unknown fraction: ${collection.fraction}`);
+                        break;
+                }
+            }
+
+            resolve(fDates);
+        }).catch(function (error) {
+            reject(new Error(`Error occured during retrieval of garbage (check auth token): ${error}`))
+        })
+    });
+}
+
 /**
  * Helper functions used by different API implementations
  */
@@ -1561,6 +1675,7 @@ apiList.push({ name: "Afvalkalender Súdwest-Fryslân", id: "swf", execute: afva
 apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderVenray });
 apiList.push({ name: "Afvalkalender Westland", id: "akwl", execute: afvalKalenderWestland });
 apiList.push({ name: "Afvalkalender ZRD", id: "afzrd", execute: afvalkalenderZrd });
+apiList.push({ name: "Avalwijzer Montferland", id: "mont", execute: afvalwijzerMontferland });
 apiList.push({ name: "Afvalwijzer Pre Zero", id: "arn", execute: afvalwijzerPreZero });
 apiList.push({ name: "Area Reiniging", id: "arei", execute: areaReiniging });
 apiList.push({ name: "Avalex", id: "avx", execute: afvalAvalex });
