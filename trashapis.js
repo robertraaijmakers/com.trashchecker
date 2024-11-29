@@ -495,6 +495,7 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                                 fDates.GFT.push(date);
                                 break;
                             case "GREY":
+                            case "BULKYRESTWASTE":
                                 if (!fDates.REST) fDates.REST = [];
                                 fDates.REST.push(date);
                                 break;
@@ -523,6 +524,9 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                             case "GLASS":
                                 if (!fDates.GLAS) fDates.GLAS = [];
                                 fDates.GLAS.push(date);
+                                break;
+                            default:
+                                console.log(calendarResult.dataList[i]._pickupTypeText);
                                 break;
                         }
                     }
@@ -1234,6 +1238,8 @@ function circulusBerkel(postcode, homenumber, street, country)
                             case 'rest':
                                 key = key.toUpperCase();
                                 break;
+                            case 'restafr':
+                                key = "REST";
                             case 'drocodev':
                                 key = "PLASTIC";
                                 break;
@@ -1244,6 +1250,7 @@ function circulusBerkel(postcode, homenumber, street, country)
                                 key = 'PAPIER';
                                 break;
                             case 'best':
+                            case 'bestafr':
                                 key = 'TEXTIEL';
                                 break;
                             case 'kerst':

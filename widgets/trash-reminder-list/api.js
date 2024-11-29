@@ -3,6 +3,8 @@
 module.exports = {
   async getSettings({ homey, query  }) {
     const trashData =  homey.settings.get(`collectingDays`);
+    let cleaningDays = homey.settings.get('cleaningDays');
+    if(cleaningDays === null || typeof cleaningDays === 'undefined') cleaningDays = {};
 
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0); // Set to midnight for accurate comparison
@@ -35,9 +37,14 @@ module.exports = {
     const allDates = firstDatesPerType.concat(remainingDates);
     allDates.sort((a, b) => a.date - b.date);
 
+    const cleanedDatesSet = new Set(
+      Object.values(cleaningDays).flat().map(dateStr => new Date(dateStr).toISOString().split('T')[0])
+    );
+
     return allDates.map(item => ({
-        date: item.date.toISOString().split('T')[0],  // Format date as YYYY-MM-DD
-        type: item.type
+        date: item.date.toISOString().split('T')[0], // Format date as YYYY-MM-DD
+        type: item.type,
+        isCleaned: cleanedDatesSet.has(item.date.toISOString().split('T')[0])
     }));
   },
 };

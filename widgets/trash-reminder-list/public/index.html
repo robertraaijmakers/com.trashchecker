@@ -8,19 +8,35 @@
       }
 
       .trash-item-container {
-        margin: 10px 0px;
-        flex: 1 1 30%; /* Each item takes 30% of the width (adjust as needed) */
-        max-width: 30%;
-        box-sizing: border-box;
+        flex: 1 1 33%; /* Each item takes 30% of the width (adjust as needed) */
+        max-width: 22%;
         display: flex;
         flex-direction: column; /* Ensures elements inside stack vertically */
         align-items: center; /* Center items horizontally within the container */
         text-align: center; /* Ensures text aligns in the center */
+
+        margin: 0px 0px var(--homey-su-3) 0px;  /* Add some spacing between items */
+        box-sizing: border-box;
+        padding: var(--homey-su) var(--homey-su-2);
+        background-color: var(--homey-background-color);
+        border-radius: var(--homey-border-radius-default);
+        
+        position: relative;
       }
 
-      .dot {
-        height: 75px;
-        width: 75px;
+      .trashContainer.triple .trash-item-container {
+          flex: 1 1 33%;
+          max-width: 31%;
+      }
+
+      .trashContainer.quad .trash-item-container {
+          flex: 1 1 25%;
+          max-width: 23%;
+      }
+
+      .dot-large {
+        height: 50px;
+        width: 50px;
         background-color: #bbb;
         border-radius: 50%;
         font-weight: bold;
@@ -30,29 +46,28 @@
         align-items: center; /* Vertically center the content inside the dot */
       }
 
+      .dot-large img {
+        width: 75%;
+        height: 75%;
+      }
+
       .trash-date {
-        margin: 10px 0px;
-        padding: 0px;
+        margin: 2px 0px 0px 0px;
+        padding: 6px 0px 0px 0px;
         text-align: center;
-      }
-
-      .trashContainer.triple .trash-item-container {
-          flex: 1 1 30%;
-          max-width: 30%;
-      }
-
-      .trashContainer.quad .trash-item-container {
-          flex: 1 1 45%;
-          max-width: 45%;
       }
 
       .trash-item-container-compact {
         display: flex;
         align-items: center;  /* Vertically center the dot and text */
         justify-content: flex-start;  /* Align items to the left */
-        width: 40%;  /* Each container takes about half the width */
-        margin: 5px 10px 10px 10px;  /* Add some spacing between items */
+        width: 48%;  /* Each container takes about half the width */
+        margin: 0px 0px var(--homey-su-3) 0px;  /* Add some spacing between items */
         box-sizing: border-box;
+        padding: var(--homey-su) var(--homey-su-2);
+        background-color: var(--homey-background-color);
+        border-radius: var(--homey-border-radius-default);
+        position: relative;
       }
 
       /* Dot styling - aligned to the left */
@@ -68,8 +83,8 @@
       }
 
       .dot-compact img {
-        width: 17px;
-        height: 17px;
+        width: 75%;
+        height: 75%;
       }
 
       /* Container for date titles */
@@ -83,8 +98,9 @@
       /* Title and subtitle styling */
       .trash-date-title {
           margin: 0;
-          font-weight: bold;
-          font-size: 12px;
+          font-weight: var(--homey-font-weight-light);
+          font-size: var(--homey-font-size-small);
+          line-height: var(--homey-font-size-small);
       }
 
       .trash-date-subtitle {
@@ -127,10 +143,32 @@
       .dot-type-GLAS {
         background-color: #00cdae;
       }
+
+      .my-custom-body {
+        background-color: transparent;
+        overflow-x: auto;
+      }
+      
+      .my-custom-body-overflow-hidden {
+        background-color: transparent;
+        overflow: hidden;
+      }
+
+      .cleaning-icon {
+        position: absolute; /* Position relative to the container */
+        top: 5px; /* Adjust distance from the top */
+        right: 5px; /* Adjust distance from the right */
+        font-size: 32px; /* Adjust the size */
+        color: green; /* Icon color */
+      }
+
+      .trash-item-container-compact .cleaning-icon {
+        font-size: 28px; /* Adjust the size */
+      }
     </style>
   </head>
 
-  <body class="homey-widget-full my-custom-body">
+  <body class="homey-widget-full my-custom-body" id="main-body">
     <div id="trashCollections" class="trashContainer">
     </div>
 
@@ -158,7 +196,7 @@
             return Homey.__("speech.output.timeindicator.t1");
         } else {
             // Options to format the date as day and short month name
-            const options = { day: 'numeric', month: monthStyle };
+            const options = { weekday: 'short', day: 'numeric', month: monthStyle };
 
             // Format the date to "12 Oct"
             return firstDate.toLocaleDateString(undefined, options);
@@ -172,14 +210,15 @@
       function init(Homey) {
         const widgetSetting = Homey.getSettings();
         const showYesterday = widgetSetting['display-yesterday'];
-        
+
         // Fetch something from your app.
         Homey.api("GET", `/?displayYesterday=${showYesterday}`).then((response) => {
           const tbody = document.querySelector('#trashCollections');
           tbody.innerHTML = '';
           let counter = 0;
           let usedTypes = {};
-          let rowHeight = 130;
+          let rowHeight = 88;
+          let itemsPerRow = 4;
 
           for (let index in response) {
             const trashItem = response[index];
@@ -196,14 +235,15 @@
             if (widgetSetting['layout-type'] === 'large') {
               tbody.innerHTML += `
               <div class="trash-item-container">
-                <span class="dot dot-type-${trashItem.type}"><img src="trash-${trashItem.type}.svg" /></span>
-                <p class="trash-date">${displayDate}</p>
+                <span class="dot-large dot-type-${trashItem.type}"><img src="trash-${trashItem.type}.svg" /></span>
+                <p class="trash-date-title trash-date">${displayDate}</p>
+                ${trashItem.isCleaned ? '<span class="cleaning-icon">🫧</span>' : ''}
               </div>`;
             } else {
 
-              // Get trash description
               const trashTypeText = Homey.__(`widgets.trashType.${trashItem.type}`);
-              rowHeight = 53;
+              rowHeight = 57;
+              itemsPerRow = 2;
 
               tbody.innerHTML += `
               <div class="trash-item-container-compact">
@@ -212,20 +252,31 @@
                   <p class="trash-date-title">${trashTypeText}</p>
                   <p class="homey-text-small-light trash-date-subtitle">${displayDate}</p>
                 </div>
+                ${trashItem.isCleaned ? '<span class="cleaning-icon">🫧</span>' : ''}
               </div>`;
             }
           }
 
-          const container = document.querySelector('#trashCollections');
-          const items = container.querySelectorAll('.trash-item-container');
-          container.classList.remove('triple', 'quad');
-          if (items.length === 4) {
-            container.classList.add('quad'); // Add the 'quad' class if there are 4 items
-          } else {
-            container.classList.add('triple');
+          if(widgetSetting['layout-type'] === 'large' && counter % 3 === 0) itemsPerRow = 3;
+
+          if(widgetSetting['layout-type'] === 'large' && itemsPerRow === 4) {
+            tbody.classList.remove('triple');
+            tbody.classList.add('quad');
+          } else if(widgetSetting['layout-type'] === 'large') {
+            tbody.classList.remove('quad');
+            tbody.classList.add('triple');
           }
 
-          Homey.ready({ height: widgetSetting['list-height'] * rowHeight });
+          const dBody = document.querySelector('#main-body');
+          const items = dBody.querySelectorAll('.trash-item-container, .trash-item-container-compact');
+          dBody.classList.remove('my-custom-body-overflow-hidden');
+
+          const totalItems = widgetSetting['list-height'] * itemsPerRow;
+          if (totalItems >= items.length) {
+            dBody.classList.add('my-custom-body-overflow-hidden'); // Make the widget not overflow
+          }
+
+          Homey.ready({ height: ((widgetSetting['list-height'] * rowHeight) + (widgetSetting['list-height']-1 * 10)) });
         }).catch((error) => {
             console.error(error);
         });

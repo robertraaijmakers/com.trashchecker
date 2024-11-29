@@ -7,16 +7,16 @@
     "nl": "Afval Herinnering 2.0",
     "sv": "Avfallspåminnelse 2.0"
   },
-  "version": "4.0.5",
+  "version": "4.1.0",
   "platforms": [
     "local"
   ],
-  "compatibility": ">=12.1.0",
+  "compatibility": ">=12.1.2",
   "author": {
     "name": "Robert Raaijmakers",
     "email": "dutchfighter@live.nl"
   },
-  "brandColor": "#1DB954",
+  "brandColor": "#006622",
   "permissions": [],
   "contributors": {
     "developers": [
@@ -36,11 +36,9 @@
   },
   "category": "tools",
   "images": {
+    "small": "./assets/images/small.png",
     "large": "./assets/images/large.png",
-    "small": "./assets/images/small.png"
-  },
-  "credits": {
-    "icon": "Pham Thi Dieu Linh"
+    "xlarge": "./assets/images/xlarge.png"
   },
   "contributing": {
     "donate": {
@@ -59,11 +57,151 @@
   "api": {
     "validateUserData": {
       "method": "POST",
-      "path": "/"
+      "path": "/trashcollection"
+    },
+    "validateUserCleanData": {
+      "method": "POST",
+      "path": "/clean"
     }
   },
   "flow": {
     "conditions": [
+      {
+        "id": "days_to_clean",
+        "title": {
+          "en": "Container will be cleaned...",
+          "nl": "Container wordt schoongemaakt...",
+          "sv": "Behållaren håller på att rengöras..."
+        },
+        "titleFormatted": {
+          "en": "[[trash_type]] will !{{|not}} be cleaned [[when]]",
+          "nl": "[[trash_type]] wordt [[when]] !{{|niet}} schoongemaakt",
+          "sv": "[[trash_type]] rengöras !{{|inte}} in [[when]]"
+        },
+        "hint": {
+          "en": "This card will run successful when the container of selected type is cleaned.",
+          "nl": "Deze actie zal succesvol draaien als het geselecteerde type wordt schoongemaakt.",
+          "sv": "Denna åtgärd kommer att köras framgångsrikt om den valda typen rengörs"
+        },
+        "args": [
+          {
+            "name": "when",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "Today",
+                  "nl": "Vandaag",
+                  "sv": "Hämtas idag"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "Tomorrow",
+                  "nl": "Morgen",
+                  "sv": "Hämtas imorgon"
+                }
+              },
+              {
+                "id": "datomorrow",
+                "label": {
+                  "en": "Day after tomorrow",
+                  "nl": "Overmorgen",
+                  "sv": "Hämtas i övermorgon"
+                }
+              }
+            ]
+          },
+          {
+            "name": "trash_type",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "ANY",
+                "label": {
+                  "en": "Any",
+                  "nl": "Iets",
+                  "sv": "Några"
+                }
+              },
+              {
+                "id": "GFT",
+                "label": {
+                  "en": "Organic Waste",
+                  "nl": "GFT",
+                  "sv": "Kompost"
+                }
+              },
+              {
+                "id": "GROF",
+                "label": {
+                  "en": "Bulky waste",
+                  "nl": "Grof afval",
+                  "sv": "Grovsopor"
+                }
+              },
+              {
+                "id": "PAPIER",
+                "label": {
+                  "en": "Paper",
+                  "nl": "Papier",
+                  "sv": "Papper"
+                }
+              },
+              {
+                "id": "PLASTIC",
+                "label": {
+                  "en": "Plastic",
+                  "nl": "Plastic",
+                  "sv": "Plast"
+                }
+              },
+              {
+                "id": "PMD",
+                "label": {
+                  "en": "PMD",
+                  "nl": "PMD",
+                  "sv": "PMD"
+                }
+              },
+              {
+                "id": "REST",
+                "label": {
+                  "en": "Residual",
+                  "nl": "Rest",
+                  "sv": "Restavfall"
+                }
+              },
+              {
+                "id": "TEXTIEL",
+                "label": {
+                  "en": "Textiles",
+                  "nl": "Textiel",
+                  "sv": "Textilier"
+                }
+              },
+              {
+                "id": "KERSTBOOM",
+                "label": {
+                  "en": "Christmas tree",
+                  "nl": "Kerstboom",
+                  "sv": "Julgran"
+                }
+              },
+              {
+                "id": "GLAS",
+                "label": {
+                  "en": "Glass",
+                  "nl": "Glas",
+                  "sv": "Glas"
+                }
+              }
+            ]
+          }
+        ]
+      },
       {
         "id": "days_to_collect",
         "title": {
@@ -208,6 +346,7 @@
         "en": "Trash Overview",
         "nl": "Afval Overzicht"
       },
+      "transparent": true,
       "settings": [
         {
           "id": "layout-type",
@@ -259,12 +398,12 @@
         {
           "id": "max-items",
           "type": "number",
-          "value": 3,
+          "value": 4,
           "min": 1,
           "max": 9,
           "units": {
-            "en": "trash types",
-            "nl": "afvaltypes"
+            "en": "collecting days",
+            "nl": "ophaaldagen"
           },
           "title": {
             "en": "Total Items",

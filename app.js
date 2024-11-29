@@ -4,6 +4,7 @@
 const Homey = require('homey');
 const DateTimeHelper = require('./lib/datetime.js');
 var apiArray = require('./trashapis.js');
+var cleanArray = require('./cleanapis.js');
 
 var supportedTypes = ["GFT","PLASTIC","PAPIER","PMD","REST","TEXTIEL","GROF","KERSTBOOM","GLAS"];
 
@@ -12,6 +13,7 @@ class TrashcanReminder extends Homey.App
 	async onInit()
 	{
 		this.gdates = '';
+		this.cleanDates = '';
 		this.trashTokenToday = null;
 		this.trashTokenTomorrow = null;
 		this.trashTokenDayAfterTomorrow = null;
@@ -25,7 +27,10 @@ class TrashcanReminder extends Homey.App
 		// Register flow card
 		let daysToCollect = this.homey.flow.getConditionCard('days_to_collect');
 		daysToCollect.registerRunListener(this.flowDaysToCollect.bind(this));
-		
+
+		let cleaningDaysFlowCard = this.homey.flow.getConditionCard('days_to_clean');
+		cleaningDaysFlowCard.registerRunListener(this.flowTrashIsCleaned.bind(this));
+
 		// Create trash collection tokens (labels)
 		let trashCollectionTokenToday = await this.homey.flow.createToken( 'trash_collection_token_today', {
 			type: 'string',
@@ -98,6 +103,39 @@ class TrashcanReminder extends Homey.App
 		return Promise.resolve( this.gdates[ args.trash_type.toUpperCase() ].indexOf(dateString) > -1 );
 	}
 	
+	async flowTrashIsCleaned(args, state)
+	{
+		if( typeof this.cleanDates[ args.trash_type.toUpperCase() ] === 'undefined' && args.trash_type.toUpperCase() !== "ANY")
+		{
+			var message = this.homey.__('error.typenotsupported.addviasettings');
+			console.log(message);
+			return Promise.resolve(false);
+		}
+	
+		var now = this.getLocalDate();
+		if(args.when == 'tomorrow') {
+			now.setDate(now.getDate() + 1);
+		} else if(args.when == 'datomorrow') {
+			now.setDate(now.getDate() + 2);
+		}
+		
+		var dateString = this.dateToString(now);
+		if(args.trash_type.toUpperCase() == "ANY") {
+			var result = false;
+			
+			for(var i=0; i<supportedTypes.length; i++)
+			{
+				if(result === false && typeof(this.cleanDates[supportedTypes[i].toUpperCase()]) !== 'undefined') {
+					result = this.cleanDates[ supportedTypes[i].toUpperCase() ].indexOf(dateString) > -1;
+				}
+			}
+			
+			return Promise.resolve( result );
+		}
+
+		return Promise.resolve( this.cleanDates[ args.trash_type.toUpperCase() ].indexOf(dateString) > -1 );
+	}
+
 	/* ******************
 		EVENT HANDLERS
 	********************/
@@ -127,18 +165,13 @@ class TrashcanReminder extends Homey.App
 	
 	onUpdateData(shouldExecute, shouldSetTimeout)
 	{
-		// For backwards compatibility and to support BE suppliers, add an empty the streetname to everyones settings.
-		if(!this.homey.settings.get('streetName'))
-		{
-			this.homey.settings.set('streetName', null);
-		}
-
 		if (this.homey.settings.get('postcode') &&
 			this.homey.settings.get('hnumber') &&
 			this.homey.settings.get('country') &&
 			shouldExecute === true)
 		{
 			var apiId = this.homey.settings.get('apiId');
+			var cleanApiId = this.homey.settings.get('cleanApiId');
 			
 			this.updateAPI(
 				this.homey.settings.get('postcode'),
@@ -150,14 +183,32 @@ class TrashcanReminder extends Homey.App
 				{
 					if(success)
 					{
-						console.log('retrieved house information');
+						console.log('Retrieved trash collection information');
 					}
 					else 
 					{
-						console.log('house information has not been set');
+						console.log('Trash collection information has not been set');
 					}
 				}
 			);
+
+			this.updateCleaningAPI(
+				this.homey.settings.get('postcode'),
+				this.homey.settings.get('hnumber'),
+				this.homey.settings.get('streetName'),
+				this.homey.settings.get('country'),
+				cleanApiId,
+				function(success, that, newApiId)
+				{
+					if(success)
+					{
+						console.log('Retrieved cleaning information');
+					}
+					else 
+					{
+						console.log('Cleaning information has not been set');
+					}
+				});
 
 			// Make sure we are not updating everything to often.
 			shouldExecute = false;
@@ -406,7 +457,7 @@ class TrashcanReminder extends Homey.App
 		}
 		
 		// check if we already know which API is chosen
-		if(apiId != '' && postcode != '' && homenumber != '')
+		if(apiId !== '' && postcode !== '' && homenumber !== '')
 		{
 			console.log("API ID Known: " + apiId);
 			var result = apiArray.find(o => o.id === apiId);
@@ -517,6 +568,160 @@ class TrashcanReminder extends Homey.App
 		},
 		() => {
 			console.log('Checked all APIs');
+			return callback(false, this, null);
+		});
+	}
+
+	updateCleaningAPI(postcode, homenumber, streetName, country, cleanApiId, callback) {
+		let newDates = null;
+		let newThis = this;
+		
+		if(typeof postcode !== 'undefined' && postcode !== null && postcode !== '')
+		{
+			postcode = postcode.toUpperCase();
+		} 
+		else 
+		{
+			postcode = '';
+		}
+		
+		if(typeof homenumber !== 'undefined' && homenumber !== null && homenumber !== '')
+		{
+			homenumber = homenumber.toUpperCase();
+		} 
+		else 
+		{
+			homenumber = '';
+		}
+
+		if(typeof streetName !== 'undefined' && streetName !== null && streetName !== '')
+		{
+			streetName = streetName.toLowerCase();
+		} 
+		else 
+		{
+			streetName = '';
+		}
+		
+		if(typeof cleanApiId !== 'undefined' && cleanApiId !== null && cleanApiId !== '' && isNaN(cleanApiId))
+		{
+			cleanApiId = cleanApiId.toLowerCase();
+		} 
+		else 
+		{
+			cleanApiId = '';
+		}
+		
+		// check if we already know which API is chosen
+		if(cleanApiId !== '' && postcode !== '' && homenumber !== '' && cleanApiId !== 'not-applicable')
+		{
+			console.log("Clean API ID Known: " + cleanApiId);
+			let result = cleanArray.find(o => o.id === cleanApiId);
+			if(result == null || typeof result === 'undefined')
+			{
+				return Promise.reject(new Error("Clean API cannot be found: " + cleanApiId));
+			}
+			
+			// only load that API, this is so that we won't send requests to all data providers all the time.
+			result['execute'](postcode,homenumber,streetName,country)
+			.then(function(result)
+			{
+				if(Object.keys(result).length > 0)
+				{
+					newThis.homey.settings.set('cleaningDays', null);
+					
+					newDates = result;
+					newThis.cleanDates = newDates;
+					
+					newThis.homey.settings.set('cleanApiId', cleanApiId);					
+					callback(true, newThis, cleanApiId);
+				}
+				else if(Object.keys(result).length === 0) {
+					console.log('No information found, go to settings to reset your clean API settings.');
+					callback(false, this, null);
+				}
+			})
+			.catch(function(error)
+			{
+				console.log(error);
+				callback(false, this, null);
+			});
+			
+			return;
+		}
+		
+		if(postcode === '' || homenumber === '' || cleanApiId === 'not-applicable')
+		{
+			callback(false, this, null);
+			return;
+		}
+
+		function asyncLoop(iterations, that, func, callback)
+		{
+			var index = 0;
+			var done = false;
+			var loop = {
+				next: function() {
+					if (done) {
+						return;
+					}
+	
+					if (index < iterations) {
+						index++;
+						func(loop, that);
+					} else {
+						done = true;
+						callback();
+					}
+				},
+	
+				iteration: function() {
+					return index - 1;
+				},
+	
+				break: function() {
+					done = true;
+					callback();
+				}
+			};
+
+			loop.next();
+			return loop;
+		}
+
+		asyncLoop(cleanArray.length, this, function(loop, that)
+		{
+			var executable = cleanArray[loop.iteration()];
+			executable['execute'](postcode,homenumber,streetName,country)
+			.then(function(result)
+			{
+				if(Object.keys(result).length > 0)
+				{
+					newDates = result;
+					that.cleanDates = newDates;
+					
+					that.homey.settings.set('cleanApiId', cleanArray[loop.iteration()]['id']);
+					that.homey.settings.set('cleaningDays', newDates);
+					return callback(true, that, cleanArray[loop.iteration()]['id']);
+				}
+				else if(Object.keys(result).length === 0)
+				{
+					console.log('Starting next clean iteration');
+					loop.next();
+					return;
+				}
+
+				loop.next();
+			}).catch(function(err)
+			{
+				console.log('Error while looping through cleaning services', err);
+				loop.next();
+			});
+		},
+		() => {
+			console.log('Checked all cleaning APIs, none found, setting to not-applicable');
+			this.homey.settings.set('cleanApiId', 'not-applicable');
+			this.homey.settings.set('cleaningDays', null);
 			return callback(false, this, null);
 		});
 	}

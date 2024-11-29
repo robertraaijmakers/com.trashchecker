@@ -3,6 +3,7 @@
     "en": "Trash Overview",
     "nl": "Afval Overzicht"
   },
+  "transparent": true,
   "settings": [
     {
       "id": "layout-type",
@@ -54,12 +55,12 @@
     {
       "id": "max-items",
       "type": "number",
-      "value": 3,
+      "value": 4,
       "min": 1,
       "max": 9,
       "units": {
-        "en": "trash types",
-        "nl": "afvaltypes"
+        "en": "collecting days",
+        "nl": "ophaaldagen"
       },
       "title": {
         "en": "Total Items",

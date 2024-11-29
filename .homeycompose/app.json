@@ -6,16 +6,16 @@
     "nl": "Afval Herinnering 2.0",
     "sv": "Avfallspåminnelse 2.0"
   },
-  "version": "4.0.5",
+  "version": "4.1.0",
   "platforms": [
     "local"
   ],
-  "compatibility": ">=12.1.0",
+  "compatibility": ">=12.1.2",
   "author": {
     "name": "Robert Raaijmakers",
     "email": "dutchfighter@live.nl"
   },
-  "brandColor": "#1DB954",
+  "brandColor": "#006622",
   "permissions": [],
   "contributors": {
     "developers": [
@@ -35,11 +35,9 @@
   },
   "category": "tools",
   "images": {
+    "small": "./assets/images/small.png",
     "large": "./assets/images/large.png",
-    "small": "./assets/images/small.png"
-  },
-  "credits": {
-    "icon": "Pham Thi Dieu Linh"
+    "xlarge": "./assets/images/xlarge.png"
   },
   "contributing": {
     "donate": {
@@ -58,7 +56,11 @@
   "api": {
     "validateUserData": {
       "method": "POST",
-      "path": "/"
+      "path": "/trashcollection"
+    },
+    "validateUserCleanData": {
+      "method": "POST",
+      "path": "/clean"
     }
   }
 }

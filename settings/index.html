@@ -28,8 +28,10 @@
         </div>
         <div class="homey-form-group">
 			<label class="homey-form-label" for="country" data-i18n="settings.country"></label>
-			<input class="homey-form-radio" style="width:10px" checked="checked" id="NL" name="country" type="radio" value="NL"/><span class="name">NL</span>
-			<input class="homey-form-radio" style="width:10px" id="BE" name="country" type="radio" value="NL"/><span class="name">BE</span>
+			<select class="homey-form-select" id="country">
+				<option value="NL">NL</option>
+				<option value="BE">BE</option>
+			</select>
         </div>
         <div class="homey-form-group">
 			<label class="homey-form-label" for="api" data-i18n="settings.api"></label>
@@ -73,6 +75,14 @@
 				<option value="rewl">Reinigingsdienst Waardlanden (NL)</option>
 				<option value="twm">Twente Milieu (NL)</option>
 				<option value="recbe">Recycle! App (BE)</option>
+			</select>
+        </div>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="cleanApi" data-i18n="settings.cleanApi"></label>
+			<select class="homey-form-select" id="cleanApi">
+				<option value="not-applicable" data-i18n="settings.notapplicable"></option>
+				<option value="" data-i18n="settings.unknown"></option>
+				<option value="cpfs">Clean Profs (NL)</option>
 			</select>
         </div>
         <span id="resp" title="Details?" onclick="document.getElementById('respDates').style='display: block;'"></span>
@@ -613,8 +623,8 @@
 			document.getElementById("labelKerstboom").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelNone").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
 			document.getElementById("labelGeneric").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-
-			document.getElementById("BE").addEventListener("change", function(elem) { ToggleFieldsBasedOnCountry( Homey ); });
+			
+			document.getElementById("country").addEventListener("change", function(elem) { ToggleFieldsBasedOnCountry( Homey ); });
 
 			var respDates = document.getElementById("respDatesDebug");
 				respDates.style.color = 'black';
@@ -670,9 +680,9 @@
         		}
 
         		if(country == 'NL' || country == 'BE') {
-        			document.getElementById(country).checked = true;
+        			document.getElementById('country').value = country;
         		} else {
-        			document.getElementById('NL').checked = true;
+        			document.getElementById('country').value = "NL";
         		}
         	});
 
@@ -683,6 +693,15 @@
         		}
 
         		document.getElementById("api").value = apiId;
+        	});
+
+        	Homey.get('cleanApiId',function(err, cleanApiId)
+        	{
+        		if(err){
+        			return console.error(err);
+        		}
+
+        		document.getElementById("cleanApi").value = cleanApiId;
         	});
 
 			Homey.get('manualEntryData',function(err, manualEntryData)
@@ -930,18 +949,14 @@
         	var num = document.getElementById('number').value;
         	var streetName = document.getElementById('streetName').value;
 			var apiSelected = document.getElementById('api').value;
+			var cleanApiSelected = document.getElementById('cleanApi').value;
+        	var country = document.getElementById('country').value;
 
-        	var country = null;
-        	if(document.getElementById('NL').checked) {
-            	country = 'NL';
-            } else if(document.getElementById('BE').checked) {
-            	country = 'BE';
-            }
-
-			if(apiSelected == "") { apiSelected = null; }
-			if(pc == "") { pc = null; }
-			if(num == "") { num = null; }
-			if(streetName == "") { streetName = null; }
+			if(apiSelected === "") { apiSelected = null; }
+			if(cleanApiSelected === "") { cleanApiSelected = null; }
+			if(pc === "") { pc = null; }
+			if(num === "") { num = null; }
+			if(streetName === "") { streetName = null; }
 
 			if(pc == null || num == null)
 			{
@@ -949,6 +964,7 @@
 				Homey.set('hnumber', '');
 				Homey.set('country', 'NL');
 				Homey.set('apiId', '');
+				Homey.set('cleanApiId', 'not-applicable');
 				Homey.set('streetName', '');
 
 				resp.innerHTML = Homey.__('settings.manualonly');
@@ -957,7 +973,7 @@
 				return;
 			}
 
-        	Homey.api('POST', '/', {
+        	Homey.api('POST', '/trashcollection', {
         		"postcode":pc,
         		"housenumber":num,
 				"streetName":streetName,
@@ -995,6 +1011,45 @@
 				}
 
 				retrieveCollectionDaysDebug( Homey );
+        		console.log(result);
+        	});
+
+			Homey.api('POST', '/clean', {
+        		"postcode":pc,
+        		"housenumber":num,
+				"streetName":streetName,
+        		"country":country,
+				"cleanApiId": cleanApiSelected
+        	}, function(err, result) {
+        		if(err) { return console.log(err); }
+
+				if(result)
+				{
+					// Retrieve API id & gdates from settings
+					Homey.get('cleanApiId', function(err, cleanApiId)
+					{
+						if(err)
+						{
+							// resp.style.color = 'red';
+							return;
+						}
+
+						document.getElementById("cleanApi").value = cleanApiId;
+
+						if (cleanApiId !== 'not-applicable') {
+							resp.innerHTML += '<br />' + Homey.__('settings.updateCleaning');
+						}
+
+						//respDates.innerHTML = "<br />API ID: " + apiId + respDates.innerHTML;
+					});
+				}
+				else
+				{
+					// resp.innerHTML = Homey.__('settings.fail');
+					// resp.style.color = 'red';
+				}
+
+				// retrieveCollectionDaysDebug( Homey );
         		console.log(result);
         	});
         }
@@ -1226,11 +1281,22 @@
 		}
 
 		// Toggle street name
+		var optionSetStore = null;
 		function ToggleFieldsBasedOnCountry(Homey)
 		{
-			if(document.getElementById('NL').checked) {
+			const countrySelected = document.getElementById('country').value;
+			// const ddl = document.getElementById('country');
+
+			// if(optionSetStore === null) {
+			// 	optionSetStore = new Array();
+			// 	for (i = 0; i < ddl.options.length; i++) {
+			// 		optionSetStore[i] = ddl .options[i].value;
+			// 	}
+			// }
+
+			if(countrySelected === 'NL') {
             	document.getElementById("streetName_div").style.display = 'none';
-            } else if(document.getElementById('BE').checked) {
+            } else if(countrySelected === 'BE') {
             	document.getElementById("streetName_div").style.display = 'block';
             }
 		}
