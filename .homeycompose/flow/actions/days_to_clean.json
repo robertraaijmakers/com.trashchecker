@@ -1,0 +1,179 @@
+{
+  "id": "days_to_clean",
+  "title": {
+    "en": "Container will be cleaned...",
+    "nl": "Container wordt schoongemaakt...",
+    "sv": "Behållaren håller på att rengöras..."
+  },
+  "titleFormatted": {
+    "en": "[[trash_type]] will !{{|not}} be cleaned [[when]]",
+    "nl": "[[trash_type]] wordt [[when]] !{{|niet}} schoongemaakt",
+    "sv": "[[trash_type]] rengöras !{{|inte}} in [[when]]"
+  },
+  "hint":
+  {
+    "en": "This card will run successful when the container of selected type is cleaned.",
+	  "nl": "Deze actie zal succesvol draaien als het geselecteerde type wordt schoongemaakt.",
+	  "sv": "Denna åtgärd kommer att köras framgångsrikt om den valda typen rengörs"
+  },
+  "advanced": true,
+  "args": [
+    {
+      "name": "when",
+      "type": "dropdown",
+      "values": [
+        {
+          "id": "today",
+          "label": {
+            "en": "Today",
+            "nl": "Vandaag",
+            "sv": "Hämtas idag"
+          }
+        },
+        {
+          "id": "tomorrow",
+          "label": {
+            "en": "Tomorrow",
+            "nl": "Morgen",
+            "sv": "Hämtas imorgon"
+          }
+        },
+        {
+          "id": "datomorrow",
+          "label": {
+            "en": "Day after tomorrow",
+            "nl": "Overmorgen",
+            "sv": "Hämtas i övermorgon"
+          }
+        }
+      ]
+    },
+    {
+      "name": "trash_type",
+      "type": "dropdown",
+      "values": [
+        {
+          "id": "ANY",
+          "label": {
+            "en": "Any",
+            "nl": "Iets",
+            "sv": "Några"
+          }
+        },
+        {
+          "id": "GFT",
+          "label": {
+            "en": "Organic Waste",
+            "nl": "GFT",
+            "sv": "Kompost"
+          }
+        },
+        {
+          "id": "GROF",
+          "label": {
+            "en": "Bulky waste",
+            "nl": "Grof afval",
+            "sv": "Grovsopor"
+          }
+        },
+        {
+          "id": "PAPIER",
+          "label": {
+            "en": "Paper",
+            "nl": "Papier",
+            "sv": "Papper"
+          }
+        },
+        {
+          "id": "PLASTIC",
+          "label": {
+            "en": "Plastic",
+            "nl": "Plastic",
+            "sv": "Plast"
+          }
+        },
+        {
+          "id": "PMD",
+          "label": {
+            "en": "PMD",
+            "nl": "PMD",
+            "sv": "PMD"
+          }
+        },
+        {
+          "id": "REST",
+          "label": {
+            "en": "Residual",
+            "nl": "Rest",
+            "sv": "Restavfall"
+          }
+        },
+        {
+          "id": "TEXTIEL",
+          "label": {
+            "en": "Textiles",
+            "nl": "Textiel",
+            "sv": "Textilier"
+          }
+        },
+        {
+          "id": "KERSTBOOM",
+          "label": {
+            "en": "Christmas tree",
+            "nl": "Kerstboom",
+            "sv": "Julgran"
+          }
+        },
+        {
+          "id": "GLAS",
+          "label": {
+            "en": "Glass",
+            "nl": "Glas",
+            "sv": "Glas"
+          }
+        }
+      ]
+    }
+  ],
+  "tokens": [
+    {
+      "name": "isCleaned",
+      "type": "boolean",
+      "title": {
+        "en": "If the specified type is cleaned on given moment",
+        "nl": "Of opgegeven type schoongemaakt wordt op gegeven moment"
+      },
+      "example": {
+        "en": "true",
+        "nl": "true",
+        "sv": "true"
+      }
+    },
+    {
+      "name": "trashType",
+      "type": "string",
+      "title": {
+        "en": "Short trash type as known by the app (GFT, PLASTIC, PAPIER, PMD, REST, TEXTIEL, GROF, KERSTBOOM, GLAS)",
+        "nl": "Korte benaming van afval, zoals type bekend staat in de app (GFT, PLASTIC, PAPIER, PMD, REST, TEXTIEL, GROF, KERSTBOOM, GLAS)"
+      },
+      "example": {
+        "en": "PMD",
+        "nl": "PMD",
+        "sv": "PMD"
+      }
+    },
+    {
+      "name": "trashTypeLocalized",
+      "type": "string",
+      "title": {
+        "en": "Localized trash type as given in settings page",
+        "nl": "Volledige label van het afvaltype zoals opgegeven in de applicatie settings"
+      },
+      "example": {
+        "en": "The plastic container",
+        "nl": "De plastic container",
+        "sv": "Plastförpackningar"
+      }
+    }
+  ]
+}

@@ -25,11 +25,14 @@ class TrashcanReminder extends Homey.App
 		this.homey.settings.on('set', this.onSettingsChanged.bind(this));
 
 		// Register flow card
-		let daysToCollect = this.homey.flow.getConditionCard('days_to_collect');
-		daysToCollect.registerRunListener(this.flowDaysToCollect.bind(this));
+		let daysToCollectConditionCard = this.homey.flow.getConditionCard('days_to_collect');
+		daysToCollectConditionCard.registerRunListener(this.flowDaysToCollect.bind(this));
 
-		let cleaningDaysFlowCard = this.homey.flow.getConditionCard('days_to_clean');
-		cleaningDaysFlowCard.registerRunListener(this.flowTrashIsCleaned.bind(this));
+		let cleaningDaysConditionCard = this.homey.flow.getConditionCard('days_to_clean');
+		cleaningDaysConditionCard.registerRunListener(this.flowTrashIsCleanedCondition.bind(this));
+
+		let cleaningDaysActionCard = this.homey.flow.getActionCard('days_to_clean');
+		cleaningDaysActionCard.registerRunListener(this.flowTrashIsCleanedAction.bind(this));
 
 		// Create trash collection tokens (labels)
 		let trashCollectionTokenToday = await this.homey.flow.createToken( 'trash_collection_token_today', {
@@ -102,8 +105,16 @@ class TrashcanReminder extends Homey.App
 
 		return Promise.resolve( this.gdates[ args.trash_type.toUpperCase() ].indexOf(dateString) > -1 );
 	}
+
+	async flowTrashIsCleanedAction(args, state) {
+		return this.flowTrashIsCleaned(args, state, "action");
+	}
+
+	async flowTrashIsCleanedCondition(args, state) {
+		return this.flowTrashIsCleaned(args, state, "condition");
+	}
 	
-	async flowTrashIsCleaned(args, state)
+	async flowTrashIsCleaned(args, state, type)
 	{
 		if( typeof this.cleanDates[ args.trash_type.toUpperCase() ] === 'undefined' && args.trash_type.toUpperCase() !== "ANY")
 		{
@@ -119,21 +130,68 @@ class TrashcanReminder extends Homey.App
 			now.setDate(now.getDate() + 2);
 		}
 		
-		var dateString = this.dateToString(now);
+		const dateString = this.dateToString(now);
+		const labelSettings = this.homey.settings.get('labelSettings');
+		let trashTypeCollected = "";
+		let trashTypeCollectedLocalized = "";
+		let result = false;
+
 		if(args.trash_type.toUpperCase() == "ANY") {
-			var result = false;
-			
 			for(var i=0; i<supportedTypes.length; i++)
 			{
 				if(result === false && typeof(this.cleanDates[supportedTypes[i].toUpperCase()]) !== 'undefined') {
 					result = this.cleanDates[ supportedTypes[i].toUpperCase() ].indexOf(dateString) > -1;
+					if(result === true) {
+						trashTypeCollected = this.homey.__(`widgets.trashType.${supportedTypes[i].toUpperCase()}`);
+						trashTypeCollectedLocalized = labelSettings.type[supportedTypes[i].toLowerCase()];
+					}
 				}
 			}
+
+			if(type === "condition") {
+				return Promise.resolve(result);
+			}
 			
-			return Promise.resolve( result );
+			if(result === true) {
+				return Promise.resolve(
+					{
+						isCleaned: true,
+						trashType: trashTypeCollected,
+						trashTypeLocalized: trashTypeCollectedLocalized
+					}
+				);
+			}
+
+			return Promise.resolve({
+				isCleaned: false,
+				trashType: "",
+				trashTypeLocalized: ""
+			});
 		}
 
-		return Promise.resolve( this.cleanDates[ args.trash_type.toUpperCase() ].indexOf(dateString) > -1 );
+		result = this.cleanDates[ args.trash_type.toUpperCase() ].indexOf(dateString) > -1;
+		if(type === "condition") {
+			return Promise.resolve(result);
+		}
+
+		if(result === true) {
+			trashTypeCollected = this.homey.__(`widgets.trashType.${args.trash_type.toUpperCase()}`);
+			trashTypeCollectedLocalized = labelSettings.type[args.trash_type.toLowerCase()];
+
+			return Promise.resolve(
+				{
+					isCleaned: true,
+					trashType: trashTypeCollected,
+					trashTypeLocalized: trashTypeCollectedLocalized
+				}
+			);
+		}
+
+		return Promise.resolve({
+			isCleaned: false,
+			trashType: "",
+			trashTypeLocalized: ""
+		});
 	}
 
 	/* ******************
@@ -154,6 +212,11 @@ class TrashcanReminder extends Homey.App
 			
 			console.log("Updating label because collecting days changed.");
 			this.onUpdateLabel( );
+		}
+		
+		if(parameterName === "cleaningDays")
+		{			
+			console.log("Cleaning days are updated.");
 		}
 		
 		if(parameterName === "labelSettings" && this.collectingDaysSet == true)
@@ -579,7 +642,7 @@ class TrashcanReminder extends Homey.App
 		if(typeof postcode !== 'undefined' && postcode !== null && postcode !== '')
 		{
 			postcode = postcode.toUpperCase();
-		} 
+		}
 		else 
 		{
 			postcode = '';
@@ -588,7 +651,7 @@ class TrashcanReminder extends Homey.App
 		if(typeof homenumber !== 'undefined' && homenumber !== null && homenumber !== '')
 		{
 			homenumber = homenumber.toUpperCase();
-		} 
+		}
 		else 
 		{
 			homenumber = '';
@@ -597,7 +660,7 @@ class TrashcanReminder extends Homey.App
 		if(typeof streetName !== 'undefined' && streetName !== null && streetName !== '')
 		{
 			streetName = streetName.toLowerCase();
-		} 
+		}
 		else 
 		{
 			streetName = '';
@@ -606,7 +669,7 @@ class TrashcanReminder extends Homey.App
 		if(typeof cleanApiId !== 'undefined' && cleanApiId !== null && cleanApiId !== '' && isNaN(cleanApiId))
 		{
 			cleanApiId = cleanApiId.toLowerCase();
-		} 
+		}
 		else 
 		{
 			cleanApiId = '';
@@ -627,13 +690,12 @@ class TrashcanReminder extends Homey.App
 			.then(function(result)
 			{
 				if(Object.keys(result).length > 0)
-				{
-					newThis.homey.settings.set('cleaningDays', null);
-					
+				{					
 					newDates = result;
 					newThis.cleanDates = newDates;
 					
-					newThis.homey.settings.set('cleanApiId', cleanApiId);					
+					newThis.homey.settings.set('cleanApiId', cleanApiId);
+					newThis.homey.settings.set('cleaningDays', newDates);
 					callback(true, newThis, cleanApiId);
 				}
 				else if(Object.keys(result).length === 0) {

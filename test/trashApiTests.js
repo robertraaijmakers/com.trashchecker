@@ -2,6 +2,21 @@
 
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
+
+it('API - Mijn Cyclus', function() {
+    var postcode = "2741jb";
+    var homenumber = 37;
+    var country = "NL";
+    var apiId = "afc";
+    var apiName = "API - Cyclus";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 /*
 it('API - Mijn Afvalwijzer', function() {
     var postcode = "9821TT";
