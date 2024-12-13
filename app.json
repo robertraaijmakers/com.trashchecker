@@ -7,7 +7,7 @@
     "nl": "Afval Herinnering 2.0",
     "sv": "Avfallspåminnelse 2.0"
   },
-  "version": "4.1.1",
+  "version": "4.1.4",
   "platforms": [
     "local"
   ],
@@ -348,14 +348,14 @@
           "sv": "Behållaren håller på att rengöras..."
         },
         "titleFormatted": {
-          "en": "[[trash_type]] will !{{|not}} be cleaned [[when]]",
-          "nl": "[[trash_type]] wordt [[when]] !{{|niet}} schoongemaakt",
-          "sv": "[[trash_type]] rengöras !{{|inte}} in [[when]]"
+          "en": "What trash type will be cleaned [[when]]",
+          "nl": "Welk type container wordt [[when]] schoongemaakt",
+          "sv": "Vilken typ av skräp rensas [[when]]"
         },
         "hint": {
-          "en": "This card will run successful when the container of selected type is cleaned.",
-          "nl": "Deze actie zal succesvol draaien als het geselecteerde type wordt schoongemaakt.",
-          "sv": "Denna åtgärd kommer att köras framgångsrikt om den valda typen rengörs"
+          "en": "This card will give you three tokens to use for your flow. One if a trash container will be cleaned, another one with what container will be cleaned, and a last one with the value from the settings page of the cleaned type.",
+          "nl": "Deze actie resulteert in drie tokens. 1. Of er iets schoongemaakt wordt, 2. Welke container er schoongemaakt wordt, 3. De waarde zoals opgegeven op de instellingen pagina van de app voor het type dat schoongemaakt wordt.",
+          "sv": "Denna åtgärd resulterar i tre tokens. 1. Om något rengörs, 2. Vilken behållare som rengörs, 3. Värdet som anges på inställningssidan i appen för den typ som rengörs."
         },
         "advanced": true,
         "args": [
@@ -388,92 +388,6 @@
                 }
               }
             ]
-          },
-          {
-            "name": "trash_type",
-            "type": "dropdown",
-            "values": [
-              {
-                "id": "ANY",
-                "label": {
-                  "en": "Any",
-                  "nl": "Iets",
-                  "sv": "Några"
-                }
-              },
-              {
-                "id": "GFT",
-                "label": {
-                  "en": "Organic Waste",
-                  "nl": "GFT",
-                  "sv": "Kompost"
-                }
-              },
-              {
-                "id": "GROF",
-                "label": {
-                  "en": "Bulky waste",
-                  "nl": "Grof afval",
-                  "sv": "Grovsopor"
-                }
-              },
-              {
-                "id": "PAPIER",
-                "label": {
-                  "en": "Paper",
-                  "nl": "Papier",
-                  "sv": "Papper"
-                }
-              },
-              {
-                "id": "PLASTIC",
-                "label": {
-                  "en": "Plastic",
-                  "nl": "Plastic",
-                  "sv": "Plast"
-                }
-              },
-              {
-                "id": "PMD",
-                "label": {
-                  "en": "PMD",
-                  "nl": "PMD",
-                  "sv": "PMD"
-                }
-              },
-              {
-                "id": "REST",
-                "label": {
-                  "en": "Residual",
-                  "nl": "Rest",
-                  "sv": "Restavfall"
-                }
-              },
-              {
-                "id": "TEXTIEL",
-                "label": {
-                  "en": "Textiles",
-                  "nl": "Textiel",
-                  "sv": "Textilier"
-                }
-              },
-              {
-                "id": "KERSTBOOM",
-                "label": {
-                  "en": "Christmas tree",
-                  "nl": "Kerstboom",
-                  "sv": "Julgran"
-                }
-              },
-              {
-                "id": "GLAS",
-                "label": {
-                  "en": "Glass",
-                  "nl": "Glas",
-                  "sv": "Glas"
-                }
-              }
-            ]
           }
         ],
         "tokens": [
@@ -481,8 +395,8 @@
             "name": "isCleaned",
             "type": "boolean",
             "title": {
-              "en": "If the specified type is cleaned on given moment",
-              "nl": "Of opgegeven type schoongemaakt wordt op gegeven moment"
+              "en": "Cleaning day?",
+              "nl": "Schoonmaakdag?"
             },
             "example": {
               "en": "true",
@@ -494,8 +408,8 @@
             "name": "trashType",
             "type": "string",
             "title": {
-              "en": "Short trash type as known by the app (GFT, PLASTIC, PAPIER, PMD, REST, TEXTIEL, GROF, KERSTBOOM, GLAS)",
-              "nl": "Korte benaming van afval, zoals type bekend staat in de app (GFT, PLASTIC, PAPIER, PMD, REST, TEXTIEL, GROF, KERSTBOOM, GLAS)"
+              "en": "Short trash type",
+              "nl": "Containertype (kort)"
             },
             "example": {
               "en": "PMD",
@@ -507,8 +421,100 @@
             "name": "trashTypeLocalized",
             "type": "string",
             "title": {
-              "en": "Localized trash type as given in settings page",
-              "nl": "Volledige label van het afvaltype zoals opgegeven in de applicatie settings"
+              "en": "Trash type label",
+              "nl": "Containertype (localized)"
+            },
+            "example": {
+              "en": "The plastic container",
+              "nl": "De plastic container",
+              "sv": "Plastförpackningar"
+            }
+          }
+        ]
+      },
+      {
+        "id": "days_to_collect",
+        "title": {
+          "en": "Trash will be collected...",
+          "nl": "Afval wordt opgehaald...",
+          "sv": "Papperskorgen samlas in..."
+        },
+        "titleFormatted": {
+          "en": "What type will be collected [[when]]",
+          "nl": "Welk type wordt [[when]] opgehaald",
+          "sv": "Vilken typ samlas in [[when]]"
+        },
+        "hint": {
+          "en": "This card will give you three tokens to use for your flow. One if a trash type will be collected, another one with what type will be collected, and a last one with the value from the settings page of the collected type.",
+          "nl": "Deze actie resulteert in drie tokens. 1. Of er iets geleegd wordt, 2. Welk type er geleegd wordt, 3. De waarde zoals opgegeven op de instellingen pagina van de app voor het type dat opgehaald wordt.",
+          "sv": "Denna åtgärd resulterar i tre tokens. 1. Om något töms, 2. Vilken typ som töms, 3. Värdet som anges på appens inställningssida för den typ som hämtas."
+        },
+        "advanced": true,
+        "args": [
+          {
+            "name": "when",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "Today",
+                  "nl": "Vandaag",
+                  "sv": "Hämtas idag"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "Tomorrow",
+                  "nl": "Morgen",
+                  "sv": "Hämtas imorgon"
+                }
+              },
+              {
+                "id": "datomorrow",
+                "label": {
+                  "en": "Day after tomorrow",
+                  "nl": "Overmorgen",
+                  "sv": "Hämtas i övermorgon"
+                }
+              }
+            ]
+          }
+        ],
+        "tokens": [
+          {
+            "name": "isCollected",
+            "type": "boolean",
+            "title": {
+              "en": "Collection day?",
+              "nl": "Ophaaldag?"
+            },
+            "example": {
+              "en": "true",
+              "nl": "true",
+              "sv": "true"
+            }
+          },
+          {
+            "name": "trashType",
+            "type": "string",
+            "title": {
+              "en": "Short trash type",
+              "nl": "Containertype (kort)"
+            },
+            "example": {
+              "en": "PMD",
+              "nl": "PMD",
+              "sv": "PMD"
+            }
+          },
+          {
+            "name": "trashTypeLocalized",
+            "type": "string",
+            "title": {
+              "en": "Trash type label",
+              "nl": "Containertype (localized)"
             },
             "example": {
               "en": "The plastic container",

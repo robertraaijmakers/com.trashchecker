@@ -23,10 +23,16 @@ class TrashcanReminder extends Homey.App
 
 		// Update manual input dates when settings change.
 		this.homey.settings.on('set', this.onSettingsChanged.bind(this));
+		this.homey.settings.on('set', () => {
+			this.homey.api.realtime("settings_changed", "{}");
+		});
 
 		// Register flow card
 		let daysToCollectConditionCard = this.homey.flow.getConditionCard('days_to_collect');
-		daysToCollectConditionCard.registerRunListener(this.flowDaysToCollect.bind(this));
+		daysToCollectConditionCard.registerRunListener(this.flowTrashIsCollectedCondition.bind(this));
+
+		let daysToCollectActionCard = this.homey.flow.getActionCard('days_to_collect');
+		daysToCollectActionCard.registerRunListener(this.flowTrashIsCollectedAction.bind(this));
 
 		let cleaningDaysConditionCard = this.homey.flow.getConditionCard('days_to_clean');
 		cleaningDaysConditionCard.registerRunListener(this.flowTrashIsCleanedCondition.bind(this));
@@ -73,9 +79,18 @@ class TrashcanReminder extends Homey.App
 	/* ******************
 		FLOW FUNCTIONS
 	********************/
-	async flowDaysToCollect(args, state)
+	async flowTrashIsCollectedAction(args, state) {
+		args.trash_type = "ANY";
+		return this.flowDaysToCollect(args, state, "action");
+	}
+
+	async flowTrashIsCollectedCondition(args, state) {
+		return this.flowDaysToCollect(args, state, "condition");
+	}
+
+	async flowDaysToCollect(args, state, type)
 	{
-		if( typeof this.gdates[ args.trash_type.toUpperCase() ] === 'undefined' && args.trash_type.toUpperCase() !== "ANY")
+		if(typeof this.gdates[ args.trash_type.toUpperCase() ] === 'undefined' && args.trash_type.toUpperCase() !== "ANY")
 		{
 			var message = this.homey.__('error.typenotsupported.addviasettings');
 			console.log(message);
@@ -89,24 +104,72 @@ class TrashcanReminder extends Homey.App
 			now.setDate(now.getDate() + 2);
 		}
 		
-		var dateString = this.dateToString(now);
+		const dateString = this.dateToString(now);
+		const labelSettings = this.homey.settings.get('labelSettings');
+		let trashTypeCollected = "";
+		let trashTypeCollectedLocalized = "";
+		let result = false;
+
 		if(args.trash_type.toUpperCase() == "ANY") {
-			var result = false;
-			
 			for(var i=0; i<supportedTypes.length; i++)
 			{
 				if(result === false && typeof(this.gdates[supportedTypes[i].toUpperCase()]) !== 'undefined') {
 					result = this.gdates[ supportedTypes[i].toUpperCase() ].indexOf(dateString) > -1;
+					if(result === true) {
+						trashTypeCollected = this.homey.__(`widgets.trashType.${supportedTypes[i].toUpperCase()}`);
+						trashTypeCollectedLocalized = labelSettings.type[supportedTypes[i].toLowerCase()];
+					}
 				}
 			}
+
+			if(type === "condition") {
+				return Promise.resolve(result);
+			}
 			
-			return Promise.resolve( result );
+			if(result === true) {
+				return Promise.resolve(
+					{
+						isCollected: true,
+						trashType: trashTypeCollected,
+						trashTypeLocalized: trashTypeCollectedLocalized
+					}
+				);
+			}
+
+			return Promise.resolve({
+				isCollected: false,
+				trashType: "",
+				trashTypeLocalized: ""
+			});
 		}
 
-		return Promise.resolve( this.gdates[ args.trash_type.toUpperCase() ].indexOf(dateString) > -1 );
+		result = this.gdates[ args.trash_type.toUpperCase() ].indexOf(dateString) > -1;
+		if(type === "condition") {
+			return Promise.resolve(result);
+		}
+
+		if(result === true) {
+			trashTypeCollected = this.homey.__(`widgets.trashType.${args.trash_type.toUpperCase()}`);
+			trashTypeCollectedLocalized = labelSettings.type[args.trash_type.toLowerCase()];
+
+			return Promise.resolve(
+				{
+					isCollected: true,
+					trashType: trashTypeCollected,
+					trashTypeLocalized: trashTypeCollectedLocalized
+				}
+			);
+		}
+
+		return Promise.resolve({
+			isCollected: false,
+			trashType: "",
+			trashTypeLocalized: ""
+		});
 	}
 
 	async flowTrashIsCleanedAction(args, state) {
+		args.trash_type = "ANY";
 		return this.flowTrashIsCleaned(args, state, "action");
 	}
 

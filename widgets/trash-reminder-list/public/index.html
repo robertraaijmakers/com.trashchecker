@@ -204,7 +204,8 @@
       }
 
       function onHomeyReady(Homey) {
-        init(Homey);        
+        init(Homey);
+        Homey.on("settings_changed", (data) => init(Homey));
       }
 
       function init(Homey) {

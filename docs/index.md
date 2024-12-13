@@ -26,6 +26,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Afvalkalender RMN](https://inzamelschema.rmn.nl)
 - [Afvalkalender ROVA](https://www.rova.nl)
 - [Afvalkalender RWM](https://rwm.nl)
+- [Afvalkalender Saver](https://saver.nl)
 - [Afvalkalender Venray](https://afvalkalender.venray.nl)
 - [Afvalkalender ZRD](https://afvalkalender.zrd.nl)
 - [Afvalwijzer Pre Zero](https://inzamelwijzer.prezero.nl/)

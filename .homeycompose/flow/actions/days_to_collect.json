@@ -1,20 +1,20 @@
 {
-  "id": "days_to_clean",
+  "id": "days_to_collect",
   "title": {
-    "en": "Container will be cleaned...",
-    "nl": "Container wordt schoongemaakt...",
-    "sv": "Behållaren håller på att rengöras..."
+    "en": "Trash will be collected...",
+    "nl": "Afval wordt opgehaald...",
+    "sv": "Papperskorgen samlas in..."
   },
   "titleFormatted": {
-    "en": "What trash type will be cleaned [[when]]",
-    "nl": "Welk type container wordt [[when]] schoongemaakt",
-    "sv": "Vilken typ av skräp rensas [[when]]"
+    "en": "What type will be collected [[when]]",
+    "nl": "Welk type wordt [[when]] opgehaald",
+    "sv": "Vilken typ samlas in [[when]]"
   },
   "hint":
   {
-    "en": "This card will give you three tokens to use for your flow. One if a trash container will be cleaned, another one with what container will be cleaned, and a last one with the value from the settings page of the cleaned type.",
-	  "nl": "Deze actie resulteert in drie tokens. 1. Of er iets schoongemaakt wordt, 2. Welke container er schoongemaakt wordt, 3. De waarde zoals opgegeven op de instellingen pagina van de app voor het type dat schoongemaakt wordt.",
-	  "sv": "Denna åtgärd resulterar i tre tokens. 1. Om något rengörs, 2. Vilken behållare som rengörs, 3. Värdet som anges på inställningssidan i appen för den typ som rengörs."
+    "en": "This card will give you three tokens to use for your flow. One if a trash type will be collected, another one with what type will be collected, and a last one with the value from the settings page of the collected type.",
+	  "nl": "Deze actie resulteert in drie tokens. 1. Of er iets geleegd wordt, 2. Welk type er geleegd wordt, 3. De waarde zoals opgegeven op de instellingen pagina van de app voor het type dat opgehaald wordt.",
+	  "sv": "Denna åtgärd resulterar i tre tokens. 1. Om något töms, 2. Vilken typ som töms, 3. Värdet som anges på appens inställningssida för den typ som hämtas."
   },
   "advanced": true,
   "args": [
@@ -51,11 +51,11 @@
   ],
   "tokens": [
     {
-      "name": "isCleaned",
+      "name": "isCollected",
       "type": "boolean",
       "title": {
-        "en": "Cleaning day?",
-        "nl": "Schoonmaakdag?"
+        "en": "Collection day?",
+        "nl": "Ophaaldag?"
       },
       "example": {
         "en": "true",

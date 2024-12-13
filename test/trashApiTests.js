@@ -17,6 +17,20 @@ it('API - Mijn Cyclus', function() {
         });
 });
 
+it('API - Saver', function() {
+    var postcode = "4715EP";
+    var homenumber = 7;
+    var country = "NL";
+    var apiId = "svr";
+    var apiName = "API - Saver";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 /*
 it('API - Mijn Afvalwijzer', function() {
     var postcode = "9821TT";

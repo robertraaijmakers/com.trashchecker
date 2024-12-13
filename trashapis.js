@@ -173,6 +173,10 @@ function afvalwijzerMontferland(postcode, housenumber, street, country) {
     return afvalwijzerMontferlandApiImplementation(postcode, housenumber, country, "appapi.montferland.info");
 }
 
+function afvalkalenderSaver(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, "saver.nl");
+}
+
 /**
  * General implementation of the afvalkalender API used by a lot of different vendors.
  */
@@ -1678,6 +1682,7 @@ apiList.push({ name: "Afvalkalender Reinis", id: "aknw", execute: nissewaard });
 apiList.push({ name: "Afvalkalender RMN", id: "afrm", execute: afvalRmn });
 apiList.push({ name: "Afvalkalender ROVA", id: "rov", execute: rovaAfvalkalender });
 apiList.push({ name: "Afvalkalender RWM", id: "rwm", execute: afvalkalenderRwm });
+apiList.push({ name: "Afvalkalender Saver", id: "svr", execute: afvalkalenderSaver });
 apiList.push({ name: "Afvalkalender Súdwest-Fryslân", id: "swf", execute: afvalkalenderSudwestFryslan });
 apiList.push({ name: "Afvalkalender Venray", id: "akvr", execute: afvalkalenderVenray });
 apiList.push({ name: "Afvalkalender Westland", id: "akwl", execute: afvalKalenderWestland });
@@ -1701,8 +1706,5 @@ apiList.push({ name: "Reinigingsdienst Waardlanden", id: "rewl", execute: reinig
 apiList.push({ name: "Twente Milieu", id: "twm", execute: twenteMilieu });
 
 apiList.push({ name: "Recycle App (BE)", id: "recbe", execute: recycleApp });
-
-apiList.push({ name: "Afvalkalender Cure", id: "acu", execute: afvalkalenderCure })                             // Deprecated as of 2022-06-09
-apiList.push({ name: "Stadswerk072", id: "sw072", execute: afvalwijzerStadswerk072 });                          // Deprecated as of 2022-06-09
 
 module.exports = apiList;
