@@ -73,6 +73,12 @@ class TrashcanReminder extends Homey.App
 		this.homey.setTimeout(this.onUpdateData.bind(this), 172800000, true, true); // Retrieves it every 48 hours
 		this.homey.setInterval(this.onUpdateLabel.bind(this), 10*60*1000); // Update label every 10 minutes.
 		
+		// Backwards compatibility for people updating instead of clean install
+		let cleanApiSettings = this.homey.settings.get('cleanApiId');
+		if(typeof cleanApiSettings === 'undefined' || cleanApiSettings === null) {
+			this.homey.settings.set('cleanApiId', 'not-applicable');
+		}
+
 		this.log("App initialized");
 	}
 
@@ -777,7 +783,9 @@ class TrashcanReminder extends Homey.App
 		
 		if(postcode === '' || homenumber === '' || cleanApiId === 'not-applicable')
 		{
-			callback(false, this, null);
+			this.homey.settings.set('cleanApiId', 'not-applicable');
+			this.homey.settings.set('cleaningDays', null);
+			callback(false, this, 'not-applicable');
 			return;
 		}
 
@@ -847,7 +855,7 @@ class TrashcanReminder extends Homey.App
 			console.log('Checked all cleaning APIs, none found, setting to not-applicable');
 			this.homey.settings.set('cleanApiId', 'not-applicable');
 			this.homey.settings.set('cleaningDays', null);
-			return callback(false, this, null);
+			return callback(false, this, 'not-applicable');
 		});
 	}
 	
