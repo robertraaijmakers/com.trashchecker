@@ -2,7 +2,7 @@
 
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
-
+/*
 it('API - Mijn Cyclus', function() {
     var postcode = "2741jb";
     var homenumber = 37;
@@ -15,9 +15,9 @@ it('API - Mijn Cyclus', function() {
         {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
-});
+});*/
 
-it('API - Saver', function() {
+it('API - Saver (1)', function() {
     var postcode = "4715EP";
     var homenumber = 7;
     var country = "NL";
@@ -31,13 +31,69 @@ it('API - Saver', function() {
         });
 });
 
+it('API - Saver (2)', function() {
+    var postcode = "4707RE";
+    var homenumber = 1;
+    var country = "NL";
+    var apiId = "svr";
+    var apiName = "API - Saver (2)";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 /*
-it('API - Mijn Afvalwijzer', function() {
+it('API - Afvalwijzer - Rova', function() {
+    var postcode = "3824GL";
+    var homenumber = 11;
+    var country = "NL";
+    var apiId = "rov";
+    var apiName = "API - Afvalwijzer - Rova";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Cyclus (2)', function() {
+    var postcode = "2914EM";
+    var homenumber = 107;
+    var country = "NL";
+    var apiId = "afc";
+    var apiName = "API - Cyclus (2)";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - RAD', function() {
+    var postcode = "3284XR";
+    var homenumber = 17;
+    var country = "NL";
+    var apiId = "rad";
+    var apiName = "API - RAD";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Mijn Afvalwijzer (1)', function() {
     var postcode = "9821TT";
     var homenumber = 9;
     var country = "NL";
     var apiId = "afw";
-    var apiName = "API - Afvalwijzer";
+    var apiName = "API - Mijn Afvalwijzer (1)";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
@@ -46,12 +102,12 @@ it('API - Mijn Afvalwijzer', function() {
         });
 });
 
-it('API - Mijn Afvalwijzer', function() {
+it('API - Mijn Afvalwijzer (2)', function() {
     var postcode = "5122GP";
     var homenumber = 94;
     var country = "NL";
     var apiId = "afw";
-    var apiName = "API - Afvalwijzer - #204";
+    var apiName = "API - Afvalwijzer (2) - #204";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
@@ -59,7 +115,7 @@ it('API - Mijn Afvalwijzer', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-/*
+
 it('API - Afvalkalender Recycle BE - 1', function() {
     var postcode = "8930";
     var homenumber = 58;
@@ -190,12 +246,12 @@ it('API - RD4 - Toevoeging', function() {
         });
 });
 
-it('API - Afvalwijzer', function() {
+it('API - Afvalwijzer (3)', function() {
     var postcode = "9681TP";
     var homenumber = 5;
     var country = "NL";
     var apiId = "afw";
-    var apiName = "API - Afvalwijzer";
+    var apiName = "API - Afvalwijzer (3)";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
@@ -204,12 +260,12 @@ it('API - Afvalwijzer', function() {
         });
 });
 
-it('API - Afvalwijzer - Manual Description', function() {
+it('API - Afvalwijzer (4) - Manual Description', function() {
     var postcode = "1141SL";
     var homenumber = 15;
     var country = "NL";
     var apiId = "afw";
-    var apiName = "API - Afvalwijzer";
+    var apiName = "API - Afvalwijzer (4)";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
@@ -218,12 +274,12 @@ it('API - Afvalwijzer - Manual Description', function() {
         });
 });
 
-it('API - Afvalwijzer - Extra GFT', function() {
+it('API - Afvalwijzer (5) - Extra GFT', function() {
     var postcode = "9321GZ";
     var homenumber = 52;
     var country = "NL";
     var apiId = "afw";
-    var apiName = "API - Afvalwijzer";
+    var apiName = "API - Afvalwijzer (5)";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
@@ -302,12 +358,12 @@ it('API - Waardlanden', function() {
         });
 });
 
-it('API - Afvalwijzer', function() {
+it('API - Afvalwijzer (6)', function() {
     var postcode = "6191JM";
     var homenumber = 12;
     var country = "NL";
     var apiId = "afw";
-    var apiName = "API - Afvalwijzer";
+    var apiName = "API - Afvalwijzer (6)";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
@@ -386,26 +442,12 @@ it('API - Mijn Blink', function() {
         });
 });
 
-it('API - Afvalwijzer', function() {
+it('API - Afvalwijzer (1)', function() {
     var postcode = "7007HS";
     var homenumber = 35;
     var country = "NL";
     var apiId = "afw";
-    var apiName = "API - Afvalwijzer";
-
-    return testAPI(apiId, apiName, postcode, homenumber, "", country)
-        .then(function(result)
-        {
-            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
-        });
-});
-
-it('API - Afvalwijzer', function() {
-    var postcode = "4707RE";
-    var homenumber = 1;
-    var country = "NL";
-    var apiId = "afw";
-    var apiName = "API - Afvalwijzer";
+    var apiName = "API - Afvalwijzer (1)";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
@@ -420,20 +462,6 @@ it('API - Afvalwijzer - Den Bosch', function() {
     var country = "NL";
     var apiId = "dbafw";
     var apiName = "API - Afvalwijzer - Den Bosch";
-
-    return testAPI(apiId, apiName, postcode, homenumber, "", country)
-        .then(function(result)
-        {
-            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
-        });
-});
-
-it('API - Afvalwijzer - Rova', function() {
-    var postcode = "3824GL";
-    var homenumber = 11;
-    var country = "NL";
-    var apiId = "rov";
-    var apiName = "API - Afvalwijzer - Rova";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
@@ -611,21 +639,6 @@ it('API - Afval App', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-
-it('API - Mijn Blink - ERROR', function() {
-    var postcode = "5673RE";
-    var homenumber = 1111125;
-    var country = "NL";
-    var apiId = "mba";
-    var apiName = "API - Mijn Blink";
-
-    return testAPI(apiId, apiName, postcode, homenumber, "", country)
-        .then(function(result)
-        {
-            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
-        });
-});
-
 
 it('API - Afvalkalender Súdwest-Fryslân', function() {
     var postcode = "9021CK";

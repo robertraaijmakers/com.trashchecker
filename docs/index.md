@@ -21,6 +21,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Afvalkalender Meerlanden](https://afvalkalender.meerlanden.nl)
 - [Afvalkalender Peel en Maas](https://afvalkalender.peelenmaas.nl)
 - [Afvalkalender Purmerend](https://afvalkalender.purmerend.nl/)
+- [Afvalkalender RAD](https://www.radbv.nl/)
 - [Afvalkalender RD4](https://rd4.syzygy.eu)
 - [Afvalkalender Reinis](https://reinis.ximmio.com/modules/9dc25c8a-175a-4a41-b7a1-83f237a80b77/sitekalender/)
 - [Afvalkalender RMN](https://inzamelschema.rmn.nl)

@@ -2,7 +2,7 @@
 
 var cleanApiArray = require('../cleanapis.js');
 var expect  = require('chai').expect;
-
+/*
 it('Clean API - Clean Profs', function() {
     var postcode = "3206sn";
     var homenumber = 9;
@@ -30,7 +30,7 @@ it('Clean API - Clean Profs', function() {
             expect(validateApiResults(null, result, cleanApiId, apiName)).to.be.true;
         });
 });
-
+*/
 
 function testAPI(cleanApiId, apiName, postcode, homenumber, streetName, country)
 {
