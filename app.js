@@ -72,12 +72,6 @@ class TrashcanReminder extends Homey.App
 		// Every 24 hours update API or manual dates
 		this.homey.setTimeout(this.onUpdateData.bind(this), 172800000, true, true); // Retrieves it every 48 hours
 		this.homey.setInterval(this.onUpdateLabel.bind(this), 10*60*1000); // Update label every 10 minutes.
-		
-		// Backwards compatibility for people updating instead of clean install
-		let cleanApiSettings = this.homey.settings.get('cleanApiId');
-		if(typeof cleanApiSettings === 'undefined' || cleanApiSettings === null) {
-			this.homey.settings.set('cleanApiId', 'not-applicable');
-		}
 
 		this.log("App initialized");
 	}
