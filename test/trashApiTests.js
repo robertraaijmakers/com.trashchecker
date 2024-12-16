@@ -2,7 +2,7 @@
 
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
-/*
+
 it('API - Mijn Cyclus', function() {
     var postcode = "2741jb";
     var homenumber = 37;
@@ -15,7 +15,7 @@ it('API - Mijn Cyclus', function() {
         {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
-});*/
+});
 
 it('API - Saver (1)', function() {
     var postcode = "4715EP";
@@ -45,7 +45,6 @@ it('API - Saver (2)', function() {
         });
 });
 
-/*
 it('API - Afvalwijzer - Rova', function() {
     var postcode = "3824GL";
     var homenumber = 11;
@@ -73,7 +72,7 @@ it('API - Cyclus (2)', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-
+/*
 it('API - RAD', function() {
     var postcode = "3284XR";
     var homenumber = 17;

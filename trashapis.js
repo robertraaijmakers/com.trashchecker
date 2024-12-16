@@ -22,7 +22,7 @@ function rovaAfvalkalender(postcode, housenumber, street, country) {
 }
 
 function afvalkalenderCyclus(postcode, housenumber, street, country) {
-    return newGeneralAfvalkalendersNederland(postcode, housenumber, country, 'cyclusnv.nl');
+    return newGeneralAfvalkalendersNederlandRest(postcode, housenumber, country, 'cyclusnv.nl');
 }
 
 function afvalkalenderZrd(postcode, housenumber, street, country) {
@@ -289,7 +289,8 @@ function newGeneralAfvalkalendersNederlandRest(postcode, housenumber, country, b
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-        }
+        },
+        family: 4
     });
     
     return new Promise(function(resolve, reject)
@@ -311,7 +312,8 @@ function newGeneralAfvalkalendersNederlandRest(postcode, housenumber, country, b
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                }
+                },
+                family: 4
             });
 
             let today = new Date();
@@ -326,7 +328,8 @@ function newGeneralAfvalkalendersNederlandRest(postcode, housenumber, country, b
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                    }
+                    },
+                    family: 4
                 });
 
                 retrieveCollectionDays.then(function(responseDates)
@@ -1744,14 +1747,22 @@ function processWasteData(afvalstromenResponse, kalenderResponse) {
     // Map afvalstroom_id to waste types
     const afvalstroomMap = {};
     afvalstromenResponse.forEach((afvalstroom) => {
-        let title = afvalstroom.page_title.toUpperCase().replace(/\s+/g, '');
-        if (title.includes('GFT')) title = 'GFT';
-        if (title.includes('PBD') || title.includes('PMD')) title = 'PMD';
-        if (title.includes('PAPIER')) title = 'PAPIER';
-        if (title.includes('RESTAFVAL')) title = 'REST';
-        if (title.includes('TEXTIEL')) title = 'TEXTIEL';
-        if (title.includes('KERSTBOOM')) title = 'KERSTBOOM';
-        if (title.includes('GROF')) title = 'GROF';
+        const checkTitle = afvalstroom.page_title.toUpperCase().replace(/\s+/g, '');
+        let title = '';
+        if (checkTitle.includes('GFT') || checkTitle.includes('GROENTE')) title = 'GFT';
+        if (checkTitle.includes('PBD') || checkTitle.includes('PMD') || checkTitle.includes('PLASTIC')) title = 'PMD';
+        if (checkTitle.includes('PAPIER')) title = 'PAPIER';
+        if (checkTitle.includes('RESTAFVAL')) title = 'REST';
+        if (checkTitle.includes('TEXTIEL')) title = 'TEXTIEL';
+        if (checkTitle.includes('KERSTBOOM')) title = 'KERSTBOOM';
+        if (checkTitle.includes('GROF')) title = 'GROF';
+        if (checkTitle.includes('GLAS')) title = 'GLAS';
+
+        if(title === '')
+        { 
+            console.log(`Couldn't found type: ${checkTitle}.`);
+            return;
+        }
 
         afvalstroomMap[afvalstroom.id] = title;
     });

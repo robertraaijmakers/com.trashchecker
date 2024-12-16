@@ -1,4 +1,3 @@
-/*globals Homey, module, require, setInterval*/
 "use strict";
 
 const Homey = require('homey');
@@ -274,18 +273,13 @@ class TrashcanReminder extends Homey.App
 			this.collectingDaysSet = true;
 			
 			console.log("Updating label because collecting days changed.");
-			this.onUpdateLabel( );
-		}
-		
-		if(parameterName === "cleaningDays")
-		{			
-			console.log("Cleaning days are updated.");
+			this.onUpdateLabel();
 		}
 		
 		if(parameterName === "labelSettings" && this.collectingDaysSet == true)
 		{
 			console.log("Updating label because label settings changed.");
-			this.onUpdateLabel( );
+			this.onUpdateLabel();
 		}
 	}
 	
@@ -307,16 +301,8 @@ class TrashcanReminder extends Homey.App
 				apiId,
 				function(success, that, newApiId)
 				{
-					if(success)
-					{
-						console.log('Retrieved trash collection information');
-					}
-					else 
-					{
-						console.log('Trash collection information has not been set');
-					}
-				}
-			);
+					console.log(`Trash API internally successfully updated: ${newApiId}.`);
+				});
 
 			this.updateCleaningAPI(
 				this.homey.settings.get('postcode'),
@@ -326,14 +312,7 @@ class TrashcanReminder extends Homey.App
 				cleanApiId,
 				function(success, that, newApiId)
 				{
-					if(success)
-					{
-						console.log('Retrieved cleaning information');
-					}
-					else 
-					{
-						console.log('Cleaning information has not been set');
-					}
+					console.log(`Cleaning API internally successfully updated: ${newApiId}.`);
 				});
 
 			// Make sure we are not updating everything to often.
@@ -609,14 +588,13 @@ class TrashcanReminder extends Homey.App
 				}
 				else if(Object.keys(result).length === 0) {
 					console.log('No information found, go to settings to reset your API settings.');
-					
-					callback(false, this, null);
+					callback(false, newThis, null);
 				}
 			})
 			.catch(function(error)
 			{
 				console.log(error);
-				callback(false, this, null);
+				callback(false, newThis, null);
 			});
 			
 			return;
@@ -644,7 +622,7 @@ class TrashcanReminder extends Homey.App
 						func(loop, that);
 					} else {
 						done = true;
-						callback();
+						callback(that);
 					}
 				},
 	
@@ -654,7 +632,7 @@ class TrashcanReminder extends Homey.App
 	
 				break: function() {
 					done = true;
-					callback();
+					callback(that);
 				}
 			};
 
@@ -672,11 +650,13 @@ class TrashcanReminder extends Homey.App
 				{
 					newDates = result;
 					that.gdates = newDates;
+
+					const newApiId = apiArray[loop.iteration()]['id'];
 					
-					that.homey.settings.set('apiId', apiArray[loop.iteration()]['id']);
+					that.homey.settings.set('apiId', newApiId);
 					that.homey.settings.set('collectingDays', newDates);
 					that.GenerateNewDaysBasedOnManualInput();
-					return callback(true, that, apiArray[loop.iteration()]['id']);
+					return callback(true, that, newApiId);
 				}
 				else if(Object.keys(result).length === 0)
 				{
@@ -692,9 +672,9 @@ class TrashcanReminder extends Homey.App
 				loop.next();
 			});
 		},
-		() => {
+		(that) => {
 			console.log('Checked all APIs');
-			return callback(false, this, null);
+			return callback(false, that, null);
 		});
 	}
 
@@ -756,20 +736,25 @@ class TrashcanReminder extends Homey.App
 				{					
 					newDates = result;
 					newThis.cleanDates = newDates;
-					
-					newThis.homey.settings.set('cleanApiId', cleanApiId);
 					newThis.homey.settings.set('cleaningDays', newDates);
+					newThis.homey.settings.set('cleanApiId', cleanApiId);
 					callback(true, newThis, cleanApiId);
 				}
 				else if(Object.keys(result).length === 0) {
 					console.log('No information found, go to settings to reset your clean API settings.');
-					callback(false, this, null);
+					newThis.homey.settings.set('cleanApiId', 'not-applicable');
+					newThis.homey.settings.set('cleaningDays', null);
+					callback(false, newThis, 'not-applicable');
 				}
 			})
 			.catch(function(error)
 			{
+				console.log('Going in error catch');
 				console.log(error);
-				callback(false, this, null);
+				
+				newThis.homey.settings.set('cleanApiId', 'not-applicable');
+				newThis.homey.settings.set('cleaningDays', null);
+				callback(false, newThis, 'not-applicable');
 			});
 			
 			return;
@@ -798,7 +783,7 @@ class TrashcanReminder extends Homey.App
 						func(loop, that);
 					} else {
 						done = true;
-						callback();
+						callback(that);
 					}
 				},
 	
@@ -808,7 +793,7 @@ class TrashcanReminder extends Homey.App
 	
 				break: function() {
 					done = true;
-					callback();
+					callback(that);
 				}
 			};
 
@@ -827,9 +812,11 @@ class TrashcanReminder extends Homey.App
 					newDates = result;
 					that.cleanDates = newDates;
 					
-					that.homey.settings.set('cleanApiId', cleanArray[loop.iteration()]['id']);
+					const cleanApiId = cleanArray[loop.iteration()]['id'];
+
 					that.homey.settings.set('cleaningDays', newDates);
-					return callback(true, that, cleanArray[loop.iteration()]['id']);
+					that.homey.settings.set('cleanApiId', cleanApiId);
+					return callback(true, that, cleanApiId);
 				}
 				else if(Object.keys(result).length === 0)
 				{
@@ -845,11 +832,11 @@ class TrashcanReminder extends Homey.App
 				loop.next();
 			});
 		},
-		() => {
+		function(that) {
 			console.log('Checked all cleaning APIs, none found, setting to not-applicable');
-			this.homey.settings.set('cleanApiId', 'not-applicable');
-			this.homey.settings.set('cleaningDays', null);
-			return callback(false, this, 'not-applicable');
+			that.homey.settings.set('cleanApiId', 'not-applicable');
+			that.homey.settings.set('cleaningDays', null);
+			return callback(false, that, 'not-applicable');
 		});
 	}
 	
