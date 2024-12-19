@@ -164,5 +164,9 @@
   "4.0.8": {
     "en": "Added support for widgets! Now display the next collection days right on your dashboard.",
     "nl": "Ondersteuning voor widgets toegevoegd! Toon de eerstvolgende ophaaldata direct op je dashboard."
+  },
+  "4.2.0": {
+    "en": "Going back in time... Sorry for the crashes",
+    "nl": "Excuses voor de crashes, weer even terug op oude versie"
   }
 }
