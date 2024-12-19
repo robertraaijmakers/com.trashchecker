@@ -172,5 +172,13 @@
   "4.2.1": {
     "en": "Added support for widgets and first trash cleaning services! Get notified when your container is cleaned as well.",
     "nl": "Ondersteuning voor widgets en eerste schoonmaakdienst toegevoegd! Toon de eerstvolgende ophaaldata en ook wanneer je container schoongemaakt wordt."
+  },
+  "4.2.2": {
+    "en": "Going back in time... Sorry for the crashes",
+    "nl": "Excuses voor de crashes, weer even terug op oude versie"
+  },
+  "4.2.3": {
+    "en": "Added support for widgets and first trash cleaning services! Get notified when your container is cleaned as well.",
+    "nl": "Ondersteuning voor widgets en eerste schoonmaakdienst toegevoegd! Toon de eerstvolgende ophaaldata en ook wanneer je container schoongemaakt wordt."
   }
 }
