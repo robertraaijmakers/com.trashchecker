@@ -30,7 +30,7 @@ it('API - Mijn Afvalwijzer', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-/*
+
 it('API - Afvalkalender Recycle BE - 1', function() {
     var postcode = "8930";
     var homenumber = 58;
@@ -667,7 +667,7 @@ it('API - RWM', function() {
         {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
-});*/
+});
 
 function testAPI(apiId, apiName, postcode, homenumber, streetName, country)
 {
