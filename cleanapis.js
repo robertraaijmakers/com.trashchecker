@@ -13,6 +13,10 @@ function CleanProfs(zipCode, houseNumber, street, country) {
         return Promise.reject(Error('Unsupported country'));
     }
 
+    if (zipCode === '') {
+        return Promise.reject(Error('Zip code is required'));
+    }
+
     let fDates = {};
 
     // Retrieve trash request
@@ -51,9 +55,12 @@ function CleanProfs(zipCode, houseNumber, street, country) {
             for (let i in result) {
                 const entry = result[i];
                 const dateStr = entry['full_date'];
-                const description = entry['product_name'].toLowerCase();
+                const description = entry['product_name']?.toLowerCase();
 
-                if (description.indexOf('gft') !== -1) {
+                if (typeof description === 'undefined' || description === null || description === '') {
+                    console.log(`No description found for date: ${dateStr}. Full entry details: ${entry}.`);
+                }
+                else if (description.indexOf('gft') !== -1) {
                     if (!fDates.GFT) fDates.GFT = [];
                     fDates.GFT.push(dateStr);
                 } else if (description.indexOf('rest') !== -1 || description.indexOf('rst') !== -1) {
