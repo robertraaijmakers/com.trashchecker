@@ -64,13 +64,13 @@ class TrashcanReminder extends Homey.App
 		this.trashTokenTomorrow = trashCollectionTokenTomorrow;
 		this.trashTokenDayAfterTomorrow = trashCollectionTokenDayAfterTomorrow;
 		this.trashTokenAdvancedCollectionDates = trashCollectionTokenAdvancedCollectionDates;
-
-		// Manually kick off data retrieval
-		this.onUpdateData(true, false);
 		
 		// Every 24 hours update API or manual dates
 		this.homey.setTimeout(this.onUpdateData.bind(this), 172800000, true, true); // Retrieves it every 48 hours
 		this.homey.setInterval(this.onUpdateLabel.bind(this), 10*60*1000); // Update label every 10 minutes.
+
+		// Manually kick off data retrieval
+		await this.onUpdateData(true, false);
 
 		this.log("App initialized");
 	}
@@ -283,7 +283,7 @@ class TrashcanReminder extends Homey.App
 		}
 	}
 	
-	onUpdateData(shouldExecute, shouldSetTimeout)
+	async onUpdateData(shouldExecute, shouldSetTimeout)
 	{
 		if (this.homey.settings.get('postcode') &&
 			this.homey.settings.get('hnumber') &&
@@ -293,7 +293,7 @@ class TrashcanReminder extends Homey.App
 			var apiId = this.homey.settings.get('apiId');
 			var cleanApiId = this.homey.settings.get('cleanApiId');
 			
-			this.updateAPI(
+			await this.updateAPI(
 				this.homey.settings.get('postcode'),
 				this.homey.settings.get('hnumber'),
 				this.homey.settings.get('streetName'),
@@ -304,7 +304,7 @@ class TrashcanReminder extends Homey.App
 					console.log(`Trash API internally successfully updated: ${newApiId}.`);
 				});
 
-			this.updateCleaningAPI(
+			await this.updateCleaningAPI(
 				this.homey.settings.get('postcode'),
 				this.homey.settings.get('hnumber'),
 				this.homey.settings.get('streetName'),
@@ -520,7 +520,7 @@ class TrashcanReminder extends Homey.App
 		return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 	}
 	
-	updateAPI(postcode, homenumber, streetName, country, apiId, callback)
+	async updateAPI(postcode, homenumber, streetName, country, apiId, callback)
 	{
 		let newDates = null;
 		let newThis = this;
@@ -757,7 +757,7 @@ class TrashcanReminder extends Homey.App
 				callback(false, newThis, 'not-applicable');
 			});
 			
-			return;
+			return Promise.resolve();
 		}
 		
 		if(postcode === '' || homenumber === '' || cleanApiId === 'not-applicable')
