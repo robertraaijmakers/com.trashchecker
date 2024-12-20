@@ -19,6 +19,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Afvalkalender Cyclus](https://afvalkalender.cyclusnv.nl/)
 - [Afvalkalender Dar](https://afvalkalender.dar.nl)
 - [Afvalkalender Meerlanden](https://afvalkalender.meerlanden.nl)
+- [Afvalkalender Noardeast-Fryslân & Dantumadiel](https://offalkalinder.nl/)
 - [Afvalkalender Peel en Maas](https://afvalkalender.peelenmaas.nl)
 - [Afvalkalender Purmerend](https://afvalkalender.purmerend.nl/)
 - [Afvalkalender RAD](https://www.radbv.nl/)

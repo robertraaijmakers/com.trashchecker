@@ -174,6 +174,10 @@ function afvalkalenderSaver(postcode, housenumber, street, country) {
     return newGeneralAfvalkalendersNederlandRest(postcode, housenumber, country, "saver.nl");
 }
 
+function afvalkalenderNoordOostFriesland(postcode, housenumber, street, country) {
+    return newGeneralAfvalkalendersNederlandRest(postcode, housenumber, country, "offalkalinder.nl");
+}
+
 /**
  * General implementation of the afvalkalender API used by a lot of different vendors.
  */
@@ -1804,6 +1808,7 @@ apiList.push({ name: "Afvalkalender Cyclus", id: "afc", execute: afvalkalenderCy
 apiList.push({ name: "Afvalkalender DAR", id: "dar", execute: darAfvalkalender });
 apiList.push({ name: "Afvalkalender Etten-Leur", id: "akel", execute: huisvuilkalenderEttenLeur });
 apiList.push({ name: "Afvalkalender Meerlanden", id: "akm", execute: afvalkalenderMeerlanden });
+apiList.push({ name: "Afvalkalender Noardeast-Fryslân", id: "nfd", execute: afvalkalenderNoordOostFriesland});
 apiList.push({ name: "Afvalkalender Peel en Maas", id: "akpm", execute: afvalkalenderPeelEnMaas });
 apiList.push({ name: "Afvalkalender Purmerend", id: "akpu", execute: afvalkalenderPurmerend});
 apiList.push({ name: "Afvalkalender RAD", id: "rad", execute: afvalkalenderRad});
