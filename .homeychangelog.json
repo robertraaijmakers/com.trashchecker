@@ -180,5 +180,9 @@
   "4.2.4": {
     "en": "Added support for widgets and first trash cleaning services! Get notified when your container is cleaned as well.",
     "nl": "Ondersteuning voor widgets en eerste schoonmaakdienst toegevoegd! Toon de eerstvolgende ophaaldata en ook wanneer je container schoongemaakt wordt."
+  },
+  "4.2.5": {
+    "en": "Deleted Gemeente Meppel, which now works via Mijn Afvalwijzer",
+    "nl": "Optie Gemeente Meppel verwijderd, werkt nu via Mijn Afvalwijzer."
   }
 }
