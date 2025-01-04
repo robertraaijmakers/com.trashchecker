@@ -121,11 +121,6 @@ function gemeenteHellendoorn(postcode, housenumber, street, country) {
     return generalImplementationWasteApi(postcode, housenumber, country, "24434f5b-7244-412b-9306-3a2bd1e22bc1", "wasteapi.ximmio.com");
 }
 
-function gemeenteMeppel(postcode, housenumber, street, country) {
-    console.log("Checking Gemeente Meppel");
-    return generalImplementationWasteApi(postcode, housenumber, country, "b7a594c7-2490-4413-88f9-94749a3ec62a", "wasteapi.ximmio.com");
-}
-
 function acvAfvalkalender(postcode, housenumber, street, country)
 {
     console.log("Checking ACV afvalkalender");
