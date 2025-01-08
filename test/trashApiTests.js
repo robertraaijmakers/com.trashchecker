@@ -130,10 +130,10 @@ it('API - Cyclus (2)', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-
+*/
 it('API - RAD 2', function() {
-    var postcode = "3273CB";
-    var homenumber = 18;
+    var postcode = "3241CM";
+    var homenumber = 22;
     var country = "NL";
     var apiId = "rad";
     var apiName = "API - RAD 2";
@@ -144,7 +144,7 @@ it('API - RAD 2', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-
+/*
 it('API - RAD', function() {
     var postcode = "3284XR";
     var homenumber = 17;
