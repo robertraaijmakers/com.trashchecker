@@ -180,5 +180,9 @@
   "4.2.4": {
     "en": "Added support for widgets and first trash cleaning services! Get notified when your container is cleaned as well.",
     "nl": "Ondersteuning voor widgets en eerste schoonmaakdienst toegevoegd! Toon de eerstvolgende ophaaldata en ook wanneer je container schoongemaakt wordt."
+  },
+  "4.2.5": {
+    "en": "Updated APIs for new year. Notice: your municipality might have changed from provider/API and you might need to reconfigure the app.",
+    "nl": "APIs waar nodig bijgewerkt voor het nieuwe jaar. Let op: het kan zijn dat je gemeente van API gewijzigd is en je zaken opnieuw moet instellen!"
   }
 }
