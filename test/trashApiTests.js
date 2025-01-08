@@ -2,7 +2,65 @@
 
 var apiArray = require('../trashapis.js');
 var expect  = require('chai').expect;
+/*
+it('API - Avalex', function() { // IPv4 issues?
+    var postcode = "2627AD";
+    var homenumber = 33;
+    var streetName = "";
+    var country = "NL";
+    var apiId = "avx";
+    var apiName = "API - Avalex";
 
+    return testAPI(apiId, apiName, postcode, homenumber, streetName, country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Afvalkalender RMN', function() {
+    var postcode = "3768MJ";
+    var homenumber = 40;
+    var country = "NL";
+    var apiId = "afrm";
+    var apiName = "API - Afvalkalender RMN";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+it('API - Meerlanden', function() {
+    var postcode = "2134PJ";
+    var homenumber = 105;
+    var country = "NL";
+    var apiId = "akm";
+    var apiName = "API - Meerlanden";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});*/
+
+it('API - Afvalkalender Assen', function() {
+    var postcode = "9402JW";
+    var homenumber = 254;
+    var country = "NL";
+    var apiId = "gemas";
+    var apiName = "API - Afvalkalender Assen";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
+/*
 it('API - Mijn Cyclus', function() {
     var postcode = "2741jb";
     var homenumber = 37;
@@ -72,7 +130,21 @@ it('API - Cyclus (2)', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-/*
+
+it('API - RAD 2', function() {
+    var postcode = "3273CB";
+    var homenumber = 18;
+    var country = "NL";
+    var apiId = "rad";
+    var apiName = "API - RAD 2";
+
+    return testAPI(apiId, apiName, postcode, homenumber, "", country)
+        .then(function(result)
+        {
+            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
+        });
+});
+
 it('API - RAD', function() {
     var postcode = "3284XR";
     var homenumber = 17;
@@ -203,20 +275,6 @@ it('API - Afvalkalender AVRI', function() {
         });
 });
 
-it('API - Afvalkalender Assen', function() {
-    var postcode = "9402JW";
-    var homenumber = 254;
-    var country = "NL";
-    var apiId = "gemas";
-    var apiName = "API - Afvalkalender Assen";
-
-    return testAPI(apiId, apiName, postcode, homenumber, "", country)
-        .then(function(result)
-        {
-            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
-        });
-});
-
 it('API - RD4', function() {
     var postcode = "6374BA";
     var homenumber = 159;
@@ -329,40 +387,12 @@ it('API - Suez', function() {
         });
 });
 
-it('API - Meerlanden', function() {
-    var postcode = "2134PJ";
-    var homenumber = 105;
-    var country = "NL";
-    var apiId = "akm";
-    var apiName = "API - Meerlanden";
-
-    return testAPI(apiId, apiName, postcode, homenumber, "", country)
-        .then(function(result)
-        {
-            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
-        });
-});
-
 it('API - Waardlanden', function() {
     var postcode = "4132BL";
     var homenumber = 48;
     var country = "NL";
     var apiId = "rewl";
     var apiName = "API - Waardlanden";
-
-    return testAPI(apiId, apiName, postcode, homenumber, "", country)
-        .then(function(result)
-        {
-            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
-        });
-});
-
-it('API - Afvalwijzer (6)', function() {
-    var postcode = "6191JM";
-    var homenumber = 12;
-    var country = "NL";
-    var apiId = "afw";
-    var apiName = "API - Afvalwijzer (6)";
 
     return testAPI(apiId, apiName, postcode, homenumber, "", country)
         .then(function(result)
@@ -552,20 +582,6 @@ it('API - Almere Ximmio', function() {
         });
 });
 
-it('API - Afvalkalender RMN', function() {
-    var postcode = "3768MJ";
-    var homenumber = 40;
-    var country = "NL";
-    var apiId = "afrm";
-    var apiName = "API - Afvalkalender RMN";
-
-    return testAPI(apiId, apiName, postcode, homenumber, "", country)
-        .then(function(result)
-        {
-            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
-        });
-});
-
 it('API - Afvalkalender Etten-Leur', function() {
     var postcode = "4871TK";
     var homenumber = 36;
@@ -609,20 +625,6 @@ it('API - Recycle!', function() {
         });
 });
 
-it('API - Avalex', function() {
-    var postcode = "2627AD";
-    var homenumber = 33;
-    var streetName = "";
-    var country = "NL";
-    var apiId = "avx";
-    var apiName = "API - Avalex";
-
-    return testAPI(apiId, apiName, postcode, homenumber, streetName, country)
-        .then(function(result)
-        {
-            expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
-        });
-});
 
 it('API - Afval App', function() {
     var postcode = "5427CW";
@@ -695,21 +697,21 @@ it('API - RWM', function() {
         });
 });
 
-it('API - RWM', function() {
+it('API - RECYCLE BE', function() {
     var postcode = "2650";
     var homenumber = 24;
     var country = "BE";
     var street = "De Pelgrim"
     var apiId = "recbe";
-    var apiName = "API - RWM'";
+    var apiName = "API - RECYCLE BE'";
 
     return testAPI(apiId, apiName, postcode, homenumber, street, country)
         .then(function(result)
         {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
-});*/
-
+});
+*/
 function testAPI(apiId, apiName, postcode, homenumber, streetName, country)
 {
     var result = apiArray.find(o => o.id === apiId);

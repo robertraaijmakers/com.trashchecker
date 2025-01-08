@@ -195,7 +195,8 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-        }
+        },
+        family: 4
     });
     
     return new Promise(function(resolve, reject)
@@ -213,7 +214,8 @@ function newGeneralAfvalkalendersNederland(postcode, housenumber, country, baseU
             var retrieveCalendar  = httpsPromise({
                 hostname: baseUrl,
                 path: `/ical/${identificatie}`,
-                method: 'GET'
+                method: 'GET',
+                family: 4
             });
 
             retrieveCalendar.then(function(response)
@@ -378,7 +380,8 @@ function generalMijnAfvalwijzerApiImplementation(postcode, housenumber, country,
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-        }
+        },
+        family: 4
     });
     
     return new Promise(function(resolve, reject)
@@ -529,7 +532,8 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(post_data1)
         },
-        body: post_data1
+        body: post_data1,
+        family: 4
     });
 
     return new Promise(function(resolve, reject)
@@ -560,7 +564,8 @@ function generalImplementationWasteApi(postcode, housenumber, country, companyCo
                     'Content-Type': 'application/json',
                     'Content-Length': Buffer.byteLength(post_data2)
                 },
-                body: post_data2
+                body: post_data2,
+                family: 4
             });
 
             retrieveCalendarDataRequest.then(function(response)
@@ -662,7 +667,8 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
           'User-Agent': 'Homey',
           'x-consumer': accessConsumer,
           'x-secret': accessSecret
-        }
+        },
+        family: 4
     });
 
     return new Promise(function(resolve, reject)
@@ -681,7 +687,8 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                     'User-Agent': 'Homey',
                     'Authorization': accessToken,
                     'x-consumer': accessConsumer,
-                }
+                },
+                family: 4
             });
 
             validateZipCodeRequest.then(function(response)
@@ -707,11 +714,12 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                     path: encodeURI(`/recycle-public/app/v1/streets?q=${street.trim()}&zipcodes=${zipcodeId}`),
                     method: "POST",
                     headers: {
-                    'Content-Type': 'application/json',
-                    'User-Agent': 'Homey',
-                    'Authorization': accessToken,
-                    'x-consumer': accessConsumer,                
-                    }
+                        'Content-Type': 'application/json',
+                        'User-Agent': 'Homey',
+                        'Authorization': accessToken,
+                        'x-consumer': accessConsumer,                
+                    },
+                    family: 4
                 });
     
                 validateStreetRequest.then(function(response)
@@ -746,7 +754,8 @@ function generalImplementationRecycleApp(postcode, housenumber, street, country)
                             'User-Agent': 'Homey',
                             'Authorization': accessToken,
                             'x-consumer': accessConsumer,                
-                        }
+                        },
+                        family: 4
                     });
         
                     getTrashRequest.then(function(response)
@@ -905,7 +914,8 @@ function generalImplementationBurgerportaal(zipcode, housenumber, country, organ
                             'Content-Type': 'application/json',
                             'User-Agent': 'Homey',
                             'Authorization': accessToken,
-                        }
+                        },
+                        family: 4
                     });
     
                     getTrashRequest.then(function(response)
@@ -943,7 +953,7 @@ function generalImplementationBurgerportaal(zipcode, housenumber, country, organ
                             }  else if (description.indexOf('papier') !== -1 || description.indexOf('opk') !== -1) {
                                 if (!fDates.PAPIER) fDates.PAPIER = [];
                                 fDates.PAPIER.push(dateStr);
-                            } else if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1) {
+                            } else if (description.indexOf('textiel') !== -1 || description.indexOf('retour') !== -1 || description.indexOf('txtl') !== -1) {
                                 if (!fDates.TEXTIEL) fDates.TEXTIEL = [];
                                 fDates.TEXTIEL.push(dateStr);
                             } else if(description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1) {
@@ -1002,7 +1012,8 @@ function recycleManager(postcode, housenumber, street, country)
         method: "GET",
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        family: 4
     });
 
     return new Promise(function(resolve, reject)
@@ -1082,7 +1093,8 @@ function afvalkalenderRD4(postcode, housenumber, street, country) {
         method: "GET",
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        family: 4
     });
 
     return new Promise(function(resolve, reject)
@@ -1171,7 +1183,8 @@ function rovaWasteCalendar(postcode, housenumber, country, hostname, startPath) 
         method: "GET",
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        family: 4
     });
 
     return new Promise(function(resolve, reject)
@@ -1210,7 +1223,8 @@ function afvalapp(postcode, homenumber, street, country) {
         method: "GET",
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        family: 4
     });
 
     return new Promise(function(resolve, reject)
@@ -1267,6 +1281,7 @@ function circulusBerkel(postcode, homenumber, street, country)
         hostname: 'mijn.circulus.nl',
         path: '/login',
         method: "GET",
+        family: 4
     });
 
     return new Promise(function(resolve, reject)
@@ -1290,7 +1305,8 @@ function circulusBerkel(postcode, homenumber, street, country)
                 path: '/register/zipcode.json',
                 method: 'POST',
                 body: post_data,
-                headers: headers
+                headers: headers,
+                family: 4
             });
 
             validateAddressRequest.then(function(response)
@@ -1307,7 +1323,8 @@ function circulusBerkel(postcode, homenumber, street, country)
                     hostname: 'mijn.circulus.nl',
                     path: `/afvalkalender.json?from=${startDate}&till=${endDate}`,
                     method: 'GET',
-                    headers: headers
+                    headers: headers,
+                    family: 4
                 });
 
                 getTrashData.then(function(response)
@@ -1408,7 +1425,8 @@ function afvalwijzerMontferlandApiImplementation(postcode, housenumber, country,
         headers: {
             "Content-Type": "application/json",
             "authToken": "77FE5F8B-9051-4B05-A525-C7CCCD42236F"
-        }
+        },
+        family: 4
     });
 
     return new Promise(function (resolve, reject) {
@@ -1753,18 +1771,20 @@ function processWasteData(afvalstromenResponse, kalenderResponse) {
     afvalstromenResponse.forEach((afvalstroom) => {
         const checkTitle = afvalstroom.page_title.toUpperCase().replace(/\s+/g, '');
         let title = '';
-        if (checkTitle.includes('GFT') || checkTitle.includes('GROENTE')) title = 'GFT';
+        if (checkTitle.includes('GFT') || checkTitle.includes('GROENTE') || checkTitle.includes('GROENE')) title = 'GFT';
         if (checkTitle.includes('PBD') || checkTitle.includes('PMD') || checkTitle.includes('PLASTIC')) title = 'PMD';
         if (checkTitle.includes('PAPIER')) title = 'PAPIER';
-        if (checkTitle.includes('RESTAFVAL')) title = 'REST';
+        if (checkTitle.includes('RESTAFVAL') || checkTitle.includes('GRIJZE')) title = 'REST';
         if (checkTitle.includes('TEXTIEL')) title = 'TEXTIEL';
-        if (checkTitle.includes('KERSTBOOM')) title = 'KERSTBOOM';
+        if (checkTitle.includes('KERSTBOOM') || checkTitle.includes('KERSTBOMEN')) title = 'KERSTBOOM';
         if (checkTitle.includes('GROF')) title = 'GROF';
         if (checkTitle.includes('GLAS')) title = 'GLAS';
+        //if (checkTitle.includes('ELEKTRISCH')) title = 'ELEKTRISCH';
+        //if (checkTitle.includes('SNOEI')) title = 'SNOEI';
 
         if(title === '')
         { 
-            console.log(`Couldn't found type: ${checkTitle}.`);
+            console.log(`Couldn't find type: ${checkTitle}.`);
             return;
         }
 
