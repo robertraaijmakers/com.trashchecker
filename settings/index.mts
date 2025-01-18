@@ -52,7 +52,7 @@ class SettingScript {
 
     // Set properties
     this.toggleFieldsBasedOnCountry();
-
+    
     this.homey.ready();
   }
 

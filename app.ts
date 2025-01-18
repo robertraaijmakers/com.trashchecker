@@ -442,7 +442,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     }
 
     const currentDate = await this.getLocalDate();
-    const startDate = manualSetting.startdate || new Date();
+    const startDate = manualSetting.startdate !== null && manualSetting.startdate !== '' ? new Date(manualSetting.startdate ?? '') : new Date();
 
     const firstDayInCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const previousMonth = new Date(new Date(firstDayInCurrentMonth).setMonth(firstDayInCurrentMonth.getMonth() - 1));
@@ -547,18 +547,23 @@ module.exports = class TrashCollectionReminder extends Homey.App {
 
   // Function to help migrate settings from the old settings structure to the new to make for an easy upgrade
   async migrateSettings() {
-    const oldManualSettings = this.homey.settings.get('manualEntryData');
-    const oldLabelSettings = this.homey.settings.get('labelSettings');
+    this.log("Checking for migration.");
+
     const zipCode = this.homey.settings.get('postcode');
     const hNumber = this.homey.settings.get('hnumber');
-    const country = this.homey.settings.get('country');
-    const apiId = this.homey.settings.get('apiId');
-    const cleanApiId = this.homey.settings.get('cleanApiId');
-    const streetName = this.homey.settings.get('streetName');
 
     if(!zipCode || !hNumber) {
       return;
     }
+
+    this.log("Starting migration of settings.");
+
+    const country = this.homey.settings.get('country');
+    const apiId = this.homey.settings.get('apiId');
+    const cleanApiId = this.homey.settings.get('cleanApiId');
+    const streetName = this.homey.settings.get('streetName');
+    const oldManualSettings = this.homey.settings.get('manualEntryData');
+    const oldLabelSettings = this.homey.settings.get('labelSettings');
 
     const apiSettings: ApiSettings = {
       apiId: apiId,

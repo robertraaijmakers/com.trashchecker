@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: npm install
+        run: |
+          npm install
       - uses: athombv/github-action-homey-app-validate@master
         with:
           level: verified

@@ -36,7 +36,7 @@ export interface ManualSettings {
 export interface ManualSetting {
   option: number;
   option_extension?: number;
-  startdate?: Date;
+  startdate?: string;
   day: number;
 }
 
