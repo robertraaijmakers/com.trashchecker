@@ -44,7 +44,7 @@ it('API - Meerlanden', function() {
         {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
-});*/
+});
 
 it('API - Afvalkalender Assen', function() {
     var postcode = "9402JW";
@@ -60,7 +60,6 @@ it('API - Afvalkalender Assen', function() {
         });
 });
 
-/*
 it('API - Mijn Cyclus', function() {
     var postcode = "2741jb";
     var homenumber = 37;
@@ -130,7 +129,7 @@ it('API - Cyclus (2)', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-*/
+
 it('API - RAD 2', function() {
     var postcode = "3241CM";
     var homenumber = 22;
@@ -144,7 +143,7 @@ it('API - RAD 2', function() {
             expect(validateApiResults(null, result, apiId, apiName)).to.be.true;
         });
 });
-/*
+
 it('API - RAD', function() {
     var postcode = "3284XR";
     var homenumber = 17;

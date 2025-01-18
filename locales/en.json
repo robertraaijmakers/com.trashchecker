@@ -15,16 +15,16 @@
 		"update": "Address updated to ",
 		"updateCleaning": "Cleaning service has been updated.",
 		"checking": "checking address...",
-		"gft": "Organic",
-		"rest": "Residual",
-		"plastic": "Plastic",
-		"pmd": "PMD",
-		"paper": "Paper",
-		"textile": "Textile",
-		"bulky": "Bulky Waste",
-		"glas": "Glass",
-		"christmas": "Christmas Tree",
-		"unknown": "Unknown",
+		"GFT": "Organic",
+		"REST": "Residual",
+		"PLASTIC": "Plastic",
+		"PMD": "PMD",
+		"PAPIER": "Paper",
+		"TEXTIEL": "Textile",
+		"GROF": "Bulky Waste",
+		"GLAS": "Glass",
+		"KERSTBOOM": "Christmas Tree",
+		"UNKNOWN": "Unknown",
 		"notapplicable": "Not Applicable",
 		"none": "When nothing is collected",
 		"titlemanualinput": "Manual Input",
@@ -81,53 +81,9 @@
 	},
 	"speech":
 	{
-		"replacequestion": "do you know|can you tell me|can you tell|question",
-		"type":
-		{
-			"GFT": "organic",
-			"REST": "residual",
-			"PLASTIC": "plastic",
-			"PMD": "pmd",
-			"PAPIER": "paper",
-			"TEXTIEL": "textile",
-			"GROF": "bulky waste",
-			"GLAS": "glass",
-			"KERSTBOOM": "christmas tree"
-		},
-		"type_multipleother":
-		{
-			"GFT": "green|biological",
-			"REST": "black|residual|grey|gray",
-			"PLASTIC": "elastic|supple",
-			"PMD": "metal|drink carton",
-			"PAPIER": "cardboard|papery",
-			"TEXTIEL": "cloth|yarn|textile",
-			"GROF": "bulky waste|bulky",
-			"GLAS": "glass",
-			"KERSTBOOM": "christmas tree|christmas"
-		},
-		"questiontype":
-		{
-			"what": "what",
-			"when": "when",
-			"is": "is",
-			"which": "which"
-		},
 		"output":
 		{
-			"noknowntrashcollected": "As far as I know there is no trash collected in your neighbourhood.",
-			"notrashcollectedonx": "There is no trash collected __time__.",
-			"trashtypesycollectedonx": "__time__ __types__ are collected.",
-			"trashtypeycollectedonx": "__time__ __type__ is collected.",
-			"notrashcollectionforx": "__type__ is not collected in your area.",
-			"trashtypexcollectedony": "__type__ is collected __time__.",
-			"yesyiscollectedonx": "Yes, __type__ is collected __time__.",
-			"noyiscollectedonxbutonz": "No, __type__ is not collected __time__ but __time2__.",
-			"and": "and",
-			"next": "next",
-			"on": "on",
-			"days": "days",
-			"in": "in",
+			"trashtypeycollectedonx": "__time__ __type__ __plural__ collected.",
 			"replacementsingle": "is",
 			"replacementplural": "are",
 			"type":

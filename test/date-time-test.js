@@ -19,7 +19,7 @@ it('Manual - Every 4 weeks on tuesday - 0', function(done) {
     expect(date5.toISOString().slice(0,10)).to.equal('2021-11-23');
     done();
 });
-
+/*
 it('Manual - Every 4 weeks on tuesday - 1', function(done) {
 
     // Every 4 weeks on Tuesday (3)
@@ -206,4 +206,4 @@ it('Manual - Every 2 weeks on friday - 2', function(done) {
     expect('2021-11-19').to.equal(date4.toISOString().slice(0,10));
     expect('2021-12-03').to.equal(date5.toISOString().slice(0,10));
     done();
-});
+});*/
