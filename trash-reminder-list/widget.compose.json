@@ -174,7 +174,7 @@
   "api": {
     "getSettings": {
       "method": "GET",
-      "path": "/collectiondata"
+      "path": "/"
     }
   }
 }

@@ -18,9 +18,9 @@
             <label class="homey-form-label" for="postcode" data-i18n="settings.postcode"></label>
             <input class="homey-form-input" placeholder="1234AB" id="postcode" maxlength="6" type="text" value=""/>
         </div>
-		<div class="homey-form-group" id="streetName_div">
-            <label class="homey-form-label" for="streetName" data-i18n="settings.streetname"></label>
-            <input class="homey-form-input" placeholder="Van Homeystraat" id="streetName" type="text" value=""/>
+		<div class="homey-form-group" id="streetname_div">
+            <label class="homey-form-label" for="streetname" data-i18n="settings.streetname"></label>
+            <input class="homey-form-input" placeholder="Van Homeystraat" id="streetname" type="text" value=""/>
         </div>
         <div class="homey-form-group">
             <label class="homey-form-label" for="number" data-i18n="settings.hnumber"></label>
@@ -37,6 +37,7 @@
 			<label class="homey-form-label" for="api" data-i18n="settings.api"></label>
 			<select class="homey-form-select" id="api">
 				<option value="" data-i18n="settings.unknown"></option>
+				<option value="not-applicable" data-i18n="settings.notapplicable"></option>
 				<option value="afa">Afval App (NL)</option>
 				<option value="acv">Afvalkalender ACV (NL)</option>
 				<option value="alm">Afvalkalender Almere (NL)</option>
@@ -72,6 +73,8 @@
 				<option value="gem">Gemeente Meppel (NL)</option>
 				<option value="hkdh">Huisvuilkalender Den Haag (NL)</option>
 				<option value="hvc">Inzamelkalender HVC (NL)</option>
+				<option value="kmoij">Klikomanager Oude IJsselstreek (NL)</option>
+				<option value="kmuit">Klikomanager Uithoorn (NL)</option>
 				<option value="afw">Mijn Afvalwijzer (NL)</option>
 				<option value="mba">Mijn Blink (NL)</option>
 				<option value="remg">Recyclemanager (NL)</option>
@@ -83,8 +86,8 @@
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="cleanApi" data-i18n="settings.cleanApi"></label>
 			<select class="homey-form-select" id="cleanApi">
-				<option value="not-applicable" data-i18n="settings.notapplicable"></option>
 				<option value="" data-i18n="settings.unknown"></option>
+				<option value="not-applicable" data-i18n="settings.notapplicable"></option>
 				<option value="cpfs">Clean Profs (NL)</option>
 			</select>
         </div>
@@ -191,9 +194,9 @@
 
 		<!-- PAPER -->
 		<div class="homey-form-group">
-			<label class="homey-form-label" for="paper" data-i18n="settings.paper"></label>
+			<label class="homey-form-label" for="papier" data-i18n="settings.papier"></label>
 			<div>
-				<select class="homey-form-select" name="paper[option]" id="paper_option">
+				<select class="homey-form-select" name="papier[option]" id="papier_option">
 					<option value="-1" data-i18n="settings.interval.na"></option>
 					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
@@ -210,8 +213,8 @@
 					<option value="19" data-i18n="settings.interval.everylast"></option>
 				</select>
 			</div>
-			<div id="paper_day_div">
-				<select class="homey-form-select" style="margin-left: 5px;" name="paper[day_of_week]" id="paper_dayofweek">
+			<div id="papier_day_div">
+				<select class="homey-form-select" style="margin-left: 5px;" name="papier[day_of_week]" id="papier_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
 					<option value="3" data-i18n="settings.dayofweek.we"></option>
@@ -222,16 +225,16 @@
 				</select>
 			</div>
 			<div>
-				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="paper[option_extension]" id="paper_option_extension">
+				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="papier[option_extension]" id="papier_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
 					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
 					<option value="12" data-i18n="settings.interval_extra.year"></option>
 				</select>
 			</div>
-			<div id="paper_startdate_div">
+			<div id="papier_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
-				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="paper[startdate]" id="paper_startdate"></input>
+				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="papier[startdate]" id="papier_startdate"></input>
 			</div>
         </div>
 
@@ -329,9 +332,9 @@
 
 		<!-- TEXTILE -->
 		<div class="homey-form-group">
-			<label class="homey-form-label" for="textile" data-i18n="settings.textile"></label>
+			<label class="homey-form-label" for="textiel" data-i18n="settings.textiel"></label>
 			<div>
-				<select class="homey-form-select" name="textile[option]" id="textile_option">
+				<select class="homey-form-select" name="textiel[option]" id="textiel_option">
 					<option value="-1" data-i18n="settings.interval.na"></option>
 					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
@@ -348,8 +351,8 @@
 					<option value="19" data-i18n="settings.interval.everylast"></option>
 				</select>
 			</div>
-			<div id="textile_day_div">
-				<select class="homey-form-select" style="margin-left: 5px;" name="textile[day_of_week]" id="textile_dayofweek">
+			<div id="textiel_day_div">
+				<select class="homey-form-select" style="margin-left: 5px;" name="textiel[day_of_week]" id="textiel_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
 					<option value="3" data-i18n="settings.dayofweek.we"></option>
@@ -360,24 +363,24 @@
 				</select>
 			</div>
 			<div>
-				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="textile[option_extension]" id="textile_option_extension">
+				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="textiel[option_extension]" id="textiel_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
 					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
 					<option value="12" data-i18n="settings.interval_extra.year"></option>
 				</select>
 			</div>
-			<div id="textile_startdate_div">
+			<div id="textiel_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
-				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="textile[startdate]" id="textile_startdate"></input>
+				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="textiel[startdate]" id="textiel_startdate"></input>
 			</div>
         </div>
 
 		<!-- BULKY / GROF VUIL -->
 		<div class="homey-form-group">
-			<label class="homey-form-label" for="bulky" data-i18n="settings.bulky"></label>
+			<label class="homey-form-label" for="grof" data-i18n="settings.grof"></label>
 			<div>
-				<select class="homey-form-select" name="bulky[option]" id="bulky_option">
+				<select class="homey-form-select" name="grof[option]" id="grof_option">
 					<option value="-1" data-i18n="settings.interval.na"></option>
 					<option value="0" data-i18n="settings.interval.automatic"></option>
 					<option value="1" data-i18n="settings.interval.everyweek"></option>
@@ -394,8 +397,8 @@
 					<option value="19" data-i18n="settings.interval.everylast"></option>
 				</select>
 			</div>
-			<div id="bulky_day_div">
-				<select class="homey-form-select" style="margin-left: 5px;" name="bulky[day_of_week]" id="bulky_dayofweek">
+			<div id="grof_day_div">
+				<select class="homey-form-select" style="margin-left: 5px;" name="grof[day_of_week]" id="grof_dayofweek">
 					<option value="1" data-i18n="settings.dayofweek.mo"></option>
 					<option value="2" data-i18n="settings.dayofweek.tu"></option>
 					<option value="3" data-i18n="settings.dayofweek.we"></option>
@@ -406,16 +409,16 @@
 				</select>
 			</div>
 			<div>
-				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="bulky[option_extension]" id="bulky_option_extension">
+				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="grof[option_extension]" id="grof_option_extension">
 					<option value="1" data-i18n="settings.interval_extra.month"></option>
 					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
 					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
 					<option value="12" data-i18n="settings.interval_extra.year"></option>
 				</select>
 			</div>
-			<div id="bulky_startdate_div">
+			<div id="grof_startdate_div">
 				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
-				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="bulky[startdate]" id="bulky_startdate"></input>
+				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="grof[startdate]" id="grof_startdate"></input>
 			</div>
         </div>
 
@@ -480,9 +483,9 @@
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="labelTimeIndicator" data-i18n="settings.timeindicator"></label>
 			<select class="homey-form-select" name="labelDay" id="labelTimeIndicator">
-				<option value="0" data-i18n="speech.output.timeindicator.t0"></option>
-				<option value="1" data-i18n="speech.output.timeindicator.t1"></option>
-				<option value="2" data-i18n="speech.output.timeindicator.t2"></option>
+				<option value="0" data-i18n="tokens.output.timeindicator.t0"></option>
+				<option value="1" data-i18n="tokens.output.timeindicator.t1"></option>
+				<option value="2" data-i18n="tokens.output.timeindicator.t2"></option>
 			</select>
 			<p data-i18n="settings.timeindicatorDescription"></p>
         </div>
@@ -497,7 +500,7 @@
 			<p id="exampleRest"></p>
         </div>
 		<div class="homey-form-group">
-			<label class="homey-form-label" for="labelPapier" data-i18n="settings.paper"></label>
+			<label class="homey-form-label" for="labelPapier" data-i18n="settings.papier"></label>
 			<input class="homey-form-input" type="text" id="labelPapier" name="label[papier]" />
 			<p id="examplePapier"></p>
         </div>
@@ -512,12 +515,12 @@
 			<p id="examplePmd"></p>
         </div>
 		<div class="homey-form-group">
-			<label class="homey-form-label" for="labelTextiel" data-i18n="settings.textile"></label>
+			<label class="homey-form-label" for="labelTextiel" data-i18n="settings.textiel"></label>
 			<input class="homey-form-input" type="text" id="labelTextiel" name="label[textiel]" />
 			<p id="exampleTextiel"></p>
         </div>
 		<div class="homey-form-group">
-			<label class="homey-form-label" for="labelGrof" data-i18n="settings.bulky"></label>
+			<label class="homey-form-label" for="labelGrof" data-i18n="settings.grof"></label>
 			<input class="homey-form-input" type="text" id="labelGrof" name="label[grof]" />
 			<p id="exampleGrof"></p>
         </div>
@@ -527,7 +530,7 @@
 			<p id="exampleGlas"></p>
         </div>
 		<div class="homey-form-group">
-			<label class="homey-form-label" for="labelKerstboom" data-i18n="settings.christmas"></label>
+			<label class="homey-form-label" for="labelKerstboom" data-i18n="settings.kerstboom"></label>
 			<input class="homey-form-input" class="homey-form-input" type="text" id="labelKerstboom" name="label[kerstboom]" />
 			<p id="exampleKerstboom"></p>
         </div>
@@ -560,787 +563,7 @@
 	</fieldset>
 	<button id="refreshDebugInformation" class="homey-button-primary-full" style="display:block" data-i18n="settings.refreshDebugInformation" ></button>
 	<br /><br />
-
-	<script type="text/javascript">
-
-        function onHomeyReady( Homey )
-		{
-			// Register on change events of fields in settings page.
-			document.getElementById("apiSave").addEventListener("click", function(elem)
-			{
-				save( Homey );
-				return false; // cancels save event! (we don't need the real button event to be handled).
-			});
-
-			document.getElementById("manualSettingsSave").addEventListener("click", function(elem)
-			{
-				save( Homey );
-				return false; // cancels save event! (we don't need the real button event to be handled).
-			});
-
-			document.getElementById("labelInput").addEventListener("click", function(elem)
-			{
-				saveLabelInput( Homey );
-				return false; // cancels save event! (we don't need the real button event to be handled).
-			});
-
-			document.getElementById("saveManaulDataEntry").addEventListener("click", function(elem)
-			{
-				saveManaulEntryData( Homey );
-				return false; // cancels save event! (we don't need the real button event to be handled).
-			});
-
-			document.getElementById("refreshDebugInformation").addEventListener("click", function(elem)
-			{
-				retrieveCollectionDaysDebug( Homey );
-				return false; // cancels save event! (we don't need the real button event to be handled).
-			});
-
-			document.getElementById("gft_option").addEventListener("change", function(elem) { ToggleManualInputFields("gft"); });
-			document.getElementById("paper_option").addEventListener("change",function(elem) { ToggleManualInputFields("paper"); });
-			document.getElementById("rest_option").addEventListener("change", function(elem) { ToggleManualInputFields("rest"); });
-			document.getElementById("plastic_option").addEventListener("change", function(elem) { ToggleManualInputFields("plastic"); });
-			document.getElementById("pmd_option").addEventListener("change", function(elem) { ToggleManualInputFields("pmd"); });
-			document.getElementById("textile_option").addEventListener("change", function(elem) { ToggleManualInputFields("textile"); });
-			document.getElementById("bulky_option").addEventListener("change", function(elem) { ToggleManualInputFields("bulky"); });
-			document.getElementById("glas_option").addEventListener("change", function(elem) { ToggleManualInputFields("glas"); });
-
-			document.getElementById("gft_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("gft"); });
-			document.getElementById("paper_option_extension").addEventListener("change",function(elem) { ToggleManualInputFields("paper"); });
-			document.getElementById("rest_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("rest"); });
-			document.getElementById("plastic_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("plastic"); });
-			document.getElementById("pmd_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("pmd"); });
-			document.getElementById("textile_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("textile"); });
-			document.getElementById("bulky_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("bulky"); });
-			document.getElementById("glas_option_extension").addEventListener("change", function(elem) { ToggleManualInputFields("glas"); });
-
-			document.getElementById("labelTimeIndicator").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-			document.getElementById("labelGft").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-			document.getElementById("labelRest").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-			document.getElementById("labelPmd").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-			document.getElementById("labelPlastic").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-			document.getElementById("labelPapier").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-			document.getElementById("labelTextiel").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-			document.getElementById("labelGrof").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-			document.getElementById("labelGlas").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-			document.getElementById("labelKerstboom").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-			document.getElementById("labelNone").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-			document.getElementById("labelGeneric").addEventListener("change", function(elem) { renderGlobalLabel( Homey ); });
-			
-			document.getElementById("country").addEventListener("change", function(elem) { ToggleFieldsBasedOnCountry( Homey ); });
-
-			var respDates = document.getElementById("respDatesDebug");
-				respDates.style.color = 'black';
-				respDates.innerHTML = "Loading collection days...";
-
-			// Set properties
-			ToggleManualInputFields("gft");
-			ToggleManualInputFields("paper");
-			ToggleManualInputFields("rest");
-			ToggleManualInputFields("plastic");
-			ToggleManualInputFields("pmd");
-			ToggleManualInputFields("textile");
-			ToggleManualInputFields("bulky");
-			ToggleManualInputFields("glas");
-			ToggleFieldsBasedOnCountry( Homey );
-
-			// Retrieve values from Homey settings
-        	Homey.get('postcode', function(err, postcode)
-        	{
-        		if(err)
-        		{
-        			console.log("not working");
-        			return console.error(err);
-        		}
-        		document.getElementById('postcode').value = postcode;
-        	});
-
-			Homey.get('hnumber', function (err, houseNumber)
-			{
-				console.log('NUMBER', err, houseNumber);
-				if (err) {
-					console.log("not working");
-					return console.error(err);
-				}
-				document.getElementById('number').value = houseNumber;
-			});
-
-			Homey.get('streetName', function (err, streetName)
-			{
-				console.log('STREET', err, streetName);
-				if (err) {
-					console.log("not working");
-					return console.error(err);
-				}
-				document.getElementById('streetName').value = streetName;
-			});
-
-        	Homey.get('country',function(err, country)
-        	{
-        		console.log(country);
-        		if(err) {
-        			return console.error(err);
-        		}
-
-        		if(country == 'NL' || country == 'BE') {
-        			document.getElementById('country').value = country;
-        		} else {
-        			document.getElementById('country').value = "NL";
-        		}
-        	});
-
-        	Homey.get('apiId',function(err, apiId)
-        	{
-        		if(err){
-        			return console.error(err);
-        		}
-
-        		document.getElementById("api").value = apiId;
-        	});
-
-        	Homey.get('cleanApiId',function(err, cleanApiId)
-        	{
-        		if(err){
-        			return console.error(err);
-        		}
-
-        		document.getElementById("cleanApi").value = cleanApiId;
-        	});
-
-			Homey.get('manualEntryData',function(err, manualEntryData)
-			{
-				console.log(manualEntryData);
-				if(err) {
-					return console.error(err);
-				}
-
-				if(manualEntryData !== null && typeof manualEntryData.gft !== 'undefined')
-				{
-					SetManualEntryFormValues(manualEntryData.gft, "gft");
-				} else {
-					document.getElementById("gft_option").value = 0;
-				}
-
-				if(manualEntryData !== null && typeof manualEntryData.paper !== 'undefined')
-				{
-					SetManualEntryFormValues(manualEntryData.paper, "paper");
-				} else {
-					document.getElementById("paper_option").value = 0;
-				}
-
-				if(manualEntryData !== null && typeof manualEntryData.rest !== 'undefined')
-				{
-					SetManualEntryFormValues(manualEntryData.rest, "rest");
-				} else {
-					document.getElementById("rest_option").value = 0;
-				}
-
-				if(manualEntryData !== null && typeof manualEntryData.plastic !== 'undefined')
-				{
-					SetManualEntryFormValues(manualEntryData.plastic, "plastic");
-				} else {
-					document.getElementById("plastic_option").value = 0;
-				}
-
-				if(manualEntryData !== null && typeof manualEntryData.pmd !== 'undefined')
-				{
-					SetManualEntryFormValues(manualEntryData.pmd, "pmd");
-				} else {
-					document.getElementById("pmd_option").value = 0;
-				}
-
-				if(manualEntryData !== null && typeof manualEntryData.textile !== 'undefined')
-				{
-					SetManualEntryFormValues(manualEntryData.textile, "textile");
-				} else {
-					document.getElementById("textile_option").value = 0;
-				}
-
-				if(manualEntryData !== null && typeof manualEntryData.bulky !== 'undefined')
-				{
-					SetManualEntryFormValues(manualEntryData.bulky, "bulky");
-				} else {
-					document.getElementById("bulky_option").value = 0;
-				}
-
-				if(manualEntryData !== null && typeof manualEntryData.glas !== 'undefined')
-				{
-					SetManualEntryFormValues(manualEntryData.glas, "glas");
-				} else {
-					document.getElementById("glas_option").value = 0;
-				}
-			});
-
-			Homey.get('labelSettings', function(err, labelSettings)
-			{
-				console.log(labelSettings);
-				if(err)
-				{
-						return console.error(err);
-				}
-
-				if(typeof labelSettings.timeindicator !== 'undefined')
-				{
-					document.getElementById("labelTimeIndicator").value = labelSettings.timeindicator;
-				}
-
-				document.getElementById("labelGeneric").placeholder = Homey.__('speech.output.trashtypeycollectedonx');
-				if(typeof labelSettings.generic !== 'undefined')
-				{
-					document.getElementById("labelGeneric").value = labelSettings.generic;
-				}
-
-				if(typeof labelSettings.type.gft !== 'undefined')
-				{
-					SetLabelEntryFormValues(Homey, labelSettings.type.gft, "gft");
-				}
-				else
-				{
-					SetLabelEntryFormValues(Homey, Homey.__('settings.gft'), "gft");
-				}
-
-				if(typeof labelSettings.type.papier !== 'undefined')
-				{
-					SetLabelEntryFormValues(Homey, labelSettings.type.papier, "papier");
-				}
-				else
-				{
-					SetLabelEntryFormValues(Homey, Homey.__('settings.paper'), "papier");
-				}
-
-				if(typeof labelSettings.type.rest !== 'undefined')
-				{
-					SetLabelEntryFormValues(Homey, labelSettings.type.rest, "rest");
-				}
-				else
-				{
-					SetLabelEntryFormValues(Homey, Homey.__('settings.rest'), "rest");
-				}
-
-				if(typeof labelSettings.type.plastic !== 'undefined')
-				{
-					SetLabelEntryFormValues(Homey, labelSettings.type.plastic, "plastic");
-				}
-				else
-				{
-					SetLabelEntryFormValues(Homey.__('settings.plastic'), "plastic");
-				}
-
-				if(typeof labelSettings.type.pmd !== 'undefined')
-				{
-					SetLabelEntryFormValues(Homey, labelSettings.type.pmd, "pmd");
-				}
-				else
-				{
-					SetLabelEntryFormValues(Homey, Homey.__('settings.pmd'), "pmd");
-				}
-
-				if(typeof labelSettings.type.textiel !== 'undefined')
-				{
-					SetLabelEntryFormValues(Homey, labelSettings.type.textiel, "textiel");
-				}
-				else
-				{
-					SetLabelEntryFormValues(Homey, Homey.__('settings.textile'), "textiel");
-				}
-
-				if(typeof labelSettings.type.grof !== 'undefined')
-				{
-					SetLabelEntryFormValues(Homey, labelSettings.type.grof, "grof");
-				}
-				else
-				{
-					SetLabelEntryFormValues(Homey, Homey.__('settings.bulky'), "grof");
-				}
-
-				if(typeof labelSettings.type.glas !== 'undefined')
-				{
-					SetLabelEntryFormValues(Homey, labelSettings.type.glas, "glas");
-				}
-				else
-				{
-					SetLabelEntryFormValues(Homey, Homey.__('settings.glas'), "glas");
-				}
-
-				if(typeof labelSettings.type.kerstboom !== 'undefined')
-				{
-					SetLabelEntryFormValues(Homey, labelSettings.type.kerstboom, "kerstboom");
-				}
-				else
-				{
-					SetLabelEntryFormValues(Homey, Homey.__('settings.christmas'), "kerstboom");
-				}
-
-				if(typeof labelSettings.type.none !== 'undefined')
-				{
-					SetLabelEntryFormValues(Homey, labelSettings.type.none, "none");
-				}
-				else
-				{
-					SetLabelEntryFormValues(Homey, Homey.__('settings.none'), "none");
-				}
-
-				renderGlobalLabel( Homey );
-			});
-
-
-			retrieveManualInputDays( Homey );
-			retrieveCollectionDaysDebug( Homey );
-
-			Homey.ready();
-		}
-
-		function retrieveCollectionDaysDebug( Homey )
-		{
-			var respDates = document.getElementById("respDatesDebug");
-
-			Homey.get('collectingDays', function(err, collectingDays)
-			{
-				if(err)
-				{
-					respDates.innerHTML = "No collecting days found.";
-					return;
-				}
-
-				respDates.innerHTML = "<pre>" + JSON.stringify(collectingDays, null, 2) + "</pre>";
-			});
-		}
-
-		function retrieveManualInputDays( Homey )
-		{
-			Homey.get('manualAdditions', function(err, manualAdditions)
-        	{
-        		if(err || manualAdditions === null)
-        		{
-					console.log("No data yet.");
-					document.getElementById('manualDataEntry').value = "{"
-					+"\n\t\"GFT\": [],"
-					+"\n\t\"REST\": [],"
-					+"\n\t\"PAPIER\": [],"
-					+"\n\t\"GROF\": [],"
-					+"\n\t\"PLASTIC\": [],"
-					+"\n\t\"PMD\": [],"
-					+"\n\t\"TEXTIEL\": [],"
-					+"\n\t\"KERSTBOOM\": []"
-					+"\n}";
-        			return console.error(err);
-				}
-
-        		document.getElementById('manualDataEntry').value = JSON.stringify(manualAdditions, null, 2);
-        	});
-		}
-
-		// Save zipcode and housenumber to Homey Settings
-        function save( Homey )
-        {
-			var resp = document.getElementById("resp");
-				resp.style.color = 'black';
-				resp.innerHTML = Homey.__('settings.checking');
-
-			var respDates = document.getElementById("respDates");
-				respDates.style.color = 'black';
-				respDates.innerHTML = "";
-
-			var respDatesDebug = document.getElementById("respDatesDebug");
-				respDatesDebug.innerHTML = "Loading collection days...";
-
-			// Always save the manual input when save button is pressed
-			Homey.set('manualInput', true);
-			saveManualInput( Homey );
-
-        	var pc = document.getElementById('postcode').value;
-        	var num = document.getElementById('number').value;
-        	var streetName = document.getElementById('streetName').value;
-			var apiSelected = document.getElementById('api').value;
-			var cleanApiSelected = document.getElementById('cleanApi').value;
-        	var country = document.getElementById('country').value;
-
-			if(apiSelected === "") { apiSelected = null; }
-			if(cleanApiSelected === "") { cleanApiSelected = null; }
-			if(pc === "") { pc = null; }
-			if(num === "") { num = null; }
-			if(streetName === "") { streetName = null; }
-
-			if(pc == null || num == null)
-			{
-				Homey.set('postcode', '');
-				Homey.set('hnumber', '');
-				Homey.set('country', 'NL');
-				Homey.set('apiId', '');
-				Homey.set('cleanApiId', 'not-applicable');
-				Homey.set('streetName', '');
-
-				resp.innerHTML = Homey.__('settings.manualonly');
-				resp.style.color = 'green';
-				retrieveCollectionDaysDebug( Homey );
-				return;
-			}
-
-        	Homey.api('POST', '/trashcollection', {
-        		"postcode":pc,
-        		"housenumber":num,
-				"streetName":streetName,
-        		"country":country,
-				"api": apiSelected
-        	}, function(err, result) {
-        		if(err) { return console.log(err); }
-
-				if(result)
-				{
-					resp.style.color = 'green';
-					resp.innerHTML = Homey.__('settings.update') + pc + ', ' + num + ' in ' + country;
-		            Homey.set('postcode', pc);
-		            Homey.set('hnumber', num);
-		            Homey.set('streetName', streetName);
-		            Homey.set('country', country);
-
-					// Retrieve API id & gdates from settings
-					Homey.get('apiId', function(err, apiId)
-					{
-						if(err)
-						{
-							resp.style.color = 'red';
-							return;
-						}
-
-						document.getElementById("api").value = apiId;
-						respDates.innerHTML = "<br />API ID: " + apiId + respDates.innerHTML;
-					});
-				}
-				else
-				{
-					resp.innerHTML = Homey.__('settings.fail');
-					resp.style.color = 'red';
-				}
-
-				retrieveCollectionDaysDebug( Homey );
-        		console.log(result);
-        	});
-
-			Homey.api('POST', '/clean', {
-        		"postcode":pc,
-        		"housenumber":num,
-				"streetName":streetName,
-        		"country":country,
-				"cleanApiId": cleanApiSelected
-        	}, function(err, result) {
-        		if(err) { return console.log(err); }
-
-				if(result)
-				{
-					// Retrieve API id & gdates from settings
-					Homey.get('cleanApiId', function(err, cleanApiId)
-					{
-						if(err)
-						{
-							// resp.style.color = 'red';
-							return;
-						}
-
-						document.getElementById("cleanApi").value = cleanApiId;
-
-						if (cleanApiId !== 'not-applicable') {
-							resp.innerHTML += '<br />' + Homey.__('settings.updateCleaning');
-						}
-
-						//respDates.innerHTML = "<br />API ID: " + apiId + respDates.innerHTML;
-					});
-				}
-				else
-				{
-					// resp.innerHTML = Homey.__('settings.fail');
-					// resp.style.color = 'red';
-				}
-
-				// retrieveCollectionDaysDebug( Homey );
-        		console.log(result);
-        	});
-        }
-
-		// Save manual input data to Homey Settings
-		function saveManualInput( Homey )
-		{
-			Homey.set('manualInput', true);
-
-			var data = {};
-			data = SetManualInputDataFor("gft", data);
-			data = SetManualInputDataFor("rest", data);
-			data = SetManualInputDataFor("pmd", data);
-			data = SetManualInputDataFor("plastic", data);
-			data = SetManualInputDataFor("paper", data);
-			data = SetManualInputDataFor("textile", data);
-			data = SetManualInputDataFor("bulky", data);
-			data = SetManualInputDataFor("glas", data);
-
-			console.log(data);
-			Homey.set('manualEntryData', data);
-		}
-
-		// Save extra manual data entry
-		function saveManaulEntryData( Homey )
-		{
-			var data = {};
-
-			var textualInput = {};
-			try
-			{
-				textualInput = JSON.parse(document.getElementById('manualDataEntry').value);
-			}
-			catch(err)
-			{
-				console.log(err);
-				document.getElementById('respManualDataEntry').innerHTML = err;
-				return;
-			}
-
-			document.getElementById('respManualDataEntry').innerHTML = "";
-
-			if(typeof textualInput.GFT !== 'undefined')
-			{
-				data.GFT = validateDates(textualInput.GFT);
-			}
-			else
-			{
-				data.GFT = [];
-			}
-
-			if(typeof textualInput.REST !== 'undefined')
-			{
-				data.REST = validateDates(textualInput.REST);
-			}
-			else
-			{
-				data.REST = [];
-			}
-
-			if(typeof textualInput.PAPIER !== 'undefined')
-			{
-				data.PAPIER = validateDates(textualInput.PAPIER);
-			}
-			else
-			{
-				data.PAPIER = [];
-			}
-
-			if(typeof textualInput.GROF !== 'undefined')
-			{
-				data.GROF = validateDates(textualInput.GROF);
-			}
-			else
-			{
-				data.GROF = [];
-			}
-
-			if(typeof textualInput.PLASTIC !== 'undefined')
-			{
-				data.PLASTIC = validateDates(textualInput.PLASTIC);
-			}
-			else
-			{
-				data.PLASTIC = [];
-			}
-
-			if(typeof textualInput.PMD !== 'undefined')
-			{
-				data.PMD = validateDates(textualInput.PMD);
-			}
-			else
-			{
-				data.PMD = [];
-			}
-
-			if(typeof textualInput.KERSTBOOM !== 'undefined')
-			{
-				data.KERSTBOOM = validateDates(textualInput.KERSTBOOM);
-			}
-			else
-			{
-				data.KERSTBOOM = [];
-			}
-
-			Homey.set('manualAdditions', data);
-
-			// We trigger a full save, to make sure everything is recalculated (a bit heavy, but this feature shouldn't be used that often)
-			save( Homey );
-			saveLabelInput( Homey );
-
-			// Retrieve them again & update field (for formatting & feedback purposes)
-			retrieveManualInputDays( Homey );
-		}
-
-		function validateDates(inputArray)
-		{
-			var output = [];
-
-			for(var i=0;i<inputArray.length; i++)
-			{
-				var validDate = new Date(inputArray[i]);
-
-				month = '' + (validDate.getMonth() + 1),
-				day = '' + validDate.getDate(),
-				year = validDate.getFullYear();
-
-				if (month.length < 2)
-					month = '0' + month;
-				if (day.length < 2)
-					day = '0' + day;
-
-				output.push([year, month, day].join('-'));
-			}
-
-			return output;
-		}
-
-		function renderGlobalLabel( Homey )
-		{
-			var sentence = "<i>Example: " + document.getElementById("labelGeneric").value + "</i>";
-			var timeReplacement = Homey.__("speech.output.timeindicator.t" + document.getElementById("labelTimeIndicator").value);
-			var types = ["gft","rest","pmd","plastic","papier","textiel","grof","glas","none"];
-			var replacementSingle = Homey.__("speech.output.replacementsingle");
-			var replacementPlural = Homey.__("speech.output.replacementplural");
-
-			for(var i=0; i<types.length; i+=1)
-			{
-				var typeReplacement = document.getElementById("label"+capitalizeFirstLetter(types[i])).value;
-				document.getElementById("example"+capitalizeFirstLetter(types[i])).innerHTML = sentence.replace("__time__",timeReplacement).replace("__type__",typeReplacement).replace("__plural__",replacementSingle);
-			}
-
-			var multipleTypesReplacement = document.getElementById("labelGft").value + ", " + document.getElementById("labelPlastic").value + " " + Homey.__("speech.output.and") + " " + document.getElementById("labelGrof").value;
-			document.getElementById("exampleMultiple").innerHTML = sentence.replace("__time__",timeReplacement).replace("__type__",multipleTypesReplacement).replace("__plural__",replacementPlural);
-		}
-
-		// Saves label values into Homey settings
-		function saveLabelInput( Homey )
-		{
-			var data = {
-				timeindicator: document.getElementById("labelTimeIndicator").value,
-				generic: document.getElementById("labelGeneric").value,
-				type: {
-					gft: document.getElementById("labelGft").value,
-					rest: document.getElementById("labelRest").value,
-					pmd: document.getElementById("labelPmd").value,
-					plastic: document.getElementById("labelPlastic").value,
-					papier: document.getElementById("labelPapier").value,
-					textiel: document.getElementById("labelTextiel").value,
-					grof: document.getElementById("labelGrof").value,
-					glas: document.getElementById("labelGlas").value,
-					kerstboom: document.getElementById("labelKerstboom").value,
-					none: document.getElementById("labelNone").value
-				}
-			};
-
-			console.log(data);
-			Homey.set('labelSettings', data);
-		}
-
-		// Sets values given in "values" to the given "type" on the form.
-		function SetManualEntryFormValues(values, type)
-		{
-			document.getElementById(type + "_option").value = values.option;
-			document.getElementById(type + "_dayofweek").value = values.day;
-			document.getElementById(type + "_option_extension").value = values.option_extension;
-
-			if(typeof values.startdate !== 'undefined' && values.startdate !== null)
-			{
-				document.getElementById(type + "_startdate").value = values.startdate.substring(0, 10);
-			}
-
-			ToggleManualInputFields(type);
-		}
-
-		function capitalizeFirstLetter(string) {
-			return string.charAt(0).toUpperCase() + string.slice(1);
-		}
-
-		// Sets values given in "values" to the given "type" on the form.
-		function SetLabelEntryFormValues(Homey, values, type)
-		{
-			document.getElementById("label" + capitalizeFirstLetter(type)).value = values;
-			document.getElementById("label" + capitalizeFirstLetter(type)).placeholder = values;
-		}
-
-		// Retrieves all manual values from the form based on given "type" and adds them to the "data" element.
-		function SetManualInputDataFor(type, data)
-		{
-			// If not applicable, leave empty.
-			if(document.getElementById(type + "_option").value == 0)
-			{
-				return data;
-			}
-
-			data[type] = {};
-			data[type].option = document.getElementById(type + "_option").value;
-			data[type].startdate = document.getElementById(type + "_startdate").value;
-			data[type].day = document.getElementById(type + "_dayofweek").value;
-
-			if(data[type].option >= 10) {
-				data[type].option_extension = document.getElementById(type + "_option_extension").value;
-			}
-			else {
-				data[type].option_extension = -1;
-			}
-
-			return data;
-		}
-
-		// Toggle street name
-		var optionSetStore = null;
-		function ToggleFieldsBasedOnCountry(Homey)
-		{
-			const countrySelected = document.getElementById('country').value;
-			// const ddl = document.getElementById('country');
-
-			// if(optionSetStore === null) {
-			// 	optionSetStore = new Array();
-			// 	for (i = 0; i < ddl.options.length; i++) {
-			// 		optionSetStore[i] = ddl .options[i].value;
-			// 	}
-			// }
-
-			if(countrySelected === 'NL') {
-            	document.getElementById("streetName_div").style.display = 'none';
-            } else if(countrySelected === 'BE') {
-            	document.getElementById("streetName_div").style.display = 'block';
-            }
-		}
-
-		// Toggles fields on the form based on the given element
-		function ToggleManualInputFields(prefix)
-		{
-			var value = document.getElementById(prefix + "_option").value;
-			var optionExtensionValue = document.getElementById(prefix + "_option_extension").value;
-
-			if(value >= 11) {
-				document.getElementById(prefix + "_option_extension").style.display = 'block';
-				document.getElementById(prefix + "_day_div").style.display = 'block';
-
-				if(optionExtensionValue == 2)
-				{
-					document.getElementById(prefix + "_startdate_div").style.display = 'block';
-				}
-				else
-				{
-					document.getElementById(prefix + "_startdate_div").style.display = 'none';
-				}
-			}
-			else if(value == 1)
-			{
-				document.getElementById(prefix + "_option_extension").style.display = 'none';
-				document.getElementById(prefix + "_startdate_div").style.display = 'none';
-				document.getElementById(prefix + "_day_div").style.display = 'block';
-			}
-			else if(value == 0 || value == -1)
-			{
-				document.getElementById(prefix + "_option_extension").style.display = 'none';
-				document.getElementById(prefix + "_startdate_div").style.display = 'none';
-				document.getElementById(prefix + "_day_div").style.display = 'none';
-			}
-			else {
-				document.getElementById(prefix + "_option_extension").style.display = 'none';
-				document.getElementById(prefix + "_startdate_div").style.display = 'block';
-				document.getElementById(prefix + "_day_div").style.display = 'block';
-			}
-		}
-	</script>
+	
+    <script defer type="module" src="index.mjs"></script>
 </body>
 </html>

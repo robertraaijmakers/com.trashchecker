@@ -12,19 +12,19 @@
 		"save": "Save Changes",
 		"fail": "This address is not supported",
 		"manualonly": "The data was refreshed based on the manual settings only",
-		"update": "Address updated to ",
+		"update": "Address updated to",
 		"updateCleaning": "Cleaning service has been updated.",
 		"checking": "checking address...",
-		"GFT": "Organic",
-		"REST": "Residual",
-		"PLASTIC": "Plastic",
-		"PMD": "PMD",
-		"PAPIER": "Paper",
-		"TEXTIEL": "Textile",
-		"GROF": "Bulky Waste",
-		"GLAS": "Glass",
-		"KERSTBOOM": "Christmas Tree",
-		"UNKNOWN": "Unknown",
+		"gft": "Organic",
+		"rest": "Residual",
+		"plastic": "Plastic",
+		"pmd": "PMD",
+		"papier": "Paper",
+		"textiel": "Textile",
+		"grof": "Bulky Waste",
+		"glas": "Glass",
+		"kerstboom": "Christmas Tree",
+		"unknown": "Unknown",
 		"notapplicable": "Not Applicable",
 		"none": "When nothing is collected",
 		"titlemanualinput": "Manual Input",
@@ -79,11 +79,31 @@
 		"timeindicator": "Global Label Type",
 		"timeindicatorDescription": "This is used to render the examples below your label settings, to give a sneak preview of the text available through the three global labels."
 	},
-	"speech":
+	"debug":
 	{
+		"labeltitle": "Debug",
+		"labeldescription": "These are the current known collection dates in the app."	
+	},
+	"error":
+	{
+		"typenotsupported":
+		{ 
+			"addviasettings": "No dates known for this type of trash. Add them manually via the settings page of the app.",
+			"onyouraddress": "This type of trash is not supported on your address."
+		}
+	},
+	"tokens":
+	{
+		"trashcollection": {
+			"today": "Collected Today",
+			"tomorrow": "Collected Tomorrow",
+			"dayaftertomorrow": "Collected Day After Tomorrow",
+			"advancedcollectiondates": "Collection Days (JSON)"
+		},
 		"output":
 		{
-			"trashtypeycollectedonx": "__time__ __type__ __plural__ collected.",
+			"trashtypeycollectedonx": "__type__ __plural__ collected __time__.",
+			"and": "and",
 			"replacementsingle": "is",
 			"replacementplural": "are",
 			"type":
@@ -116,28 +136,6 @@
 				"t1": "Tomorrow",
 				"t2": "The day after tomorrow"
 			}
-		}
-	},
-	"debug":
-	{
-		"labeltitle": "Debug",
-		"labeldescription": "These are the current known collection dates in the app."	
-	},
-	"error":
-	{
-		"typenotsupported":
-		{ 
-			"addviasettings": "No dates known for this type of trash. Add them manually via the settings page of the app.",
-			"onyouraddress": "This type of trash is not supported on your address."
-		}
-	},
-	"tokens":
-	{
-		"trashcollection": {
-			"today": "Collected Today",
-			"tomorrow": "Collected Tomorrow",
-			"dayaftertomorrow": "Collected Day After Tomorrow",
-			"advancedcollectiondates": "Collection Days (JSON)"
 		}
 	},
 	"widgets":

@@ -12,18 +12,18 @@
 		"save": "Spara ändringar",
 		"fail": "Den här adressen stöds inte",
 		"manualonly": "Datan är bara uppdaterad baserad på de manuella inställningarna",
-		"update": "Adressen updaterad till ",
+		"update": "Adressen updaterad till",
 		"updateCleaning": "Städservice har uppdaterats.",
 		"checking": "Checkar adress...",
 		"gft": "Kompost",
 		"rest": "Övrigt",
 		"plastic": "Plastförpackningar",
 		"pmd": "Plast, metall och dryckesförpackningar",
-		"paper": "Papper",
-		"textile": "Textilier",
-		"bulky": "Grovsopor",
+		"papier": "Papper",
+		"textiel": "Textilier",
+		"grof": "Grovsopor",
 		"glas": "Glas",
-		"christmas": "Julgran",
+		"kerstboom": "Julgran",
 		"unknown": "okänt",
 		"notapplicable": "Ej tillämpligt",
 		"none": "Ingenting hämtas",
@@ -79,55 +79,31 @@
 		"timeindicator": "Global etiketttyp",
 		"timeindicatorDescription": "Detta används för att visa exemplen under inställningarna. Du kan alltså i förväg se vilken text som kan förekomma i någon av de tre etiketterna."
 	},
-	"speech":
+	"debug":
 	{
-		"replacequestion": "vet du|kan du berätta för mig|kan du berätta|fråga",
-		"type":
-		{
-			"GFT": "kompost",
-			"REST": "restavfall",
-			"PLASTIC": "plast",
-			"PMD": "plast metall mjölkförpackningar",
-			"PAPIER": "papper",
-			"TEXTIEL": "textilier",
-			"GROF": "grovsopor",
-			"GLAS": "glas",
-			"KERSTBOOM": "julgran"
-		},
-		"type_multipleother":
-		{
-			"GFT": "grön|biologiskt",
-			"REST": "svart|restavfall|grå|grå",
-			"PLASTIC": "plast|plast",
-			"PMD": "metall|mjölkförpackningar",
-			"PAPIER": "pappförpackningar|papper",
-			"TEXTIEL": "kläder|gard|textilier",
-			"GROF": "grovsopor|skräp",
-			"GLAS": "glas",
-			"KERSTBOOM": "julgran|jul"
-		},
-		"questiontype":
-		{
-			"what": "vad",
-			"when": "när",
-			"is": "är",
-			"which": "vilken"
+		"labeltitle": "Debug",
+		"labeldescription": "Det här är de kända datumen i appen för sophämtning."	
+	},
+	"error":
+	{
+		"typenotsupported":
+		{ 
+			"addviasettings": "Det finns inga kända datum för den här typen av sopor. Lägg till dem manuellt i appens inställningar.",
+			"onyouraddress": "Den här typen av sopor stöds inte på din adress."
+		}
+	},
+	"tokens":
+	{
+		"trashcollection": {
+			"today": "Hämtas idag",
+			"tomorrow": "Hämtas imorgon",
+			"dayaftertomorrow": "Hämtas i övermorgon",
+			"advancedcollectiondates": "Samlingsdagar (JSON)"
 		},
 		"output":
 		{
-			"noknowntrashcollected": "Så vitt jag vet hämtas inga sopor idag i ditt område.",
-			"notrashcollectedonx": "Det hämtas inte sopor __time__.",
-			"trashtypesycollectedonx": "__time__ __types__ är hämtade.",
-			"trashtypeycollectedonx": "__time__ __type__ är hämtade.",
-			"notrashcollectionforx": "__type__ hämtas inte i ditt område.",
-			"trashtypexcollectedony": "__type__ hämtas __time__.",
-			"yesyiscollectedonx": "Ja, __type__ hämtas __time__.",
-			"noyiscollectedonxbutonz": "Nej, __type__ hämtas inte __time__ but __time2__.",
+			"trashtypeycollectedonx": "__time__ __type__ __plural__ hämtade.",
 			"and": "och",
-			"next": "nästa",
-			"on": "på",
-			"days": "dagar",
-			"in": "i",
 			"replacementsingle": "är",
 			"replacementplural": "är",
 			"type":
@@ -160,28 +136,6 @@
 				"t1": "imorgon",
 				"t2": "i övermorgon"
 			}
-		}
-	},
-	"debug":
-	{
-		"labeltitle": "Debug",
-		"labeldescription": "Det här är de kända datumen i appen för sophämtning."	
-	},
-	"error":
-	{
-		"typenotsupported":
-		{ 
-			"addviasettings": "Det finns inga kända datum för den här typen av sopor. Lägg till dem manuellt i appens inställningar.",
-			"onyouraddress": "Den här typen av sopor stöds inte på din adress."
-		}
-	},
-	"tokens":
-	{
-		"trashcollection": {
-			"today": "Hämtas idag",
-			"tomorrow": "Hämtas imorgon",
-			"dayaftertomorrow": "Hämtas i övermorgon",
-			"advancedcollectiondates": "Samlingsdagar (JSON)"
 		}
 	},
 	"widgets":

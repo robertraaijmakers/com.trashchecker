@@ -1,23 +1,30 @@
 {
   "name": "com.trashchecker",
-  "version": "4.0.6",
+  "version": "5.0.0",
   "description": "Homey Trashcan Reminder 2.0",
-  "main": "test.js",
+  "main": "app.ts",
   "directories": {
     "lib": "lib"
   },
   "dependencies": {
     "cheerio": "1.0.0-rc.10",
-    "https": "^1.0.0",
-    "ical": "^0.8.0"
+    "https": "^1.0.0"
   },
   "devDependencies": {
-    "chai": "^4.3.4",
-    "mocha": "^9.1.3"
+    "@tsconfig/node16": "^16.1.3",
+    "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.10",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.10.5",
+    "eslint": "^7.32.0",
+    "eslint-config-athom": "^3.1.3",
+    "mocha": "^9.2.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
   },
   "scripts": {
-    "app": "onInit",
-    "test": "mocha --timeout 10000"
+    "build": "tsc",
+    "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
+    "test": "mocha -r ts-node/register 'test/**/*.ts' --timeout 10000'"
   },
   "repository": {
     "type": "git",

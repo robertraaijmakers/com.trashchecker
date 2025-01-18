@@ -41,6 +41,8 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Gemeente Hellendoorn](https://www.hellendoorn.nl/wonen-leven/publicatie/afval)
 - [Huisvuilkalender Den Haag](https://huisvuilkalender.denhaag.nl/)
 - [Inzamelkalender HVC](https://inzamelkalender.hvcgroep.nl)
+- Klikomanager Oude IJsselstreek
+- Klikomanager Uithoorn
 - [Mijn Afvalwijzer](http://www.mijnafvalwijzer.nl)
 - [Mijn Blink](https://mijnblink.nl/)
 - [Recyle Manager](http://www.recyclemanager.nl)
