@@ -87,6 +87,7 @@
           {
             "name": "when",
             "type": "dropdown",
+            "title": "When?",
             "values": [
               {
                 "id": "today",
@@ -117,6 +118,11 @@
           {
             "name": "trash_type",
             "type": "dropdown",
+            "title": {
+              "en": "Type?",
+              "nl": "Type?",
+              "sv": "Type?"
+            },
             "values": [
               {
                 "id": "ANY",
@@ -223,6 +229,11 @@
           {
             "name": "when",
             "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "When?"
+            },
             "values": [
               {
                 "id": "today",
@@ -253,6 +264,11 @@
           {
             "name": "trash_type",
             "type": "dropdown",
+            "title": {
+              "en": "Type?",
+              "nl": "Type?",
+              "sv": "Type?"
+            },
             "values": [
               {
                 "id": "ANY",
@@ -362,6 +378,11 @@
           {
             "name": "when",
             "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "When?"
+            },
             "values": [
               {
                 "id": "today",
@@ -454,6 +475,11 @@
           {
             "name": "when",
             "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "When?"
+            },
             "values": [
               {
                 "id": "today",

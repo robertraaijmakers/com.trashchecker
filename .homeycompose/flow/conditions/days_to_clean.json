@@ -20,6 +20,7 @@
     {
       "name": "when",
       "type": "dropdown",
+      "title": "When?",
       "values": [
         {
           "id": "today",
@@ -50,6 +51,11 @@
     {
       "name": "trash_type",
       "type": "dropdown",
+      "title": {
+        "en": "Type?",
+        "nl": "Type?",
+        "sv": "Type?"
+      },
       "values": [
         {
           "id": "ANY",
