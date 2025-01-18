@@ -1,9 +1,9 @@
 'use strict';
 
 import cheerio from 'cheerio';
-import { ActivityDates, ApiDefinition, ApiFindResult, ApiSettings } from '../types/localTypes';
+import { ActivityDates, ApiDefinition, ApiFindResult } from '../types/localTypes';
 import { addDate, formatDate, httpsPromise, processWasteData, validateCountry, validateHousenumber, validateZipcode, verifyByName, verifyDate } from './helpers';
-import { TrashType } from '../assets/publicTypes';
+import { ApiSettings, TrashType } from '../assets/publicTypes';
 
 export class TrashApis {
   #apiList: ApiDefinition[] = [];

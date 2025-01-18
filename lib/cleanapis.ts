@@ -1,6 +1,7 @@
 'use strict';
 
-import { ActivityDates, ApiDefinition, ApiFindResult, ApiSettings } from '../types/localTypes';
+import { ApiSettings } from '../assets/publicTypes';
+import { ActivityDates, ApiDefinition, ApiFindResult } from '../types/localTypes';
 import { formatDate, httpsPromise, validateCountry, validateHousenumber, validateZipcode, verifyByName } from './helpers';
 
 export class CleanApis {

@@ -1,11 +1,11 @@
 'use strict';
 
 import Homey from 'homey';
-import { ActivityDates, ActivityItem, ApiSettings, FlowCardType, LabelSettings, TrashFlowCardArgument, When } from './types/localTypes';
+import { ActivityDates, ActivityItem, FlowCardType, TrashFlowCardArgument, When } from './types/localTypes';
 import { TrashApis } from './lib/trashapis';
 import { CleanApis } from './lib/cleanapis';
 import { addDate } from './lib/helpers';
-import { ManualSetting, ManualSettings, TrashType } from './assets/publicTypes';
+import { ApiSettings, LabelSettings, ManualSetting, ManualSettings, TrashType } from './assets/publicTypes';
 import { DateTimeHelper } from './lib/datetimehelper';
 
 // TODO: find solution to import this from the .mts file
@@ -337,9 +337,8 @@ module.exports = class TrashCollectionReminder extends Homey.App {
 	********************/
   // Retrieves the local Homey date
   async getLocalDate(): Promise<Date> {
-    const timezone = await this.homey.clock.getTimezone();
+    const timezone = this.homey.clock.getTimezone();
     var date = new Date(new Date().toLocaleString('en-US', { timeZone: timezone }));
-    this.log(`Local date: ${date}`);
     return date;
   }
 
@@ -547,5 +546,71 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   }
 
   // Function to help migrate settings from the old settings structure to the new to make for an easy upgrade
-  async migrateSettings() {}
+  async migrateSettings() {
+    const oldManualSettings = this.homey.settings.get('manualEntryData');
+    const oldLabelSettings = this.homey.settings.get('labelSettings');
+    const zipCode = this.homey.settings.get('postcode');
+    const hNumber = this.homey.settings.get('hnumber');
+    const country = this.homey.settings.get('country');
+    const apiId = this.homey.settings.get('apiId');
+    const cleanApiId = this.homey.settings.get('cleanApiId');
+    const streetName = this.homey.settings.get('streetName');
+
+    if(!zipCode || !hNumber) {
+      return;
+    }
+
+    const apiSettings: ApiSettings = {
+      apiId: apiId,
+      cleanApiId: cleanApiId,
+      zipcode: zipCode,
+      housenumber: hNumber,
+      streetname: streetName,
+      country: country
+    }
+
+    this.homey.settings.set('apiSettings', apiSettings);
+
+    const labelSettings: LabelSettings = {
+      timeindicator: oldLabelSettings.timeindicator,
+      generic: oldLabelSettings.generic,
+      type: {
+        GFT: oldLabelSettings.gft,
+        REST: oldLabelSettings.rest,
+        PMD: oldLabelSettings.pmd,
+        PLASTIC: oldLabelSettings.plastic,
+        PAPIER: oldLabelSettings.papier,
+        TEXTIEL: oldLabelSettings.textiel,
+        GROF: oldLabelSettings.grof,
+        GLAS: oldLabelSettings.glas,
+        KERSTBOOM: oldLabelSettings.kerstboom,
+        NONE: oldLabelSettings.none
+      }
+    }
+
+    this.homey.settings.set('labelSettings', labelSettings);
+
+    const manualSettings: ManualSettings = {
+      GFT: oldManualSettings.gft,
+      PLASTIC: oldManualSettings.plastic,
+      PAPIER: oldManualSettings.paper,
+      PMD: oldManualSettings.pmd,
+      REST: oldManualSettings.rest,
+      TEXTIEL: oldManualSettings.textile,
+      GROF: oldManualSettings.bulky,
+      GLAS: oldManualSettings.glas
+    }
+
+    this.homey.settings.set('manualEntryData', manualSettings);
+
+    this.homey.settings.unset('postcode');
+    this.homey.settings.unset('hnumber');
+    this.homey.settings.unset('country');
+    this.homey.settings.unset('apiId');
+    this.homey.settings.unset('cleanApiId');
+    this.homey.settings.unset('streetName');
+    this.homey.settings.unset('cleaningDays');
+    this.homey.settings.unset('collectingDays');
+    this.homey.settings.unset('manualAdditions');
+  }
 };

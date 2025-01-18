@@ -2,8 +2,8 @@
 
 import https from 'https';
 import { HttpsPromiseOptions, HttpsPromiseResponse } from '../types/apiRequestTypes';
-import { ActivityDates, ApiSettings } from '../types/localTypes';
-import { TrashType } from '../assets/publicTypes';
+import { ActivityDates } from '../types/localTypes';
+import { TrashType, ApiSettings } from '../assets/publicTypes';
 
 export async function httpsPromise(options: HttpsPromiseOptions): Promise<HttpsPromiseResponse> {
   const { body, ...requestOptions } = options;

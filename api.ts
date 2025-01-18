@@ -1,6 +1,7 @@
 'use strict';
 
-import { ApiSettings, TrashCollectionReminder } from './types/localTypes';
+import { ApiSettings } from './assets/publicTypes';
+import { TrashCollectionReminder } from './types/localTypes';
 
 module.exports = {
   async trashCollectionDays({ homey, query }: { homey: any; query: any }) {

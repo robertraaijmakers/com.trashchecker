@@ -3,7 +3,7 @@
 import Homey from 'homey/lib/Homey';
 import { TrashApis } from '../lib/trashapis';
 import { CleanApis } from '../lib/cleanapis';
-import { TrashType } from '../assets/publicTypes';
+import { ApiSettings, TrashType } from '../assets/publicTypes';
 
 export interface TrashCollectionReminder extends Homey.App {
   collectionDates: ActivityDates[];
@@ -51,23 +51,6 @@ export interface TrashFlowCardArgument {
   when: When;
 }
 
-export interface LabelSettings {
-  timeindicator: number;
-  generic: string;
-  type: {
-    GFT: string;
-    REST: string;
-    PMD: string;
-    PLASTIC: string;
-    PAPIER: string;
-    TEXTIEL: string;
-    GROF: string;
-    GLAS: string;
-    KERSTBOOM: string;
-    NONE: string;
-  };
-}
-
 export interface WidgetSettings {
   displayYesterday: boolean;
   layoutType: 'compact' | 'large';
@@ -75,15 +58,6 @@ export interface WidgetSettings {
   singleTypes: boolean;
   listHeight: number;
   displayTypes: Record<TrashType, boolean>;
-}
-
-export interface ApiSettings {
-  apiId: string;
-  cleanApiId: string;
-  zipcode: string;
-  housenumber: string;
-  streetname: string;
-  country: string;
 }
 
 export interface ApiDefinition {

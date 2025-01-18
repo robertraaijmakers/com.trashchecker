@@ -2,8 +2,9 @@
 
 import { TrashApis } from '../lib/trashapis';
 import { describe, it } from 'node:test';
-import { ActivityDates, ApiSettings } from '../types/localTypes';
+import { ActivityDates } from '../types/localTypes';
 import assert from 'assert';
+import { ApiSettings } from '../assets/publicTypes';
 
 describe('Kliko Manager', function () {
   it('API - Klikomanager Uithoorn', async function () {

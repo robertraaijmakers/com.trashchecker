@@ -39,3 +39,29 @@ export interface ManualSetting {
   startdate?: Date;
   day: number;
 }
+
+export interface LabelSettings {
+  timeindicator: number;
+  generic: string;
+  type: {
+    GFT: string;
+    REST: string;
+    PMD: string;
+    PLASTIC: string;
+    PAPIER: string;
+    TEXTIEL: string;
+    GROF: string;
+    GLAS: string;
+    KERSTBOOM: string;
+    NONE: string;
+  };
+}
+
+export interface ApiSettings {
+  apiId: string;
+  cleanApiId: string;
+  zipcode: string;
+  housenumber: string;
+  streetname: string;
+  country: string;
+}

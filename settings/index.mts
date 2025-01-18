@@ -1,8 +1,7 @@
 'use strict';
 
 import type HomeySettings from 'homey/lib/HomeySettings.js';
-import { ApiSettings, LabelSettings } from '../types/localTypes.js';
-import { TrashType } from '../assets/publicTypes.js';
+import { ApiSettings, LabelSettings, TrashType } from '../assets/publicTypes.js';
 import { AllTrashTypes, AllTrashTypesExtended, createManualAdditons } from './settingTypes.mjs';
 
 class SettingScript {
@@ -64,11 +63,12 @@ class SettingScript {
     this.setInputValue('labelGeneric', labelSettings?.generic || this.homey.__('tokens.output.trashtypeycollectedonx'));
     this.setPlaceholderValue('labelGeneric', this.homey.__('tokens.output.trashtypeycollectedonx'));
 
-    // Loop over types
-    for (let type in labelSettings.type) {
-      let labelText = labelSettings?.type[type as TrashType | 'NONE'] || this.homey.__(`tokens.output.type.${type}`);
+    // Loop over types    
+    for (let type in AllTrashTypesExtended) {
+      const trashType = AllTrashTypesExtended[type];
+      let labelText = labelSettings?.type[trashType as TrashType | 'NONE'] || this.homey.__(`tokens.output.type.${trashType}`);
 
-      var ucFirstType = this.#capitalizeFirstLetter(type);
+      var ucFirstType = this.#capitalizeFirstLetter(trashType);
       this.setInputValue(`label${ucFirstType}`, labelText);
       this.setPlaceholderValue(`label${ucFirstType}`, labelText);
     }

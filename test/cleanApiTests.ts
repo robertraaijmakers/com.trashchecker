@@ -2,8 +2,9 @@
 
 import { CleanApis } from '../lib/cleanapis';
 import { describe, it } from 'node:test';
-import { ActivityDates, ApiSettings } from '../types/localTypes';
+import { ActivityDates } from '../types/localTypes';
 import assert from 'assert';
+import { ApiSettings } from '../assets/publicTypes';
 /*
 describe('CleanApiCleanProfs', function () {
   it('Clean API - Clean Profs 1', async function () {
