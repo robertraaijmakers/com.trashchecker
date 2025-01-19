@@ -27,8 +27,7 @@
 		"unknown": "Onbekend",
 		"notapplicable": "Niet van toepassing",
 		"none": "Wanneer niets wordt opgehaald",
-		"titlemanualinput": "Handmatige invoer",
-		"saveLabelInput": "Global tag instellingen opslaan",
+		"titlemanualinput": "Ophaaldagen",
 		"refreshDebugInformation": "Ververs debug informatie",
 		"interval":
 		{
@@ -71,11 +70,11 @@
 			"save": "Sla alles op"
 		},
 		"startdate": "startend op",
-		"labeltitle": "Globale tag instellingen",
-		"labeldescription": "Deze waarden worden ingesteld in de globale tag wanneer een specifiek type prullenbak wordt opgehaald vandaag/morgen/overmorgen.",
+		"labeltitle": "Afvaltype namen personaliseren",
+		"labeldescription": "Deze waarden worden ingesteld in de globale tag wanneer een specifiek type afval wordt opgehaald. Daarnaast worden deze waarden gebruikt in de widget en voor tags bij kaarten gebruikt in advanced flows.",
+		"saveLabelInput": "Afvaltype namen opslaan",
 		"labelgeneric": "Zin in globale tag",
 		"genericlabelhelper": "Variabelen die in de globale tag zin gebruikt kunnen worden zijn __time__, __type__, __plural__.",
-		"labelplaceholder": "wordt vandaag opgehaald",
 		"timeindicator": "Globaal Label Type",
 		"timeindicatorDescription": "Deze wordt gebruikt om de voorbeelden te tonen onder de instellingen. Zodat je alvast kan zien welke tekst er in één van de drie labels kan komen."
 	},

@@ -43,18 +43,23 @@ export interface ManualSetting {
 export interface LabelSettings {
   timeindicator: number;
   generic: string;
-  type: {
-    GFT: string;
-    REST: string;
-    PMD: string;
-    PLASTIC: string;
-    PAPIER: string;
-    TEXTIEL: string;
-    GROF: string;
-    GLAS: string;
-    KERSTBOOM: string;
-    NONE: string;
-  };
+  GFT?: LabelSetting;
+  REST?: LabelSetting;
+  PMD?: LabelSetting;
+  PLASTIC?: LabelSetting;
+  PAPIER?: LabelSetting;
+  TEXTIEL?: LabelSetting;
+  GROF?: LabelSetting;
+  GLAS?: LabelSetting;
+  KERSTBOOM?: LabelSetting;
+  NONE?: LabelSetting;
+}
+
+export interface LabelSetting {
+  trashLong?: string;
+  trashShort?: string;
+  trashIcon?: string;
+  trashColor?: string;
 }
 
 export interface ApiSettings {

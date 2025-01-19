@@ -392,14 +392,15 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       let multiTypeString = '';
       for (var i = 0, len = items.length; i < len; i++) {
         multiTypeString +=
-          (labelSettings?.type?.[items[i]?.type] || this.homey.__(`tokens.output.type.${items[0].type}`)) + (i < len - 2 ? ', ' : i == len - 2 ? ' ' + this.homey.__('tokens.output.and') + ' ' : '');
+          (labelSettings?.[items[i]?.type]?.trashLong || this.homey.__(`tokens.output.type.${items[0].type}`)) +
+          (i < len - 2 ? ', ' : i == len - 2 ? ' ' + this.homey.__('tokens.output.and') + ' ' : '');
       }
 
       outputText = alternativeTextLabel.replace('__time__', timeReplacement).replace('__type__', multiTypeString).replace('__plural__', this.homey.__('tokens.output.replacementplural'));
     } else {
-      let textLabel = labelSettings?.type?.['NONE'] || this.homey.__('tokens.output.type.NONE');
+      let textLabel = labelSettings?.['NONE']?.trashLong || this.homey.__('tokens.output.type.NONE');
       if (items.length === 1) {
-        textLabel = labelSettings?.type?.[items[0]?.type] || this.homey.__(`tokens.output.type.${items[0].type}`);
+        textLabel = labelSettings?.[items[0]?.type]?.trashLong || this.homey.__(`tokens.output.type.${items[0].type}`);
       }
 
       outputText = alternativeTextLabel.replace('__time__', timeReplacement).replace('__type__', textLabel).replace('__plural__', this.homey.__('tokens.output.replacementsingle'));
@@ -547,16 +548,16 @@ module.exports = class TrashCollectionReminder extends Homey.App {
 
   // Function to help migrate settings from the old settings structure to the new to make for an easy upgrade
   async migrateSettings() {
-    this.log("Checking for migration.");
+    this.log('Checking for migration.');
 
     const zipCode = this.homey.settings.get('postcode');
     const hNumber = this.homey.settings.get('hnumber');
 
-    if(!zipCode || !hNumber) {
+    if (!zipCode || !hNumber) {
       return;
     }
 
-    this.log("Starting migration of settings.");
+    this.log('Starting migration of settings.');
 
     const country = this.homey.settings.get('country');
     const apiId = this.homey.settings.get('apiId');
@@ -571,27 +572,25 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       zipcode: zipCode,
       housenumber: hNumber,
       streetname: streetName,
-      country: country
-    }
+      country: country,
+    };
 
     this.homey.settings.set('apiSettings', apiSettings);
 
     const labelSettings: LabelSettings = {
       timeindicator: oldLabelSettings.timeindicator,
       generic: oldLabelSettings.generic,
-      type: {
-        GFT: oldLabelSettings.gft,
-        REST: oldLabelSettings.rest,
-        PMD: oldLabelSettings.pmd,
-        PLASTIC: oldLabelSettings.plastic,
-        PAPIER: oldLabelSettings.papier,
-        TEXTIEL: oldLabelSettings.textiel,
-        GROF: oldLabelSettings.grof,
-        GLAS: oldLabelSettings.glas,
-        KERSTBOOM: oldLabelSettings.kerstboom,
-        NONE: oldLabelSettings.none
-      }
-    }
+      GFT: { trashLong: oldLabelSettings.gft },
+      REST: { trashLong: oldLabelSettings.rest },
+      PMD: { trashLong: oldLabelSettings.pmd },
+      PLASTIC: { trashLong: oldLabelSettings.plastic },
+      PAPIER: { trashLong: oldLabelSettings.papier },
+      TEXTIEL: { trashLong: oldLabelSettings.textiel },
+      GROF: { trashLong: oldLabelSettings.grof },
+      GLAS: { trashLong: oldLabelSettings.glas },
+      KERSTBOOM: { trashLong: oldLabelSettings.kerstboom },
+      NONE: { trashLong: oldLabelSettings.none },
+    };
 
     this.homey.settings.set('labelSettings', labelSettings);
 
@@ -603,8 +602,8 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       REST: oldManualSettings.rest,
       TEXTIEL: oldManualSettings.textile,
       GROF: oldManualSettings.bulky,
-      GLAS: oldManualSettings.glas
-    }
+      GLAS: oldManualSettings.glas,
+    };
 
     this.homey.settings.set('manualEntryData', manualSettings);
 

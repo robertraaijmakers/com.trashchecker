@@ -87,7 +87,11 @@
           {
             "name": "when",
             "type": "dropdown",
-            "title": "When?",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "When?"
+            },
             "values": [
               {
                 "id": "today",

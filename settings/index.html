@@ -2,6 +2,170 @@
 <head>
 	<script defer type="module" src="index.mjs"></script>
 	<script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+
+	<style>
+		.trashContainer {
+		  display: flex;
+		  justify-content: space-between;  /* Space between the two items */
+		  flex-wrap: wrap;  /* Allows items to wrap to the next line */
+		}
+
+		input.trash-form-custom {
+			margin-left: 10px;
+			margin-top: 10px;
+		}
+
+		input[type='file'].trash-form-custom {
+			width: 40%;
+		}
+
+		input[type='colorpicker'].trash-form-custom {
+			width: 10%;
+		}
+
+		input[type='button'].trash-form-custom {
+			padding: 5px;
+			margin: 5px;
+			font-size: 25px;
+			width: auto;
+		}
+
+		.trash-item-container {
+		  flex: 1 1 33%; /* Each item takes 30% of the width (adjust as needed) */
+		  max-width: 22%;
+		  display: flex;
+		  flex-direction: column; /* Ensures elements inside stack vertically */
+		  align-items: center; /* Center items horizontally within the container */
+		  text-align: center; /* Ensures text aligns in the center */
+  
+		  margin: 0px 0px var(--homey-su-3) 0px;  /* Add some spacing between items */
+		  box-sizing: border-box;
+		  padding: var(--homey-su) var(--homey-su-2);
+		  background-color: var(--homey-background-color);
+		  border-radius: var(--homey-border-radius-default);
+		  
+		  position: relative;
+		}
+  
+		.trashContainer.triple .trash-item-container {
+			flex: 1 1 33%;
+			max-width: 31%;
+		}
+  
+		.trashContainer.quad .trash-item-container {
+			flex: 1 1 25%;
+			max-width: 23%;
+		}
+  
+		.dot-large {
+		  height: 50px;
+		  width: 50px;
+		  background-color: #bbb;
+		  border-radius: 50%;
+		  font-weight: bold;
+		  color: white;
+		  display: flex;
+		  justify-content: center; /* Horizontally center the content inside the dot */
+		  align-items: center; /* Vertically center the content inside the dot */
+		}
+  
+		.dot-large img {
+		  width: 75%;
+		  height: 75%;
+		}
+  
+		.trash-date {
+		  margin: 2px 0px 0px 0px;
+		  padding: 6px 0px 0px 0px;
+		  text-align: center;
+		}
+  
+		.trash-item-container-compact {
+		  display: flex;
+		  align-items: center;  /* Vertically center the dot and text */
+		  justify-content: flex-start;  /* Align items to the left */
+		  margin: 0px 0px var(--homey-su-3) 0px;  /* Add some spacing between items */
+		  box-sizing: border-box;
+		  padding: var(--homey-su) var(--homey-su-2);
+		  background-color: var(--homey-background-color);
+		  border-radius: var(--homey-border-radius-default);
+		  position: relative;
+		}
+  
+		/* Dot styling - aligned to the left */
+		.dot-compact {
+			width: 28px;
+			height: 28px;
+			border-radius: 50%;
+			background-color: #bbb;
+			margin-right: 10px;  /* Adds spacing between the dot and text */
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+  
+		.dot-compact img {
+		  width: 75%;
+		  height: 75%;
+		}
+  
+		/* Container for date titles */
+		.trash-date-container {
+			display: flex;
+			flex-direction: column;  /* Stack title and subtitle vertically */
+			justify-content: center;  /* Vertically center the text */
+			margin-top: 5px;
+		}
+  
+		/* Title and subtitle styling */
+		.trash-date-title {
+			margin: 0;
+			font-weight: var(--homey-font-weight-light);
+			font-size: var(--homey-font-size-small);
+			line-height: var(--homey-font-size-small);
+		}
+  
+		.trash-date-subtitle {
+			margin: 0;
+			font-size: 11px;
+		}
+  
+		.dot-type-GFT {
+		  background-color: #3a9600;
+		}
+  
+		.dot-type-PLASTIC {
+		  background-color: #ffa203;
+		}
+  
+		.dot-type-PAPIER {
+		  background-color: #060367;
+		}
+  
+		.dot-type-PMD {
+		  background-color: #ffa203;
+		}
+  
+		.dot-type-REST {
+		  background-color: #787878;
+		}
+  
+		.dot-type-TEXTIEL {
+		  background-color: #6c0014;
+		}
+  
+		.dot-type-GROF {
+		  background-color: #292929;
+		}
+  
+		.dot-type-KERSTBOOM {
+		  background-color: #59bd1b;
+		}
+  
+		.dot-type-GLAS {
+		  background-color: #00cdae;
+		}
+	  </style>
 </head>
 
 <body>
@@ -493,12 +657,36 @@
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="labelsGft" data-i18n="settings.gft"></label>
 			<input class="homey-form-input" type="text" id="labelGft" name="label[gft]" />
-			<p id="exampleGft"></p>
+			<p id="exampleGft"></p> <br />
+
+			<input class="homey-form-input" type="text" id="labelSmallGft" name="labelSmall[gft]" />
+			<div class="trash-item-container-compact">
+				<span class="dot-compact dot-type-GFT" id="trashDateColorGft"><img id="trashDateIconGft" src="trashIcons/trash-GFT.svg" /></span>
+				<div class="trash-date-container">
+					<p class="trash-date-title" id="trashDateTitleGft">GFT</p>
+					<p class="homey-text-small-light trash-date-subtitle">Tomorrow</p>
+				</div>
+				<input class="homey-form-input trash-form-custom" type="color" id="widgetColorGft" name="widgetColor[gft]" />
+				<input class="homey-form-input trash-form-custom" type="file" id="widgetIconGft" name="widgetIcon[gft]" accept="image/png, image/svg+xml" />
+				<input class="homey-form-input trash-form-custom" type="button" id="widgetIconButtonGft" value="&#x21BA;" />
+			</div>
         </div>
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="labelRest" data-i18n="settings.rest"></label>
 			<input class="homey-form-input" class="homey-form-input" type="text" id="labelRest" name="label[rest]" />
-			<p id="exampleRest"></p>
+			<p id="exampleRest"></p> <br />
+
+			<input class="homey-form-input" type="text" id="labelSmallRest" name="labelSmall[rest]" />
+			<div class="trash-item-container-compact">
+				<span class="dot-compact dot-type-REST" id="trashDateColorRest"><img id="trashDateIconRest" src="trashIcons/trash-REST.svg" /></span>
+				<div class="trash-date-container">
+					<p class="trash-date-title" id="trashDateTitleRest">Rest</p>
+					<p class="homey-text-small-light trash-date-subtitle">Tomorrow</p>
+				</div>
+				<input class="homey-form-input trash-form-custom" type="color" id="widgetColorRest" name="widgetColor[rest]" />
+				<input class="homey-form-input trash-form-custom" type="file" id="widgetIconRest" name="widgetIcon[rest]" accept="image/png, image/svg+xml" />
+				<input class="homey-form-input trash-form-custom" type="button" id="widgetIconButtonRest" value="&#x21BA;" />
+			</div>
         </div>
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="labelPapier" data-i18n="settings.papier"></label>

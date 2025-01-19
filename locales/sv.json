@@ -27,7 +27,7 @@
 		"unknown": "okänt",
 		"notapplicable": "Ej tillämpligt",
 		"none": "Ingenting hämtas",
-		"titlemanualinput": "Manuell input",
+		"titlemanualinput": "Datuminput",
 		"saveLabelInput": "Spara globala 'tag'-inställningar",
 		"refreshDebugInformation": "Uppdatera debug information",
 		"interval":
@@ -75,7 +75,6 @@
 		"labeldescription": "Dessa värden sätts i den globala 'tagen' när en specifik typ av sopor hämtas idag/imorgon/i övermorgon.",
 		"labelgeneric": "Global 'tag-mening'",
 		"genericlabelhelper": "Variabler som kan användas i den globala tag-meningen är __time__, __type__, __plural__.",
-		"labelplaceholder": "hämtas idag",
 		"timeindicator": "Global etiketttyp",
 		"timeindicatorDescription": "Detta används för att visa exemplen under inställningarna. Du kan alltså i förväg se vilken text som kan förekomma i någon av de tre etiketterna."
 	},

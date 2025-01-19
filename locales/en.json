@@ -27,8 +27,7 @@
 		"unknown": "Unknown",
 		"notapplicable": "Not Applicable",
 		"none": "When nothing is collected",
-		"titlemanualinput": "Manual Input",
-		"saveLabelInput": "Save Global Tag Settings",
+		"titlemanualinput": "Date Settings",
 		"refreshDebugInformation": "Refresh debug information",
 		"interval":
 		{
@@ -71,11 +70,11 @@
 			"save": "Save All Settings"
 		},
 		"startdate": "starting on",
-		"labeltitle": "Global tag settings",
-		"labeldescription": "These values are set in the global tag when a specific type of trash is collected today/tomorrow/the day after tomorrow.",
+		"labeltitle": "Local Trash Type Values",
+		"labeldescription": "The values entered below are used to customize your trash experience. The values are used in the global tags available in your flows, in the widget and set in labels on cards available in advanced flows.",
+		"saveLabelInput": "Save Trash Type Values",
 		"labelgeneric": "Global tag sentence",
 		"genericlabelhelper": "Variables that can be used in the global tag sentence are __time__, __type__, __plural__.",
-		"labelplaceholder": "is collected today",
 		"timeindicator": "Global Label Type",
 		"timeindicatorDescription": "This is used to render the examples below your label settings, to give a sneak preview of the text available through the three global labels."
 	},

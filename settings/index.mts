@@ -2,7 +2,7 @@
 
 import type HomeySettings from 'homey/lib/HomeySettings.js';
 import { ApiSettings, LabelSettings, TrashType } from '../assets/publicTypes.js';
-import { AllTrashTypes, AllTrashTypesExtended, createManualAdditons } from './settingTypes.mjs';
+import { AllTrashTypes, AllTrashTypesExtended, createManualAdditons, TrashColors } from './settingTypes.mjs';
 
 class SettingScript {
   private homey: HomeySettings;
@@ -26,7 +26,12 @@ class SettingScript {
 
       document.getElementById(`${typeLower}_option`)?.addEventListener('change', () => this.toggleManualInputFields(AllTrashTypes[type] as TrashType));
       document.getElementById(`${typeLower}_option_extension`)?.addEventListener('change', () => this.toggleManualInputFields(AllTrashTypes[type] as TrashType));
+
       document.getElementById(`label${typeUFirst}`)?.addEventListener('change', () => this.renderGlobalLabel());
+      document.getElementById(`labelSmall${typeUFirst}`)?.addEventListener('change', () => this.renderWidgetLabel(typeUFirst));
+      document.getElementById(`widgetColor${typeUFirst}`)?.addEventListener('change', () => this.renderWidgetLabel(typeUFirst));
+      document.getElementById(`widgetIcon${typeUFirst}`)?.addEventListener('change', () => this.renderWidgetLabel(typeUFirst));
+      document.getElementById(`widgetIconButton${typeUFirst}`)?.addEventListener('click', () => this.resetWidgetLabel(AllTrashTypes[type]));
 
       this.toggleManualInputFields(AllTrashTypes[type] as TrashType);
     }
@@ -52,7 +57,7 @@ class SettingScript {
 
     // Set properties
     this.toggleFieldsBasedOnCountry();
-    
+
     this.homey.ready();
   }
 
@@ -63,14 +68,21 @@ class SettingScript {
     this.setInputValue('labelGeneric', labelSettings?.generic || this.homey.__('tokens.output.trashtypeycollectedonx'));
     this.setPlaceholderValue('labelGeneric', this.homey.__('tokens.output.trashtypeycollectedonx'));
 
-    // Loop over types    
+    // Loop over types
     for (let type in AllTrashTypesExtended) {
       const trashType = AllTrashTypesExtended[type];
-      let labelText = labelSettings?.type[trashType as TrashType | 'NONE'] || this.homey.__(`tokens.output.type.${trashType}`);
+      const trashSettings = labelSettings?.[trashType as TrashType | 'NONE'];
+
+      let labelText = trashSettings?.trashLong || this.homey.__(`tokens.output.type.${trashType}`);
 
       var ucFirstType = this.#capitalizeFirstLetter(trashType);
       this.setInputValue(`label${ucFirstType}`, labelText);
-      this.setPlaceholderValue(`label${ucFirstType}`, labelText);
+      this.setPlaceholderValue(`label${ucFirstType}`, this.homey.__(`tokens.output.type.${trashType}`));
+
+      // Check if element exist, otherwise skip
+      const trashDateTitle = document.getElementById(`trashDateTitle${ucFirstType}`);
+      if (trashDateTitle === null) continue;
+      this.setWidgetLabel(trashType, trashSettings?.trashShort || '', trashSettings?.trashColor || '', trashSettings?.trashIcon || '');
     }
 
     this.renderGlobalLabel();
@@ -258,29 +270,31 @@ class SettingScript {
   }
 
   async saveLabelInput() {
-    var data = {
-      timeindicator: this.getInputValue('labelTimeIndicator'),
-      generic: this.getInputValue('labelGeneric'),
-      type: {
-        GFT: this.getInputValue('labelGft'),
-        REST: this.getInputValue('labelRest'),
-        PMD: this.getInputValue('labelPmd'),
-        PLASTIC: this.getInputValue('labelPlastic'),
-        PAPIER: this.getInputValue('labelPapier'),
-        TEXTIEL: this.getInputValue('labelTextiel'),
-        GROF: this.getInputValue('labelGrof'),
-        GLAS: this.getInputValue('labelGlas'),
-        KERSTBOOM: this.getInputValue('labelKerstboom'),
-        NONE: this.getInputValue('labelNone'),
+    var data: LabelSettings = {
+      timeindicator: parseInt(this.getInputValue('labelTimeIndicator') || '0'),
+      generic: this.getInputValue('labelGeneric') || this.homey.__('tokens.output.trashtypeycollectedonx'),
+      NONE: {
+        trashLong: this.getInputValue('labelNone') || this.homey.__('tokens.output.type.NONE'),
       },
     };
+
+    for (let type in AllTrashTypes) {
+      const trashType = AllTrashTypes[type] as TrashType;
+      const ucFirstTrashType = this.#capitalizeFirstLetter(trashType);
+      data[trashType] = {
+        trashLong: this.getInputValue(`label${ucFirstTrashType}`) || this.homey.__(`tokens.output.type.${trashType}`),
+        trashShort: this.getInputValue(`labelSmall${ucFirstTrashType}`) || this.homey.__(`widgets.trashType.${trashType}`),
+        trashIcon: '',
+        trashColor: this.getInputValue(`widgetColor${ucFirstTrashType}`) || TrashColors[trashType],
+      };
+    }
 
     console.log(data);
     this.homey.set('labelSettings', data, this.#onSettingsSet);
   }
 
   async renderGlobalLabel() {
-    var sentence = '<i>Example: ' + this.getInputValue('labelGeneric') + '</i>';
+    var sentence = '<i>Global label: ' + this.getInputValue('labelGeneric') + '</i>';
     var timeReplacement = this.homey.__('tokens.output.timeindicator.t' + this.getInputValue('labelTimeIndicator'));
     var replacementSingle = this.homey.__('tokens.output.replacementsingle');
     var replacementPlural = this.homey.__('tokens.output.replacementplural');
@@ -296,6 +310,60 @@ class SettingScript {
 
     var multipleTypesReplacement = this.getInputValue(`labelGft`) + ', ' + this.getInputValue(`labelPlastic`) + ' ' + this.homey.__('tokens.output.and') + ' ' + this.getInputValue(`labelGrof`);
     document.getElementById('exampleMultiple')!.innerHTML = sentence.replace('__time__', timeReplacement).replace('__type__', multipleTypesReplacement).replace('__plural__', replacementPlural);
+  }
+
+  async renderWidgetLabel(trashType: string) {
+    const text = this.getInputValue(`labelSmall${trashType}`) ?? this.homey.__(`widgets.trashtype.${trashType.toUpperCase()}`);
+    const color = this.getInputValue(`widgetColor${trashType}`) ?? '#efefef';
+    const icon = document.getElementById(`widgetIcon${trashType}`) as HTMLInputElement;
+
+    document.getElementById(`trashDateTitle${trashType}`)!.innerHTML = text;
+    document.getElementById(`trashDateColor${trashType}`)!.style.backgroundColor = color;
+
+    if (icon === null || icon.files === null || icon.files.length <= 0) {
+      return;
+    }
+
+    if (icon.files[0].size > 102400) {
+      alert('Only files < 100kb are allowed.');
+      return;
+    }
+
+    const fileType = icon.files[0].type;
+    if (fileType !== 'image/png' && fileType !== 'image/svg+xml') {
+      alert('Only .png and .svg files are allowed.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      const result = event!.target!.result;
+      if (typeof result === 'string') {
+        const base64String = result.split(',')[1];
+        (document.getElementById(`trashDateIcon${trashType}`) as HTMLImageElement).src = `data:${fileType};base64,${base64String}`;
+      }
+    };
+
+    reader.readAsDataURL(icon.files[0]);
+  }
+
+  async resetWidgetLabel(trashType: string) {
+    await this.setWidgetLabel(trashType, '', '', '');
+  }
+
+  async setWidgetLabel(trashType: string, text: string, color: string, icon: string) {
+    var ucFirstType = this.#capitalizeFirstLetter(trashType);
+
+    console.log(trashType);
+
+    this.setInputValue(`labelSmall${ucFirstType}`, text || this.homey.__(`widgets.trashType.${trashType}`));
+    this.setPlaceholderValue(`labelSmall${ucFirstType}`, this.homey.__(`widgets.trashType.${trashType}`));
+    this.setInputValue(`widgetColor${ucFirstType}`, color || TrashColors[trashType as TrashType]);
+    this.setInputValue(`widggetIcon${ucFirstType}`, '');
+
+    document.getElementById(`trashDateTitle${ucFirstType}`)!.innerHTML = text || this.homey.__(`widgets.trashType.${trashType}`);
+    (document.getElementById(`trashDateIcon${ucFirstType}`) as HTMLImageElement)!.src = icon || `trashIcons/trash-${trashType}.svg`;
+    document.getElementById(`trashDateColor${ucFirstType}`)!.style.backgroundColor = color || TrashColors[trashType as TrashType];
   }
 
   async toggleManualInputFields(type: TrashType) {
