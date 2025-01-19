@@ -664,7 +664,7 @@
 				<span class="dot-compact dot-type-GFT" id="trashDateColorGft"><img id="trashDateIconGft" src="trashIcons/trash-GFT.svg" /></span>
 				<div class="trash-date-container">
 					<p class="trash-date-title" id="trashDateTitleGft">GFT</p>
-					<p class="homey-text-small-light trash-date-subtitle">Tomorrow</p>
+					<p class="homey-text-small-light trash-date-subtitle" data-i18n="tokens.output.timeindicator.t-1"></p>
 				</div>
 				<input class="homey-form-input trash-form-custom" type="color" id="widgetColorGft" name="widgetColor[gft]" />
 				<input class="homey-form-input trash-form-custom" type="file" id="widgetIconGft" name="widgetIcon[gft]" accept="image/png, image/svg+xml" />
@@ -681,7 +681,7 @@
 				<span class="dot-compact dot-type-REST" id="trashDateColorRest"><img id="trashDateIconRest" src="trashIcons/trash-REST.svg" /></span>
 				<div class="trash-date-container">
 					<p class="trash-date-title" id="trashDateTitleRest">Rest</p>
-					<p class="homey-text-small-light trash-date-subtitle">Tomorrow</p>
+					<p class="homey-text-small-light trash-date-subtitle" data-i18n="tokens.output.timeindicator.t0"></p>
 				</div>
 				<input class="homey-form-input trash-form-custom" type="color" id="widgetColorRest" name="widgetColor[rest]" />
 				<input class="homey-form-input trash-form-custom" type="file" id="widgetIconRest" name="widgetIcon[rest]" accept="image/png, image/svg+xml" />
@@ -691,37 +691,121 @@
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="labelPapier" data-i18n="settings.papier"></label>
 			<input class="homey-form-input" type="text" id="labelPapier" name="label[papier]" />
-			<p id="examplePapier"></p>
+			<p id="examplePapier"></p> <br />
+
+			<input class="homey-form-input" type="text" id="labelSmallPapier" name="labelSmall[papier]" />
+			<div class="trash-item-container-compact">
+				<span class="dot-compact dot-type-PAPIER" id="trashDateColorPapier"><img id="trashDateIconPapier" src="trashIcons/trash-PAPIER.svg" /></span>
+				<div class="trash-date-container">
+					<p class="trash-date-title" id="trashDateTitlePapier">Papier</p>
+					<p class="homey-text-small-light trash-date-subtitle" data-i18n="tokens.output.timeindicator.t0"></p>
+				</div>
+				<input class="homey-form-input trash-form-custom" type="color" id="widgetColorPapier" name="widgetColor[papier]" />
+				<input class="homey-form-input trash-form-custom" type="file" id="widgetIconPapier" name="widgetIcon[papier]" accept="image/png, image/svg+xml" />
+				<input class="homey-form-input trash-form-custom" type="button" id="widgetIconButtonPapier" value="&#x21BA;" />
+			</div>
         </div>
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="labelPlastic" data-i18n="settings.plastic"></label>
 			<input class="homey-form-input" type="text" id="labelPlastic" name="label[plastic]" />
-			<p id="examplePlastic"></p>
+			<p id="examplePlastic"></p> <br />
+
+			<input class="homey-form-input" type="text" id="labelSmallPlastic" name="labelSmall[plastic]" />
+			<div class="trash-item-container-compact">
+				<span class="dot-compact dot-type-PLASTIC" id="trashDateColorPlastic"><img id="trashDateIconPlastic" src="trashIcons/trash-PLASTIC.svg" /></span>
+				<div class="trash-date-container">
+					<p class="trash-date-title" id="trashDateTitlePlastic">Plastic</p>
+					<p class="homey-text-small-light trash-date-subtitle" data-i18n="tokens.output.timeindicator.t1"></p>
+				</div>
+				<input class="homey-form-input trash-form-custom" type="color" id="widgetColorPlastic" name="widgetColor[plastic]" />
+				<input class="homey-form-input trash-form-custom" type="file" id="widgetIconPlastic" name="widgetIcon[plastic]" accept="image/png, image/svg+xml" />
+				<input class="homey-form-input trash-form-custom" type="button" id="widgetIconButtonPlastic" value="&#x21BA;" />
+			</div>
         </div>
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="labelPmd" data-i18n="settings.pmd"></label>
 			<input class="homey-form-input" type="text" id="labelPmd" name="label[pmd]" />
-			<p id="examplePmd"></p>
+			<p id="examplePmd"></p> <br />
+
+			<input class="homey-form-input" type="text" id="labelSmallPmd" name="labelSmall[pmd]" />
+			<div class="trash-item-container-compact">
+				<span class="dot-compact dot-type-PMD" id="trashDateColorPmd"><img id="trashDateIconPmd" src="trashIcons/trash-PMD.svg" /></span>
+				<div class="trash-date-container">
+					<p class="trash-date-title" id="trashDateTitlePmd">PMD</p>
+					<p class="homey-text-small-light trash-date-subtitle" data-i18n="tokens.output.timeindicator.t-1"></p>
+				</div>
+				<input class="homey-form-input trash-form-custom" type="color" id="widgetColorPmd" name="widgetColor[pmd]" />
+				<input class="homey-form-input trash-form-custom" type="file" id="widgetIconPmd" name="widgetIcon[pmd]" accept="image/png, image/svg+xml" />
+				<input class="homey-form-input trash-form-custom" type="button" id="widgetIconButtonPmd" value="&#x21BA;" />
+			</div>
         </div>
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="labelTextiel" data-i18n="settings.textiel"></label>
 			<input class="homey-form-input" type="text" id="labelTextiel" name="label[textiel]" />
-			<p id="exampleTextiel"></p>
+			<p id="exampleTextiel"></p> <br />
+
+			<input class="homey-form-input" type="text" id="labelSmallTextiel" name="labelSmall[textiel]" />
+			<div class="trash-item-container-compact">
+				<span class="dot-compact dot-type-TEXTIEL" id="trashDateColorTextiel"><img id="trashDateIconTextiel" src="trashIcons/trash-TEXTIEL.svg" /></span>
+				<div class="trash-date-container">
+					<p class="trash-date-title" id="trashDateTitleTextiel">Textiel</p>
+					<p class="homey-text-small-light trash-date-subtitle" data-i18n="tokens.output.timeindicator.t-1"></p>
+				</div>
+				<input class="homey-form-input trash-form-custom" type="color" id="widgetColorTextiel" name="widgetColor[textiel]" />
+				<input class="homey-form-input trash-form-custom" type="file" id="widgetIconTextiel" name="widgetIcon[textiel]" accept="image/png, image/svg+xml" />
+				<input class="homey-form-input trash-form-custom" type="button" id="widgetIconButtonTextiel" value="&#x21BA;" />
+			</div>
         </div>
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="labelGrof" data-i18n="settings.grof"></label>
 			<input class="homey-form-input" type="text" id="labelGrof" name="label[grof]" />
-			<p id="exampleGrof"></p>
+			<p id="exampleGrof"></p> <br />
+
+			<input class="homey-form-input" type="text" id="labelSmallGrof" name="labelSmall[grof]" />
+			<div class="trash-item-container-compact">
+				<span class="dot-compact dot-type-GROF" id="trashDateColorGrof"><img id="trashDateIconGrof" src="trashIcons/trash-GROF.svg" /></span>
+				<div class="trash-date-container">
+					<p class="trash-date-title" id="trashDateTitleGrof">GROF</p>
+					<p class="homey-text-small-light trash-date-subtitle" data-i18n="tokens.output.timeindicator.t-1"></p>
+				</div>
+				<input class="homey-form-input trash-form-custom" type="color" id="widgetColorGrof" name="widgetColor[grof]" />
+				<input class="homey-form-input trash-form-custom" type="file" id="widgetIconGrof" name="widgetIcon[grof]" accept="image/png, image/svg+xml" />
+				<input class="homey-form-input trash-form-custom" type="button" id="widgetIconButtonGrof" value="&#x21BA;" />
+			</div>
         </div>
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="labelGlas" data-i18n="settings.glas"></label>
 			<input class="homey-form-input" type="text" id="labelGlas" name="label[glas]" />
-			<p id="exampleGlas"></p>
+			<p id="exampleGlas"></p> <br />
+
+			<input class="homey-form-input" type="text" id="labelSmallGlas" name="labelSmall[glas]" />
+			<div class="trash-item-container-compact">
+				<span class="dot-compact dot-type-GLAS" id="trashDateColorGlas"><img id="trashDateIconGlas" src="trashIcons/trash-GLAS.svg" /></span>
+				<div class="trash-date-container">
+					<p class="trash-date-title" id="trashDateTitleGlas">Glas</p>
+					<p class="homey-text-small-light trash-date-subtitle" data-i18n="tokens.output.timeindicator.t-1"></p>
+				</div>
+				<input class="homey-form-input trash-form-custom" type="color" id="widgetColorGlas" name="widgetColor[glas]" />
+				<input class="homey-form-input trash-form-custom" type="file" id="widgetIconGlas" name="widgetIcon[glas]" accept="image/png, image/svg+xml" />
+				<input class="homey-form-input trash-form-custom" type="button" id="widgetIconButtonGlas" value="&#x21BA;" />
+			</div>
         </div>
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="labelKerstboom" data-i18n="settings.kerstboom"></label>
 			<input class="homey-form-input" class="homey-form-input" type="text" id="labelKerstboom" name="label[kerstboom]" />
-			<p id="exampleKerstboom"></p>
+			<p id="exampleKerstboom"></p> <br />
+
+			<input class="homey-form-input" type="text" id="labelSmallKerstboom" name="labelSmall[kerstboom]" />
+			<div class="trash-item-container-compact">
+				<span class="dot-compact dot-type-KERSTBOOM" id="trashDateColorKerstboom"><img id="trashDateIconKerstboom" src="trashIcons/trash-KERSTBOOM.svg" /></span>
+				<div class="trash-date-container">
+					<p class="trash-date-title" id="trashDateTitleKerstboom">Kerstboom</p>
+					<p class="homey-text-small-light trash-date-subtitle" data-i18n="tokens.output.timeindicator.t-1"></p>
+				</div>
+				<input class="homey-form-input trash-form-custom" type="color" id="widgetColorKerstboom" name="widgetColor[kerstboom]" />
+				<input class="homey-form-input trash-form-custom" type="file" id="widgetIconKerstboom" name="widgetIcon[kerstboom]" accept="image/png, image/svg+xml" />
+				<input class="homey-form-input trash-form-custom" type="button" id="widgetIconButtonKerstboom" value="&#x21BA;" />
+			</div>
         </div>
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="labelNone" data-i18n="settings.none"></label>
