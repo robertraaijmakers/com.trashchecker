@@ -21,6 +21,12 @@ function rovaAfvalkalender(postcode, housenumber, street, country) {
     return rovaWasteCalendar(postcode, housenumber, country, "www.rova.nl", "/api/waste-calendar/year");
 }
 
+
+function apnAfvalkalender(postcode, housenumber, street, country) {
+    console.log("Checking APN afvalkalender");
+    return apnAfvalKalendar(postcode, housenumber, "https://afvalkalender.alphenaandenrijn.nl");
+}
+
 function afvalkalenderCyclus(postcode, housenumber, street, country) {
     return newGeneralAfvalkalendersNederlandRest(postcode, housenumber, country, 'cyclusnv.nl');
 }
@@ -1208,6 +1214,66 @@ function rovaWasteCalendar(postcode, housenumber, country, hostname, startPath) 
     });
 }
 
+async function apnAfvalKalendar(postcode, housenumber, url) {
+    let address = await httpsPromise({
+        hostname: 'afvalkalender.alphenaandenrijn.nl',
+        path: `/adressen/${postcode}:${housenumber}`,
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    address = address.body;
+    let bagId = address[0].bagid;
+
+    let trashData = await httpsPromise({
+        hostname: 'afvalkalender.alphenaandenrijn.nl',
+        path: `/rest/adressen/${bagId}/afvalstromen`,
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+
+    const dates = {};
+
+    trashData = trashData.body;
+    for (let fraction of trashData) {
+        if (fraction['ophaaldatum'] === null) continue;
+        let key = fraction['id'];
+        switch (key) {
+            case 112:
+                if (!dates.GFT) dates.GFT = [];
+                dates.GFT.push(fraction['ophaaldatum']);
+                break;
+            case 113:
+                if (!dates.PMD) dates.PMD = [];
+                dates.PMD.push(fraction['ophaaldatum']);
+                break;
+            case 87:
+                if (!dates.PAPIER) dates.PAPIER = [];
+                dates.PAPIER.push(fraction['ophaaldatum']);
+                break;
+            case 101:
+                if (!dates.REST) dates.REST = [];
+                dates.REST.push(fraction['ophaaldatum']);
+                break;
+            case 7:
+                if (!dates.TEXTIEL) dates.TEXTIEL = [];
+                dates.TEXTIEL.push(fraction['ophaaldatum']);
+                break;
+            case 94:
+                if (!dates.GROF) dates.GROF = [];
+                dates.GROF.push(fraction['ophaaldatum']);
+                break;
+        }
+    }
+
+    return dates;
+}
+
 function afvalapp(postcode, homenumber, street, country) {
     console.log("Checking De Afval App");
 
@@ -1821,6 +1887,7 @@ function processWasteData(afvalstromenResponse, kalenderResponse) {
 // Don't forget to add the ID and name to the option set in settings/index.html page as well! :)
 apiList.push({ name: "Afval App", id: "afa", execute: afvalapp });
 apiList.push({ name: "Afvalkalender ACV", id: "acv", execute: acvAfvalkalender });
+apiList.push({ name: "Afvalkalender Alphen aan den Rijn", id: "apn", execute: apnAfvalkalender });
 apiList.push({ name: "Afvalkalender Almere", id: "alm", execute: almereAfvalkalender });
 apiList.push({ name: "Afvalkalender BAR", id: "afbar", execute: afvalkalenderBar });
 apiList.push({ name: "Afvalkalender Circulus-Berkel", id: "acb", execute: circulusBerkel });
