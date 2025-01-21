@@ -1,5 +1,5 @@
 # Developers
-Because trash collection is organized by the local city authorities there is no national database with all the collection dates. However, many cities provide the dates on which trash will be collected openly. Because it would take a lot of time to write a handler for ech of the 390 municipalities in the Netherlands and the 589 in Belgium we made it easy for developers to add a handler for their city. You can submit your handler through a pull-request [here](https://github.com/robertraaijmakers/com.athom.trashchecker). Let me show you how it works.
+Because trash collection is organized by the local city authorities there is no national database with all the collection dates. However, many cities provide the dates on which trash will be collected openly. Because it would take a lot of time to write a handler for ech of the 390 municipalities in the Netherlands and the 589 in Belgium we made it easy for developers to add a handler for their city. You can submit your handler through a pull-request [here](https://github.com/robertraaijmakers/com.trashchecker/). Let me show you how it works.
 
 In the file [trashapis.ts](https://github.com/robertraaijmakers/com.trashchecker/blob/beta/lib/trashapis.ts) there are functions for each trash data provider the function takes an ApiSettings object and contains the number, zipcode, street and country.
 

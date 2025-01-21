@@ -38,6 +38,23 @@ describe('Kliko Manager', function () {
   });
 });
 
+describe('TrashApiApn', function () {
+  it('API - Afvalkalender Alfen aan den Rijn', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '2406XT',
+      housenumber: '21',
+      country: 'NL',
+      apiId: 'apn',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+
 /*
 describe('TrashApiAkwl', function () {
   it('API - Afvalkalender Westland', async function () {
