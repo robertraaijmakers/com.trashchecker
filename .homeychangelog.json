@@ -1,6 +1,6 @@
 {
   "5.0.0": {
-    "en": "Complete rebuild of the app based on new development best practices from Athom.",
-    "nl": "De app is volledig opnieuw opgebouwd om nog meer APIs te kunnen ondersteunen in de toekomst."
+    "en": "Complete rebuild of the app based on new development best practices from Athom and to be able to support even more customizations such as custom colors, icons and naming withing widgets.",
+    "nl": "De app is volledig opnieuw opgebouwd om nog meer mogelijkheden te kunnen ondersteunen, zoals custom kleuren, iconen en naamgeving binnen widgets!"
   }
 }
