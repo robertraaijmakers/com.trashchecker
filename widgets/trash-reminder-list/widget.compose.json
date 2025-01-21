@@ -90,84 +90,46 @@
       }
     },
     {
-      "id": "type-GFT",
-      "type": "checkbox",
-      "value": true,
+      "id": "display-provider-icons",
+      "type": "dropdown",
+      "value": "settings",
+      "values": [
+        {
+          "id": "settings",
+          "label": { 
+            "en": "Use icons, colors and naming from settings", 
+            "nl": "Gebruik icoon, kleur en naam vanuit instellingen" 
+          }
+        },
+        {
+          "id": "settings-icons",
+          "label": { 
+            "en": "Icons: trash provider (if possible), colors and naming: settings", 
+            "nl": "Iconen: afvalverwerker (waar mogelijk), kleuren en namen: instellingen" 
+          }
+        },
+        {
+          "id": "settings-iconscolors",
+          "label": { 
+            "en": "Icons and colors: trash provider (if possible), naming: settings", 
+            "nl": "Iconen en kleuren: afvalverwerker (waar mogelijk), namen: instellingen" 
+          }
+        },
+        {
+          "id": "trashprovider",
+          "label": { 
+            "en": "All from trash provider (if possible)", 
+            "nl": "Alles van afvalverwerker (waar mogelijk)" 
+          }
+        }
+      ],
       "title": {
-        "en": "Show Organic?",
-        "nl": "Toon GFT?"
-      }
-    },
-    {
-      "id": "type-PLASTIC",
-      "type": "checkbox",
-      "value": true,
-      "title": {
-        "en": "Show Plastic?",
-        "nl": "Toon Plastic?"
-      }
-    },
-    {
-      "id": "type-PAPIER",
-      "type": "checkbox",
-      "value": true,
-      "title": {
-        "en": "Show Paper?",
-        "nl": "Toon Papier?"
-      }
-    },
-    {
-      "id": "type-PMD",
-      "type": "checkbox",
-      "value": true,
-      "title": {
-        "en": "Show PMD?",
-        "nl": "Toon PMD?"
-      }
-    },
-    {
-      "id": "type-REST",
-      "type": "checkbox",
-      "value": true,
-      "title": {
-        "en": "Show Rest?",
-        "nl": "Toon Rest?"
-      }
-    },
-    {
-      "id": "type-TEXTIEL",
-      "type": "checkbox",
-      "value": true,
-      "title": {
-        "en": "Show Textile?",
-        "nl": "Toon Textiel?"
-      }
-    },
-    {
-      "id": "type-GROF",
-      "type": "checkbox",
-      "value": true,
-      "title": {
-        "en": "Show Bulky Waste?",
-        "nl": "Toon Grof?"
-      }
-    },
-    {
-      "id": "type-GLAS",
-      "type": "checkbox",
-      "value": true,
-      "title": {
-        "en": "Show Glass?",
-        "nl": "Toon Glas?"
-      }
-    },
-    {
-      "id": "type-KERSTBOOM",
-      "type": "checkbox",
-      "value": true,
-      "title": {
-        "en": "Show Christmas Tree?",
-        "nl": "Toon Kerstboom?"
+        "en": "Display settings",
+        "nl": "Icoon, naam en kleurinstellingen"
+      },
+      "hint": {
+        "en": "Some trash providers bring in their own icons, names and colors. Here you can define which one you want to use.",
+        "nl": "Sommige afvalverwerkers leveren hun eigen iconen, namen en kleuren aan. Selecteer welke je wilt gebruiken."
       }
     }
   ],

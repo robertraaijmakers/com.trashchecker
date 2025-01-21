@@ -2,10 +2,12 @@
 
 import Homey from 'homey/lib/Homey';
 import { ActivityItem, TrashCollectionReminder, WidgetItem } from '../../types/localTypes';
+import { LabelSettings, TrashColors } from '../../assets/publicTypes';
 
 module.exports = {
   async getSettings({ homey, query }: { homey: Homey; query: any }): Promise<WidgetItem[]> {
     const trashApp = <TrashCollectionReminder>homey.app;
+    const localizedSettings = homey.settings.get('labelSettings') as LabelSettings;
 
     const trashData = trashApp.collectionDates;
     let cleaningDays = trashApp.cleanDates;
@@ -65,6 +67,9 @@ module.exports = {
       icon: item.icon,
       localText: item.localText,
       isCleaned: cleanedDatesSet.has(item.activityDate.toISOString().split('T')[0]),
+      settingText: localizedSettings?.[item.type]?.trashShort || homey.__(`widgets.trashType.${item.type}`),
+      settingIcon: localizedSettings?.[item.type]?.trashIcon || `trash-${item.type}.svg`,
+      settingColor: localizedSettings?.[item.type]?.trashColor || TrashColors[item.type],
     }));
 
     return result;

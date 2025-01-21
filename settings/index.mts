@@ -6,9 +6,21 @@ import { AllTrashTypes, AllTrashTypesExtended, createManualAdditons, TrashColors
 
 class SettingScript {
   private homey: HomeySettings;
+  private iconCache: { [key in TrashType]: string };
 
   constructor(homey: HomeySettings) {
     this.homey = homey;
+    this.iconCache = {
+      GFT: '',
+      PLASTIC: '',
+      PAPIER: '',
+      PMD: '',
+      REST: '',
+      TEXTIEL: '',
+      GROF: '',
+      KERSTBOOM: '',
+      GLAS: '',
+    };
   }
 
   public async onHomeyReady(): Promise<void> {
@@ -284,7 +296,7 @@ class SettingScript {
       data[trashType] = {
         trashLong: this.getInputValue(`label${ucFirstTrashType}`) || this.homey.__(`tokens.output.type.${trashType}`),
         trashShort: this.getInputValue(`labelSmall${ucFirstTrashType}`) || this.homey.__(`widgets.trashType.${trashType}`),
-        trashIcon: '',
+        trashIcon: this.iconCache[trashType],
         trashColor: this.getInputValue(`widgetColor${ucFirstTrashType}`) || TrashColors[trashType],
       };
     }
@@ -336,11 +348,12 @@ class SettingScript {
     }
 
     const reader = new FileReader();
-    reader.onload = function (event) {
+    reader.onload = (event) => {
       const result = event!.target!.result;
       if (typeof result === 'string') {
         const base64String = result.split(',')[1];
         (document.getElementById(`trashDateIcon${trashType}`) as HTMLImageElement).src = `data:${fileType};base64,${base64String}`;
+        this.iconCache[trashType.toUpperCase() as TrashType] = `data:${fileType};base64,${base64String}`;
       }
     };
 
@@ -354,7 +367,7 @@ class SettingScript {
   async setWidgetLabel(trashType: string, text: string, color: string, icon: string) {
     var ucFirstType = this.#capitalizeFirstLetter(trashType);
 
-    console.log(trashType);
+    this.iconCache[trashType as TrashType] = icon;
 
     this.setInputValue(`labelSmall${ucFirstType}`, text || this.homey.__(`widgets.trashType.${trashType}`));
     this.setPlaceholderValue(`labelSmall${ucFirstType}`, this.homey.__(`widgets.trashType.${trashType}`));

@@ -301,6 +301,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   async calculateManualDays() {
     // Parse manual settings
     const manualSettings = <ManualSettings>this.homey.settings.get('manualEntryData');
+
     if (manualSettings !== null) {
       for (let type in AllTrashTypes) {
         const trashType = AllTrashTypes[type] as keyof ManualSettings;
@@ -438,7 +439,21 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   }
 
   async calculateManualDay(manualSetting: ManualSetting, trashType: TrashType) {
-    if (!manualSetting || manualSetting.option <= 0) {
+    if (!manualSetting || manualSetting.option === 0) {
+      return;
+    }
+
+    // When user set option to not applicable, clear any dates that we already automatically found, to prevent faulty manual setting data
+    const currentDates = this.collectionDates.find((x) => x.type === trashType);
+    if (currentDates !== undefined && currentDates !== null) {
+      currentDates.color = undefined;
+      currentDates.localText = undefined;
+      currentDates.icon = undefined;
+      currentDates.dates = [];
+    }
+
+    // Skip settings when N/A or Automatic
+    if (manualSetting.option <= 0) {
       return;
     }
 

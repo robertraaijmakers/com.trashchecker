@@ -44,6 +44,9 @@ export interface ActivityItem {
 
 export interface WidgetItem extends ActivityItem {
   isCleaned: boolean;
+  settingText?: string;
+  settingIcon?: string;
+  settingColor?: string;
 }
 
 export interface TrashFlowCardArgument {
@@ -57,7 +60,7 @@ export interface WidgetSettings {
   maxItems: number;
   singleTypes: boolean;
   listHeight: number;
-  displayTypes: Record<TrashType, boolean>;
+  displayRule: 'settings' | 'settings-icons' | 'settings-iconscolors' | 'trashprovider';
 }
 
 export interface ApiDefinition {

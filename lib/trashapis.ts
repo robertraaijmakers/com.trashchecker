@@ -883,6 +883,10 @@ export class TrashApis {
       }
     }
 
+    if (fDates.length <= 0) {
+      throw new Error('No dates found in Afval App.');
+    }
+
     return fDates;
   }
 
