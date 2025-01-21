@@ -15,6 +15,7 @@ export class TrashApis {
     this.#apiList.push({ name: 'Afval App', id: 'afa', execute: (apiSettings) => this.#afvalapp(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender ACV', id: 'acv', execute: (apiSettings) => this.#acvAfvalkalender(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Almere', id: 'alm', execute: (apiSettings) => this.#almereAfvalkalender(apiSettings) });
+    this.#apiList.push({ name: 'Afvalkalender Alphen aan den Rijn', id: 'apn', execute: (apiSettings) => this.#afvalkalenderApn(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender BAR', id: 'afbar', execute: (apiSettings) => this.#afvalkalenderBar(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Circulus-Berkel', id: 'acb', execute: (apiSettings) => this.#circulusBerkel(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Cyclus', id: 'afc', execute: (apiSettings) => this.#afvalkalenderCyclus(apiSettings) });
@@ -255,6 +256,10 @@ export class TrashApis {
 
   async #afvalkalenderNoordOostFriesland(apiSettings: ApiSettings) {
     return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'offalkalinder.nl');
+  }
+
+  async #afvalkalenderApn(apiSettings: ApiSettings) {
+    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.alphenaandenrijn.nl');
   }
 
   async #klikoManagerUithoorn(apiSettings: ApiSettings) {
