@@ -1,0 +1,180 @@
+{
+  "name": {
+    "en": "Trash Overview",
+    "nl": "Afval Overzicht"
+  },
+  "transparent": true,
+  "settings": [
+    {
+      "id": "layout-type",
+      "type": "dropdown",
+      "title": {
+        "en": "Layout",
+        "nl": "Layout",
+        "sv": "Layout"
+      },
+      "value": "large",
+      "values": [
+        {
+          "id": "large",
+          "title": {
+            "en": "Large",
+            "nl": "Groot",
+            "sv": "Stor"
+          }
+        },
+        {
+          "id": "compact",
+          "title": {
+            "en": "Compact",
+            "nl": "Compact",
+            "sv": "Compact"
+          }
+        }
+      ]
+    },
+    {
+      "id": "list-height",
+      "type": "number",
+      "value": 1,
+      "min": 1,
+      "max": 3,
+      "units": {
+        "en": "rows",
+        "nl": "regels"
+      },
+      "title": {
+        "en": "Widget Height",
+        "nl": "Widget Hoogte"
+      },
+      "hint": {
+        "en": "The amount of trash type lines to be visible in one view. Determines the widget height.",
+        "nl": "Aantal afvalregels wat zichtbaar is in één overzicht. Bepaald de hoogte van de widget."
+      }
+    },
+    {
+      "id": "max-items",
+      "type": "number",
+      "value": 4,
+      "min": 1,
+      "max": 9,
+      "units": {
+        "en": "collecting days",
+        "nl": "ophaaldagen"
+      },
+      "title": {
+        "en": "Total Items",
+        "nl": "Aantal Items"
+      },
+      "hint": {
+        "en": "The total amount of trash items rendered in a single view.",
+        "nl": "Het totaal aantal items wat getoond wordt in één enkele widget."
+      }
+    },
+    {
+      "id": "single-types",
+      "type": "checkbox",
+      "value": false,
+      "title": {
+        "en": "Show types once?",
+        "nl": "Toon types maar één keer?"
+      }
+    },
+    {
+      "id": "display-yesterday",
+      "type": "checkbox",
+      "value": false,
+      "title": {
+        "en": "Display yesterday?",
+        "nl": "Toon gisteren?"
+      }
+    },
+    {
+      "id": "type-GFT",
+      "type": "checkbox",
+      "value": true,
+      "title": {
+        "en": "Show Organic?",
+        "nl": "Toon GFT?"
+      }
+    },
+    {
+      "id": "type-PLASTIC",
+      "type": "checkbox",
+      "value": true,
+      "title": {
+        "en": "Show Plastic?",
+        "nl": "Toon Plastic?"
+      }
+    },
+    {
+      "id": "type-PAPIER",
+      "type": "checkbox",
+      "value": true,
+      "title": {
+        "en": "Show Paper?",
+        "nl": "Toon Papier?"
+      }
+    },
+    {
+      "id": "type-PMD",
+      "type": "checkbox",
+      "value": true,
+      "title": {
+        "en": "Show PMD?",
+        "nl": "Toon PMD?"
+      }
+    },
+    {
+      "id": "type-REST",
+      "type": "checkbox",
+      "value": true,
+      "title": {
+        "en": "Show Rest?",
+        "nl": "Toon Rest?"
+      }
+    },
+    {
+      "id": "type-TEXTIEL",
+      "type": "checkbox",
+      "value": true,
+      "title": {
+        "en": "Show Textile?",
+        "nl": "Toon Textiel?"
+      }
+    },
+    {
+      "id": "type-GROF",
+      "type": "checkbox",
+      "value": true,
+      "title": {
+        "en": "Show Bulky Waste?",
+        "nl": "Toon Grof?"
+      }
+    },
+    {
+      "id": "type-GLAS",
+      "type": "checkbox",
+      "value": true,
+      "title": {
+        "en": "Show Glass?",
+        "nl": "Toon Glas?"
+      }
+    },
+    {
+      "id": "type-KERSTBOOM",
+      "type": "checkbox",
+      "value": true,
+      "title": {
+        "en": "Show Christmas Tree?",
+        "nl": "Toon Kerstboom?"
+      }
+    }
+  ],
+  "api": {
+    "getSettings": {
+      "method": "GET",
+      "path": "/"
+    }
+  }
+}

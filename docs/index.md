@@ -15,6 +15,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Afval App](http://www.deafvalapp.nl/calendar/kalender_start.jsp)
 - [Afvalkalender ACV](https://www.acv-groep.nl/)
 - [Afvalkalender Almere](https://almere.ximmio.com/modules/53d8db94-7945-42fd-9742-9bbc71dbe4c1/kalender/)
+- [Afvalkalender Alphen aan de Rijn](https://afvalkalender.alphenaandenrijn.nl/overzicht)
 - [Afvalkalender Circulus-Berkel](https://mijn.circulus.nl/)
 - [Afvalkalender Cyclus](https://afvalkalender.cyclusnv.nl/)
 - [Afvalkalender Dar](https://afvalkalender.dar.nl)
@@ -41,6 +42,8 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Gemeente Hellendoorn](https://www.hellendoorn.nl/wonen-leven/publicatie/afval)
 - [Huisvuilkalender Den Haag](https://huisvuilkalender.denhaag.nl/)
 - [Inzamelkalender HVC](https://inzamelkalender.hvcgroep.nl)
+- Klikomanager Oude IJsselstreek
+- Klikomanager Uithoorn
 - [Mijn Afvalwijzer](http://www.mijnafvalwijzer.nl)
 - [Mijn Blink](https://mijnblink.nl/)
 - [Recyle Manager](http://www.recyclemanager.nl)

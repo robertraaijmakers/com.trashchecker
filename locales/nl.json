@@ -12,23 +12,22 @@
 		"save": "Opslaan",
 		"fail": "Dit adres wordt niet ondersteund",
 		"manualonly": "De ophaaldata is ververst op basis van de handmatige invoer",
-		"update": "Adres is aangepast naar ",
+		"update": "Adres is aangepast naar",
 		"updateCleaning": "Schoonmaakservice is aangepast",
 		"checking": "adres checken...",
 		"gft": "GFT",
 		"rest": "Restafval",
 		"plastic": "Plastic",
 		"pmd": "PMD",
-		"paper": "Papier",
-		"textile": "Textiel",
-		"bulky": "Grof vuil",
+		"papier": "Papier",
+		"textiel": "Textiel",
+		"grof": "Grof vuil",
 		"glas": "Glas",
-		"christmas": "Kerstboom",
+		"kerstboom": "Kerstboom",
 		"unknown": "Onbekend",
 		"notapplicable": "Niet van toepassing",
 		"none": "Wanneer niets wordt opgehaald",
-		"titlemanualinput": "Handmatige invoer",
-		"saveLabelInput": "Global tag instellingen opslaan",
+		"titlemanualinput": "Ophaaldagen",
 		"refreshDebugInformation": "Ververs debug informatie",
 		"interval":
 		{
@@ -71,63 +70,39 @@
 			"save": "Sla alles op"
 		},
 		"startdate": "startend op",
-		"labeltitle": "Globale tag instellingen",
-		"labeldescription": "Deze waarden worden ingesteld in de globale tag wanneer een specifiek type prullenbak wordt opgehaald vandaag/morgen/overmorgen.",
+		"labeltitle": "Afvaltype namen personaliseren",
+		"labeldescription": "Deze waarden worden ingesteld in de globale tag wanneer een specifiek type afval wordt opgehaald. Daarnaast worden deze waarden gebruikt in de widget en voor tags bij kaarten gebruikt in advanced flows.",
+		"saveLabelInput": "Afvaltype namen opslaan",
 		"labelgeneric": "Zin in globale tag",
 		"genericlabelhelper": "Variabelen die in de globale tag zin gebruikt kunnen worden zijn __time__, __type__, __plural__.",
-		"labelplaceholder": "wordt vandaag opgehaald",
 		"timeindicator": "Globaal Label Type",
 		"timeindicatorDescription": "Deze wordt gebruikt om de voorbeelden te tonen onder de instellingen. Zodat je alvast kan zien welke tekst er in één van de drie labels kan komen."
 	},
-	"speech":
+	"debug":
 	{
-		"replacequestion": "weet je|kan je me vertellen|kan je me zeggen|kun je mij zeggen|kun je mij vertellen",
-		"type":
+		"labeltitle": "Debug",
+		"labeldescription": "Dit zijn de dagen die op dit moment bekend zijn in de app."	
+	},
+	"error":
+	{
+		"typenotsupported":
 		{
-			"GFT": "gft",
-			"REST": "rest",
-			"PLASTIC": "plastic",
-			"PMD": "pmd",
-			"PAPIER": "papier",
-			"TEXTIEL": "textiel",
-			"GROF": "grof vuil",
-			"GLAS": "glas",
-			"KERSTBOOM": "kerstboom"
-		},
-		"type_multipleother":
-		{
-			"GFT": "groen|tuinafval|groene|groente|fruit",
-			"REST": "zwart|grijs|grijze|restafval",
-			"PLASTIC": "plastic|oranje",
-			"PMD": "metaal|drinkpak|drink karton",
-			"PAPIER": "blauw|karton",
-			"TEXTIEL": "kleding|kledij",
-			"GROF": "grof vuil|grof|vuil",
-			"GLAS": "glas",
-			"KERSTBOOM": "kerstboom|kerst"
-		},
-		"questiontype":
-		{
-			"what": "wat",
-			"when": "wanneer",
-			"is": "wordt",
-			"which": "welke"
+			"addviasettings": "Geen ophaaldatum bekend voor dit type afval. Voeg deze handmatig toe via de instellingen pagina van de app.",
+			"onyouraddress": "Dit type afval wordt niet door de API ondersteund op jouw adres."
+		}
+	},
+	"tokens":
+	{
+		"trashcollection": {
+			"today": "Vandaag opgehaald",
+			"tomorrow": "Morgen opgehaald",
+			"dayaftertomorrow": "Overmorgen opgehaald",
+			"advancedcollectiondates": "Ophaaldagen (JSON)"
 		},
 		"output":
 		{
-			"noknowntrashcollected": "Voor zover ik weet wordt er bij jou in de buurt geen afval opgehaald.",
-			"notrashcollectedonx": "Er wordt geen afval opgehaald __time__.",
-			"trashtypesycollectedonx": "__time__ worden __types__ opgehaald.",
-			"trashtypeycollectedonx": "__time__ wordt __type__ opgehaald.",
-			"notrashcollectionforx": "__type__ wordt niet opgehaald in jouw gebied.",
-			"trashtypexcollectedony": "__type__ wordt __time__ opgehaald.",
-			"yesyiscollectedonx": "Ja, __type__ wordt __time__ opgehaald.",
-			"noyiscollectedonxbutonz": "Nee, __type__ wordt niet __time__ opgehaald maar __time2__.",
+			"trashtypeycollectedonx": "__types__ __plural__ __time__ opgehaald.",
 			"and": "en",
-			"next": "aanstaande",
-			"on": "op",
-			"days": "dagen",
-			"in": "over",
 			"replacementsingle": "wordt",
 			"replacementplural": "worden",
 			"type":
@@ -160,28 +135,6 @@
 				"t1": "Morgen",
 				"t2": "Overmorgen"
 			}
-		}
-	},
-	"debug":
-	{
-		"labeltitle": "Debug",
-		"labeldescription": "Dit zijn de dagen die op dit moment bekend zijn in de app."	
-	},
-	"error":
-	{
-		"typenotsupported":
-		{
-			"addviasettings": "Geen ophaaldatum bekend voor dit type afval. Voeg deze handmatig toe via de instellingen pagina van de app.",
-			"onyouraddress": "Dit type afval wordt niet door de API ondersteund op jouw adres."
-		}
-	},
-	"tokens":
-	{
-		"trashcollection": {
-			"today": "Vandaag opgehaald",
-			"tomorrow": "Morgen opgehaald",
-			"dayaftertomorrow": "Overmorgen opgehaald",
-			"advancedcollectiondates": "Ophaaldagen (JSON)"
 		}
 	},
 	"widgets":

@@ -6,7 +6,7 @@
     "nl": "Afval Herinnering 2.0",
     "sv": "Avfallspåminnelse 2.0"
   },
-  "version": "4.2.5",
+  "version": "5.0.0",
   "platforms": [
     "local"
   ],
@@ -22,10 +22,6 @@
       {
         "name": "Robert Raaijmakers",
         "email": "dutchfighter@live.nl"
-      },
-      {
-        "name": "Axel Stuiver",
-        "email": "axelstuiver@gmail.com"
       }
     ]
   },
@@ -61,6 +57,10 @@
     "validateUserCleanData": {
       "method": "POST",
       "path": "/clean"
+    },
+    "trashCollectionDays": {
+      "method": "GET",
+      "path": "/trashcollectiondays"
     }
   }
 }

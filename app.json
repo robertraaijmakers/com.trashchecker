@@ -7,7 +7,7 @@
     "nl": "Afval Herinnering 2.0",
     "sv": "Avfallspåminnelse 2.0"
   },
-  "version": "4.2.5",
+  "version": "5.0.0",
   "platforms": [
     "local"
   ],
@@ -23,10 +23,6 @@
       {
         "name": "Robert Raaijmakers",
         "email": "dutchfighter@live.nl"
-      },
-      {
-        "name": "Axel Stuiver",
-        "email": "axelstuiver@gmail.com"
       }
     ]
   },
@@ -62,6 +58,10 @@
     "validateUserCleanData": {
       "method": "POST",
       "path": "/clean"
+    },
+    "trashCollectionDays": {
+      "method": "GET",
+      "path": "/trashcollectiondays"
     }
   },
   "flow": {
@@ -87,6 +87,11 @@
           {
             "name": "when",
             "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "When?"
+            },
             "values": [
               {
                 "id": "today",
@@ -117,6 +122,11 @@
           {
             "name": "trash_type",
             "type": "dropdown",
+            "title": {
+              "en": "Type?",
+              "nl": "Type?",
+              "sv": "Type?"
+            },
             "values": [
               {
                 "id": "ANY",
@@ -223,6 +233,11 @@
           {
             "name": "when",
             "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "When?"
+            },
             "values": [
               {
                 "id": "today",
@@ -253,6 +268,11 @@
           {
             "name": "trash_type",
             "type": "dropdown",
+            "title": {
+              "en": "Type?",
+              "nl": "Type?",
+              "sv": "Type?"
+            },
             "values": [
               {
                 "id": "ANY",
@@ -362,6 +382,11 @@
           {
             "name": "when",
             "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "When?"
+            },
             "values": [
               {
                 "id": "today",
@@ -454,6 +479,11 @@
           {
             "name": "when",
             "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "When?"
+            },
             "values": [
               {
                 "id": "today",
@@ -703,7 +733,7 @@
       "api": {
         "getSettings": {
           "method": "GET",
-          "path": "/"
+          "path": "/collectiondata"
         }
       },
       "id": "trash-reminder-list"
