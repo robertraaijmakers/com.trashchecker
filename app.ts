@@ -224,7 +224,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       this.cleanDates = cleaningDays;
       this.collectionDates = collectionDays;
 
-      this.calculateManualDays();
+      await this.calculateManualDays();
       return false;
     }
 
@@ -281,9 +281,9 @@ module.exports = class TrashCollectionReminder extends Homey.App {
 
     var labelSettings = <LabelSettings>this.homey.settings.get('labelSettings');
 
-    const todayLabel = await this.getLabel(labelSettings, this.collectionDates, 0);
-    const tomorrowLabel = await this.getLabel(labelSettings, this.collectionDates, 1);
-    const dayAfterTomorrowLabel = await this.getLabel(labelSettings, this.collectionDates, 2);
+    const todayLabel = await this.getLabel(labelSettings, 0);
+    const tomorrowLabel = await this.getLabel(labelSettings, 1);
+    const dayAfterTomorrowLabel = await this.getLabel(labelSettings, 2);
 
     await this.trashTokenToday.setValue(todayLabel);
     await this.trashTokenTomorrow.setValue(tomorrowLabel);
@@ -374,7 +374,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   }
 
   // Function to get the label for a specific date
-  async getLabel(labelSettings: LabelSettings, trashDates: ActivityDates[], timeIndicator: number) {
+  async getLabel(labelSettings: LabelSettings, timeIndicator: number) {
     const checkDate = await this.getLocalDate();
     checkDate.setDate(checkDate.getDate() + timeIndicator);
 
@@ -427,11 +427,11 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   // Generic function to give proper result back to the flow
   async handleResultTrashCleaning(type: FlowCardType, result: boolean, trashType: string, trashTypeLocalized: string) {
     if (type === FlowCardType.CONDITION) {
-      return false;
+      return result;
     }
 
     return {
-      isCleaned: false,
+      isCleaned: result,
       trashType,
       trashTypeLocalized,
     };
