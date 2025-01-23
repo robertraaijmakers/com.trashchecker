@@ -277,8 +277,6 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   }
 
   async onUpdateLabel() {
-    this.log('Start updating label');
-
     var labelSettings = <LabelSettings>this.homey.settings.get('labelSettings');
 
     const todayLabel = await this.getLabel(labelSettings, 0);
@@ -291,10 +289,6 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     await this.trashTokenAdvancedCollectionDates.setValue(JSON.stringify(this.collectionDates));
 
     this.log('Labels updated');
-    this.log(`Today: ${todayLabel}`);
-    this.log(`Tomorrow: ${tomorrowLabel}`);
-    this.log(`Day after tomorrow: ${dayAfterTomorrowLabel}`);
-
     return true;
   }
 
@@ -319,7 +313,6 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       if (!manualAdditions?.[trashType]) continue;
 
       for (let index in manualAdditions[trashType]) {
-        this.log(`Added date ${manualAdditions[trashType][index]} to ${trashType}.`);
         addDate(this.collectionDates, trashType, new Date(manualAdditions[trashType][index]));
       }
     }

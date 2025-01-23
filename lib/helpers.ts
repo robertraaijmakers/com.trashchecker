@@ -130,7 +130,13 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     foundType = true;
   }
 
-  if (description.indexOf('rest') !== -1 || description.indexOf('etensresten') !== -1 || description.indexOf('residual') !== -1 || description.indexOf('grey') !== -1) {
+  if (
+    description.indexOf('rest') !== -1 ||
+    description.indexOf('etensresten') !== -1 ||
+    description.indexOf('residual') !== -1 ||
+    description.indexOf('grey') !== -1 ||
+    description.indexOf('sortibak') !== -1
+  ) {
     addDate(activityDates, TrashType.REST, date, icon, localDescription, color);
     foundType = true;
   }
