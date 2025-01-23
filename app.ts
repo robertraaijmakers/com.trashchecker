@@ -134,7 +134,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
         const firstItem = itemsCollectedToday[0];
         result = true;
         trashTypeCollected = this.homey.__(`widgets.trashType.${firstItem.type}`);
-        trashTypeCollectedLocalized = labelSettings.type[firstItem.type];
+        trashTypeCollectedLocalized = labelSettings?.type?.[firstItem.type] || this.homey.__(`tokens.output.type.${firstItem.type}`);
       }
 
       return this.handleResultTrashCollection(type, result, trashTypeCollected, trashTypeCollectedLocalized);
@@ -143,7 +143,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     result = itemsCollectedToday.some((x) => x.type === args.trash_type);
     if (result === true) {
       trashTypeCollected = this.homey.__(`widgets.trashType.${args.trash_type}`);
-      trashTypeCollectedLocalized = labelSettings.type[args.trash_type];
+      trashTypeCollectedLocalized = labelSettings?.type?.[args.trash_type] || this.homey.__(`tokens.output.type.${args.trash_type}`);
     }
 
     return this.handleResultTrashCollection(type, true, trashTypeCollected, trashTypeCollectedLocalized);
@@ -188,7 +188,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
         const firstItem = itemsCleanedToday[0];
         result = true;
         trashTypeCleaned = this.homey.__(`widgets.trashType.${firstItem.type}`);
-        trashTypeCleanedLocalized = labelSettings.type[firstItem.type];
+        trashTypeCleanedLocalized = labelSettings?.type?.[firstItem.type] || this.homey.__(`tokens.output.type.${firstItem.type}`);
       }
 
       return this.handleResultTrashCleaning(type, result, trashTypeCleaned, trashTypeCleanedLocalized);
@@ -197,7 +197,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     result = itemsCleanedToday.some((x) => x.type === args.trash_type);
     if (result === true) {
       trashTypeCleaned = this.homey.__(`widgets.trashType.${args.trash_type}`);
-      trashTypeCleanedLocalized = labelSettings.type[args.trash_type];
+      trashTypeCleanedLocalized = labelSettings?.type?.[args.trash_type] || this.homey.__(`tokens.output.type.${args.trash_type}`);
     }
 
     return this.handleResultTrashCleaning(type, true, trashTypeCleaned, trashTypeCleanedLocalized);
