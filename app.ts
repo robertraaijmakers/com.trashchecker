@@ -113,7 +113,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       return this.handleResultTrashCollection(type, result, trashTypeCollected, trashTypeCollectedLocalized);
     }
 
-    if (args.trash_type !== 'ANY' && this.collectionDates.some((x) => x.type === args.trash_type.toUpperCase())) {
+    if (args.trash_type !== 'ANY' && !this.collectionDates.some((x) => x.type === args.trash_type.toUpperCase())) {
       var message = this.homey.__('error.typenotsupported.addviasettings');
       this.log(message);
       return this.handleResultTrashCollection(type, result, trashTypeCollected, trashTypeCollectedLocalized);
@@ -167,7 +167,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       return this.handleResultTrashCleaning(type, result, trashTypeCleaned, trashTypeCleanedLocalized);
     }
 
-    if (args.trash_type !== 'ANY' && this.cleanDates.some((x) => x.type === args.trash_type.toUpperCase())) {
+    if (args.trash_type !== 'ANY' && !this.cleanDates.some((x) => x.type === args.trash_type.toUpperCase())) {
       var message = this.homey.__('error.typenotsupported.addviasettings');
       this.log(message);
       return this.handleResultTrashCleaning(type, result, trashTypeCleaned, trashTypeCleanedLocalized);
@@ -409,13 +409,11 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       return result;
     }
 
-    if (result) {
-      return {
-        isCollected: true,
-        trashType,
-        trashTypeLocalized,
-      };
-    }
+    return {
+      isCollected: result,
+      trashType,
+      trashTypeLocalized,
+    };
   }
 
   // Generic function to give proper result back to the flow
