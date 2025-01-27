@@ -9,7 +9,7 @@ import { ApiSettings, LabelSettings, ManualSetting, ManualSettings, TrashType } 
 import { DateTimeHelper } from './lib/datetimehelper';
 
 // TODO: find solution to import this from the .mts file
-export const AllTrashTypes: string[] = ['GFT', 'PLASTIC', 'PAPIER', 'PMD', 'REST', 'TEXTIEL', 'GROF', 'KERSTBOOM', 'GLAS'];
+const AllTrashTypes: string[] = ['GFT', 'PLASTIC', 'PAPIER', 'PMD', 'REST', 'TEXTIEL', 'GROF', 'KERSTBOOM', 'GLAS'];
 
 module.exports = class TrashCollectionReminder extends Homey.App {
   collectionDates: ActivityDates[] = [];
@@ -113,7 +113,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       return this.handleResultTrashCollection(type, result, trashTypeCollected, trashTypeCollectedLocalized);
     }
 
-    if (args.trash_type !== 'ANY' && !this.collectionDates.some((x) => x.type === args.trash_type.toUpperCase())) {
+    if (args.trash_type !== 'ANY' && !this.collectionDates.some((x) => x.type === args.trash_type)) {
       var message = this.homey.__('error.typenotsupported.addviasettings');
       this.log(message);
       return this.handleResultTrashCollection(type, result, trashTypeCollected, trashTypeCollectedLocalized);
@@ -146,7 +146,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       trashTypeCollectedLocalized = labelSettings?.type?.[args.trash_type] || this.homey.__(`tokens.output.type.${args.trash_type}`);
     }
 
-    return this.handleResultTrashCollection(type, true, trashTypeCollected, trashTypeCollectedLocalized);
+    return this.handleResultTrashCollection(type, result, trashTypeCollected, trashTypeCollectedLocalized);
   }
 
   async flowTrashIsCleanedAction(args: TrashFlowCardArgument) {
@@ -200,7 +200,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       trashTypeCleanedLocalized = labelSettings?.type?.[args.trash_type] || this.homey.__(`tokens.output.type.${args.trash_type}`);
     }
 
-    return this.handleResultTrashCleaning(type, true, trashTypeCleaned, trashTypeCleanedLocalized);
+    return this.handleResultTrashCleaning(type, result, trashTypeCleaned, trashTypeCleanedLocalized);
   }
 
   /* ******************
@@ -349,12 +349,12 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   // Function to find all events on a specified date
   async findResultsByDate(dates: ActivityDates[], targetDate: Date): Promise<ActivityItem[]> {
     // Normalize the target date to avoid time mismatches
-    const normalizedTargetDate = new Date(targetDate.toDateString());
+    const normalizedTargetDate = new Date(targetDate.toDateString()).getTime();
 
     // Filter and map the dates array to get matching collection items
     const collectionItems = dates.flatMap((collectionDate) =>
       collectionDate.dates
-        .filter((date) => new Date(new Date(date).toDateString()).getTime() === normalizedTargetDate.getTime())
+        .filter((date) => new Date(date).setHours(0, 0, 0, 0) === normalizedTargetDate)
         .map((date) => ({
           type: collectionDate.type,
           icon: collectionDate.icon,
