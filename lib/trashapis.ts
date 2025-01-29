@@ -2,7 +2,7 @@
 
 import cheerio from 'cheerio';
 import { ActivityDates, ApiDefinition, ApiFindResult } from '../types/localTypes';
-import { addDate, formatDate, httpsPromise, processWasteData, validateCountry, validateHousenumber, validateZipcode, verifyByName, verifyDate } from './helpers';
+import { addDate, formatDate, httpsPromise, parseDutchDate, processWasteData, validateCountry, validateHousenumber, validateZipcode, verifyByName, verifyDate } from './helpers';
 import { ApiSettings, TrashType } from '../assets/publicTypes';
 
 export class TrashApis {
@@ -375,10 +375,13 @@ export class TrashApis {
         var wasteDescription = $('.afvaldescr', elem).text();
         if (child.children.length < 1) {
           var subData = <any>elem.children[0];
-          trashDate = subData.data;
+          trashDate = parseDutchDate(subData.data);
         } else {
-          trashDate = child.children[0].data;
+          trashDate = parseDutchDate(child.children[0].data);
         }
+
+        console.log(trashDate);
+        if (trashDate == null) return;
 
         verifyByName(fDates, wasteDescription, elem.attribs.class.trim(), trashDate);
       });
