@@ -1,5 +1,191 @@
 {
-  "5.0.4": {
+  "2.6.8": {
+    "en": "Fix for Afvalwijzer and Rova. For full list of changes see: https://github.com/robertraaijmakers/com.trashchecker/milestone/3."
+  },
+  "2.6.10": {
+    "en": "Fix for Rova and Mijn Afvalwijzer. Fixt some random crashes. Added support for Cure Afvalbeheer."
+  },
+  "2.6.11": {
+    "en": "Fix for Rova and Mijn Afvalwijzer. Fixt some random crashes. Added support for Cure Afvalbeheer. Updated app to latest Homey developer standards."
+  },
+  "2.6.12": {
+    "en": "Fix for Rova and Mijn Afvalwijzer. Fixt some random crashes. Added support for Cure Afvalbeheer. Updated app to latest Homey developer standards."
+  },
+  "2.7.4": {
+    "en": "Attention: Plastic can now be reported as PMD! (Issue #78). Added new way of managing the global tag (#71). Added possibility to add extra dates for types not retrieved trough an API (Issue #70). Fixt issue in Circulus Berkel (#68) and Afvalwijzer APIs (#77). Full list see: https://github.com/robertraaijmakers/com.trashchecker/milestone/4?closed=1."
+  },
+  "2.7.5": {
+    "en": "Sorry, due to some large updates it was possible that the dates would stay empty. This should be resolved now."
+  },
+  "2.7.6": {
+    "en": "Minor issues fixt"
+  },
+  "2.7.9": {
+    "en": "Added some debug info to analyse random crash. If you experience a crash please report it via GitHub."
+  },
+  "2.8.1": {
+    "en": "BREAKING CHANGE! The app now provides three global labels instead of one, please select the one you need for your flows. I try my best not to introduce breaking changes, but the request for multiple labels has been requested many times. So here it is!",
+    "nl": "BELANGRIJKE CHANGE! De app gebruikt nu 3 globale labels in plaats van 1, hierdoor moet je de juiste selecteren voor je flow om de juiste melding te krijgen. Ik doe mijn best om de updates zo soepel mogelijk te laten verlopen, maar het verzoek voor meerdere labels is zo vaak binnengekomen dat dit nodig was. Maak er goed gebruik van!"
+  },
+  "2.8.2": {
+    "en": "Updated API's, implemented swedish",
+    "nl": "API's bijgewerkt, Zweeds nu ook ondersteund als taal"
+  },
+  "3.0.2": {
+    "en": "Upgraded to SDK v3 to be future proof, removed speech due to Homey deprecating speech functionality",
+    "nl": "Bijgewerkt zodat de app SDK v3 ondersteund en toekomstbestendig is, spraak functionaliteit volledig verwijderd omdat Homey dit zelf ook doet"
+  },
+  "3.0.4": {
+    "en": "Added help pages to the github repository, here you can find example flows and information on how to configure the app!",
+    "nl": "Aan de github repository zijn nu help pagina's toegevoegd zodat iedereen gemakkelijk de app kan configureren en voorbeelden kan vinden!"
+  },
+  "3.0.6": {
+    "en": "Fixt issue with UTC vs local time causing flows running at midnight to give wrong data.",
+    "nl": "Issues met time (local vs UTC) opgelost waardoor sommige flows om middernacht onjuiste resultaten gaven."
+  },
+  "3.0.7": {
+    "en": "Fixed Meerlanden API.",
+    "nl": "Issue met Meerlanden API opgelost."
+  },
+  "3.0.10": {
+    "en": "Dutchy- (Edwin) added the Waarlanden reinigingsdienst API.",
+    "nl": "Dutchy- (Edwin) heeft ondersteuning voor Waarlanden reinigingsdienst toegevoegd."
+  },
+  "3.0.11": {
+    "en": "Added fix for Twente Milieu API",
+    "nl": "Twente Milieu API werkt weer"
+  },
+  "3.0.12": {
+    "en": "Added support for Almere, Stadswerk and fixes for some of the used APIs",
+    "nl": "Almere en Stadswerk zijn toegevoegd. Plus nog wat andere APIs weer gefixt"
+  },
+  "3.1.0": {
+    "en": "Welcome Belgium! The first Belgium API has been added: Recycle! app.",
+    "nl": "Welkom België! De eerste Belgische API wordt nu uitgelezen: Recycle! app."
+  },
+  "3.1.1": {
+    "en": "Fixes for Avalex (#131), Afval App (#129) and Suez. P.S. Did you know Belgium has been added as well?!",
+    "nl": "Avalex (#131), Afval App (#129) en Suez werken weer. P.S. Wist je al dat België nu ook ondersteund wordt?!"
+  },
+  "3.1.3": {
+    "en": "Some minor bugfixes with regards to manual date settings"
+  },
+  "3.1.4": {
+    "en": "Fixed implementation of Circulus-Berkel (GitHub: #137)",
+    "nl": "Circulus-Berkel API werkt weer (GitHub: #137)"
+  },
+  "3.1.5": {
+    "en": "Fixed implementation of Circulus-Berkel (GitHub: #138)",
+    "nl": "Circulus-Berkel API werkt weer (GitHub: #138)"
+  },
+  "3.1.13": {
+    "en": "Fixed implementation of RD4 and added Reinus (GitHub: #140)",
+    "nl": "RD4 weer gemaakt en Reinus toegevoegd (GitHub: #140)"
+  },
+  "3.1.14": {
+    "en": "Fixed issue with initial set-up that didn't loop through the available APIs",
+    "nl": "Issue opgelost die ervoor zorgde dat de initiele set-up niet door alle APIs kon zoeken"
+  },
+  "3.1.17": {
+    "en": "Added better error handling and added new 6-week interval.",
+    "nl": "Betere foutafhandeling en nu ook een 6-weekse interval beschikbaar als handmatige optie."
+  },
+  "3.1.19": {
+    "en": "Added fix for afvalwijzer. #148, #149",
+    "nl": "Betere afhandeling van afvalwijzer. #148, #149"
+  },
+  "3.1.20": {
+    "en": "Added support for Den Haag and Purmerend with many thanks to HugoKNL #93",
+    "nl": "Den Haag en Purmerend nu ook ondersteund met dank aan HugoKNL #93"
+  },
+  "3.1.21": {
+    "en": "Updated API for Belgium"
+  },
+  "3.2.0": {
+    "en": "Small updates and bugfixes #154, #156, #157",
+    "nl": "Kleine updates en bugfixes #154, #156, #157"
+  },
+  "3.2.1": {
+    "en": "A holiday update for next year, added parsing of kerstbomen to extra APIs #164",
+    "nl": "Een extratje voor volgend jaar, kerstbomen nu in nog meer gemeentes ondersteund #164"
+  },
+  "3.2.3": {
+    "en": "Extended support in Almere for the Duobak (green + grey). Added support for Etten-Leur who switched APIs.",
+    "nl": "Etten-Leur wordt nu (weer) ondersteund na overstap van leverancier. Almere is uitgebreid en de duobak wordt nu herkend als groen en grijs."
+  },
+  "3.2.4": {
+    "en": "Removed RMN due to API change.",
+    "nl": "Sorry, heb RMN uit de app moeten halen omdat hun data niet meer toegankelijk is."
+  },
+  "3.2.6": {
+    "en": "RMN is back in the game!",
+    "nl": "Een slim persoon heeft de RMN API ontleed en op dit moment werkt het weer, BAR gebruikt dezelfde, dus deze ook toegevoegd (geen garanties, maar geniet ervan zolang het kan)!"
+  },
+  "3.2.7": {
+    "en": "Updated ZRD url",
+    "nl": "ZRD bijgewerkt"
+  },
+  "3.2.8": {
+    "en": "Updated RD4 to support house number extensions",
+    "nl": "RD4 bijgewerkt zodat deze huisnummer toevoegingen ondersteund"
+  },
+  "3.2.9": {
+    "en": "Added Westland",
+    "nl": "Westland wordt nu ondersteund"
+  },
+  "3.2.10": {
+    "en": "Added gemeente Meppel, gemeente Assen and Avri",
+    "nl": "Gemeente Meppel, Gemeente Assen & AVRI worden nu ondersteund"
+  },
+  "3.2.11": {
+    "en": "Fix for belgium addresses with recycle BE",
+    "nl": "Added better support for Belgium recycle BE"
+  },
+  "3.2.13": {
+    "en": "Fix for belgium addresses with recycle BE",
+    "nl": "Nieuwe sleutel waardoor Recycle BE adressen weer werken"
+  },
+  "3.2.14": {
+    "en": "Added Súdwest-Fryslân",
+    "nl": "Súdwest-Fryslân is nu toegevoegd"
+  },
+  "3.2.15": {
+    "en": "Added fix for ROVA",
+    "nl": "ROVA is working again"
+  },
+  "3.2.16": {
+    "en": "Added fix for Cyclus",
+    "nl": "Cyclus is working again"
+  },
+  "3.2.19": {
+    "en": "Added RWM garbage, added GFT and area collection (under Textile) for Recycleapp",
+    "nl": "RWM afval en reiniging wordt nu ook ondersteund, toevoegingen voor Recycleapp"
+  },
+  "4.0.8": {
+    "en": "Added support for widgets! Now display the next collection days right on your dashboard.",
+    "nl": "Ondersteuning voor widgets toegevoegd! Toon de eerstvolgende apphaaldata direct op je dashboard."
+  },
+  "4.2.0": {
+    "en": "Going back in time... Sorry for the crashes",
+    "nl": "Excuses voor de crashes, weer even terug op oude versie"
+  },
+  "4.2.1": {
+    "en": "Added support for widgets and first trash cleaning services! Get notified when your container is cleaned as well.",
+    "nl": "Ondersteuning voor widgets en eerste schoonmaakdienst toegevoegd! Toon de eerstvolgende ophaaldata en ook wanneer je container schoongemaakt wordt."
+  },
+  "4.2.2": {
+    "en": "Going back in time... Sorry for the crashes",
+    "nl": "Excuses voor de crashes, weer even terug op oude versie"
+  },
+  "4.2.4": {
+    "en": "Added support for widgets and first trash cleaning services! Get notified when your container is cleaned as well.",
+    "nl": "Ondersteuning voor widgets en eerste schoonmaakdienst toegevoegd! Toon de eerstvolgende ophaaldata en ook wanneer je container schoongemaakt wordt."
+  },
+  "4.2.5": {
+    "en": "Updated APIs for new year. Notice: your municipality might have changed from provider/API and you might need to reconfigure the app.",
+    "nl": "APIs waar nodig bijgewerkt voor het nieuwe jaar. Let op: het kan zijn dat je gemeente van API gewijzigd is en je zaken opnieuw moet instellen!"
+  },
+  "5.0.5": {
     "en": "Complete rebuild of the app based on new development best practices from Athom.",
     "nl": "De app is volledig opnieuw opgebouwd om nog meer APIs te kunnen ondersteunen in de toekomst."
   }
