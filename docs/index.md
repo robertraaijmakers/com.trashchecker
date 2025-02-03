@@ -4,7 +4,7 @@ Homey will remind you to put the trash out! You can do this by providing a posta
 *NOTE* NO this app will NOT work on Homey Cloud. I'm not investing [100 euro's](https://homey.app/nl-nl/store/product/homey_developer_athom_12m/) a year and my free time on this.
 
 Here you can find information regarding:
-- [Settings](settings.md)
+- [Configuring the app](settings.md)
 - [Flow Examples](flow-examples.md)
 - [Developer Guidelines](developer-guidelines.md)
 
@@ -56,15 +56,14 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 ## Supported Cards
 There is one card that you can place in the "and" column. The card lets you check whether or not trash is collected either today, tomorrow or the day after tomorrow. The type of trash that is checked for can be set to a specific one, or to 'any' to include all types.
 
-## Supported Speech / Chat
-The speech is removed in this new version. Homey is removing the speech completely from their own product.
-
 ## Tags
-There are three global tags available. The tags can be configured trough the settings page. The tags represent the trash that is collected today, tomorrow and the day after tomorrow.
+There are four global tags available. The text in the tags can be configured trough the settings page. The tags represent the trash that is collected today, tomorrow and the day after tomorrow.
 If you want to create a flow that notifies you what type of trash is collected today, use the "today" tag.
 If you want to create a flow that notifies you what type of trash is collected tomorrow, use the "tomorrow" tag.
 If you want to create a flow that notifies you what type of trash is collected the day after tomorrow, use the "day after tomorrow" tag.
 Plase note that the tags are independent from the "What type of trash is collected on << day >>" card available in the "and" column.
+
+The fourth tag has the result of all trash collection dates in JSON format available. If you like custom coding and need some additional flexibility, you can use this global tag.
 
 ## Widgets
 There is one widget available that displays the trash that is collected next. You can configure the height and amount of items to display through the widget configuration.

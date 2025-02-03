@@ -1,8 +1,10 @@
 # How to configure Trashcan Reminder 2.0
-Trashcan Reminder 2.0 has several configuration settings which can be found under "Settings" in your Homey app. On this page you can configure your postal code and house number to see if your address is supported by one of the API's. You can also enter data based on "frequency" or even fully manual. One of the other settings you can configure is the text that is displayed in the "Global Tags". At last there is also some debug information.
+Trashcan Reminder 2.0 has several configuration settings which can be found under "Settings" in your Homey app. On this page you can configure your postal code and house number to see if your address is supported by one of the API's. You can also enter data based on "frequency" or even fully manual. Next to that you can configure the text, color and icons of the widget and also configure a custom text to output in the global tags. This wide range of configuration gives you the flexibility to use the app to your liking.
 
 ## Working with API
 When you first set-up your app you can enter your postal code and house number here in the fields. Then select "Save changes" and the app will search all known API's to find if one gives a valid response. When this is found, you wel get a green text and the dropdown box will show you which API has been chosen. In the debug information at the bottom of the screen (when you scroll down) you can find which dates are found (after pressing "refresh debug information").
+
+If you don't want to get notifications for a certain trash type (for instance, when your trash provider does collect this type of trash, but you don't have that certain container yourself). Then you can easily disable that type by setting the "N/A" (not applicable) for that trash type under the "Date Settings". This way the information of that trash type will be ignored in the flow and in your widget.
 
 ## Working with schedule/manual input
 When there is no API found based on your postal code and house number you can either try to search for the API and add it in the code yourself. Or you can figure out the schedule behind your trash pickups. Most of the time there is some kind of logic in the collection of the trash.
@@ -30,12 +32,17 @@ When you change the dropdown field after "Type Collected" to: today/tomorrow/day
 
 This way you are in full control of the text that is displayed in the global tags. This is especially usefull for plastics/PMD collection as this is very region/city specific and isn't always mentioned and categorized in the correct way.
 
+You can see some [optimal flow examples here](flow-examples.md).
+
+## Configure Widget Settings
+These settings allow you to configure the individual look and feel per trash type. You can influence the color, icon and text that is displayed in the widget. If you made changes and you don't like them, you can use the &#x21BA; button to reset the details back to the default for that specific trash type.
+
 ## Advanced Data Entry
 Here you can enter custom dates for trashcan pick-up in JSON format. These dates will be *added* to the existing dates that already exist based on other selected options. This is only for advanced users and isn't recommended to use.
 
 ```
 {
-    GFT: ['2022-05-05','2022-05-19'],
+    GFT: ['2022-05-05T00:00:00Z','2022-05-19T00:00:00Z'],
     REST: [],
     PAPIER: [],
     GROF: [],
