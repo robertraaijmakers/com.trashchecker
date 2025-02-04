@@ -27,7 +27,10 @@ module.exports = class TrashCollectionReminder extends Homey.App {
    */
   async onInit() {
     // Update manual input dates when settings change.
-    this.homey.settings.on('set', this.onSettingsChanged);
+    this.homey.settings.on('set', (settingName) => {
+      this.onSettingsChanged(settingName);
+    });
+
     this.homey.settings.on('set', () => {
       this.homey.api.realtime('settings_changed', '{}');
     });
@@ -81,13 +84,9 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       this.onUpdateData();
     }, 48 * 60 * 60 * 1000);
 
-    // Update the labels every 10 minutes
-    this.homey.setInterval(() => {
-      this.onUpdateLabel();
-    }, 10 * 60 * 1000);
-
     // Manually kick off data retrieval
     await this.onUpdateData();
+    await this.dailyRefresh();
 
     this.log('App initialized');
   }
@@ -210,6 +209,9 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     this.log('App setings where changed: ', settingName);
 
     // Do something with the fact that the settings where changed
+    if (settingName === 'labelSettings') {
+      await this.onUpdateLabel();
+    }
   }
 
   async onUpdateData() {
@@ -321,7 +323,20 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     await this.onUpdateLabel();
   }
 
-  // Recalculatees the whole set of dates based on the latest settings
+  async dailyRefresh() {
+    await this.onUpdateLabel(); // Update labels on daily interval
+    this.homey.api.realtime('settings_changed', '{}'); // Trigger daily widget refresh
+
+    // Set new timeout to midnight
+    const localDate = await this.getLocalDate();
+    const msToMidnight = new Date(localDate.getFullYear(), localDate.getMonth(), localDate.getDate() + 1, 0, 0, 0, 0).getTime() - localDate.getTime();
+
+    this.homey.setTimeout(() => {
+      this.dailyRefresh();
+    }, msToMidnight + 1000);
+  }
+
+  // Recalculates the whole set of dates based on the latest settings
   async recalculate() {
     await this.onUpdateData();
   }

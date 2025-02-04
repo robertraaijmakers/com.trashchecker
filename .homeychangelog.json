@@ -185,7 +185,7 @@
     "en": "Updated APIs for new year. Notice: your municipality might have changed from provider/API and you might need to reconfigure the app.",
     "nl": "APIs waar nodig bijgewerkt voor het nieuwe jaar. Let op: het kan zijn dat je gemeente van API gewijzigd is en je zaken opnieuw moet instellen!"
   },
-  "5.0.5": {
+  "5.0.6": {
     "en": "Complete rebuild of the app based on new development best practices from Athom.",
     "nl": "De app is volledig opnieuw opgebouwd om nog meer APIs te kunnen ondersteunen in de toekomst."
   }

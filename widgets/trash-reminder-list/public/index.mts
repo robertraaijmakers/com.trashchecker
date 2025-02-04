@@ -58,8 +58,8 @@ class WidgetScript {
         const trashTypeText = this.settings.displayRule === 'trashprovider' ? trashItem.localText || trashItem.settingText : trashItem.settingText;
         const trashColor =
           this.settings.displayRule === 'settings-iconscolors' || this.settings.displayRule === 'trashprovider'
-            ? `style="color: ${trashItem.color || trashItem.settingColor}"`
-            : `style="color: ${trashItem.settingColor}"`;
+            ? `style="background-color: ${trashItem.color || trashItem.settingColor}"`
+            : `style="background-color: ${trashItem.settingColor}"`;
 
         if (this.settings.layoutType === 'large') {
           tbody.innerHTML += `
