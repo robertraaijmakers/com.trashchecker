@@ -601,29 +601,29 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     const labelSettings: LabelSettings = {
       timeindicator: oldLabelSettings.timeindicator,
       generic: oldLabelSettings.generic,
-      GFT: { trashLong: oldLabelSettings.gft },
-      REST: { trashLong: oldLabelSettings.rest },
-      PMD: { trashLong: oldLabelSettings.pmd },
-      PLASTIC: { trashLong: oldLabelSettings.plastic },
-      PAPIER: { trashLong: oldLabelSettings.papier },
-      TEXTIEL: { trashLong: oldLabelSettings.textiel },
-      GROF: { trashLong: oldLabelSettings.grof },
-      GLAS: { trashLong: oldLabelSettings.glas },
-      KERSTBOOM: { trashLong: oldLabelSettings.kerstboom },
-      NONE: { trashLong: oldLabelSettings.none },
+      GFT: { trashLong: oldLabelSettings?.gft || this.homey.__('tokens.output.type.GFT') },
+      REST: { trashLong: oldLabelSettings?.rest || this.homey.__('tokens.output.type.REST') },
+      PMD: { trashLong: oldLabelSettings?.pmd || this.homey.__('tokens.output.type.PMD') },
+      PLASTIC: { trashLong: oldLabelSettings?.plastic || this.homey.__('tokens.output.type.PLASTIC') },
+      PAPIER: { trashLong: oldLabelSettings?.papier || this.homey.__('tokens.output.type.PAPIER') },
+      TEXTIEL: { trashLong: oldLabelSettings?.textiel || this.homey.__('tokens.output.type.TEXTIEL') },
+      GROF: { trashLong: oldLabelSettings?.grof || this.homey.__('tokens.output.type.GROF') },
+      GLAS: { trashLong: oldLabelSettings?.glas || this.homey.__('tokens.output.type.GLAS') },
+      KERSTBOOM: { trashLong: oldLabelSettings?.kerstboom || this.homey.__('tokens.output.type.KERSTBOOM') },
+      NONE: { trashLong: oldLabelSettings?.none || this.homey.__('tokens.output.type.NONE') },
     };
 
     this.homey.settings.set('labelSettings', labelSettings);
 
     const manualSettings: ManualSettings = {
-      GFT: oldManualSettings.gft,
-      PLASTIC: oldManualSettings.plastic,
-      PAPIER: oldManualSettings.paper,
-      PMD: oldManualSettings.pmd,
-      REST: oldManualSettings.rest,
-      TEXTIEL: oldManualSettings.textile,
-      GROF: oldManualSettings.bulky,
-      GLAS: oldManualSettings.glas,
+      GFT: oldManualSettings?.gft,
+      PLASTIC: oldManualSettings?.plastic,
+      PAPIER: oldManualSettings?.paper,
+      PMD: oldManualSettings?.pmd,
+      REST: oldManualSettings?.rest,
+      TEXTIEL: oldManualSettings?.textile,
+      GROF: oldManualSettings?.bulky,
+      GLAS: oldManualSettings?.glas,
     };
 
     this.homey.settings.set('manualEntryData', manualSettings);

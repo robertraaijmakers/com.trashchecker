@@ -1004,7 +1004,9 @@ export class TrashApis {
           break;
       }
 
-      addDate(fDates, key, o[i].dates);
+      for (let index in o[i].dates) {
+        addDate(fDates, key, new Date(o[i].dates[index]));
+      }
     }
 
     return fDates;
