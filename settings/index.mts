@@ -122,7 +122,7 @@ class SettingScript {
 
     this.setInputValue('api', apiSettings?.apiId || '');
     this.setInputValue('cleanApi', apiSettings?.cleanApiId || '');
-    this.setInputValue('postcode', apiSettings?.zipcode || '');
+    this.setInputValue('postcode', apiSettings?.zipcode?.toUpperCase() || '');
     this.setInputValue('number', apiSettings?.housenumber || '');
     this.setInputValue('streetname', apiSettings?.streetname || '');
     this.setInputValue('country', apiSettings?.country || 'NL');
@@ -171,7 +171,7 @@ class SettingScript {
     this.saveManualInput(false);
 
     const apiSettings = {
-      zipcode: this.getInputValue('postcode') || null,
+      zipcode: this.getInputValue('postcode')?.toUpperCase()?.replace(' ', '') || null,
       housenumber: this.getInputValue('number') || null,
       streetname: this.getInputValue('streetname') || null,
       country: this.getInputValue('country') || null,

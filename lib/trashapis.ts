@@ -1,9 +1,9 @@
 'use strict';
 
-import cheerio from 'cheerio';
 import { ActivityDates, ApiDefinition, ApiFindResult } from '../types/localTypes';
 import { addDate, formatDate, httpsPromise, parseDutchDate, processWasteData, validateCountry, validateHousenumber, validateZipcode, verifyByName, verifyDate } from './helpers';
 import { ApiSettings, TrashType } from '../assets/publicTypes';
+import { parseDocument, DomUtils } from 'htmlparser2';
 
 export class TrashApis {
   #apiList: ApiDefinition[] = [];
@@ -345,53 +345,42 @@ export class TrashApis {
       family: 4,
     });
 
-    // Stip lot of data from body to prevent memory overflow
-    const body = <any>retrieveCalendarDataRequest.body;
-    var searchResultIndex = body.indexOf('<table width="100%" cellpadding="0" cellspacing="0" role=\'presentation\'>');
+    // Skip lot of data from body to prevent memory overflow
+    const body = <string>retrieveCalendarDataRequest.body;
 
-    var regex = /<a href="#waste-(.*) class="wasteInfoIcon/i;
-    var searchResultIndex = body.search(regex);
+    const regex = /<a href="#waste-(.*) class="wasteInfoIcon/i;
+    let searchResultIndex = body.search(regex);
 
     while (searchResultIndex >= 0) {
       const endString = body.indexOf('</a>', searchResultIndex);
-      const result = body.substr(searchResultIndex, endString - searchResultIndex + 4);
-      const $ = cheerio.load(result);
+      const result = body.substring(searchResultIndex, endString + 4);
 
-      $('a.wasteInfoIcon p').each((i, elem) => {
-        if (elem == null) {
-          return;
-        }
+      // Parse the HTML fragment
+      const doc = parseDocument(result);
 
-        if (elem.children.length < 2) {
-          return;
-        }
+      // Find all `<a>` elements with class `wasteInfoIcon`
+      const wasteInfoLinks = DomUtils.findAll((elem) => DomUtils.isTag(elem) && elem.tagName === 'a' && elem.attribs.class?.includes('wasteInfoIcon'), doc.children);
 
-        var child = <any>elem.children[1];
-        if (child.children == null) {
-          return;
-        }
+      for (const link of wasteInfoLinks) {
+        const firstParagraph = DomUtils.findOne((elem) => DomUtils.isTag(elem) && elem.tagName === 'p', link.children);
 
-        let trashDate = null;
-        var wasteDescription = $('.afvaldescr', elem).text();
-        if (child.children.length < 1) {
-          var subData = <any>elem.children[0];
-          trashDate = parseDutchDate(subData.data);
-        } else {
-          trashDate = parseDutchDate(child.children[0].data);
-        }
+        if (!firstParagraph || !firstParagraph.children || firstParagraph.children.length < 2) continue;
 
-        console.log(trashDate);
-        if (trashDate == null) return;
+        const trashType = link.attribs?.title || 'Unknown';
+        const spanElement = DomUtils.findOne((el) => DomUtils.isTag(el) && el.name === 'span', firstParagraph.children);
+        if (!spanElement) continue;
 
-        verifyByName(fDates, wasteDescription, elem.attribs.class.trim(), trashDate);
-      });
+        const trashDate = DomUtils.innerText(spanElement).trim();
+        if (trashDate === 'Unknown') continue;
 
-      let nextResult = body.substring(searchResultIndex + 4).search(regex);
-      if (nextResult > 0) {
-        searchResultIndex = nextResult + searchResultIndex + 4;
-      } else {
-        searchResultIndex = -1;
+        const parsedTrashDate = parseDutchDate(trashDate);
+        if (parsedTrashDate === null) continue;
+        verifyByName(fDates, '', trashType, parsedTrashDate);
       }
+
+      // Find the next match
+      let nextResult = body.substring(searchResultIndex + 4).search(regex);
+      searchResultIndex = nextResult > 0 ? searchResultIndex + 4 + nextResult : -1;
     }
 
     return fDates;
@@ -409,7 +398,7 @@ export class TrashApis {
     const startDate = new Date().setDate(new Date().getDate() - 14);
     const endDate = new Date().setDate(new Date().getDate() + 30);
 
-    const post_data1 = `{companyCode:"${companyCode}",postCode:"${apiSettings.zipcode}",houseNumber:${apiSettings.housenumber}}`;
+    const post_data1 = `{companyCode:"${companyCode}",postCode:"${apiSettings.zipcode?.toUpperCase()}",houseNumber:${apiSettings.housenumber}}`;
     const retrieveUniqueId = await httpsPromise({
       hostname: hostName,
       path: `/api/FetchAdress`,
