@@ -76,8 +76,9 @@ class SettingScript {
   async handleGetLabelSettings(err: string, labelSettings: LabelSettings) {
     console.log(labelSettings);
 
+    // Replacement of __types__ with __type__ to be backwards compatible and migrate everybody to the __type__ replacement
     this.setInputValue('labelTimeIndicator', labelSettings?.timeindicator || 0);
-    this.setInputValue('labelGeneric', labelSettings?.generic || this.homey.__('tokens.output.trashtypeycollectedonx'));
+    this.setInputValue('labelGeneric', labelSettings?.generic?.replace('__types__', '__type__') || this.homey.__('tokens.output.trashtypeycollectedonx'));
     this.setPlaceholderValue('labelGeneric', this.homey.__('tokens.output.trashtypeycollectedonx'));
 
     // Loop over types

@@ -408,7 +408,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       outputText = alternativeTextLabel
         .replace('__time__', timeReplacement)
         .replace('__type__', multiTypeString)
-        .replace('__types__', multiTypeString)
+        .replace('__types__', multiTypeString) // Added replacement for __types__ backwards compatibility
         .replace('__plural__', this.homey.__('tokens.output.replacementplural'));
     } else {
       let textLabel = labelSettings?.['NONE']?.trashLong || this.homey.__('tokens.output.type.NONE');
@@ -419,7 +419,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       outputText = alternativeTextLabel
         .replace('__time__', timeReplacement)
         .replace('__type__', textLabel)
-        .replace('__types__', textLabel)
+        .replace('__types__', textLabel) // Added replacement for __types__ backwards compatibility
         .replace('__plural__', this.homey.__('tokens.output.replacementsingle'));
     }
 
