@@ -405,14 +405,22 @@ module.exports = class TrashCollectionReminder extends Homey.App {
           (i < len - 2 ? ', ' : i == len - 2 ? ' ' + this.homey.__('tokens.output.and') + ' ' : '');
       }
 
-      outputText = alternativeTextLabel.replace('__time__', timeReplacement).replace('__type__', multiTypeString).replace('__plural__', this.homey.__('tokens.output.replacementplural'));
+      outputText = alternativeTextLabel
+        .replace('__time__', timeReplacement)
+        .replace('__type__', multiTypeString)
+        .replace('__types__', multiTypeString)
+        .replace('__plural__', this.homey.__('tokens.output.replacementplural'));
     } else {
       let textLabel = labelSettings?.['NONE']?.trashLong || this.homey.__('tokens.output.type.NONE');
       if (items.length === 1) {
         textLabel = labelSettings?.[items[0]?.type]?.trashLong || this.homey.__(`tokens.output.type.${items[0].type}`);
       }
 
-      outputText = alternativeTextLabel.replace('__time__', timeReplacement).replace('__type__', textLabel).replace('__plural__', this.homey.__('tokens.output.replacementsingle'));
+      outputText = alternativeTextLabel
+        .replace('__time__', timeReplacement)
+        .replace('__type__', textLabel)
+        .replace('__types__', textLabel)
+        .replace('__plural__', this.homey.__('tokens.output.replacementsingle'));
     }
 
     return outputText;
