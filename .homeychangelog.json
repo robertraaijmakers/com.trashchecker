@@ -189,7 +189,7 @@
     "en": "Complete rebuild of the app based on new development best practices from Athom.",
     "nl": "De app is volledig opnieuw opgebouwd om nog meer APIs te kunnen ondersteunen in de toekomst."
   },
-  "5.1.1": {
+  "5.1.2": {
     "en": "Fixed a couple of trash APIs using the GeneralAfvalwijzer implementation",
     "nl": "Een foutmelding opgelost voor diverse APIs die gebruik maken van GeneralAfvalwijzer."
   }
