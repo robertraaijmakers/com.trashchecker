@@ -101,7 +101,7 @@
 		},
 		"output":
 		{
-			"trashtypeycollectedonx": "__types__ __plural__ __time__ opgehaald.",
+			"trashtypeycollectedonx": "__type__ __plural__ __time__ opgehaald.",
 			"and": "en",
 			"replacementsingle": "wordt",
 			"replacementplural": "worden",

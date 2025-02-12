@@ -9,7 +9,7 @@ import { ApiSettings, LabelSettings, ManualSetting, ManualSettings, TrashType } 
 import { DateTimeHelper } from './lib/datetimehelper';
 
 // TODO: find solution to import this from the .mts file
-export const AllTrashTypes: string[] = ['GFT', 'PLASTIC', 'PAPIER', 'PMD', 'REST', 'TEXTIEL', 'GROF', 'KERSTBOOM', 'GLAS'];
+const AllTrashTypes: string[] = ['GFT', 'PLASTIC', 'PAPIER', 'PMD', 'REST', 'TEXTIEL', 'GROF', 'KERSTBOOM', 'GLAS'];
 
 module.exports = class TrashCollectionReminder extends Homey.App {
   collectionDates: ActivityDates[] = [];
@@ -27,7 +27,10 @@ module.exports = class TrashCollectionReminder extends Homey.App {
    */
   async onInit() {
     // Update manual input dates when settings change.
-    this.homey.settings.on('set', this.onSettingsChanged);
+    this.homey.settings.on('set', (settingName) => {
+      this.onSettingsChanged(settingName);
+    });
+
     this.homey.settings.on('set', () => {
       this.homey.api.realtime('settings_changed', '{}');
     });
@@ -81,13 +84,9 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       this.onUpdateData();
     }, 48 * 60 * 60 * 1000);
 
-    // Update the labels every 10 minutes
-    this.homey.setInterval(() => {
-      this.onUpdateLabel();
-    }, 10 * 60 * 1000);
-
     // Manually kick off data retrieval
     await this.onUpdateData();
+    await this.dailyRefresh();
 
     this.log('App initialized');
   }
@@ -113,7 +112,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       return this.handleResultTrashCollection(type, result, trashTypeCollected, trashTypeCollectedLocalized);
     }
 
-    if (args.trash_type !== 'ANY' && this.collectionDates.some((x) => x.type === args.trash_type.toUpperCase())) {
+    if (args.trash_type !== 'ANY' && !this.collectionDates.some((x) => x.type === args.trash_type)) {
       var message = this.homey.__('error.typenotsupported.addviasettings');
       this.log(message);
       return this.handleResultTrashCollection(type, result, trashTypeCollected, trashTypeCollectedLocalized);
@@ -134,7 +133,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
         const firstItem = itemsCollectedToday[0];
         result = true;
         trashTypeCollected = this.homey.__(`widgets.trashType.${firstItem.type}`);
-        trashTypeCollectedLocalized = labelSettings.type[firstItem.type];
+        trashTypeCollectedLocalized = labelSettings?.type?.[firstItem.type] || this.homey.__(`tokens.output.type.${firstItem.type}`);
       }
 
       return this.handleResultTrashCollection(type, result, trashTypeCollected, trashTypeCollectedLocalized);
@@ -143,10 +142,10 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     result = itemsCollectedToday.some((x) => x.type === args.trash_type);
     if (result === true) {
       trashTypeCollected = this.homey.__(`widgets.trashType.${args.trash_type}`);
-      trashTypeCollectedLocalized = labelSettings.type[args.trash_type];
+      trashTypeCollectedLocalized = labelSettings?.type?.[args.trash_type] || this.homey.__(`tokens.output.type.${args.trash_type}`);
     }
 
-    return this.handleResultTrashCollection(type, true, trashTypeCollected, trashTypeCollectedLocalized);
+    return this.handleResultTrashCollection(type, result, trashTypeCollected, trashTypeCollectedLocalized);
   }
 
   async flowTrashIsCleanedAction(args: TrashFlowCardArgument) {
@@ -167,7 +166,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       return this.handleResultTrashCleaning(type, result, trashTypeCleaned, trashTypeCleanedLocalized);
     }
 
-    if (args.trash_type !== 'ANY' && this.cleanDates.some((x) => x.type === args.trash_type.toUpperCase())) {
+    if (args.trash_type !== 'ANY' && !this.cleanDates.some((x) => x.type === args.trash_type.toUpperCase())) {
       var message = this.homey.__('error.typenotsupported.addviasettings');
       this.log(message);
       return this.handleResultTrashCleaning(type, result, trashTypeCleaned, trashTypeCleanedLocalized);
@@ -188,7 +187,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
         const firstItem = itemsCleanedToday[0];
         result = true;
         trashTypeCleaned = this.homey.__(`widgets.trashType.${firstItem.type}`);
-        trashTypeCleanedLocalized = labelSettings.type[firstItem.type];
+        trashTypeCleanedLocalized = labelSettings?.type?.[firstItem.type] || this.homey.__(`tokens.output.type.${firstItem.type}`);
       }
 
       return this.handleResultTrashCleaning(type, result, trashTypeCleaned, trashTypeCleanedLocalized);
@@ -197,10 +196,10 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     result = itemsCleanedToday.some((x) => x.type === args.trash_type);
     if (result === true) {
       trashTypeCleaned = this.homey.__(`widgets.trashType.${args.trash_type}`);
-      trashTypeCleanedLocalized = labelSettings.type[args.trash_type];
+      trashTypeCleanedLocalized = labelSettings?.type?.[args.trash_type] || this.homey.__(`tokens.output.type.${args.trash_type}`);
     }
 
-    return this.handleResultTrashCleaning(type, true, trashTypeCleaned, trashTypeCleanedLocalized);
+    return this.handleResultTrashCleaning(type, result, trashTypeCleaned, trashTypeCleanedLocalized);
   }
 
   /* ******************
@@ -210,6 +209,9 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     this.log('App setings where changed: ', settingName);
 
     // Do something with the fact that the settings where changed
+    if (settingName === 'labelSettings') {
+      await this.onUpdateLabel();
+    }
   }
 
   async onUpdateData() {
@@ -277,8 +279,6 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   }
 
   async onUpdateLabel() {
-    this.log('Start updating label');
-
     var labelSettings = <LabelSettings>this.homey.settings.get('labelSettings');
 
     const todayLabel = await this.getLabel(labelSettings, 0);
@@ -291,10 +291,6 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     await this.trashTokenAdvancedCollectionDates.setValue(JSON.stringify(this.collectionDates));
 
     this.log('Labels updated');
-    this.log(`Today: ${todayLabel}`);
-    this.log(`Tomorrow: ${tomorrowLabel}`);
-    this.log(`Day after tomorrow: ${dayAfterTomorrowLabel}`);
-
     return true;
   }
 
@@ -319,7 +315,6 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       if (!manualAdditions?.[trashType]) continue;
 
       for (let index in manualAdditions[trashType]) {
-        this.log(`Added date ${manualAdditions[trashType][index]} to ${trashType}.`);
         addDate(this.collectionDates, trashType, new Date(manualAdditions[trashType][index]));
       }
     }
@@ -328,7 +323,20 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     await this.onUpdateLabel();
   }
 
-  // Recalculatees the whole set of dates based on the latest settings
+  async dailyRefresh() {
+    await this.onUpdateLabel(); // Update labels on daily interval
+    this.homey.api.realtime('settings_changed', '{}'); // Trigger daily widget refresh
+
+    // Set new timeout to midnight
+    const localDate = await this.getLocalDate();
+    const msToMidnight = new Date(localDate.getFullYear(), localDate.getMonth(), localDate.getDate() + 1, 0, 0, 0, 0).getTime() - localDate.getTime();
+
+    this.homey.setTimeout(() => {
+      this.dailyRefresh();
+    }, msToMidnight + 1000);
+  }
+
+  // Recalculates the whole set of dates based on the latest settings
   async recalculate() {
     await this.onUpdateData();
   }
@@ -356,12 +364,12 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   // Function to find all events on a specified date
   async findResultsByDate(dates: ActivityDates[], targetDate: Date): Promise<ActivityItem[]> {
     // Normalize the target date to avoid time mismatches
-    const normalizedTargetDate = new Date(targetDate.toDateString());
+    const normalizedTargetDate = new Date(targetDate.toDateString()).getTime();
 
     // Filter and map the dates array to get matching collection items
     const collectionItems = dates.flatMap((collectionDate) =>
       collectionDate.dates
-        .filter((date) => new Date(new Date(date).toDateString()).getTime() === normalizedTargetDate.getTime())
+        .filter((date) => new Date(date).setHours(0, 0, 0, 0) === normalizedTargetDate)
         .map((date) => ({
           type: collectionDate.type,
           icon: collectionDate.icon,
@@ -397,14 +405,22 @@ module.exports = class TrashCollectionReminder extends Homey.App {
           (i < len - 2 ? ', ' : i == len - 2 ? ' ' + this.homey.__('tokens.output.and') + ' ' : '');
       }
 
-      outputText = alternativeTextLabel.replace('__time__', timeReplacement).replace('__type__', multiTypeString).replace('__plural__', this.homey.__('tokens.output.replacementplural'));
+      outputText = alternativeTextLabel
+        .replace('__time__', timeReplacement)
+        .replace('__type__', multiTypeString)
+        .replace('__types__', multiTypeString) // Added replacement for __types__ backwards compatibility
+        .replace('__plural__', this.homey.__('tokens.output.replacementplural'));
     } else {
       let textLabel = labelSettings?.['NONE']?.trashLong || this.homey.__('tokens.output.type.NONE');
       if (items.length === 1) {
         textLabel = labelSettings?.[items[0]?.type]?.trashLong || this.homey.__(`tokens.output.type.${items[0].type}`);
       }
 
-      outputText = alternativeTextLabel.replace('__time__', timeReplacement).replace('__type__', textLabel).replace('__plural__', this.homey.__('tokens.output.replacementsingle'));
+      outputText = alternativeTextLabel
+        .replace('__time__', timeReplacement)
+        .replace('__type__', textLabel)
+        .replace('__types__', textLabel) // Added replacement for __types__ backwards compatibility
+        .replace('__plural__', this.homey.__('tokens.output.replacementsingle'));
     }
 
     return outputText;
@@ -416,13 +432,11 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       return result;
     }
 
-    if (result) {
-      return {
-        isCollected: true,
-        trashType,
-        trashTypeLocalized,
-      };
-    }
+    return {
+      isCollected: result,
+      trashType,
+      trashTypeLocalized,
+    };
   }
 
   // Generic function to give proper result back to the flow
@@ -595,29 +609,29 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     const labelSettings: LabelSettings = {
       timeindicator: oldLabelSettings.timeindicator,
       generic: oldLabelSettings.generic,
-      GFT: { trashLong: oldLabelSettings.gft },
-      REST: { trashLong: oldLabelSettings.rest },
-      PMD: { trashLong: oldLabelSettings.pmd },
-      PLASTIC: { trashLong: oldLabelSettings.plastic },
-      PAPIER: { trashLong: oldLabelSettings.papier },
-      TEXTIEL: { trashLong: oldLabelSettings.textiel },
-      GROF: { trashLong: oldLabelSettings.grof },
-      GLAS: { trashLong: oldLabelSettings.glas },
-      KERSTBOOM: { trashLong: oldLabelSettings.kerstboom },
-      NONE: { trashLong: oldLabelSettings.none },
+      GFT: { trashLong: oldLabelSettings?.gft || this.homey.__('tokens.output.type.GFT') },
+      REST: { trashLong: oldLabelSettings?.rest || this.homey.__('tokens.output.type.REST') },
+      PMD: { trashLong: oldLabelSettings?.pmd || this.homey.__('tokens.output.type.PMD') },
+      PLASTIC: { trashLong: oldLabelSettings?.plastic || this.homey.__('tokens.output.type.PLASTIC') },
+      PAPIER: { trashLong: oldLabelSettings?.papier || this.homey.__('tokens.output.type.PAPIER') },
+      TEXTIEL: { trashLong: oldLabelSettings?.textiel || this.homey.__('tokens.output.type.TEXTIEL') },
+      GROF: { trashLong: oldLabelSettings?.grof || this.homey.__('tokens.output.type.GROF') },
+      GLAS: { trashLong: oldLabelSettings?.glas || this.homey.__('tokens.output.type.GLAS') },
+      KERSTBOOM: { trashLong: oldLabelSettings?.kerstboom || this.homey.__('tokens.output.type.KERSTBOOM') },
+      NONE: { trashLong: oldLabelSettings?.none || this.homey.__('tokens.output.type.NONE') },
     };
 
     this.homey.settings.set('labelSettings', labelSettings);
 
     const manualSettings: ManualSettings = {
-      GFT: oldManualSettings.gft,
-      PLASTIC: oldManualSettings.plastic,
-      PAPIER: oldManualSettings.paper,
-      PMD: oldManualSettings.pmd,
-      REST: oldManualSettings.rest,
-      TEXTIEL: oldManualSettings.textile,
-      GROF: oldManualSettings.bulky,
-      GLAS: oldManualSettings.glas,
+      GFT: oldManualSettings?.gft,
+      PLASTIC: oldManualSettings?.plastic,
+      PAPIER: oldManualSettings?.paper,
+      PMD: oldManualSettings?.pmd,
+      REST: oldManualSettings?.rest,
+      TEXTIEL: oldManualSettings?.textile,
+      GROF: oldManualSettings?.bulky,
+      GLAS: oldManualSettings?.glas,
     };
 
     this.homey.settings.set('manualEntryData', manualSettings);

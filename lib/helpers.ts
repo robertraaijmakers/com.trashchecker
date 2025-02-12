@@ -99,6 +99,37 @@ export function formatDate(date: Date | number) {
   return [year, month, day].join('-');
 }
 
+export function parseDutchDate(dutchDate: string): Date | null {
+  const months: { [key: string]: number } = {
+    januari: 0,
+    februari: 1,
+    maart: 2,
+    april: 3,
+    mei: 4,
+    juni: 5,
+    juli: 6,
+    augustus: 7,
+    september: 8,
+    oktober: 9,
+    november: 10,
+    december: 11,
+  };
+
+  const parts = dutchDate.split(' ');
+  if (parts.length !== 3) return null;
+
+  const day = parseInt(parts[1], 10);
+  const month = months[parts[2]];
+  const currentYear = new Date().getUTCFullYear();
+  const currentMonth = new Date().getUTCMonth();
+
+  // If current month is December and parsed month is between January-June, set year to next year
+  const year = currentMonth === 11 && month <= 5 ? currentYear + 1 : currentYear;
+
+  if (isNaN(day) || month === undefined) return null;
+  return new Date(Date.UTC(year, month, day));
+}
+
 export function verifyDate(dateString: string) {
   var dateArray = dateString.split('-');
   if (dateArray[0].length === 4) {
@@ -130,7 +161,13 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     foundType = true;
   }
 
-  if (description.indexOf('rest') !== -1 || description.indexOf('etensresten') !== -1 || description.indexOf('residual') !== -1 || description.indexOf('grey') !== -1) {
+  if (
+    description.indexOf('rest') !== -1 ||
+    description.indexOf('etensresten') !== -1 ||
+    description.indexOf('residual') !== -1 ||
+    description.indexOf('grey') !== -1 ||
+    description.indexOf('sortibak') !== -1
+  ) {
     addDate(activityDates, TrashType.REST, date, icon, localDescription, color);
     foundType = true;
   }

@@ -7,7 +7,7 @@
     "lib": "lib"
   },
   "dependencies": {
-    "cheerio": "1.0.0-rc.10",
+    "htmlparser2": "^9.0.0",
     "https": "^1.0.0"
   },
   "devDependencies": {
@@ -17,14 +17,14 @@
     "@types/node": "^22.10.5",
     "eslint": "^7.32.0",
     "eslint-config-athom": "^3.1.3",
-    "mocha": "^9.2.2",
+    "mocha": "^11.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   },
   "scripts": {
     "build": "tsc",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
-    "test": "mocha -r ts-node/register 'test/**/*.ts' --timeout 10000'"
+    "test": "mocha --require ts-node/register test/**/*.ts --timeout 10000"
   },
   "repository": {
     "type": "git",

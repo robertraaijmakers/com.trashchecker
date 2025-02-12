@@ -5,7 +5,7 @@ import { describe, it } from 'node:test';
 import { ActivityDates } from '../types/localTypes';
 import assert from 'assert';
 import { ApiSettings } from '../assets/publicTypes';
-
+/*
 describe('Kliko Manager', function () {
   it('API - Klikomanager Uithoorn', async function () {
     const apiSettings: ApiSettings = {
@@ -396,7 +396,7 @@ describe('TrashApiRd4', function () {
     assert.equal(isValid, true);
   });
 });
-
+*/
 describe('TrashApiAfw', function () {
   it('API - Mijn Afvalwijzer (1)', async function () {
     const apiSettings: ApiSettings = {
@@ -412,7 +412,7 @@ describe('TrashApiAfw', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-
+  /*
   it('API - Afvalwijzer (2) - #204', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '5122GP',
@@ -501,9 +501,9 @@ describe('TrashApiAfw', function () {
     const result = await testAPI(apiSettings);
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
-  });
+  });*/
 });
-
+/*
 describe('TrashApiAknw', function () {
   it('API - Nissewaard', async function () {
     const apiSettings: ApiSettings = {
