@@ -35,6 +35,7 @@ export class TrashApis {
     this.#apiList.push({ name: 'Afvalkalender Súdwest-Fryslân', id: 'swf', execute: (apiSettings) => this.#afvalkalenderSudwestFryslan(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Venray', id: 'akvr', execute: (apiSettings) => this.#afvalkalenderVenray(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Westland', id: 'akwl', execute: (apiSettings) => this.#afvalKalenderWestland(apiSettings) });
+    this.#apiList.push({ name: 'Afvalkalender Woerden', id: 'akwrd', execute: (apiSettings) => this.#afvalKalenderWoerden(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender ZRD', id: 'afzrd', execute: (apiSettings) => this.#afvalkalenderZrd(apiSettings) });
     this.#apiList.push({ name: 'Avalwijzer Montferland', id: 'mont', execute: (apiSettings) => this.#afvalwijzerMontferland(apiSettings) });
     this.#apiList.push({ name: 'Afvalwijzer Pre Zero', id: 'arn', execute: (apiSettings) => this.#afvalwijzerPreZero(apiSettings) });
@@ -232,6 +233,10 @@ export class TrashApis {
 
   async #afvalKalenderWestland(apiSettings: ApiSettings) {
     return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'inzamelkalender.hvcgroep.nl');
+  }
+
+  async #afvalKalenderWoerden(apiSettings: ApiSettings) {
+    return this.#generalImplementationWasteApi(apiSettings, '06856f74-6826-4c6a-aabf-69bc9d20b5a6', 'wasteprod2api.ximmio.com');
   }
 
   async #reinigingsdienstWaardlanden(apiSettings: ApiSettings) {

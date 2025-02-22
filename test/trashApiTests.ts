@@ -396,7 +396,7 @@ describe('TrashApiRd4', function () {
     assert.equal(isValid, true);
   });
 });
-*/
+
 describe('TrashApiAfw', function () {
   it('API - Mijn Afvalwijzer (1)', async function () {
     const apiSettings: ApiSettings = {
@@ -412,7 +412,7 @@ describe('TrashApiAfw', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-  /*
+  
   it('API - Afvalwijzer (2) - #204', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '5122GP',
@@ -501,8 +501,26 @@ describe('TrashApiAfw', function () {
     const result = await testAPI(apiSettings);
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
-  });*/
+  });
+});*/
+
+describe('Woerden Ximmio', function () {
+  it('API - Ximmio - Woerden', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '3441AX',
+      housenumber: '9',
+      country: 'NL',
+      apiId: 'akwrd',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
 });
+
 /*
 describe('TrashApiAknw', function () {
   it('API - Nissewaard', async function () {
