@@ -18,10 +18,26 @@
         margin: 0px 0px var(--homey-su-3) 0px;  /* Add some spacing between items */
         box-sizing: border-box;
         padding: var(--homey-su) var(--homey-su-2);
-        background-color: var(--homey-background-color);
         border-radius: var(--homey-border-radius-default);
-        
+        box-shadow: 0 2px 2px 0 rgba(0,0,0, 0.08),0 2px 4px 0 rgba(0,0,0, 0.08),0 0 1px 1px rgba(255,255,255, 0.08);
+
         position: relative;
+      }
+
+      .trash-item-container, .trash-item-container-compact {
+        background-color: var(--homey-color-mono-025); /* for light mode - no highlight */
+      }
+
+      .homey-dark-mode .trash-item-container, .homey-dark-mode .trash-item-container-compact {
+        background-color: var(--homey-background-color); /* for dark mode - no highlight */
+      }
+
+      .trash-item-container.trash-item-container-highlight, .trash-item-container-compact.trash-item-container-highlight {
+        background-color: var(--homey-background-color); /* for light mode */
+      }
+
+      .homey-dark-mode .trash-item-container.trash-item-container-highlight, .homey-dark-mode .trash-item-container-compact.trash-item-container-highlight {
+        background-color: var(--homey-color-mono-200); /* for dark mode */
       }
 
       .trashContainer.triple .trash-item-container {
@@ -62,11 +78,11 @@
         align-items: center;  /* Vertically center the dot and text */
         justify-content: flex-start;  /* Align items to the left */
         width: 48%;  /* Each container takes about half the width */
-        margin: 0px 0px var(--homey-su-3) 0px;  /* Add some spacing between items */
+        margin: 0px 0px var(--homey-su-2) 0px;  /* Add some spacing between items */
         box-sizing: border-box;
         padding: var(--homey-su) var(--homey-su-2);
-        background-color: var(--homey-background-color);
         border-radius: var(--homey-border-radius-default);
+        box-shadow: 0 2px 2px 0 rgba(0,0,0, 0.08),0 2px 4px 0 rgba(0,0,0, 0.08),0 0 1px 1px rgba(255,255,255, 0.08);
         position: relative;
       }
 
@@ -98,7 +114,7 @@
       /* Title and subtitle styling */
       .trash-date-title {
           margin: 0;
-          font-weight: var(--homey-font-weight-light);
+          font-weight: var(--homey-font-weight-medium);
           font-size: var(--homey-font-size-small);
           line-height: var(--homey-font-size-small);
       }

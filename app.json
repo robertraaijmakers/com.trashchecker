@@ -572,6 +572,10 @@
             "nl": "Layout",
             "sv": "Layout"
           },
+          "hint": {
+            "en": "There are two layout types. Large; displays larger tiles with only the date. Compact; displays small tiles, with date and type.",
+            "nl": "Er zijn twee layout opties. Groot; toont grote iconen met de ophaaldatum. Compact; toont kleine iconen met ophaaldatum en type."
+          },
           "value": "large",
           "values": [
             {
@@ -607,8 +611,8 @@
             "nl": "Widget Hoogte"
           },
           "hint": {
-            "en": "The amount of trash type lines to be visible in one view. Determines the widget height.",
-            "nl": "Aantal afvalregels wat zichtbaar is in één overzicht. Bepaald de hoogte van de widget."
+            "en": "The amount of trash type lines to be visible in one view. Determines the widget height. When you have more items then can be shown, a scrollbar will appear.",
+            "nl": "Aantal afvalregels wat zichtbaar is in één overzicht. Bepaald de hoogte van de widget. Wanneer er meer ophaalmomenten zijn dan getoond kunnen worden op de regel(s) zal er een scrollbalk te zien zijn."
           }
         },
         {
@@ -637,6 +641,10 @@
           "title": {
             "en": "Show types once?",
             "nl": "Toon types maar één keer?"
+          },
+          "hint": {
+            "en": "Check this box if you want to show every trash collection type only once. This is helpful when you want to have only 4 tiles and want to see the first pick-up date for 4 different trash types.",
+            "nl": "Vink dit aan om elk afvaltype maar één keer te zien. Dit is handig wanneer je maar 4 tegels wilt zien en je voor vier verschillende afvaltypen wilt zien wanneer die opgehaald worden."
           }
         },
         {
@@ -646,7 +654,61 @@
           "title": {
             "en": "Display yesterday?",
             "nl": "Toon gisteren?"
+          },
+          "hint": {
+            "en": "Check this box if you want to show a tile when trash was collected yesterday.",
+            "nl": "Vink dit aan om ook te zien welk afval er gisteren opgehaald werd."
           }
+        },
+        {
+          "id": "highlight-tile",
+          "type": "dropdown",
+          "title": {
+            "en": "Highlight tile?",
+            "nl": "Markeer tegel?"
+          },
+          "hint": {
+            "en": "Configure if or when the tile needs to be 'highlighted'. None; never highlight. Today, tomorrow; highlight if trash is collected on that day. Always; highlight all tiles.",
+            "nl": "Stel in of en wanneer de achtergrond van de tegel moet 'oplichten'. Geen; nooit oplichten. Vandaag, morgen: oplichten als afval op die dag opgehaald wordt. Altijd; alle tegels oplichten."
+          },
+          "value": "today",
+          "values": [
+            {
+              "id": "none",
+              "title": {
+                "en": "None",
+                "nl": "Geen"
+              }
+            },
+            {
+              "id": "today",
+              "title": {
+                "en": "Today",
+                "nl": "Vandaag"
+              }
+            },
+            {
+              "id": "tomorrow",
+              "title": {
+                "en": "Tomorrow",
+                "nl": "Morgen"
+              }
+            },
+            {
+              "id": "today-tomorrow",
+              "title": {
+                "en": "Today & Tomorrow",
+                "nl": "Vandaag & Morgen"
+              }
+            },
+            {
+              "id": "always",
+              "title": {
+                "en": "Always",
+                "nl": "Altijd"
+              }
+            }
+          ]
         },
         {
           "id": "display-provider-icons",

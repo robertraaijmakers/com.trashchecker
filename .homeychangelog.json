@@ -194,7 +194,7 @@
     "nl": "Een foutmelding opgelost voor diverse APIs die gebruik maken van GeneralAfvalwijzer."
   },
   "5.1.3": {
-    "en": "Added Woerden (#227) and added 5 week interval (#226)",
-    "nl": "Regio Woerden wordt nu ondersteund (#227) en tevens 5-weekse handmatige interval toegevoegd (#226)."
+    "en": "Added Woerden (#227), added 5 week manual interval (#226), added widget highlight when trash is collected (can be toggled on/off through widget settings).",
+    "nl": "Regio Woerden wordt nu ondersteund (#227), tevens 5-weekse handmatige interval toegevoegd (#226), widget highlight toegevoegd als afval wordt opgehaald (kan aan/uitgezet worden via de widget instellingen)."
   }
 }

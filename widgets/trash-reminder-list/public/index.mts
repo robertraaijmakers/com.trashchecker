@@ -2,7 +2,7 @@
 
 import type HomeyWidget from 'homey/lib/HomeyWidget.js';
 import { WidgetItem, WidgetSettings } from '../../../types/localTypes.js';
-import { LabelSettings, TrashType } from '../../../assets/publicTypes.js';
+import { TrashType } from '../../../assets/publicTypes.js';
 
 class WidgetScript {
   private homey: HomeyWidget;
@@ -20,6 +20,7 @@ class WidgetScript {
       maxItems: settings['max-items'] as number,
       singleTypes: settings['single-types'] as boolean,
       listHeight: settings['list-height'] as number,
+      highlightTile: settings['highlight-tile'] as 'today' | 'tomorrow' | 'today-tomorrow' | 'none' | 'always',
       displayRule: settings['display-provider-icons'] as 'settings' | 'settings-icons' | 'settings-iconscolors' | 'trashprovider',
     };
   }
@@ -50,6 +51,15 @@ class WidgetScript {
         if (counter >= this.settings.maxItems) continue;
         if (this.settings.singleTypes === true && typeof usedTypes[trashItem.type] !== 'undefined') continue;
 
+        const activityIsToday = new Date(trashItem.activityDate).toDateString() === new Date().toDateString();
+        const activityIsTomorrow = new Date(trashItem.activityDate).toDateString() === new Date(new Date().setDate(new Date().getDate() + 1)).toDateString();
+        let highlightTile = false;
+
+        if (this.settings.highlightTile === 'today' && activityIsToday) highlightTile = true;
+        if (this.settings.highlightTile === 'tomorrow' && activityIsTomorrow) highlightTile = true;
+        if (this.settings.highlightTile === 'today-tomorrow' && (activityIsToday || activityIsTomorrow)) highlightTile = true;
+        if (this.settings.highlightTile === 'always') highlightTile = true;
+
         usedTypes[trashItem.type] = 'used';
         counter += 1;
 
@@ -63,7 +73,7 @@ class WidgetScript {
 
         if (this.settings.layoutType === 'large') {
           tbody.innerHTML += `
-          <div class="trash-item-container">
+          <div class="trash-item-container ${highlightTile ? 'trash-item-container-highlight' : ''}">
             <span class="dot-large dot-type-${trashItem.type}" ${trashColor}><img src="${trashIcon}" /></span>
             <p class="trash-date-title trash-date">${displayDate}</p>
             ${trashItem.isCleaned ? '<span class="cleaning-icon">🫧</span>' : ''}
@@ -73,7 +83,7 @@ class WidgetScript {
           itemsPerRow = 2;
 
           tbody.innerHTML += `
-          <div class="trash-item-container-compact">
+          <div class="trash-item-container-compact ${highlightTile ? 'trash-item-container-highlight' : ''}">
             <span class="dot-compact dot-type-${trashItem.type}" ${trashColor}><img src="${trashIcon}" /></span>
             <div class="trash-date-container">
               <p class="trash-date-title">${trashTypeText}</p>
@@ -112,6 +122,11 @@ class WidgetScript {
       const tbody = document.querySelector('#trashCollections');
       if (tbody === null) return;
       tbody.innerHTML = `Error: ${error}`;
+
+      // Retry after 10 seconds
+      setTimeout(() => {
+        this.Init();
+      }, 10000);
     }
   }
 
