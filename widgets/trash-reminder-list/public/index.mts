@@ -75,7 +75,7 @@ class WidgetScript {
           tbody.innerHTML += `
           <div class="trash-item-container ${highlightTile ? 'trash-item-container-highlight' : ''}">
             <span class="dot-large dot-type-${trashItem.type}" ${trashColor}><img src="${trashIcon}" /></span>
-            <p class="trash-date-title trash-date">${displayDate}</p>
+            <p class="homey-text-small-light trash-date-subtitle">${displayDate}</p>
             ${trashItem.isCleaned ? '<span class="cleaning-icon">🫧</span>' : ''}
           </div>`;
         } else {
