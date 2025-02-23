@@ -83,32 +83,51 @@ export class TrashApis {
     if (apiSettings?.apiId && apiSettings?.apiId !== '') {
       try {
         const collectionDays = await this.ExecuteApi(apiSettings);
+
+        if (Object.keys(collectionDays).length === 0) {
+          throw new Error(`No trash data found.`);
+        }
+
         apiFindResult.id = apiSettings.apiId;
         apiFindResult.days = collectionDays;
       } catch (error) {
         this.#log(`Executing API: ${apiSettings.apiId}.`);
         this.#log(error);
       }
+
       return apiFindResult;
     }
 
-    for (const apiDefinition of this.#apiList) {
-      try {
-        const collectionDays = await apiDefinition.execute(apiSettings);
-        apiFindResult = {
-          days: collectionDays,
-          id: apiDefinition.id,
-          name: apiDefinition.name,
-        };
-
-        break;
-      } catch (error) {
-        this.#log(`Executing API: ${apiDefinition.id} - ${apiDefinition.name}.`);
-        this.#log(error);
-      }
-    }
+    apiFindResult = (await this.findFirstSuccessfulApi(apiSettings)) as ApiFindResult;
 
     return apiFindResult;
+  }
+
+  async findFirstSuccessfulApi(apiSettings: ApiSettings) {
+    return new Promise(async (resolve, reject) => {
+      let resolved = false;
+
+      for (const apiDefinition of this.#apiList) {
+        apiDefinition
+          .execute(apiSettings)
+          .then((collectionDays) => {
+            if (!resolved) {
+              resolved = true;
+              let apiFindResult: ApiFindResult = {
+                id: apiDefinition.id,
+                name: apiDefinition.name,
+                days: collectionDays,
+              };
+              resolve(apiFindResult);
+            }
+          })
+          .catch((error) => this.#log(`API failed: ${apiDefinition.id} - ${error}`));
+      }
+
+      setTimeout(() => {
+        if (!resolved) reject(new Error('All API calls failed.'));
+      }, 10000); // Optional timeout
+    });
   }
 
   async #mijnAfvalWijzer(apiSettings: ApiSettings) {
@@ -388,6 +407,7 @@ export class TrashApis {
       searchResultIndex = nextResult > 0 ? searchResultIndex + 4 + nextResult : -1;
     }
 
+    this.#log('Anddddd exit');
     return fDates;
   }
 
@@ -792,12 +812,11 @@ export class TrashApis {
   async #rovaWasteCalendar(apiSettings: ApiSettings, hostname: string, startPath: string) {
     this.#log('Checking afvalkalender Rova');
 
-    let fDates: ActivityDates[] = [];
-
     await validateCountry(apiSettings, 'NL');
     await validateZipcode(apiSettings);
     await validateHousenumber(apiSettings);
 
+    let fDates: ActivityDates[] = [];
     const houseNumberMatch = `${apiSettings.housenumber}`.match(/\d+/g);
     const numberAdditionMatch = `${apiSettings.housenumber}`.match(/[a-zA-Z]+/g);
 
@@ -827,6 +846,10 @@ export class TrashApis {
     });
 
     const result = <any>getRecycleData.body;
+    if (result.length === 0) {
+      throw new Error('No data found for this address.');
+    }
+
     for (var et in result) {
       const entry = result[et];
       const trashDate = new Date(entry.date.substring(0, 4) + '-' + entry.date.substring(5, 7) + '-' + entry.date.substring(8, 10));

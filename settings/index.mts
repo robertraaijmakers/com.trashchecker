@@ -193,6 +193,8 @@ class SettingScript {
         return console.log(trashErr);
       }
 
+      console.log('Incoming results!', trashResult);
+
       if (trashResult.id === '') {
         resp.innerHTML = this.homey.__('settings.fail');
         resp.style.color = 'red';

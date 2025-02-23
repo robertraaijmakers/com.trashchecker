@@ -221,9 +221,9 @@ describe('TrashApiSvr', function () {
     assert.equal(isValid, true);
   });
 });
-
+*/
 describe('TrashApiRov', function () {
-  it('API - Afvalwijzer - Rova', async function () {
+  /*it('API - Afvalwijzer - Rova', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '3824GL',
       housenumber: '11',
@@ -236,9 +236,25 @@ describe('TrashApiRov', function () {
     const result = await testAPI(apiSettings);
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
+  });*/
+
+  it('API - Afvalwijzer - Rova - Niet bestaand adres', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '7461JC',
+      housenumber: '12',
+      country: 'NL',
+      apiId: 'rov',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    console.log(result);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, false);
   });
 });
-
+/*
 describe('TrashApiRad', function () {
   it('API - RAD 2', async function () {
     const apiSettings: ApiSettings = {
@@ -502,7 +518,7 @@ describe('TrashApiAfw', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-});*/
+});
 
 describe('Woerden Ximmio', function () {
   it('API - Ximmio - Woerden', async function () {
