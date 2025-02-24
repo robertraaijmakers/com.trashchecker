@@ -12,14 +12,16 @@
         max-width: 22%;
         display: flex;
         flex-direction: column; /* Ensures elements inside stack vertically */
-        align-items: center; /* Center items horizontally within the container */
-        text-align: center; /* Ensures text aligns in the center */
+        align-items: left; /* Center items horizontally within the container */
+        text-align: left; /* Ensures text aligns in the center */
 
-        margin: 0px 0px var(--homey-su-3) 0px;  /* Add some spacing between items */
+        margin: 0px 0px var(--homey-su-4) 0px;  /* Add some spacing between items */
         box-sizing: border-box;
-        padding: var(--homey-su) var(--homey-su-2);
+        padding: var(--homey-su-2) var(--homey-su-2);
         border-radius: var(--homey-border-radius-default);
         box-shadow: 0 2px 2px 0 rgba(0,0,0, 0.08),0 2px 4px 0 rgba(0,0,0, 0.08),0 0 1px 1px rgba(255,255,255, 0.08);
+
+        height: 100px;
 
         position: relative;
       }
@@ -51,8 +53,8 @@
       }
 
       .dot-large {
-        height: 50px;
-        width: 50px;
+        height: 35px;
+        width: 35px;
         background-color: #bbb;
         border-radius: 50%;
         font-weight: bold;
@@ -63,8 +65,8 @@
       }
 
       .dot-large img {
-        width: 75%;
-        height: 75%;
+        width: 70%;
+        height: 70%;
       }
 
       .trash-date {
@@ -78,7 +80,8 @@
         align-items: center;  /* Vertically center the dot and text */
         justify-content: flex-start;  /* Align items to the left */
         width: 48%;  /* Each container takes about half the width */
-        margin: 0px 0px var(--homey-su-2) 0px;  /* Add some spacing between items */
+        height: 45px;
+        margin: 0px 0px var(--homey-su-3) 0px;  /* Add some spacing between items */
         box-sizing: border-box;
         padding: var(--homey-su) var(--homey-su-2);
         border-radius: var(--homey-border-radius-default);
@@ -86,7 +89,6 @@
         position: relative;
       }
 
-      /* Dot styling - aligned to the left */
       .dot-compact {
           width: 28px;
           height: 28px;
@@ -111,7 +113,6 @@
           margin-top: 5px;
       }
 
-      /* Title and subtitle styling */
       .trash-date-title {
           margin: 0;
           font-weight: var(--homey-font-weight-medium);
@@ -120,8 +121,21 @@
       }
 
       .trash-date-subtitle {
-          margin: 0;
+          margin: 2 0;
           font-size: 11px;
+          line-height: var(--homey-font-size-small);
+          color: var(--homey-color-mono-600);
+      }
+
+      .trash-item-container .trash-date-subtitle {
+          margin-top: auto;
+          font-weight: var(--homey-font-weight-light);
+          font-size: var(--homey-font-size-small);
+          line-height: var(--homey-font-size-small);
+      }
+
+      .trash-item-container.trash-item-container-highlight .trash-date-subtitle {
+        color: var(--homey-color-mono-1000);
       }
 
       .dot-type-GFT {
@@ -172,14 +186,14 @@
 
       .cleaning-icon {
         position: absolute; /* Position relative to the container */
-        top: 5px; /* Adjust distance from the top */
-        right: 5px; /* Adjust distance from the right */
-        font-size: 32px; /* Adjust the size */
+        top: var(--homey-su-2); /* Adjust distance from the top */
+        right: var(--homey-su-2); /* Adjust distance from the right */
+        font-size: 25px; /* Adjust the size */
         color: green; /* Icon color */
       }
 
       .trash-item-container-compact .cleaning-icon {
-        font-size: 28px; /* Adjust the size */
+        font-size: 22px; /* Adjust the size */
       }
     </style>
   </head>

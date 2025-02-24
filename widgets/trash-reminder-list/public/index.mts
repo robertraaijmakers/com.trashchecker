@@ -39,7 +39,8 @@ class WidgetScript {
 
       tbody.innerHTML = '';
       let counter = 0;
-      let rowHeight = 95;
+      let rowHeight = 100;
+      let rowMargin = 20;
       let usedTypes: Record<TrashType, string> = {} as Record<TrashType, string>;
       let itemsPerRow = 4;
 
@@ -71,6 +72,8 @@ class WidgetScript {
             ? `style="background-color: ${trashItem.color || trashItem.settingColor}"`
             : `style="background-color: ${trashItem.settingColor}"`;
 
+        trashItem.isCleaned = true;
+
         if (this.settings.layoutType === 'large') {
           tbody.innerHTML += `
           <div class="trash-item-container ${highlightTile ? 'trash-item-container-highlight' : ''}">
@@ -79,7 +82,8 @@ class WidgetScript {
             ${trashItem.isCleaned ? '<span class="cleaning-icon">🫧</span>' : ''}
           </div>`;
         } else {
-          rowHeight = 57;
+          rowHeight = 47;
+          rowMargin = 12;
           itemsPerRow = 2;
 
           tbody.innerHTML += `
@@ -115,7 +119,7 @@ class WidgetScript {
         dBody.classList.add('my-custom-body-overflow-hidden'); // Make the widget not overflow
       }
 
-      this.homey.ready({ height: this.settings.listHeight * rowHeight + (this.settings.listHeight - 1 * 10) });
+      this.homey.ready({ height: this.settings.listHeight * rowHeight + (this.settings.listHeight - 1) * rowMargin });
     } catch (error) {
       this.homey.ready({ height: 200 });
 
