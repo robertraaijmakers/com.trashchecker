@@ -594,8 +594,6 @@ export class TrashApis {
         description = entry.fraction.name.fr.toLowerCase().trim();
       }
 
-      this.#log(description);
-
       verifyByName(fDates, '', description, dateStr);
     }
 
