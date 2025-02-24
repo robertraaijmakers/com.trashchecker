@@ -72,8 +72,6 @@ class WidgetScript {
             ? `style="background-color: ${trashItem.color || trashItem.settingColor}"`
             : `style="background-color: ${trashItem.settingColor}"`;
 
-        trashItem.isCleaned = true;
-
         if (this.settings.layoutType === 'large') {
           tbody.innerHTML += `
           <div class="trash-item-container ${highlightTile ? 'trash-item-container-highlight' : ''}">
