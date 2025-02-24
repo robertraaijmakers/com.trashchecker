@@ -223,7 +223,7 @@ describe('TrashApiSvr', function () {
 });
 
 describe('TrashApiRov', function () {
-  it('API - Afvalwijzer - Rova', async function () {
+  /*it('API - Afvalwijzer - Rova', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '3824GL',
       housenumber: '11',
@@ -236,6 +236,22 @@ describe('TrashApiRov', function () {
     const result = await testAPI(apiSettings);
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
+  });
+
+  it('API - Afvalwijzer - Rova - Niet bestaand adres', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '7461JC',
+      housenumber: '12',
+      country: 'NL',
+      apiId: 'rov',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    console.log(result);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, false);
   });
 });
 
@@ -269,10 +285,10 @@ describe('TrashApiRad', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-});
+});*/
 
 describe('TrashApiRecbe', function () {
-  it('API - Afvalkalender Recycle BE - 1', async function () {
+  /*it('API - Afvalkalender Recycle BE - 1', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '8930',
       housenumber: '58',
@@ -330,7 +346,7 @@ describe('TrashApiRecbe', function () {
     const result = await testAPI(apiSettings);
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
-  });
+  });*/
 
   it('API - RECYCLE BE 5', async function () {
     const apiSettings: ApiSettings = {
@@ -347,7 +363,7 @@ describe('TrashApiRecbe', function () {
     assert.equal(isValid, true);
   });
 });
-
+/*
 describe('TrashApiAvr', function () {
   it('API - Afvalkalender AVRI', async function () {
     const apiSettings: ApiSettings = {
@@ -396,9 +412,9 @@ describe('TrashApiRd4', function () {
     assert.equal(isValid, true);
   });
 });
-*/
+
 describe('TrashApiAfw', function () {
-  /*it('API - Mijn Afvalwijzer (1)', async function () {
+  it('API - Mijn Afvalwijzer (1)', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '9821TT',
       housenumber: '9',
@@ -412,7 +428,7 @@ describe('TrashApiAfw', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-
+  
   it('API - Afvalwijzer (2) - #204', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '5122GP',
@@ -487,7 +503,7 @@ describe('TrashApiAfw', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-*/
+
   it('API - Afvalwijzer - Den Bosch', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '5231PB',
@@ -503,6 +519,24 @@ describe('TrashApiAfw', function () {
     assert.equal(isValid, true);
   });
 });
+
+describe('Woerden Ximmio', function () {
+  it('API - Ximmio - Woerden', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '3441AX',
+      housenumber: '9',
+      country: 'NL',
+      apiId: 'akwrd',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+
 /*
 describe('TrashApiAknw', function () {
   it('API - Nissewaard', async function () {

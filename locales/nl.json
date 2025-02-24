@@ -37,6 +37,7 @@
 			"everyotherweek": "Om de week op",
 			"everythreeweeks": "Eens in de drie weken op",
 			"everyfourweeks": "Eens in de vier weken op",
+			"everyfiveweeks": "Eens in de vijf weken op",
 			"everysixweeks": "Eens in de zes weken op",
 			"everyeighthweeks": "Eens in de acht weken op",
 			"everyfirst": "Elke eerste",
@@ -101,7 +102,7 @@
 		},
 		"output":
 		{
-			"trashtypeycollectedonx": "__types__ __plural__ __time__ opgehaald.",
+			"trashtypeycollectedonx": "__type__ __plural__ __time__ opgehaald.",
 			"and": "en",
 			"replacementsingle": "wordt",
 			"replacementplural": "worden",

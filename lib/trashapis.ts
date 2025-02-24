@@ -1,9 +1,9 @@
 'use strict';
 
-import cheerio from 'cheerio';
 import { ActivityDates, ApiDefinition, ApiFindResult } from '../types/localTypes';
 import { addDate, formatDate, httpsPromise, parseDutchDate, processWasteData, validateCountry, validateHousenumber, validateZipcode, verifyByName, verifyDate } from './helpers';
 import { ApiSettings, TrashType } from '../assets/publicTypes';
+import { parseDocument, DomUtils } from 'htmlparser2';
 
 export class TrashApis {
   #apiList: ApiDefinition[] = [];
@@ -35,6 +35,7 @@ export class TrashApis {
     this.#apiList.push({ name: 'Afvalkalender Súdwest-Fryslân', id: 'swf', execute: (apiSettings) => this.#afvalkalenderSudwestFryslan(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Venray', id: 'akvr', execute: (apiSettings) => this.#afvalkalenderVenray(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Westland', id: 'akwl', execute: (apiSettings) => this.#afvalKalenderWestland(apiSettings) });
+    this.#apiList.push({ name: 'Afvalkalender Woerden', id: 'akwrd', execute: (apiSettings) => this.#afvalKalenderWoerden(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender ZRD', id: 'afzrd', execute: (apiSettings) => this.#afvalkalenderZrd(apiSettings) });
     this.#apiList.push({ name: 'Avalwijzer Montferland', id: 'mont', execute: (apiSettings) => this.#afvalwijzerMontferland(apiSettings) });
     this.#apiList.push({ name: 'Afvalwijzer Pre Zero', id: 'arn', execute: (apiSettings) => this.#afvalwijzerPreZero(apiSettings) });
@@ -82,32 +83,51 @@ export class TrashApis {
     if (apiSettings?.apiId && apiSettings?.apiId !== '') {
       try {
         const collectionDays = await this.ExecuteApi(apiSettings);
+
+        if (Object.keys(collectionDays).length === 0) {
+          throw new Error(`No trash data found.`);
+        }
+
         apiFindResult.id = apiSettings.apiId;
         apiFindResult.days = collectionDays;
       } catch (error) {
         this.#log(`Executing API: ${apiSettings.apiId}.`);
         this.#log(error);
       }
+
       return apiFindResult;
     }
 
-    for (const apiDefinition of this.#apiList) {
-      try {
-        const collectionDays = await apiDefinition.execute(apiSettings);
-        apiFindResult = {
-          days: collectionDays,
-          id: apiDefinition.id,
-          name: apiDefinition.name,
-        };
-
-        break;
-      } catch (error) {
-        this.#log(`Executing API: ${apiDefinition.id} - ${apiDefinition.name}.`);
-        this.#log(error);
-      }
-    }
+    apiFindResult = (await this.findFirstSuccessfulApi(apiSettings)) as ApiFindResult;
 
     return apiFindResult;
+  }
+
+  async findFirstSuccessfulApi(apiSettings: ApiSettings) {
+    return new Promise(async (resolve, reject) => {
+      let resolved = false;
+
+      for (const apiDefinition of this.#apiList) {
+        apiDefinition
+          .execute(apiSettings)
+          .then((collectionDays) => {
+            if (!resolved) {
+              resolved = true;
+              let apiFindResult: ApiFindResult = {
+                id: apiDefinition.id,
+                name: apiDefinition.name,
+                days: collectionDays,
+              };
+              resolve(apiFindResult);
+            }
+          })
+          .catch((error) => this.#log(`API failed: ${apiDefinition.id} - ${error}`));
+      }
+
+      setTimeout(() => {
+        if (!resolved) reject(new Error('All API calls failed.'));
+      }, 10000); // Optional timeout
+    });
   }
 
   async #mijnAfvalWijzer(apiSettings: ApiSettings) {
@@ -234,6 +254,10 @@ export class TrashApis {
     return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'inzamelkalender.hvcgroep.nl');
   }
 
+  async #afvalKalenderWoerden(apiSettings: ApiSettings) {
+    return this.#generalImplementationWasteApi(apiSettings, '06856f74-6826-4c6a-aabf-69bc9d20b5a6', 'wasteprod2api.ximmio.com');
+  }
+
   async #reinigingsdienstWaardlanden(apiSettings: ApiSettings) {
     return this.#generalImplementationWasteApi(apiSettings, '942abcf6-3775-400d-ae5d-7380d728b23c', 'wasteapi.ximmio.com');
   }
@@ -345,55 +369,45 @@ export class TrashApis {
       family: 4,
     });
 
-    // Stip lot of data from body to prevent memory overflow
-    const body = <any>retrieveCalendarDataRequest.body;
-    var searchResultIndex = body.indexOf('<table width="100%" cellpadding="0" cellspacing="0" role=\'presentation\'>');
+    // Skip lot of data from body to prevent memory overflow
+    const body = <string>retrieveCalendarDataRequest.body;
 
-    var regex = /<a href="#waste-(.*) class="wasteInfoIcon/i;
-    var searchResultIndex = body.search(regex);
+    const regex = /<a href="#waste-(.*) class="wasteInfoIcon/i;
+    let searchResultIndex = body.search(regex);
 
     while (searchResultIndex >= 0) {
       const endString = body.indexOf('</a>', searchResultIndex);
-      const result = body.substr(searchResultIndex, endString - searchResultIndex + 4);
-      const $ = cheerio.load(result);
+      const result = body.substring(searchResultIndex, endString + 4);
 
-      $('a.wasteInfoIcon p').each((i, elem) => {
-        if (elem == null) {
-          return;
-        }
+      // Parse the HTML fragment
+      const doc = parseDocument(result);
 
-        if (elem.children.length < 2) {
-          return;
-        }
+      // Find all `<a>` elements with class `wasteInfoIcon`
+      const wasteInfoLinks = DomUtils.findAll((elem) => DomUtils.isTag(elem) && elem.tagName === 'a' && elem.attribs.class?.includes('wasteInfoIcon'), doc.children);
 
-        var child = <any>elem.children[1];
-        if (child.children == null) {
-          return;
-        }
+      for (const link of wasteInfoLinks) {
+        const firstParagraph = DomUtils.findOne((elem) => DomUtils.isTag(elem) && elem.tagName === 'p', link.children);
 
-        let trashDate = null;
-        var wasteDescription = $('.afvaldescr', elem).text();
-        if (child.children.length < 1) {
-          var subData = <any>elem.children[0];
-          trashDate = parseDutchDate(subData.data);
-        } else {
-          trashDate = parseDutchDate(child.children[0].data);
-        }
+        if (!firstParagraph || !firstParagraph.children || firstParagraph.children.length < 2) continue;
 
-        console.log(trashDate);
-        if (trashDate == null) return;
+        const trashType = link.attribs?.title || 'Unknown';
+        const spanElement = DomUtils.findOne((el) => DomUtils.isTag(el) && el.name === 'span', firstParagraph.children);
+        if (!spanElement) continue;
 
-        verifyByName(fDates, wasteDescription, elem.attribs.class.trim(), trashDate);
-      });
+        const trashDate = DomUtils.innerText(spanElement).trim();
+        if (trashDate === 'Unknown') continue;
 
-      let nextResult = body.substring(searchResultIndex + 4).search(regex);
-      if (nextResult > 0) {
-        searchResultIndex = nextResult + searchResultIndex + 4;
-      } else {
-        searchResultIndex = -1;
+        const parsedTrashDate = parseDutchDate(trashDate);
+        if (parsedTrashDate === null) continue;
+        verifyByName(fDates, '', trashType, parsedTrashDate);
       }
+
+      // Find the next match
+      let nextResult = body.substring(searchResultIndex + 4).search(regex);
+      searchResultIndex = nextResult > 0 ? searchResultIndex + 4 + nextResult : -1;
     }
 
+    this.#log('Anddddd exit');
     return fDates;
   }
 
@@ -409,7 +423,7 @@ export class TrashApis {
     const startDate = new Date().setDate(new Date().getDate() - 14);
     const endDate = new Date().setDate(new Date().getDate() + 30);
 
-    const post_data1 = `{companyCode:"${companyCode}",postCode:"${apiSettings.zipcode}",houseNumber:${apiSettings.housenumber}}`;
+    const post_data1 = `{companyCode:"${companyCode}",postCode:"${apiSettings.zipcode?.toUpperCase()}",houseNumber:${apiSettings.housenumber}}`;
     const retrieveUniqueId = await httpsPromise({
       hostname: hostName,
       path: `/api/FetchAdress`,
@@ -798,12 +812,11 @@ export class TrashApis {
   async #rovaWasteCalendar(apiSettings: ApiSettings, hostname: string, startPath: string) {
     this.#log('Checking afvalkalender Rova');
 
-    let fDates: ActivityDates[] = [];
-
     await validateCountry(apiSettings, 'NL');
     await validateZipcode(apiSettings);
     await validateHousenumber(apiSettings);
 
+    let fDates: ActivityDates[] = [];
     const houseNumberMatch = `${apiSettings.housenumber}`.match(/\d+/g);
     const numberAdditionMatch = `${apiSettings.housenumber}`.match(/[a-zA-Z]+/g);
 
@@ -833,6 +846,10 @@ export class TrashApis {
     });
 
     const result = <any>getRecycleData.body;
+    if (result.length === 0) {
+      throw new Error('No data found for this address.');
+    }
+
     for (var et in result) {
       const entry = result[et];
       const trashDate = new Date(entry.date.substring(0, 4) + '-' + entry.date.substring(5, 7) + '-' + entry.date.substring(8, 10));
@@ -1004,7 +1021,9 @@ export class TrashApis {
           break;
       }
 
-      addDate(fDates, key, o[i].dates);
+      for (let index in o[i].dates) {
+        addDate(fDates, key, new Date(o[i].dates[index]));
+      }
     }
 
     return fDates;

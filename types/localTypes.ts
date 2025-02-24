@@ -60,6 +60,7 @@ export interface WidgetSettings {
   maxItems: number;
   singleTypes: boolean;
   listHeight: number;
+  highlightTile: 'today' | 'tomorrow' | 'today-tomorrow' | 'none' | 'always';
   displayRule: 'settings' | 'settings-icons' | 'settings-iconscolors' | 'trashprovider';
 }
 

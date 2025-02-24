@@ -185,8 +185,16 @@
     "en": "Updated APIs for new year. Notice: your municipality might have changed from provider/API and you might need to reconfigure the app.",
     "nl": "APIs waar nodig bijgewerkt voor het nieuwe jaar. Let op: het kan zijn dat je gemeente van API gewijzigd is en je zaken opnieuw moet instellen!"
   },
-  "5.0.6": {
+  "5.0.9": {
     "en": "Complete rebuild of the app based on new development best practices from Athom.",
     "nl": "De app is volledig opnieuw opgebouwd om nog meer APIs te kunnen ondersteunen in de toekomst."
+  },
+  "5.1.2": {
+    "en": "Fixed a couple of trash APIs using the GeneralAfvalwijzer implementation",
+    "nl": "Een foutmelding opgelost voor diverse APIs die gebruik maken van GeneralAfvalwijzer."
+  },
+  "5.1.7": {
+    "en": "Added Woerden (#227), added 5 week manual interval (#226), fixed (#228), added widget highlight when trash is collected (can be toggled on/off through widget settings).",
+    "nl": "Regio Woerden wordt nu ondersteund (#227), tevens 5-weekse handmatige interval toegevoegd (#226), fixed (#228), widget highlight toegevoegd als afval wordt opgehaald (kan aan/uitgezet worden via de widget instellingen)."
   }
 }

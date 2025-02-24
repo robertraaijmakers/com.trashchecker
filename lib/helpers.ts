@@ -166,7 +166,8 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('etensresten') !== -1 ||
     description.indexOf('residual') !== -1 ||
     description.indexOf('grey') !== -1 ||
-    description.indexOf('sortibak') !== -1
+    description.indexOf('sortibak') !== -1 ||
+    description.indexOf('huisvuil') !== -1
   ) {
     addDate(activityDates, TrashType.REST, date, icon, localDescription, color);
     foundType = true;
@@ -210,7 +211,12 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     foundType = true;
   }
 
-  if (description.indexOf('grof') !== -1 || description.indexOf('vuil') !== -1 || description.indexOf('pruning') !== -1 || description.indexOf('bulky') !== -1) {
+  if (
+    description.indexOf('grof') !== -1 ||
+    (description.indexOf('vuil') !== -1 && description.indexOf('huisvuil') === -1) ||
+    description.indexOf('pruning') !== -1 ||
+    description.indexOf('bulky') !== -1
+  ) {
     addDate(activityDates, TrashType.GROF, date, icon, localDescription, color);
     foundType = true;
   }
