@@ -412,7 +412,7 @@ describe('TrashApiRd4', function () {
     assert.equal(isValid, true);
   });
 });
-*/
+
 describe('TrashApiAfw', function () {
   it('API - Mijn Afvalwijzer (7) - Rotterdam', async function () {
     const apiSettings: ApiSettings = {
@@ -428,8 +428,6 @@ describe('TrashApiAfw', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-});
-/*
 
   it('API - Mijn Afvalwijzer (1)', async function () {
     const apiSettings: ApiSettings = {
