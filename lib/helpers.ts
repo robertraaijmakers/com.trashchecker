@@ -142,6 +142,8 @@ export function verifyDate(dateString: string) {
 export function verifyByName(activityDates: ActivityDates[], className: string, description: string, date: Date, icon?: string, color?: string): void {
   var foundType: boolean = false;
 
+  console.log(`Description: ${description}, Classname: ${className}.`);
+
   if (!description || description === '' || typeof description === undefined) {
     if (className == 'dhm') {
       foundType = true;
@@ -156,14 +158,19 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
   const localDescription = description; // Keep original description
   description = description.toLowerCase(); // Convert description to lowercase for comparison
 
-  if (description.indexOf('groente') !== -1 || description.indexOf('gft') !== -1 || description.indexOf('bio') !== -1 || description.indexOf('green') !== -1) {
+  if (
+    description.indexOf('etensresten') !== -1 ||
+    description.indexOf('groente') !== -1 ||
+    description.indexOf('gft') !== -1 ||
+    description.indexOf('bio') !== -1 ||
+    description.indexOf('green') !== -1
+  ) {
     addDate(activityDates, TrashType.GFT, date, icon, localDescription, color);
     foundType = true;
   }
 
   if (
-    description.indexOf('rest') !== -1 ||
-    description.indexOf('etensresten') !== -1 ||
+    (description.indexOf('rest') !== -1 && description.indexOf('etensresten') === -1) ||
     description.indexOf('residual') !== -1 ||
     description.indexOf('grey') !== -1 ||
     description.indexOf('sortibak') !== -1 ||

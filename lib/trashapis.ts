@@ -407,7 +407,6 @@ export class TrashApis {
       searchResultIndex = nextResult > 0 ? searchResultIndex + 4 + nextResult : -1;
     }
 
-    this.#log('Anddddd exit');
     return fDates;
   }
 
