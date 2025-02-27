@@ -264,7 +264,7 @@ export function processWasteData(afvalstromenResponse: any, kalenderResponse: an
     if (checkTitle.includes('GFT') || checkTitle.includes('GROENTE') || checkTitle.includes('GROENE')) collectionType = TrashType.GFT;
     if (checkTitle.includes('PBD') || checkTitle.includes('PMD') || checkTitle.includes('PLASTIC')) collectionType = TrashType.PMD;
     if (checkTitle.includes('PAPIER')) collectionType = TrashType.PAPIER;
-    if (checkTitle.includes('RESTAFVAL') || checkTitle.includes('GRIJZE')) collectionType = TrashType.REST;
+    if (checkTitle.includes('REST') || checkTitle.includes('RESTAFVAL') || checkTitle.includes('GRIJZE')) collectionType = TrashType.REST;
     if (checkTitle.includes('TEXTIEL')) collectionType = TrashType.TEXTIEL;
     if (checkTitle.includes('KERSTBOOM') || checkTitle.includes('KERSTBOMEN')) collectionType = TrashType.KERSTBOOM;
     if (checkTitle.includes('GROF')) collectionType = TrashType.GROF;

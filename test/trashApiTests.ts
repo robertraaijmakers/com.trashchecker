@@ -381,6 +381,23 @@ describe('TrashApiAvr', function () {
   });
 });
 
+describe('HuisvuilDenHaag', function () {
+  it('API - Huisvuil Den Haag', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '2492NN',
+      housenumber: '9',
+      country: 'NL',
+      apiId: 'hkdh',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+
 describe('TrashApiRd4', function () {
   it('API - RD4', async function () {
     const apiSettings: ApiSettings = {
