@@ -197,8 +197,8 @@
     "en": "Added Woerden (#227), added 5 week manual interval (#226), fixed (#228), added widget highlight when trash is collected (can be toggled on/off through widget settings).",
     "nl": "Regio Woerden wordt nu ondersteund (#227), tevens 5-weekse handmatige interval toegevoegd (#226), fixed (#228), widget highlight toegevoegd als afval wordt opgehaald (kan aan/uitgezet worden via de widget instellingen)."
   },
-  "5.1.8": {
-    "en": "Fix mapping types in Mijn Afvalwijzer (#230)",
-    "nl": "Issue met mapping types in Mijn Afvalwijzer opgelost (#230)"
+  "5.1.9": {
+    "en": "Fix mapping types in Mijn Afvalwijzer (#230), Fixed mapping types for Den Haag (#231)",
+    "nl": "Issue met mapping types in Mijn Afvalwijzer opgelost (#230), Issue met mapping voor Den Haag opgelost (#231)"
   }
 }
