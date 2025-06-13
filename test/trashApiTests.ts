@@ -821,6 +821,23 @@ describe('TrashApiHVC', function () {
   });
 });
 
+describe('TrashApiBurgerportaalAssen', function () {
+  it('API - HVC', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '9405HA',
+      housenumber: '7',
+      country: 'NL',
+      apiId: 'gemas',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+
 function testAPI(apiSettings: ApiSettings) {
   const trashApis = new TrashApis(console.log);
   try {
