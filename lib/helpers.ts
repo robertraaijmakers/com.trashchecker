@@ -262,14 +262,47 @@ export function processWasteData(afvalstromenResponse: any, kalenderResponse: an
   afvalstromenResponse.forEach((afvalstroom: any) => {
     const checkTitle = afvalstroom.page_title.toUpperCase().replace(/\s+/g, '');
     let collectionType: TrashType | null = null;
-    if (checkTitle.includes('GFT') || checkTitle.includes('GROENTE') || checkTitle.includes('GROENE')) collectionType = TrashType.GFT;
-    if (checkTitle.includes('PBD') || checkTitle.includes('PMD') || checkTitle.includes('PLASTIC')) collectionType = TrashType.PMD;
-    if (checkTitle.includes('PAPIER')) collectionType = TrashType.PAPIER;
-    if (checkTitle.includes('REST') || checkTitle.includes('RESTAFVAL') || checkTitle.includes('GRIJZE')) collectionType = TrashType.REST;
-    if (checkTitle.includes('TEXTIEL')) collectionType = TrashType.TEXTIEL;
-    if (checkTitle.includes('KERSTBOOM') || checkTitle.includes('KERSTBOMEN')) collectionType = TrashType.KERSTBOOM;
-    if (checkTitle.includes('GROF')) collectionType = TrashType.GROF;
-    if (checkTitle.includes('GLAS')) collectionType = TrashType.GLAS;
+    let typeFound = false;
+
+    if (checkTitle.includes('GFT') || checkTitle.includes('GROENTE') || checkTitle.includes('GROENE')) {
+      collectionType = TrashType.GFT;
+      typeFound = true;
+    }
+
+    if (checkTitle.includes('PBD') || checkTitle.includes('PMD') || checkTitle.includes('PLASTIC')) {
+      collectionType = TrashType.PMD;
+      typeFound = true;
+    }
+
+    if (checkTitle.includes('PAPIER')) {
+      collectionType = TrashType.PAPIER;
+      typeFound = true;
+    }
+
+    if ((checkTitle.includes('REST') && typeFound === false) || checkTitle.includes('RESTAFVAL') || checkTitle.includes('GRIJZE')) {
+      collectionType = TrashType.REST;
+      typeFound = true;
+    }
+
+    if (checkTitle.includes('TEXTIEL')) {
+      collectionType = TrashType.TEXTIEL;
+      typeFound = true;
+    }
+
+    if (checkTitle.includes('KERSTBOOM') || checkTitle.includes('KERSTBOMEN')) {
+      collectionType = TrashType.KERSTBOOM;
+      typeFound = true;
+    }
+
+    if (checkTitle.includes('GROF')) {
+      collectionType = TrashType.GROF;
+      typeFound = true;
+    }
+
+    if (checkTitle.includes('GLAS')) {
+      collectionType = TrashType.GLAS;
+      typeFound = true;
+    }
     //if (checkTitle.includes('ELEKTRISCH')) title = 'ELEKTRISCH';
     //if (checkTitle.includes('SNOEI')) title = 'SNOEI';
 
