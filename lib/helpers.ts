@@ -197,7 +197,7 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     foundType = true;
   }
 
-  if (description.indexOf('papier') !== -1 || description.indexOf('paper') !== -1) {
+  if (description.indexOf('papier') !== -1 || description.indexOf('paper') !== -1 || description.indexOf('opk') !== -1) {
     addDate(activityDates, TrashType.PAPIER, date, icon, localDescription, color);
     foundType = true;
   }
@@ -207,7 +207,8 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('retour') !== -1 ||
     description.indexOf('best') !== -1 ||
     description.indexOf('textile') !== -1 ||
-    description.indexOf('wijkinzameling') !== -1
+    description.indexOf('wijkinzameling') !== -1 ||
+    description.indexOf('maas') !== -1 // Mobiel afvalaanbiedstation
   ) {
     addDate(activityDates, TrashType.TEXTIEL, date, icon, localDescription, color);
     foundType = true;

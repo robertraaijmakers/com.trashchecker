@@ -785,7 +785,41 @@ describe('TrashApiRwm', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-});*/
+});
+*/
+describe('TrashApiBAR', function () {
+  it('API - BAR', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '2992WG',
+      housenumber: '19',
+      country: 'NL',
+      apiId: 'afbar',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+
+describe('TrashApiHVC', function () {
+  it('API - HVC', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '2671BK',
+      housenumber: '12',
+      country: 'NL',
+      apiId: 'hvc',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
 
 function testAPI(apiSettings: ApiSettings) {
   const trashApis = new TrashApis(console.log);
