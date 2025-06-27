@@ -786,7 +786,7 @@ describe('TrashApiRwm', function () {
     assert.equal(isValid, true);
   });
 });
-*/
+
 describe('TrashApiBAR', function () {
   it('API - BAR', async function () {
     const apiSettings: ApiSettings = {
@@ -828,6 +828,40 @@ describe('TrashApiBurgerportaalAssen', function () {
       housenumber: '7',
       country: 'NL',
       apiId: 'gemas',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+
+describe('TrashApiVenlo', function () {
+  it('API - Venlo', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '5922BT',
+      housenumber: '48',
+      country: 'NL',
+      apiId: 'akvnl',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});*/
+
+describe('TrashApiGroningen', function () {
+  it('API - Groningen', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '9713RH',
+      housenumber: '10',
+      country: 'NL',
+      apiId: 'akgr',
       cleanApiId: '',
       streetname: '',
     };

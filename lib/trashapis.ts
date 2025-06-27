@@ -1,7 +1,7 @@
 'use strict';
 
 import { ActivityDates, ApiDefinition, ApiFindResult } from '../types/localTypes';
-import { addDate, formatDate, httpsPromise, parseDutchDate, processWasteData, validateCountry, validateHousenumber, validateZipcode, verifyByName, verifyDate } from './helpers';
+import { addDate, formatDate, parseDate, httpsPromise, parseDutchDate, processWasteData, validateCountry, validateHousenumber, validateZipcode, verifyByName, verifyDate } from './helpers';
 import { ApiSettings, TrashType } from '../assets/publicTypes';
 import { parseDocument, DomUtils } from 'htmlparser2';
 
@@ -33,6 +33,7 @@ export class TrashApis {
     this.#apiList.push({ name: 'Afvalkalender RWM', id: 'rwm', execute: (apiSettings) => this.#afvalkalenderRwm(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Saver', id: 'svr', execute: (apiSettings) => this.#afvalkalenderSaver(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Súdwest-Fryslân', id: 'swf', execute: (apiSettings) => this.#afvalkalenderSudwestFryslan(apiSettings) });
+    this.#apiList.push({ name: 'Afvalkalender Venlo', id: 'akvnl', execute: (apiSettings) => this.#afvalKalenderVenlo(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Venray', id: 'akvr', execute: (apiSettings) => this.#afvalkalenderVenray(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Westland', id: 'akwl', execute: (apiSettings) => this.#afvalKalenderWestland(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Woerden', id: 'akwrd', execute: (apiSettings) => this.#afvalKalenderWoerden(apiSettings) });
@@ -45,6 +46,7 @@ export class TrashApis {
     this.#apiList.push({ name: 'Den Bosch Afvalstoffendienstkalender', id: 'dbafw', execute: (apiSettings) => this.#denBoschAfvalstoffendienstCalendar(apiSettings) });
     this.#apiList.push({ name: 'GAD Gooi en Vechtstreek', id: 'gad', execute: (apiSettings) => this.#GadGooiAndVechtstreek(apiSettings) });
     this.#apiList.push({ name: 'Gemeente Assen', id: 'gemas', execute: (apiSettings) => this.#afvalkalenderAssen(apiSettings) });
+    this.#apiList.push({ name: 'Gemeente Groningen', id: 'akgr', execute: (apiSettings) => this.#afvalkalenderGroningen(apiSettings) });
     this.#apiList.push({ name: 'Gemeente Hellendoorn', id: 'geh', execute: (apiSettings) => this.#gemeenteHellendoorn(apiSettings) });
     this.#apiList.push({ name: 'Gemeente Meppel', id: 'gem', execute: (apiSettings) => this.#gemeenteMeppel(apiSettings) });
     this.#apiList.push({ name: 'Huisvulkalender Den Haag', id: 'hkdh', execute: (apiSettings) => this.#huisvuilkalenderDenHaag(apiSettings) });
@@ -164,6 +166,10 @@ export class TrashApis {
 
   async #afvalkalenderAssen(apiSettings: ApiSettings) {
     return this.#generalImplementationBurgerportaal(apiSettings, '138204213565303512');
+  }
+
+  async #afvalkalenderGroningen(apiSettings: ApiSettings) {
+    return this.#generalImplementationBurgerportaal(apiSettings, '14355223815071999');
   }
 
   async #afvalkalenderPeelEnMaas(apiSettings: ApiSettings) {
@@ -286,6 +292,10 @@ export class TrashApis {
     return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.alphenaandenrijn.nl');
   }
 
+  async #afvalKalenderVenlo(apiSettings: ApiSettings) {
+    return this.#afvalkalenderVenlo(apiSettings, 'www.venlo.nl');
+  }
+
   async #klikoManagerUithoorn(apiSettings: ApiSettings) {
     return this.#generalImplementationContainerManager(apiSettings, 'cp-uithoorn.klikocontainermanager.com', '474');
   }
@@ -361,7 +371,7 @@ export class TrashApis {
 
     const retrieveCalendarDataRequest = await httpsPromise({
       hostname: baseUrl,
-      path: `/nl/${apiSettings.zipcode}/${apiSettings.housenumber}/`,
+      path: `/nl/${apiSettings.zipcode}/${apiSettings.housenumber}`,
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -1103,5 +1113,109 @@ export class TrashApis {
     }
 
     return fDates;
+  }
+
+  async #afvalkalenderVenlo(apiSettings: ApiSettings, baseUrl: string) {
+    let fDates: ActivityDates[] = [];
+
+    await validateCountry(apiSettings, 'NL');
+    await validateZipcode(apiSettings);
+    await validateHousenumber(apiSettings);
+
+    this.#log(`Checking new Venlo afvalkalender REST with URL: ${baseUrl}/mijn-afvalkalender/${apiSettings.zipcode}/${apiSettings.housenumber}/`);
+
+    const retrieveCalendarDataRequest = await httpsPromise({
+      hostname: baseUrl,
+      path: `/mijn-afvalkalender/${apiSettings.zipcode}/${apiSettings.housenumber}`,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'text/html; charset=UTF-8',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+        accept: 'text/html,application/xhtml+xml,application/xml',
+        'accept-language': 'en-US,en;q=0.9,nl-NL;q=0.8,nl;q=0.7',
+        'cache-control': 'no-cache',
+      },
+      family: 4,
+    });
+
+    // Skip lot of data from body to prevent memory overflow
+    const body = <string>retrieveCalendarDataRequest.body;
+
+    const regex = /<table class="responsive-enabled table"/i;
+    let searchResultIndex = body.search(regex);
+
+    while (searchResultIndex >= 0) {
+      const endString = body.indexOf('</table>', searchResultIndex);
+      const result = body.substring(searchResultIndex, endString + 8);
+      const doc = parseDocument(result);
+
+      const monthElement = DomUtils.findOne((el) => DomUtils.isTag(el) && el.tagName === 'caption', doc.children);
+      if (!monthElement) {
+        this.#log('No month element found in the table');
+        break;
+      }
+
+      const monthText = DomUtils.innerText(monthElement).trim(); // e.g. "juli 2025"
+      const rows = DomUtils.findAll((el) => DomUtils.isTag(el) && el.tagName === 'tr' && el.attribs.class?.includes('table__row'), doc.children);
+
+      for (const row of rows) {
+        const cells = DomUtils.findAll((el) => DomUtils.isTag(el) && el.tagName === 'td', row.children);
+        if (cells.length < 2) {
+          this.#log('Row has less then 2 cells.');
+          continue;
+        }
+
+        const dateText = DomUtils.innerText(cells[0]).trim(); // e.g. "dinsdag 1"
+        const fullDateText = `${dateText} ${monthText}`; // e.g. "dinsdag 1 juli 2025"
+        const parsedDate = parseDutchDate(fullDateText);
+        if (!parsedDate) {
+          this.#log('Parsed date invalid: ' + fullDateText);
+          continue;
+        }
+
+        const trashTypesContainer = DomUtils.findOne((el) => DomUtils.isTag(el) && el.attribs.role === 'text' && el.attribs.class?.includes('trash-types'), cells[1].children);
+        if (!trashTypesContainer) {
+          this.#log('No trash type found.');
+          continue;
+        }
+
+        const trashTypes = DomUtils.findAll((el) => DomUtils.isTag(el) && el.tagName === 'span' && el.attribs.class?.includes('trash-type'), trashTypesContainer.children);
+
+        for (const trash of trashTypes) {
+          const label = DomUtils.findOne((el) => DomUtils.isTag(el) && el.tagName === 'span' && el.attribs.class?.includes('trash-type__label'), trash.children);
+          const svg = DomUtils.findOne((el) => DomUtils.isTag(el) && el.tagName === 'svg', trash.children);
+
+          if (!label) continue;
+          const trashType = DomUtils.innerText(label).trim();
+          const trashIcon = svg ? this.#svgToBase64(svg) : undefined;
+
+          verifyByName(fDates, '', trashType, parsedDate, trashIcon);
+        }
+      }
+
+      const nextResult = body.substring(searchResultIndex + 8).search(/<table class="responsive-enabled table"/i);
+      searchResultIndex = nextResult >= 0 ? searchResultIndex + 8 + nextResult : -1;
+    }
+
+    return fDates;
+  }
+
+  #svgToBase64(svgElement: any): string {
+    const svgHtml = this.#serializeNode(svgElement);
+    const base64 = Buffer.from(svgHtml).toString('base64');
+    return `data:image/svg+xml;base64,${base64}`;
+  }
+
+  #serializeNode(node: any): string {
+    if (node.type === 'text') return node.data || '';
+    if (node.type === 'comment') return `<!--${node.data}-->`;
+    if (!node.name) return '';
+
+    const attrs = Object.entries(node.attribs || {})
+      .map(([key, val]) => `${key}="${val}"`)
+      .join(' ');
+
+    const children = (node.children || []).map((child: any) => this.#serializeNode(child)).join('');
+    return `<${node.name}${attrs ? ' ' + attrs : ''}>${children}</${node.name}>`;
   }
 }
