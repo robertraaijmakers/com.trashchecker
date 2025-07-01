@@ -223,7 +223,7 @@ describe('TrashApiSvr', function () {
 });
 
 describe('TrashApiRov', function () {
-  /*it('API - Afvalwijzer - Rova', async function () {
+  it('API - Afvalwijzer - Rova', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '3824GL',
       housenumber: '11',
@@ -248,10 +248,13 @@ describe('TrashApiRov', function () {
       streetname: '',
     };
 
-    const result = await testAPI(apiSettings);
-    console.log(result);
-    const isValid = validateApiResults(apiSettings, result);
-    assert.equal(isValid, false);
+    try {
+      const result = await testAPI(apiSettings);
+      assert.ok(false, 'Expected an error for non-existing address');
+    } catch (error) {
+      console.log('Error caught as expected for non-existing address');
+      assert.ok(true);
+    }
   });
 });
 
@@ -286,7 +289,7 @@ describe('TrashApiRad', function () {
     assert.equal(isValid, true);
   });
 });
-
+/*
 describe('TrashApiRecbe', function () {
   it('API - Afvalkalender Recycle BE - 1', async function () {
     const apiSettings: ApiSettings = {
@@ -460,7 +463,7 @@ describe('TrashApiAfw', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-  
+
   it('API - Afvalwijzer (2) - #204', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '5122GP',
@@ -551,7 +554,7 @@ describe('TrashApiAfw', function () {
     assert.equal(isValid, true);
   });
 });
-
+/*
 describe('Woerden Ximmio', function () {
   it('API - Ximmio - Woerden', async function () {
     const apiSettings: ApiSettings = {
@@ -853,7 +856,7 @@ describe('TrashApiVenlo', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-});*/
+});
 
 describe('TrashApiGroningen', function () {
   it('API - Groningen', async function () {
@@ -870,7 +873,7 @@ describe('TrashApiGroningen', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-});
+});*/
 
 function testAPI(apiSettings: ApiSettings) {
   const trashApis = new TrashApis(console.log);

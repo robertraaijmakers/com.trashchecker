@@ -116,7 +116,16 @@ export function parseDutchDate(dutchDate: string): Date | null {
   };
 
   const parts = dutchDate.split(' ');
-  if (parts.length !== 4) return null;
+  if (parts.length !== 4) {
+    if (parts.length !== 3) return null;
+
+    const day = parseInt(parts[1], 10);
+    const month = months[parts[2]];
+    const year = new Date(Date.now()).getFullYear(); // Default to current year if not provided
+
+    if (isNaN(day) || month === undefined) return null;
+    return new Date(Date.UTC(year, month, day));
+  }
 
   const day = parseInt(parts[1], 10);
   const month = months[parts[2]];

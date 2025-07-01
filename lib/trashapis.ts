@@ -46,7 +46,7 @@ export class TrashApis {
     this.#apiList.push({ name: 'Den Bosch Afvalstoffendienstkalender', id: 'dbafw', execute: (apiSettings) => this.#denBoschAfvalstoffendienstCalendar(apiSettings) });
     this.#apiList.push({ name: 'GAD Gooi en Vechtstreek', id: 'gad', execute: (apiSettings) => this.#GadGooiAndVechtstreek(apiSettings) });
     this.#apiList.push({ name: 'Gemeente Assen', id: 'gemas', execute: (apiSettings) => this.#afvalkalenderAssen(apiSettings) });
-    this.#apiList.push({ name: 'Gemeente Groningen', id: 'akgr', execute: (apiSettings) => this.#afvalkalenderGroningen(apiSettings) });
+    //this.#apiList.push({ name: 'Gemeente Groningen', id: 'akgr', execute: (apiSettings) => this.#afvalkalenderGroningen(apiSettings) });
     this.#apiList.push({ name: 'Gemeente Hellendoorn', id: 'geh', execute: (apiSettings) => this.#gemeenteHellendoorn(apiSettings) });
     this.#apiList.push({ name: 'Gemeente Meppel', id: 'gem', execute: (apiSettings) => this.#gemeenteMeppel(apiSettings) });
     this.#apiList.push({ name: 'Huisvulkalender Den Haag', id: 'hkdh', execute: (apiSettings) => this.#huisvuilkalenderDenHaag(apiSettings) });
@@ -381,15 +381,11 @@ export class TrashApis {
 
     // Skip lot of data from body to prevent memory overflow
     const body = <string>retrieveCalendarDataRequest.body;
+    const regex = /<a href="#waste-.*?" class="[^"]*\bwasteInfoIcon\b[^"]*"[^\>]*>[\s\S]*?<\/a>/gi;
+    let match;
 
-    const regex = /<a href="#waste-(.*) class="wasteInfoIcon/i;
-    let searchResultIndex = body.search(regex);
-
-    while (searchResultIndex >= 0) {
-      const endString = body.indexOf('</a>', searchResultIndex);
-      const result = body.substring(searchResultIndex, endString + 4);
-
-      // Parse the HTML fragment
+    while ((match = regex.exec(body)) !== null) {
+      const result = match[0];
       const doc = parseDocument(result);
 
       // Find all `<a>` elements with class `wasteInfoIcon`
@@ -409,12 +405,9 @@ export class TrashApis {
 
         const parsedTrashDate = parseDutchDate(trashDate);
         if (parsedTrashDate === null) continue;
+
         verifyByName(fDates, '', trashType, parsedTrashDate);
       }
-
-      // Find the next match
-      let nextResult = body.substring(searchResultIndex + 4).search(regex);
-      searchResultIndex = nextResult > 0 ? searchResultIndex + 4 + nextResult : -1;
     }
 
     return fDates;

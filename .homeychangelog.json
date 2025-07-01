@@ -202,7 +202,7 @@
     "nl": "Issue met mapping in Mijn Afvalwijzer (#230), Den Haag (#231), HVC (#233) en BAR (#234) opgelost."
   },
   "5.1.12": {
-    "en": "Added support for Venlo and Groningen.",
-    "nl": "Ondersteuning voor Venlo en Groningen toegevoegd."
+    "en": "Added support for Venlo and add a fix for afvalwijzer.",
+    "nl": "Ondersteuning voor Venlo en nieuwe implementatie voor mijn afvalwijzer."
   }
 }
