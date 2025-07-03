@@ -175,8 +175,6 @@ export function verifyDate(dateString: string) {
 export function verifyByName(activityDates: ActivityDates[], className: string, description: string, date: Date, icon?: string, color?: string): void {
   var foundType: boolean = false;
 
-  console.log(`Description: ${description}, Classname: ${className}.`);
-
   if (!description || description === '' || typeof description === undefined) {
     if (className == 'dhm') {
       foundType = true;
