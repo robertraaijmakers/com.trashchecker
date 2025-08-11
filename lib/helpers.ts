@@ -221,9 +221,7 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
   ) {
     addDate(activityDates, TrashType.PMD, date, icon, localDescription, color);
     foundType = true;
-  }
-
-  if (description.indexOf('plastic') !== -1 || description.indexOf('plc') !== -1) {
+  } else if (description.indexOf('plastic') !== -1 || description.indexOf('plc') !== -1) {
     addDate(activityDates, TrashType.PLASTIC, date, icon, localDescription, color);
     foundType = true;
   }

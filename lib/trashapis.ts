@@ -410,6 +410,11 @@ export class TrashApis {
       }
     }
 
+    // Remove potential duplicates
+    fDates.forEach((activity) => {
+      activity.dates = Array.from(new Map(activity.dates.map((d) => [d.toISOString(), d])).values());
+    });
+
     return fDates;
   }
 
