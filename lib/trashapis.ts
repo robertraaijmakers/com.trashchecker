@@ -467,7 +467,6 @@ export class TrashApis {
     });
 
     var calendarResult = <any>retrieveCalendarDataRequest.body;
-    this.#log(calendarResult);
     if (!calendarResult.status) {
       throw new Error('Invalid calendar result. ' + calendarResult.status);
     }
@@ -941,7 +940,6 @@ export class TrashApis {
 
     for (var i = 0; i < cookie.length; i++) {
       if (cookie[i].startsWith('CB_SESSION')) {
-        this.#log(cookie[i]);
         var j = cookie[i].indexOf('___AT=');
         var k = cookie[i].indexOf('&', j);
         authenticityToken = cookie[i].substring(j + 6, k);

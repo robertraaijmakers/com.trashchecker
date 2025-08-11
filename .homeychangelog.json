@@ -204,5 +204,9 @@
   "5.1.12": {
     "en": "Added support for Venlo and add a fix for afvalwijzer.",
     "nl": "Ondersteuning voor Venlo en nieuwe implementatie voor mijn afvalwijzer."
+  },
+  "5.1.13": {
+    "en": "Added another fix for afvalwijzer.",
+    "nl": "Weer een nieuwe update om wijzigingen uit mijn afvalwijzer te ondersteunen."
   }
 }
