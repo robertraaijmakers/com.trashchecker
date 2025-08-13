@@ -3,18 +3,20 @@
   "title": {
     "en": "Container will be cleaned...",
     "nl": "Container wordt schoongemaakt...",
-    "sv": "Behållaren håller på att rengöras..."
+    "sv": "Behållaren håller på att rengöras...",
+    "fr": "Le bac sera nettoyé..."
   },
   "titleFormatted": {
     "en": "What trash type will be cleaned [[when]]",
     "nl": "Welk type container wordt [[when]] schoongemaakt",
-    "sv": "Vilken typ av skräp rensas [[when]]"
+    "sv": "Vilken typ av skräp rensas [[when]]",
+    "fr": "Quel type de bac sera nettoyé [[when]]"
   },
-  "hint":
-  {
+  "hint": {
     "en": "This card will give you three tokens to use for your flow. One if a trash container will be cleaned, another one with what container will be cleaned, and a last one with the value from the settings page of the cleaned type.",
-	  "nl": "Deze actie resulteert in drie tokens. 1. Of er iets schoongemaakt wordt, 2. Welke container er schoongemaakt wordt, 3. De waarde zoals opgegeven op de instellingen pagina van de app voor het type dat schoongemaakt wordt.",
-	  "sv": "Denna åtgärd resulterar i tre tokens. 1. Om något rengörs, 2. Vilken behållare som rengörs, 3. Värdet som anges på inställningssidan i appen för den typ som rengörs."
+    "nl": "Deze actie resulteert in drie tokens. 1. Of er iets schoongemaakt wordt, 2. Welke container er schoongemaakt wordt, 3. De waarde zoals opgegeven op de instellingen pagina van de app voor het type dat schoongemaakt wordt.",
+    "sv": "Denna åtgärd resulterar i tre tokens. 1. Om något rengörs, 2. Vilken behållare som rengörs, 3. Värdet som anges på inställningssidan i appen för den typ som rengörs.",
+    "fr": "Cette action fournit trois jetons à utiliser dans votre flux : 1. Si un bac sera nettoyé, 2. Quel bac sera nettoyé, 3. La valeur indiquée dans la page des paramètres de l'application pour le type de bac nettoyé."
   },
   "advanced": true,
   "args": [
@@ -24,7 +26,8 @@
       "title": {
         "en": "When?",
         "nl": "Wanneer?",
-        "sv": "When?"
+        "sv": "When?",
+        "fr": "Quand ?"
       },
       "values": [
         {
@@ -32,7 +35,8 @@
           "label": {
             "en": "Today",
             "nl": "Vandaag",
-            "sv": "Hämtas idag"
+            "sv": "Hämtas idag",
+            "fr": "Aujourd'hui"
           }
         },
         {
@@ -40,7 +44,8 @@
           "label": {
             "en": "Tomorrow",
             "nl": "Morgen",
-            "sv": "Hämtas imorgon"
+            "sv": "Hämtas imorgon",
+            "fr": "Demain"
           }
         },
         {
@@ -48,7 +53,8 @@
           "label": {
             "en": "Day after tomorrow",
             "nl": "Overmorgen",
-            "sv": "Hämtas i övermorgon"
+            "sv": "Hämtas i övermorgon",
+            "fr": "Après-demain"
           }
         }
       ]
@@ -60,12 +66,14 @@
       "type": "boolean",
       "title": {
         "en": "Cleaning day?",
-        "nl": "Schoonmaakdag?"
+        "nl": "Schoonmaakdag?",
+        "fr": "Jour de nettoyage?"
       },
       "example": {
         "en": "true",
         "nl": "true",
-        "sv": "true"
+        "sv": "true",
+        "fr": "true"
       }
     },
     {
@@ -73,12 +81,14 @@
       "type": "string",
       "title": {
         "en": "Short trash type",
-        "nl": "Containertype (kort)"
+        "nl": "Containertype (kort)",
+        "fr": "Type de bac (court)"
       },
       "example": {
         "en": "PMD",
         "nl": "PMD",
-        "sv": "PMD"
+        "sv": "PMD",
+        "fr": "PMD"
       }
     },
     {
@@ -86,12 +96,14 @@
       "type": "string",
       "title": {
         "en": "Trash type label",
-        "nl": "Containertype (localized)"
+        "nl": "Containertype (localized)",
+        "fr": "Libellé du type de bac"
       },
       "example": {
         "en": "The plastic container",
         "nl": "De plastic container",
-        "sv": "Plastförpackningar"
+        "sv": "Plastförpackningar",
+        "fr": "Le bac plastique"
       }
     }
   ]

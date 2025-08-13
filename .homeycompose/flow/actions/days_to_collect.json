@@ -3,18 +3,20 @@
   "title": {
     "en": "Trash will be collected...",
     "nl": "Afval wordt opgehaald...",
-    "sv": "Papperskorgen samlas in..."
+    "sv": "Papperskorgen samlas in...",
+    "fr": "Les déchets seront collectés..."
   },
   "titleFormatted": {
     "en": "What type will be collected [[when]]",
     "nl": "Welk type wordt [[when]] opgehaald",
-    "sv": "Vilken typ samlas in [[when]]"
+    "sv": "Vilken typ samlas in [[when]]",
+    "fr": "Quel type sera collecté [[when]]"
   },
-  "hint":
-  {
+  "hint": {
     "en": "This card will give you three tokens to use for your flow. One if a trash type will be collected, another one with what type will be collected, and a last one with the value from the settings page of the collected type.",
-	  "nl": "Deze actie resulteert in drie tokens. 1. Of er iets geleegd wordt, 2. Welk type er geleegd wordt, 3. De waarde zoals opgegeven op de instellingen pagina van de app voor het type dat opgehaald wordt.",
-	  "sv": "Denna åtgärd resulterar i tre tokens. 1. Om något töms, 2. Vilken typ som töms, 3. Värdet som anges på appens inställningssida för den typ som hämtas."
+    "nl": "Deze actie resulteert in drie tokens. 1. Of er iets geleegd wordt, 2. Welk type er geleegd wordt, 3. De waarde zoals opgegeven op de instellingen pagina van de app voor het type dat opgehaald wordt.",
+    "sv": "Denna åtgärd resulterar i tre tokens. 1. Om något töms, 2. Vilken typ som töms, 3. Värdet som anges på appens inställningssida för den typ som hämtas.",
+    "fr": "Cette action fournit trois jetons à utiliser dans votre flux : 1. Si un type de déchet sera collecté, 2. Quel type de déchet sera collecté, 3. La valeur indiquée dans la page des paramètres de l’application pour le type collecté."
   },
   "advanced": true,
   "args": [
@@ -24,7 +26,8 @@
       "title": {
         "en": "When?",
         "nl": "Wanneer?",
-        "sv": "When?"
+        "sv": "When?",
+        "fr": "Quand?"
       },
       "values": [
         {
@@ -32,7 +35,8 @@
           "label": {
             "en": "Today",
             "nl": "Vandaag",
-            "sv": "Hämtas idag"
+            "sv": "Hämtas idag",
+            "fr": "Aujourd'hui"
           }
         },
         {
@@ -40,7 +44,8 @@
           "label": {
             "en": "Tomorrow",
             "nl": "Morgen",
-            "sv": "Hämtas imorgon"
+            "sv": "Hämtas imorgon",
+            "fr": "Demain"
           }
         },
         {
@@ -48,7 +53,8 @@
           "label": {
             "en": "Day after tomorrow",
             "nl": "Overmorgen",
-            "sv": "Hämtas i övermorgon"
+            "sv": "Hämtas i övermorgon",
+            "fr": "Après-demain"
           }
         }
       ]
@@ -60,12 +66,14 @@
       "type": "boolean",
       "title": {
         "en": "Collection day?",
-        "nl": "Ophaaldag?"
+        "nl": "Ophaaldag?",
+        "fr": "Jour de collecte?"
       },
       "example": {
         "en": "true",
         "nl": "true",
-        "sv": "true"
+        "sv": "true",
+        "fr": "true"
       }
     },
     {
@@ -73,12 +81,14 @@
       "type": "string",
       "title": {
         "en": "Short trash type",
-        "nl": "Containertype (kort)"
+        "nl": "Containertype (kort)",
+        "fr": "Type de déchet (court)"
       },
       "example": {
         "en": "PMD",
         "nl": "PMD",
-        "sv": "PMD"
+        "sv": "PMD",
+        "fr": "PMD"
       }
     },
     {
@@ -86,12 +96,14 @@
       "type": "string",
       "title": {
         "en": "Trash type label",
-        "nl": "Containertype (localized)"
+        "nl": "Containertype (localized)",
+        "fr": "Libellé du type de déchet"
       },
       "example": {
         "en": "The plastic container",
         "nl": "De plastic container",
-        "sv": "Plastförpackningar"
+        "sv": "Plastförpackningar",
+        "fr": "Le bac plastique"
       }
     }
   ]

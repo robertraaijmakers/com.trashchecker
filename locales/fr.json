@@ -1,0 +1,143 @@
+{
+	"title": "Trash Checker",
+	"settings": {
+		"title": "Paramètres de rappel de collecte des déchets",
+		"description": "Veuillez noter que toutes les communes ne sont pas prises en charge. Vous pouvez vérifier la disponibilité en indiquant votre code postal et votre numéro de maison. Si l'adresse n'est pas prise en charge, vous pouvez toujours ajouter la fréquence via la saisie manuelle ci-dessous et utiliser toutes les fonctionnalités de l'application.",
+		"postcode": "Code postal",
+		"hnumber": "Numéro",
+		"streetname": "Rue",
+		"country": "Pays",
+		"api": "Source",
+		"cleanApi": "Nettoyage des bacs ?",
+		"save": "Enregistrer",
+		"fail": "Cette adresse n'est pas prise en charge",
+		"manualonly": "Les données ont été actualisées sur la base des paramètres manuels uniquement",
+		"update": "Adresse mise à jour en",
+		"updateCleaning": "Le service de nettoyage des bacs a été mis à jour.",
+		"checking": "vérification de l'adresse...",
+		"gft": "Déchets biodégradables",
+		"rest": "Déchets résiduels",
+		"plastic": "Plastique",
+		"pmd": "Plastiques, métaux et emballages cartons",
+		"papier": "Papier et carton",
+		"textiel": "Textiles",
+		"grof": "Déchets volumineux",
+		"glas": "Verre",
+		"kerstboom": "Sapin de Noël",
+		"unknown": "Inconnu",
+		"notapplicable": "Sans objet",
+		"none": "Quand rien n'est collecté",
+		"titlemanualinput": "Paramètres des dates",
+		"refreshDebugInformation": "Actualiser les informations de débogage",
+		"interval": {
+			"na": "N/A",
+			"automatic": "Basé sur l'API",
+			"everyweek": "Chaque semaine le",
+			"everyotherweek": "Toutes les deux semaines le",
+			"everythreeweeks": "Une fois toutes les trois semaines le",
+			"everyfourweeks": "Une fois toutes les quatre semaines le",
+			"everyfiveweeks": "Une fois toutes les cinq semaines le",
+			"everysixweeks": "Une fois toutes les six semaines le",
+			"everyeighthweeks": "Une fois toutes les huit semaines le",
+			"everyfirst": "Chaque premier",
+			"everysecond": "Chaque deuxième",
+			"everythird": "Chaque troisième",
+			"everyfourth": "Chaque quatrième",
+			"everysecondlast": "Avant-dernier",
+			"everylast": "Dernier"
+		},
+		"dayofweek": {
+			"mo": "lundi",
+			"tu": "mardi",
+			"we": "mercredi",
+			"th": "jeudi",
+			"fr": "vendredi",
+			"sa": "samedi",
+			"su": "dimanche"
+		},
+		"interval_extra": {
+			"month": "du mois",
+			"othermonth": "un mois sur deux",
+			"quarter": "du trimestre",
+			"year": "de l'année"
+		},
+		"manualdata": {
+			"title": "Saisie avancée des dates",
+			"description": "Via ce champ, vous pouvez ajouter des dates supplémentaires. Ceci n'est pas recommandé, réservé aux utilisateurs avancés. Les dates doivent être saisies au format AAAA-mm-jj.",
+			"entryFieldLabel": "Saisie avancée de dates",
+			"save": "Enregistrer tous les paramètres"
+		},
+		"startdate": "à partir du",
+		"labeltitle": "Personnalisation des noms de types de déchets",
+		"labeldescription": "Les valeurs ci-dessous sont utilisées pour personnaliser votre expérience. Elles sont utilisées dans les étiquettes globales disponibles dans vos flux, dans le widget et dans les étiquettes sur les cartes en flux avancés.",
+		"saveLabelInput": "Enregistrer les types de déchets",
+		"labelgeneric": "Phrase d'étiquette globale",
+		"genericlabelhelper": "Les variables utilisables dans la phrase d'étiquette globale sont __time__, __type__, __plural__.",
+		"timeindicator": "Type d'étiquette globale",
+		"timeindicatorDescription": "Ceci est utilisé pour afficher des exemples sous vos paramètres d'étiquette, afin de prévisualiser le texte disponible dans les trois étiquettes globales."
+	},
+	"debug": {
+		"labeltitle": "Débogage",
+		"labeldescription": "Voici les dates de collecte actuellement connues dans l'application."
+	},
+	"error": {
+		"typenotsupported": {
+			"addviasettings": "Aucune date connue pour ce type de déchet. Ajoutez-les manuellement via la page des paramètres de l'application.",
+			"onyouraddress": "Ce type de déchet n'est pas pris en charge pour votre adresse."
+		}
+	},
+	"tokens": {
+		"trashcollection": {
+			"today": "Collecté aujourd'hui",
+			"tomorrow": "Collecté demain",
+			"dayaftertomorrow": "Collecté après-demain",
+			"advancedcollectiondates": "Jours de collecte (JSON)"
+		},
+		"output": {
+			"trashtypeycollectedonx": "__type__ __plural__ collecté __time__.",
+			"and": "et",
+			"replacementsingle": "est",
+			"replacementplural": "sont",
+			"type": {
+				"GFT": "Les déchets biodégradables",
+				"REST": "Les déchets résiduels",
+				"PLASTIC": "Les déchets plastiques",
+				"PMD": "Les plastiques, métaux et emballages cartons",
+				"PAPIER": "Le papier et le carton",
+				"TEXTIEL": "Les textiles",
+				"GROF": "Les déchets volumineux",
+				"GLAS": "Le verre",
+				"KERSTBOOM": "Le sapin de Noël",
+				"NONE": "Rien"
+			},
+			"weekdays": {
+				"d0": "dimanche",
+				"d1": "lundi",
+				"d2": "mardi",
+				"d3": "mercredi",
+				"d4": "jeudi",
+				"d5": "vendredi",
+				"d6": "samedi"
+			},
+			"timeindicator": {
+				"t-1": "Hier",
+				"t0": "Aujourd'hui",
+				"t1": "Demain",
+				"t2": "Après-demain"
+			}
+		}
+	},
+	"widgets": {
+		"trashType": {
+			"GFT": "Biodégradables",
+			"REST": "Résiduels",
+			"PLASTIC": "Plastique",
+			"PMD": "PMD",
+			"PAPIER": "Papier et carton",
+			"TEXTIEL": "Textiles",
+			"GROF": "Volumineux",
+			"GLAS": "Verre",
+			"KERSTBOOM": "Sapin de Noël"
+		}
+	}
+}

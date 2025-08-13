@@ -208,5 +208,9 @@
   "5.1.13": {
     "en": "Added another fix for afvalwijzer.",
     "nl": "Weer een nieuwe update om wijzigingen uit mijn afvalwijzer te ondersteunen."
+  },
+  "5.1.14": {
+    "en": "Added the French language.",
+    "nl": "Franse taal wordt nu ook ondersteund."
   }
 }

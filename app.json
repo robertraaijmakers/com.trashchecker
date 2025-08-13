@@ -5,9 +5,10 @@
   "name": {
     "en": "Trashcan Reminder 2.0",
     "nl": "Afval Herinnering 2.0",
-    "sv": "Avfallspåminnelse 2.0"
+    "sv": "Avfallspåminnelse 2.0",
+    "fr": "Rappel de collecte 2.0"
   },
-  "version": "5.1.13",
+  "version": "5.1.14",
   "platforms": [
     "local"
   ],
@@ -71,17 +72,20 @@
         "title": {
           "en": "Container will be cleaned...",
           "nl": "Container wordt schoongemaakt...",
-          "sv": "Behållaren håller på att rengöras..."
+          "sv": "Behållaren håller på att rengöras...",
+          "fr": "Le bac sera nettoyé..."
         },
         "titleFormatted": {
           "en": "[[trash_type]] will !{{|not}} be cleaned [[when]]",
           "nl": "[[trash_type]] wordt [[when]] !{{|niet}} schoongemaakt",
-          "sv": "[[trash_type]] rengöras !{{|inte}} in [[when]]"
+          "sv": "[[trash_type]] rengöras !{{|inte}} in [[when]]",
+          "fr": "[[trash_type]] sera !{{|pas}} nettoyé [[when]]"
         },
         "hint": {
           "en": "This card will run successful when the container of selected type is cleaned.",
           "nl": "Deze actie zal succesvol draaien als het geselecteerde type wordt schoongemaakt.",
-          "sv": "Denna åtgärd kommer att köras framgångsrikt om den valda typen rengörs"
+          "sv": "Denna åtgärd kommer att köras framgångsrikt om den valda typen rengörs",
+          "fr": "Cette action s’exécutera avec succès lorsque le bac du type sélectionné sera nettoyé."
         },
         "args": [
           {
@@ -90,7 +94,8 @@
             "title": {
               "en": "When?",
               "nl": "Wanneer?",
-              "sv": "When?"
+              "sv": "When?",
+              "fr": "Quand?"
             },
             "values": [
               {
@@ -98,7 +103,8 @@
                 "label": {
                   "en": "Today",
                   "nl": "Vandaag",
-                  "sv": "Hämtas idag"
+                  "sv": "Hämtas idag",
+                  "fr": "Aujourd'hui"
                 }
               },
               {
@@ -106,7 +112,8 @@
                 "label": {
                   "en": "Tomorrow",
                   "nl": "Morgen",
-                  "sv": "Hämtas imorgon"
+                  "sv": "Hämtas imorgon",
+                  "fr": "Demain"
                 }
               },
               {
@@ -114,7 +121,8 @@
                 "label": {
                   "en": "Day after tomorrow",
                   "nl": "Overmorgen",
-                  "sv": "Hämtas i övermorgon"
+                  "sv": "Hämtas i övermorgon",
+                  "fr": "Après-demain"
                 }
               }
             ]
@@ -125,7 +133,8 @@
             "title": {
               "en": "Type?",
               "nl": "Type?",
-              "sv": "Type?"
+              "sv": "Type?",
+              "fr": "Type?"
             },
             "values": [
               {
@@ -133,7 +142,8 @@
                 "label": {
                   "en": "Any",
                   "nl": "Iets",
-                  "sv": "Några"
+                  "sv": "Några",
+                  "fr": "N'importe lequel"
                 }
               },
               {
@@ -141,7 +151,8 @@
                 "label": {
                   "en": "Organic Waste",
                   "nl": "GFT",
-                  "sv": "Kompost"
+                  "sv": "Kompost",
+                  "fr": "Déchets biodégradables"
                 }
               },
               {
@@ -149,7 +160,8 @@
                 "label": {
                   "en": "Bulky waste",
                   "nl": "Grof afval",
-                  "sv": "Grovsopor"
+                  "sv": "Grovsopor",
+                  "fr": "Déchets volumineux"
                 }
               },
               {
@@ -157,7 +169,8 @@
                 "label": {
                   "en": "Paper",
                   "nl": "Papier",
-                  "sv": "Papper"
+                  "sv": "Papper",
+                  "fr": "Papier et carton"
                 }
               },
               {
@@ -165,7 +178,8 @@
                 "label": {
                   "en": "Plastic",
                   "nl": "Plastic",
-                  "sv": "Plast"
+                  "sv": "Plast",
+                  "fr": "Plastique"
                 }
               },
               {
@@ -173,7 +187,8 @@
                 "label": {
                   "en": "PMD",
                   "nl": "PMD",
-                  "sv": "PMD"
+                  "sv": "PMD",
+                  "fr": "PMD"
                 }
               },
               {
@@ -181,7 +196,8 @@
                 "label": {
                   "en": "Residual",
                   "nl": "Rest",
-                  "sv": "Restavfall"
+                  "sv": "Restavfall",
+                  "fr": "Déchets résiduels"
                 }
               },
               {
@@ -189,7 +205,8 @@
                 "label": {
                   "en": "Textiles",
                   "nl": "Textiel",
-                  "sv": "Textilier"
+                  "sv": "Textilier",
+                  "fr": "Textiles"
                 }
               },
               {
@@ -197,7 +214,8 @@
                 "label": {
                   "en": "Christmas tree",
                   "nl": "Kerstboom",
-                  "sv": "Julgran"
+                  "sv": "Julgran",
+                  "fr": "Sapin de Noël"
                 }
               },
               {
@@ -205,7 +223,8 @@
                 "label": {
                   "en": "Glass",
                   "nl": "Glas",
-                  "sv": "Glas"
+                  "sv": "Glas",
+                  "fr": "Verre"
                 }
               }
             ]
@@ -217,17 +236,20 @@
         "title": {
           "en": "Trash will be collected...",
           "nl": "Afval wordt opgehaald...",
-          "sv": "Papperskorgen samlas in..."
+          "sv": "Papperskorgen samlas in...",
+          "fr": "Les déchets seront collectés..."
         },
         "titleFormatted": {
           "en": "[[trash_type]] will !{{|not}} be collected [[when]]",
           "nl": "[[trash_type]] wordt [[when]] !{{|niet}} opgehaald",
-          "sv": "[[trash_type]] samlas !{{|inte}} in [[when]]"
+          "sv": "[[trash_type]] samlas !{{|inte}} in [[when]]",
+          "fr": "[[trash_type]] sera !{{|pas}} collecté [[when]]"
         },
         "hint": {
           "en": "This card will run successful when the trash of selected type is collected.",
           "nl": "Deze actie zal succesvol draaien als het geselecteerde type wordt opgehaald.",
-          "sv": "Detta kort kommer att fungera när papperskorgen av den valda typen samlas in."
+          "sv": "Detta kort kommer att fungera när papperskorgen av den valda typen samlas in.",
+          "fr": "Cette action s'exécutera avec succès lorsque les déchets du type sélectionné seront collectés."
         },
         "args": [
           {
@@ -236,7 +258,8 @@
             "title": {
               "en": "When?",
               "nl": "Wanneer?",
-              "sv": "When?"
+              "sv": "When?",
+              "fr": "Quand?"
             },
             "values": [
               {
@@ -244,7 +267,8 @@
                 "label": {
                   "en": "Today",
                   "nl": "Vandaag",
-                  "sv": "Hämtas idag"
+                  "sv": "Hämtas idag",
+                  "fr": "Aujourd'hui"
                 }
               },
               {
@@ -252,7 +276,8 @@
                 "label": {
                   "en": "Tomorrow",
                   "nl": "Morgen",
-                  "sv": "Hämtas imorgon"
+                  "sv": "Hämtas imorgon",
+                  "fr": "Demain"
                 }
               },
               {
@@ -260,7 +285,8 @@
                 "label": {
                   "en": "Day after tomorrow",
                   "nl": "Overmorgen",
-                  "sv": "Hämtas i övermorgon"
+                  "sv": "Hämtas i övermorgon",
+                  "fr": "Après-demain"
                 }
               }
             ]
@@ -271,7 +297,8 @@
             "title": {
               "en": "Type?",
               "nl": "Type?",
-              "sv": "Type?"
+              "sv": "Type?",
+              "fr": "Type?"
             },
             "values": [
               {
@@ -279,7 +306,8 @@
                 "label": {
                   "en": "Any",
                   "nl": "Iets",
-                  "sv": "Några"
+                  "sv": "Några",
+                  "fr": "N'importe lequel"
                 }
               },
               {
@@ -287,7 +315,8 @@
                 "label": {
                   "en": "Organic Waste",
                   "nl": "GFT",
-                  "sv": "Kompost"
+                  "sv": "Kompost",
+                  "fr": "Déchets biodégradables"
                 }
               },
               {
@@ -295,7 +324,8 @@
                 "label": {
                   "en": "Bulky waste",
                   "nl": "Grof afval",
-                  "sv": "Grovsopor"
+                  "sv": "Grovsopor",
+                  "fr": "Déchets volumineux"
                 }
               },
               {
@@ -303,7 +333,8 @@
                 "label": {
                   "en": "Paper",
                   "nl": "Papier",
-                  "sv": "Papper"
+                  "sv": "Papper",
+                  "fr": "Papier et carton"
                 }
               },
               {
@@ -311,7 +342,8 @@
                 "label": {
                   "en": "Plastic",
                   "nl": "Plastic",
-                  "sv": "Plast"
+                  "sv": "Plast",
+                  "fr": "Plastique"
                 }
               },
               {
@@ -319,7 +351,8 @@
                 "label": {
                   "en": "PMD",
                   "nl": "PMD",
-                  "sv": "PMD"
+                  "sv": "PMD",
+                  "fr": "PMD"
                 }
               },
               {
@@ -327,7 +360,8 @@
                 "label": {
                   "en": "Residual",
                   "nl": "Rest",
-                  "sv": "Restavfall"
+                  "sv": "Restavfall",
+                  "fr": "Déchets résiduels"
                 }
               },
               {
@@ -335,7 +369,8 @@
                 "label": {
                   "en": "Textiles",
                   "nl": "Textiel",
-                  "sv": "Textilier"
+                  "sv": "Textilier",
+                  "fr": "Textiles"
                 }
               },
               {
@@ -343,7 +378,8 @@
                 "label": {
                   "en": "Christmas tree",
                   "nl": "Kerstboom",
-                  "sv": "Julgran"
+                  "sv": "Julgran",
+                  "fr": "Sapin de Noël"
                 }
               },
               {
@@ -351,7 +387,8 @@
                 "label": {
                   "en": "Glass",
                   "nl": "Glas",
-                  "sv": "Glas"
+                  "sv": "Glas",
+                  "fr": "Verre"
                 }
               }
             ]
@@ -365,17 +402,20 @@
         "title": {
           "en": "Container will be cleaned...",
           "nl": "Container wordt schoongemaakt...",
-          "sv": "Behållaren håller på att rengöras..."
+          "sv": "Behållaren håller på att rengöras...",
+          "fr": "Le bac sera nettoyé..."
         },
         "titleFormatted": {
           "en": "What trash type will be cleaned [[when]]",
           "nl": "Welk type container wordt [[when]] schoongemaakt",
-          "sv": "Vilken typ av skräp rensas [[when]]"
+          "sv": "Vilken typ av skräp rensas [[when]]",
+          "fr": "Quel type de bac sera nettoyé [[when]]"
         },
         "hint": {
           "en": "This card will give you three tokens to use for your flow. One if a trash container will be cleaned, another one with what container will be cleaned, and a last one with the value from the settings page of the cleaned type.",
           "nl": "Deze actie resulteert in drie tokens. 1. Of er iets schoongemaakt wordt, 2. Welke container er schoongemaakt wordt, 3. De waarde zoals opgegeven op de instellingen pagina van de app voor het type dat schoongemaakt wordt.",
-          "sv": "Denna åtgärd resulterar i tre tokens. 1. Om något rengörs, 2. Vilken behållare som rengörs, 3. Värdet som anges på inställningssidan i appen för den typ som rengörs."
+          "sv": "Denna åtgärd resulterar i tre tokens. 1. Om något rengörs, 2. Vilken behållare som rengörs, 3. Värdet som anges på inställningssidan i appen för den typ som rengörs.",
+          "fr": "Cette action fournit trois jetons à utiliser dans votre flux : 1. Si un bac sera nettoyé, 2. Quel bac sera nettoyé, 3. La valeur indiquée dans la page des paramètres de l'application pour le type de bac nettoyé."
         },
         "advanced": true,
         "args": [
@@ -385,7 +425,8 @@
             "title": {
               "en": "When?",
               "nl": "Wanneer?",
-              "sv": "When?"
+              "sv": "When?",
+              "fr": "Quand ?"
             },
             "values": [
               {
@@ -393,7 +434,8 @@
                 "label": {
                   "en": "Today",
                   "nl": "Vandaag",
-                  "sv": "Hämtas idag"
+                  "sv": "Hämtas idag",
+                  "fr": "Aujourd'hui"
                 }
               },
               {
@@ -401,7 +443,8 @@
                 "label": {
                   "en": "Tomorrow",
                   "nl": "Morgen",
-                  "sv": "Hämtas imorgon"
+                  "sv": "Hämtas imorgon",
+                  "fr": "Demain"
                 }
               },
               {
@@ -409,7 +452,8 @@
                 "label": {
                   "en": "Day after tomorrow",
                   "nl": "Overmorgen",
-                  "sv": "Hämtas i övermorgon"
+                  "sv": "Hämtas i övermorgon",
+                  "fr": "Après-demain"
                 }
               }
             ]
@@ -421,12 +465,14 @@
             "type": "boolean",
             "title": {
               "en": "Cleaning day?",
-              "nl": "Schoonmaakdag?"
+              "nl": "Schoonmaakdag?",
+              "fr": "Jour de nettoyage?"
             },
             "example": {
               "en": "true",
               "nl": "true",
-              "sv": "true"
+              "sv": "true",
+              "fr": "true"
             }
           },
           {
@@ -434,12 +480,14 @@
             "type": "string",
             "title": {
               "en": "Short trash type",
-              "nl": "Containertype (kort)"
+              "nl": "Containertype (kort)",
+              "fr": "Type de bac (court)"
             },
             "example": {
               "en": "PMD",
               "nl": "PMD",
-              "sv": "PMD"
+              "sv": "PMD",
+              "fr": "PMD"
             }
           },
           {
@@ -447,12 +495,14 @@
             "type": "string",
             "title": {
               "en": "Trash type label",
-              "nl": "Containertype (localized)"
+              "nl": "Containertype (localized)",
+              "fr": "Libellé du type de bac"
             },
             "example": {
               "en": "The plastic container",
               "nl": "De plastic container",
-              "sv": "Plastförpackningar"
+              "sv": "Plastförpackningar",
+              "fr": "Le bac plastique"
             }
           }
         ]
@@ -462,17 +512,20 @@
         "title": {
           "en": "Trash will be collected...",
           "nl": "Afval wordt opgehaald...",
-          "sv": "Papperskorgen samlas in..."
+          "sv": "Papperskorgen samlas in...",
+          "fr": "Les déchets seront collectés..."
         },
         "titleFormatted": {
           "en": "What type will be collected [[when]]",
           "nl": "Welk type wordt [[when]] opgehaald",
-          "sv": "Vilken typ samlas in [[when]]"
+          "sv": "Vilken typ samlas in [[when]]",
+          "fr": "Quel type sera collecté [[when]]"
         },
         "hint": {
           "en": "This card will give you three tokens to use for your flow. One if a trash type will be collected, another one with what type will be collected, and a last one with the value from the settings page of the collected type.",
           "nl": "Deze actie resulteert in drie tokens. 1. Of er iets geleegd wordt, 2. Welk type er geleegd wordt, 3. De waarde zoals opgegeven op de instellingen pagina van de app voor het type dat opgehaald wordt.",
-          "sv": "Denna åtgärd resulterar i tre tokens. 1. Om något töms, 2. Vilken typ som töms, 3. Värdet som anges på appens inställningssida för den typ som hämtas."
+          "sv": "Denna åtgärd resulterar i tre tokens. 1. Om något töms, 2. Vilken typ som töms, 3. Värdet som anges på appens inställningssida för den typ som hämtas.",
+          "fr": "Cette action fournit trois jetons à utiliser dans votre flux : 1. Si un type de déchet sera collecté, 2. Quel type de déchet sera collecté, 3. La valeur indiquée dans la page des paramètres de l’application pour le type collecté."
         },
         "advanced": true,
         "args": [
@@ -482,7 +535,8 @@
             "title": {
               "en": "When?",
               "nl": "Wanneer?",
-              "sv": "When?"
+              "sv": "When?",
+              "fr": "Quand?"
             },
             "values": [
               {
@@ -490,7 +544,8 @@
                 "label": {
                   "en": "Today",
                   "nl": "Vandaag",
-                  "sv": "Hämtas idag"
+                  "sv": "Hämtas idag",
+                  "fr": "Aujourd'hui"
                 }
               },
               {
@@ -498,7 +553,8 @@
                 "label": {
                   "en": "Tomorrow",
                   "nl": "Morgen",
-                  "sv": "Hämtas imorgon"
+                  "sv": "Hämtas imorgon",
+                  "fr": "Demain"
                 }
               },
               {
@@ -506,7 +562,8 @@
                 "label": {
                   "en": "Day after tomorrow",
                   "nl": "Overmorgen",
-                  "sv": "Hämtas i övermorgon"
+                  "sv": "Hämtas i övermorgon",
+                  "fr": "Après-demain"
                 }
               }
             ]
@@ -518,12 +575,14 @@
             "type": "boolean",
             "title": {
               "en": "Collection day?",
-              "nl": "Ophaaldag?"
+              "nl": "Ophaaldag?",
+              "fr": "Jour de collecte?"
             },
             "example": {
               "en": "true",
               "nl": "true",
-              "sv": "true"
+              "sv": "true",
+              "fr": "true"
             }
           },
           {
@@ -531,12 +590,14 @@
             "type": "string",
             "title": {
               "en": "Short trash type",
-              "nl": "Containertype (kort)"
+              "nl": "Containertype (kort)",
+              "fr": "Type de déchet (court)"
             },
             "example": {
               "en": "PMD",
               "nl": "PMD",
-              "sv": "PMD"
+              "sv": "PMD",
+              "fr": "PMD"
             }
           },
           {
@@ -544,12 +605,14 @@
             "type": "string",
             "title": {
               "en": "Trash type label",
-              "nl": "Containertype (localized)"
+              "nl": "Containertype (localized)",
+              "fr": "Libellé du type de déchet"
             },
             "example": {
               "en": "The plastic container",
               "nl": "De plastic container",
-              "sv": "Plastförpackningar"
+              "sv": "Plastförpackningar",
+              "fr": "Le bac plastique"
             }
           }
         ]
