@@ -5,7 +5,28 @@ import { describe, it } from 'node:test';
 import { ActivityDates } from '../types/localTypes';
 import assert from 'assert';
 import { ApiSettings } from '../assets/publicTypes';
+
+describe('Blink Manager', function () {
+  it('API - Blink Manager', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '5741WT',
+      housenumber: '9',
+      country: 'NL',
+      apiId: 'mba',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+
 /*
+
+
+
 describe('Kliko Manager', function () {
   it('API - Klikomanager Uithoorn', async function () {
     const apiSettings: ApiSettings = {
@@ -523,7 +544,7 @@ describe('TrashApiAfw', function () {
     const result = await testAPI(apiSettings);
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
-  });*/
+  });
 
   it('API - Afvalwijzer (5) - Extra GFT', async function () {
     const apiSettings: ApiSettings = {
@@ -658,10 +679,25 @@ describe('TrashApiRewl', function () {
 });
 
 describe('TrashApiAfzrd', function () {
-  it('API - ZRD', async function () {
+  it('API - ZRD - 1', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '4569AD',
       housenumber: '26',
+      country: 'NL',
+      apiId: 'afzrd',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+
+  it('API - ZRD - 2 - Lege respons', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '4463LG',
+      housenumber: '19',
       country: 'NL',
       apiId: 'afzrd',
       cleanApiId: '',

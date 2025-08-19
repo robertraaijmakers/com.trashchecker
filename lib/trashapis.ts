@@ -189,7 +189,7 @@ export class TrashApis {
   }
 
   async #BlinkAfvalkalender(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'www.mijnblink.nl');
+    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'mijnblink.nl');
   }
 
   async #GadGooiAndVechtstreek(apiSettings: ApiSettings) {

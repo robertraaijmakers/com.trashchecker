@@ -212,5 +212,9 @@
   "5.1.14": {
     "en": "Added the French language.",
     "nl": "Franse taal wordt nu ook ondersteund."
+  },
+  "5.1.15": {
+    "en": "Fixed issue with MijnBlink.",
+    "nl": "URL voor MijnBlink aangepast."
   }
 }
