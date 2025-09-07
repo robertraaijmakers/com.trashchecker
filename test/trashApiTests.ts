@@ -27,8 +27,23 @@ describe('Blink Manager', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-});
 
+  it('API - Blink Manager', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '5751ps',
+      housenumber: '3',
+      country: 'NL',
+      apiId: 'mba',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+/*
 describe('Kliko Manager', function () {
   it('API - Klikomanager Uithoorn', async function () {
     const apiSettings: ApiSettings = {
@@ -423,10 +438,25 @@ describe('TrashApiAvr', function () {
 });
 
 describe('TrashApiTwenteMilieu', function () {
-  it('API - Afvalkalender Twente Milieu', async function () {
+  it('API - Afvalkalender Twente Milieu - 1', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '7641BR',
       housenumber: '19',
+      country: 'NL',
+      apiId: 'twm',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+
+  it('API - Afvalkalender Twente Milieu - 2', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '7581TN',
+      housenumber: '11',
       country: 'NL',
       apiId: 'twm',
       cleanApiId: '',
