@@ -1,10 +1,16 @@
 'use strict';
 
+/*
+  Disabled tests are to make sure we don't spam the APIs with requests when not needed.
+  Enable tests when needed to test against the APIs.
+*/
+
 import { CleanApis } from '../lib/cleanapis';
 import { describe, it } from 'node:test';
 import { ActivityDates } from '../types/localTypes';
 import assert from 'assert';
 import { ApiSettings } from '../assets/publicTypes';
+
 /*
 describe('CleanApiCleanProfs', function () {
   it('Clean API - Clean Profs 1', async function () {

@@ -1,11 +1,17 @@
 'use strict';
 
+/*
+  Disabled tests are to make sure we don't spam the APIs with requests when not needed.
+  Enable tests when needed to test against the APIs.
+*/
+
 import { TrashApis } from '../lib/trashapis';
 import { describe, it } from 'node:test';
 import { ActivityDates } from '../types/localTypes';
 import assert from 'assert';
 import { ApiSettings } from '../assets/publicTypes';
 
+/*
 describe('Blink Manager', function () {
   it('API - Blink Manager', async function () {
     const apiSettings: ApiSettings = {
@@ -22,10 +28,6 @@ describe('Blink Manager', function () {
     assert.equal(isValid, true);
   });
 });
-
-/*
-
-
 
 describe('Kliko Manager', function () {
   it('API - Klikomanager Uithoorn', async function () {
@@ -410,6 +412,23 @@ describe('TrashApiAvr', function () {
       housenumber: '14',
       country: 'NL',
       apiId: 'avr',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+
+describe('TrashApiTwenteMilieu', function () {
+  it('API - Afvalkalender Twente Milieu', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '7641BR',
+      housenumber: '19',
+      country: 'NL',
+      apiId: 'twm',
       cleanApiId: '',
       streetname: '',
     };
