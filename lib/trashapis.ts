@@ -537,58 +537,74 @@ export class TrashApis {
 
     const accessTokenResult = <any>accessTokenRequest.body;
     const accessToken = accessTokenResult.accessToken;
+    let zipcodeId = '';
 
-    // Validate zipcode request
-    const validateZipCodeRequest = await httpsPromise({
-      hostname: hostName,
-      path: `/recycle-public/app/v1/zipcodes?q=${apiSettings.zipcode}`,
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'User-Agent': 'Homey',
-        Authorization: accessToken,
-        'x-consumer': accessConsumer,
-      },
-      family: 4,
-      rejectUnauthorized: false,
-    });
+    if (apiSettings.zipcode.includes('-')) {
+      zipcodeId = apiSettings.zipcode;
+    } else {
+      // Validate zipcode request
+      const validateZipCodeRequest = await httpsPromise({
+        hostname: hostName,
+        path: `/recycle-public/app/v1/zipcodes?q=${apiSettings.zipcode}`,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Homey',
+          Authorization: accessToken,
+          'x-consumer': accessConsumer,
+        },
+        family: 4,
+        rejectUnauthorized: false,
+      });
 
-    const zipCodeResult = <any>validateZipCodeRequest.body;
-    if (zipCodeResult.items.length <= 0) {
-      throw new Error('No zipcode found for: ' + apiSettings.zipcode);
+      const zipCodeResult = <any>validateZipCodeRequest.body;
+      if (zipCodeResult.items.length <= 0) {
+        throw new Error('No zipcode found for: ' + apiSettings.zipcode);
+      }
+
+      if (zipCodeResult.items.length > 1) {
+        throw new Error('Multiple zipcode entries found for: ' + apiSettings.zipcode);
+      }
+
+      zipcodeId = zipCodeResult.items[0].id;
     }
 
-    if (zipCodeResult.items.length > 1) {
-      throw new Error('Multiple zipcode entries found for: ' + apiSettings.zipcode);
+    let streetId = '';
+    if (apiSettings.streetname.includes('-')) {
+      streetId = apiSettings.zipcode;
+    } else {
+      // Validate street request
+      const validateStreetRequest = await httpsPromise({
+        hostname: hostName,
+        path: encodeURI(`/recycle-public/app/v1/streets?q=${apiSettings.streetname.trim()}&zipcodes=${zipcodeId}`),
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Homey',
+          Authorization: accessToken,
+          'x-consumer': accessConsumer,
+        },
+        family: 4,
+        rejectUnauthorized: false,
+      });
+
+      const streetResult = <any>validateStreetRequest.body;
+      if (streetResult.items.length <= 0) {
+        throw new Error('No street found for: ' + apiSettings.streetname.trim());
+      }
+
+      // Search for exact streetname match
+      if (streetResult.items.length > 1) {
+        const exactMatch = streetResult.items.find((item: any) => item.name.toLowerCase().trim() === apiSettings.streetname.trim().toLowerCase());
+        if (exactMatch) {
+          streetId = exactMatch.id;
+        } else {
+          throw new Error('Multiple streets found for: ' + apiSettings.streetname.trim());
+        }
+      } else {
+        streetId = streetResult.items[0].id;
+      }
     }
-
-    var zipcodeId = zipCodeResult.items[0].id;
-
-    // Validate street request
-    const validateStreetRequest = await httpsPromise({
-      hostname: hostName,
-      path: encodeURI(`/recycle-public/app/v1/streets?q=${apiSettings.streetname.trim()}&zipcodes=${zipcodeId}`),
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'User-Agent': 'Homey',
-        Authorization: accessToken,
-        'x-consumer': accessConsumer,
-      },
-      family: 4,
-      rejectUnauthorized: false,
-    });
-
-    const streetResult = <any>validateStreetRequest.body;
-    if (streetResult.items.length <= 0) {
-      throw new Error('No street found for: ' + apiSettings.streetname.trim());
-    }
-
-    if (streetResult.items.length > 1) {
-      throw new Error('Multiple streets found for: ' + apiSettings.streetname.trim());
-    }
-
-    var streetId = streetResult.items[0].id;
 
     // Retrieve trash request
     var startDate = new Date().setDate(new Date().getDate() - 7);

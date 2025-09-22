@@ -380,7 +380,7 @@ describe('TrashApiRad', function () {
     assert.equal(isValid, true);
   });
 });
-/*
+
 describe('TrashApiRecbe', function () {
   it('API - Afvalkalender Recycle BE - 1', async function () {
     const apiSettings: ApiSettings = {
@@ -390,6 +390,7 @@ describe('TrashApiRecbe', function () {
       apiId: 'recbe',
       cleanApiId: '',
       streetname: 'Rozenstraat',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -405,6 +406,7 @@ describe('TrashApiRecbe', function () {
       apiId: 'recbe',
       cleanApiId: '',
       streetname: 'Plataanlaan',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -420,6 +422,7 @@ describe('TrashApiRecbe', function () {
       apiId: 'recbe',
       cleanApiId: '',
       streetname: 'Paddeschootdreef',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -435,6 +438,7 @@ describe('TrashApiRecbe', function () {
       apiId: 'recbe',
       cleanApiId: '',
       streetname: 'Voetweg',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -450,6 +454,23 @@ describe('TrashApiRecbe', function () {
       apiId: 'recbe',
       cleanApiId: '',
       streetname: 'De Pelgrim',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+
+  it('API - RECYCLE BE 6', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '9820-44043',
+      housenumber: '24',
+      country: 'BE',
+      apiId: 'recbe',
+      cleanApiId: '',
+      streetname: 'Bosstraat',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -457,7 +478,7 @@ describe('TrashApiRecbe', function () {
     assert.equal(isValid, true);
   });
 });
-
+/*
 describe('TrashApiAvr', function () {
   it('API - Afvalkalender AVRI', async function () {
     const apiSettings: ApiSettings = {
