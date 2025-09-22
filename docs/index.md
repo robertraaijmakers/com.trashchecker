@@ -49,12 +49,14 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Recyle Manager](http://www.recyclemanager.nl)
 - [Reinigingsdienst Waardlanden](https://www.waardlanden.nl/particulieren/afvalinzameling/afvalkalender)
 - [Twentemilieu](https://www.twentemilieu.nl)
+- And many more! Check the app for all available providers.
 
 ### Belgium
 - [Recycle!](https://recycleapp.be/home)
+- [Limburg.NET](https://limburg.net)
 
 ## Supported Cards
-There is one card that you can place in the "and" column. The card lets you check whether or not trash is collected either today, tomorrow or the day after tomorrow. The type of trash that is checked for can be set to a specific one, or to 'any' to include all types.
+There is one card that you can place in the "and" column. The card lets you check whether or not trash is collected either today, tomorrow or the day after tomorrow. The type of trash that is checked for can be set to a specific one, or to 'any' to include all types. Check out the [Flow Examples](flow-examples.md) for some cool tips and tricks.
 
 ## Tags
 There are four global tags available. The text in the tags can be configured trough the settings page. The tags represent the trash that is collected today, tomorrow and the day after tomorrow.
