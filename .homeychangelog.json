@@ -216,5 +216,17 @@
   "5.1.15": {
     "en": "Fixed issue with MijnBlink.",
     "nl": "URL voor MijnBlink aangepast."
+  },
+  "5.1.16": {
+    "en": "Push fix for older Homey models.",
+    "nl": "Update met een patch voor oudere Homey modellen."
+  },
+  "5.1.17": {
+    "en": "Push fix for older Homey models, added fix for Groningen and added new city Nijkerk.",
+    "nl": "Update met een patch voor oudere Homey modellen, fix voor Groningen en Nijkerk als nieuwe stad toegevoegd."
+  },
+  "5.1.18": {
+    "en": "Push fix for older Homey models, added fix for Groningen and added new city Nijkerk and provider Irado.",
+    "nl": "Update met een patch voor oudere Homey modellen, fix voor Groningen en Nijkerk als nieuwe stad toegevoegd samen met Irado als nieuwe dienstverlener."
   }
 }

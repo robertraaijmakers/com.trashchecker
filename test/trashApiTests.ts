@@ -1010,7 +1010,7 @@ describe('TrashApiGroningen', function () {
   it('API - Groningen', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '9713RH',
-      housenumber: '10',
+      housenumber: '12',
       country: 'NL',
       apiId: 'akgr',
       cleanApiId: '',
@@ -1022,6 +1022,38 @@ describe('TrashApiGroningen', function () {
     assert.equal(isValid, true);
   });
 });*/
+
+describe('TrashApiIrado', function () {
+  it('API - Irado - 1', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '3114PJ',
+      housenumber: '23',
+      country: 'NL',
+      apiId: 'akird',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+
+  it('API - Irado - 2', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '3131SP',
+      housenumber: '42',
+      country: 'NL',
+      apiId: 'akird',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
 
 function testAPI(apiSettings: ApiSettings) {
   const trashApis = new TrashApis(console.log);

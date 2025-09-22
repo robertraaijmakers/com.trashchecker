@@ -1,7 +1,7 @@
 'use strict';
 
 import { ActivityDates, ApiDefinition, ApiFindResult } from '../types/localTypes';
-import { addDate, formatDate, parseDate, httpsPromise, parseDutchDate, processWasteData, validateCountry, validateHousenumber, validateZipcode, verifyByName, verifyDate } from './helpers';
+import { addDate, formatDate, httpsPromise, parseDutchDate, processWasteData, validateCountry, validateHousenumber, validateZipcode, verifyByName, verifyDate } from './helpers';
 import { ApiSettings, TrashType } from '../assets/publicTypes';
 import { parseDocument, DomUtils } from 'htmlparser2';
 
@@ -21,6 +21,7 @@ export class TrashApis {
     this.#apiList.push({ name: 'Afvalkalender Cyclus', id: 'afc', execute: (apiSettings) => this.#afvalkalenderCyclus(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender DAR', id: 'dar', execute: (apiSettings) => this.#darAfvalkalender(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Etten-Leur', id: 'akel', execute: (apiSettings) => this.#huisvuilkalenderEttenLeur(apiSettings) });
+    this.#apiList.push({ name: 'Afvalkalender Irado', id: 'akird', execute: (apiSettings) => this.#afvalkalenderIrado(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Meerlanden', id: 'akm', execute: (apiSettings) => this.#afvalkalenderMeerlanden(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Noardeast-Fryslân', id: 'nfd', execute: (apiSettings) => this.#afvalkalenderNoordOostFriesland(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Peel en Maas', id: 'akpm', execute: (apiSettings) => this.#afvalkalenderPeelEnMaas(apiSettings) });
@@ -46,8 +47,9 @@ export class TrashApis {
     this.#apiList.push({ name: 'Den Bosch Afvalstoffendienstkalender', id: 'dbafw', execute: (apiSettings) => this.#denBoschAfvalstoffendienstCalendar(apiSettings) });
     this.#apiList.push({ name: 'GAD Gooi en Vechtstreek', id: 'gad', execute: (apiSettings) => this.#GadGooiAndVechtstreek(apiSettings) });
     this.#apiList.push({ name: 'Gemeente Assen', id: 'gemas', execute: (apiSettings) => this.#afvalkalenderAssen(apiSettings) });
-    //this.#apiList.push({ name: 'Gemeente Groningen', id: 'akgr', execute: (apiSettings) => this.#afvalkalenderGroningen(apiSettings) });
+    this.#apiList.push({ name: 'Gemeente Groningen', id: 'akgr', execute: (apiSettings) => this.#afvalkalenderGroningen(apiSettings) });
     this.#apiList.push({ name: 'Gemeente Hellendoorn', id: 'geh', execute: (apiSettings) => this.#gemeenteHellendoorn(apiSettings) });
+    this.#apiList.push({ name: 'Gemeente Nijkerk', id: 'aknk', execute: (apiSettings) => this.#afvalkalenderNijkerk(apiSettings) });
     this.#apiList.push({ name: 'Gemeente Meppel', id: 'gem', execute: (apiSettings) => this.#gemeenteMeppel(apiSettings) });
     this.#apiList.push({ name: 'Huisvulkalender Den Haag', id: 'hkdh', execute: (apiSettings) => this.#huisvuilkalenderDenHaag(apiSettings) });
     this.#apiList.push({ name: 'Inzamelkalender HVC', id: 'hvc', execute: (apiSettings) => this.#inzamelkalenderHVC(apiSettings) });
@@ -169,7 +171,11 @@ export class TrashApis {
   }
 
   async #afvalkalenderGroningen(apiSettings: ApiSettings) {
-    return this.#generalImplementationBurgerportaal(apiSettings, '14355223815071999');
+    return this.#generalImplementationBurgerportaal(apiSettings, '452048812597326549');
+  }
+
+  async #afvalkalenderNijkerk(apiSettings: ApiSettings) {
+    return this.#generalImplementationBurgerportaal(apiSettings, '138204213565304094');
   }
 
   async #afvalkalenderPeelEnMaas(apiSettings: ApiSettings) {
@@ -322,6 +328,7 @@ export class TrashApis {
         'Content-Type': 'application/json',
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     let result = <any>retrieveIdentificationRequest.body;
@@ -340,6 +347,7 @@ export class TrashApis {
         'Content-Type': 'application/json',
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     let today = new Date();
@@ -354,6 +362,7 @@ export class TrashApis {
         'Content-Type': 'application/json',
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     let fDates = processWasteData(retrieveTrashTypes.body, retrieveCollectionDays.body);
@@ -377,6 +386,7 @@ export class TrashApis {
         'Content-Type': 'application/json',
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     // Skip lot of data from body to prevent memory overflow
@@ -441,6 +451,7 @@ export class TrashApis {
       },
       body: post_data1,
       family: 4,
+      rejectUnauthorized: false,
     });
 
     var result = <any>retrieveUniqueId.body;
@@ -464,6 +475,7 @@ export class TrashApis {
       },
       body: post_data2,
       family: 4,
+      rejectUnauthorized: false,
     });
 
     var calendarResult = <any>retrieveCalendarDataRequest.body;
@@ -504,6 +516,7 @@ export class TrashApis {
         'x-secret': accessSecret,
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     const accessTokenResult = <any>accessTokenRequest.body;
@@ -521,6 +534,7 @@ export class TrashApis {
         'x-consumer': accessConsumer,
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     const zipCodeResult = <any>validateZipCodeRequest.body;
@@ -546,6 +560,7 @@ export class TrashApis {
         'x-consumer': accessConsumer,
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     const streetResult = <any>validateStreetRequest.body;
@@ -576,6 +591,7 @@ export class TrashApis {
         'x-consumer': accessConsumer,
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     var result = <any>getTrashRequest.body;
@@ -654,6 +670,8 @@ export class TrashApis {
         'User-Agent': 'Homey',
         Authorization: accessToken,
       },
+      family: 4,
+      rejectUnauthorized: false,
     });
 
     let result = <any>addressIdRequest.body;
@@ -678,6 +696,7 @@ export class TrashApis {
         Authorization: accessToken,
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     result = getTrashRequest.body;
@@ -710,6 +729,8 @@ export class TrashApis {
         'Content-Type': 'application/json',
         'User-Agent': 'Homey',
       },
+      family: 4,
+      rejectUnauthorized: false,
     });
 
     const trashResult = <any>trashRequest.body;
@@ -750,6 +771,7 @@ export class TrashApis {
         'Content-Type': 'application/json',
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     var obj1 = <any>getRecycleData.body;
@@ -762,6 +784,92 @@ export class TrashApis {
         for (var j = 0; j < obj1.data[i].occurrences.length; j++) {
           var trashDate = new Date(obj1.data[i].occurrences[j].from.date);
           verifyByName(fDates, '', obj1.data[i].occurrences[j].title, trashDate);
+        }
+      }
+    }
+
+    return fDates;
+  }
+
+  async #afvalkalenderIrado(apiSettings: ApiSettings) {
+    this.#log('Checking afvalkalender Irado');
+
+    let fDates: ActivityDates[] = [];
+
+    await validateCountry(apiSettings, 'NL');
+    await validateZipcode(apiSettings);
+    await validateHousenumber(apiSettings);
+
+    const houseNumberMatch = `${apiSettings.housenumber}`.match(/\d+/g);
+    const numberAdditionMatch = `${apiSettings.housenumber}`.match(/[a-zA-Z]+/g);
+
+    if (!houseNumberMatch || houseNumberMatch.length === 0) {
+      throw new Error('Invalid house number');
+    }
+
+    let queryAddition = '';
+    if (numberAdditionMatch !== null && numberAdditionMatch.length > 0 && numberAdditionMatch[0] !== null) {
+      queryAddition = '&extention=' + numberAdditionMatch[0];
+    }
+
+    // Retrieve Irado data
+    const d = new Date();
+    const getRecycleData = await httpsPromise({
+      hostname: 'irado.nl',
+      path: `/wp-json/wsa/v1/location/address/calendar/pickups?zipcode=${apiSettings.zipcode}&number=${houseNumberMatch[0]}${queryAddition}`,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
+      family: 4,
+      rejectUnauthorized: false,
+    });
+
+    const result = <any>getRecycleData.body;
+    const pickupsByYear = result?.calendar_data?.pickups || {};
+
+    for (const yearKey of Object.keys(pickupsByYear)) {
+      const months = pickupsByYear[yearKey] || {};
+
+      for (const monthKey of Object.keys(months)) {
+        const days = months[monthKey] || {};
+
+        for (const dayKey of Object.keys(days)) {
+          const items = days[dayKey];
+
+          if (!Array.isArray(items)) {
+            continue;
+          }
+
+          for (const item of items) {
+            if (!item || !item.date) {
+              continue;
+            }
+
+            const type = item.type ? String(item.type).trim() : '';
+            if (!type) {
+              continue;
+            }
+
+            const rawDate = String(item.date);
+            let trashDate: Date | null = null;
+
+            if (rawDate.includes('/')) {
+              const [day, month, year] = rawDate.split('/');
+              if (day && month && year) {
+                trashDate = new Date(`${year}-${month}-${day}`);
+              }
+            } else if (rawDate.includes('-')) {
+              trashDate = new Date(rawDate);
+            }
+
+            if (!trashDate || Number.isNaN(trashDate.getTime())) {
+              continue;
+            }
+
+            verifyByName(fDates, '', type, trashDate);
+          }
         }
       }
     }
@@ -802,6 +910,7 @@ export class TrashApis {
         'Content-Type': 'application/json',
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     var result = <any>getRecycleData.body;
@@ -849,6 +958,7 @@ export class TrashApis {
         'Content-Type': 'application/json',
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     const result = <any>getRecycleData.body;
@@ -883,6 +993,7 @@ export class TrashApis {
         'Content-Type': 'application/json',
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     var data = getRecycleData.body;
@@ -929,6 +1040,7 @@ export class TrashApis {
       path: '/login',
       method: 'GET',
       family: 4,
+      rejectUnauthorized: false,
     });
 
     let cookie = getRecycleData.headers['set-cookie'];
@@ -959,6 +1071,7 @@ export class TrashApis {
       body: post_data,
       headers: headers,
       family: 4,
+      rejectUnauthorized: false,
     });
 
     let startDate = new Date();
@@ -983,6 +1096,7 @@ export class TrashApis {
       method: 'GET',
       headers: newHeaders,
       family: 4,
+      rejectUnauthorized: false,
     });
 
     if (
@@ -1064,6 +1178,7 @@ export class TrashApis {
         authToken: '77FE5F8B-9051-4B05-A525-C7CCCD42236F',
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     const result = <any>getGarbageList.body;
@@ -1132,6 +1247,7 @@ export class TrashApis {
         'cache-control': 'no-cache',
       },
       family: 4,
+      rejectUnauthorized: false,
     });
 
     // Skip lot of data from body to prevent memory overflow
