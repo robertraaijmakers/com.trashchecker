@@ -80,7 +80,7 @@ export function addDate(activityDates: ActivityDates[], type: TrashType, date: D
     activityDates.push({
       type,
       icon,
-      color,
+      color: color === null ? undefined : color,
       localText,
       dates: [date],
     });

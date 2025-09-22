@@ -4,6 +4,7 @@ import { ActivityDates, ApiDefinition, ApiFindResult } from '../types/localTypes
 import { addDate, formatDate, httpsPromise, parseDutchDate, processWasteData, validateCountry, validateHousenumber, validateZipcode, verifyByName, verifyDate } from './helpers';
 import { ApiSettings, TrashType } from '../assets/publicTypes';
 import { parseDocument, DomUtils } from 'htmlparser2';
+import crypto from 'crypto';
 
 export class TrashApis {
   #apiList: ApiDefinition[] = [];
@@ -24,6 +25,7 @@ export class TrashApis {
     this.#apiList.push({ name: 'Afvalkalender Irado', id: 'akird', execute: (apiSettings) => this.#afvalkalenderIrado(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Meerlanden', id: 'akm', execute: (apiSettings) => this.#afvalkalenderMeerlanden(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Noardeast-Fryslân', id: 'nfd', execute: (apiSettings) => this.#afvalkalenderNoordOostFriesland(apiSettings) });
+    this.#apiList.push({ name: 'Afvalkalender Omrin', id: 'akom', execute: (apiSettings) => this.#afvalkalenderOmrin(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Peel en Maas', id: 'akpm', execute: (apiSettings) => this.#afvalkalenderPeelEnMaas(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender Purmerend', id: 'akpu', execute: (apiSettings) => this.#afvalkalenderPurmerend(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender RAD', id: 'rad', execute: (apiSettings) => this.#afvalkalenderRad(apiSettings) });
@@ -1307,6 +1309,87 @@ export class TrashApis {
 
       const nextResult = body.substring(searchResultIndex + 8).search(/<table class="responsive-enabled table"/i);
       searchResultIndex = nextResult >= 0 ? searchResultIndex + 8 + nextResult : -1;
+    }
+
+    return fDates;
+  }
+
+  async #afvalkalenderOmrin(apiSettings: ApiSettings) {
+    this.#log('Checking afvalkalender Omrin');
+
+    let fDates: ActivityDates[] = [];
+
+    await validateCountry(apiSettings, 'NL');
+    await validateZipcode(apiSettings);
+    await validateHousenumber(apiSettings);
+
+    const houseNumberMatch = `${apiSettings.housenumber}`.match(/\d+/g);
+    const numberAdditionMatch = `${apiSettings.housenumber}`.match(/[a-zA-Z]+/g);
+
+    if (!houseNumberMatch || houseNumberMatch.length === 0) {
+      throw new Error('Invalid house number');
+    }
+
+    let queryAddition = '';
+    if (numberAdditionMatch !== null && numberAdditionMatch.length > 0 && numberAdditionMatch[0] !== null) {
+      queryAddition = '&extention=' + numberAdditionMatch[0];
+    }
+
+    const hostname = 'api-omrin.freed.nl';
+    const uniqueAppId = '8e6f4b70-1d3a-11ee-be56-0242ac120002';
+
+    const post_data1 = `{'AppId':'${uniqueAppId}','AppVersion':'','OsVersion':'','Platform':'Homey'}`;
+
+    // Retrieve Omrin App Token
+    const getOmrinAppToken = await httpsPromise({
+      hostname: hostname,
+      path: `/Account/GetToken`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
+      body: post_data1,
+      family: 4,
+      rejectUnauthorized: false,
+    });
+
+    const result = <any>getOmrinAppToken.body;
+    const publicKey = result.PublicKey;
+    if (!publicKey || publicKey.length === 0) {
+      throw new Error('No public key received from Omrin');
+    }
+
+    const post_data2 = `{'a':false,'Email':'','Password':'','PostalCode':'${apiSettings.zipcode}','HouseNumber':${houseNumberMatch[0]}}`;
+    const encryptedBuffer = crypto.publicEncrypt(
+      {
+        key: `-----BEGIN PUBLIC KEY-----
+${publicKey}
+-----END PUBLIC KEY-----`,
+        padding: crypto.constants.RSA_PKCS1_PADDING,
+      },
+      Buffer.from(post_data2, 'utf8'),
+    );
+
+    const getOmrinTrashData = await httpsPromise({
+      hostname: hostname,
+      path: `/Account/FetchAccount/${uniqueAppId}`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
+      body: `"${encryptedBuffer.toString('base64')}"`,
+      family: 4,
+      rejectUnauthorized: false,
+    });
+
+    const trashDataResult = <any>getOmrinTrashData.body;
+
+    console.log(trashDataResult['CalendarV2']);
+
+    for (let trashEntry of trashDataResult['CalendarV2']) {
+      verifyByName(fDates, trashEntry.WelkAfval, trashEntry.Omschrijving, trashEntry.Datum, undefined, trashEntry.Kleur);
     }
 
     return fDates;
