@@ -80,5 +80,6 @@ export interface ApiSettings {
   zipcode: string;
   housenumber: string;
   streetname: string;
+  cityname: string;
   country: string;
 }

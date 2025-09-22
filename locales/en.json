@@ -6,6 +6,7 @@
 		"postcode": "Postal Code",
 		"hnumber": "House Number",
 		"streetname": "Street",
+		"cityname": "City",
 		"country": "Country",
 		"api": "Source",
 		"cleanApi": "Cleaning Service?",

@@ -125,13 +125,17 @@
 	</header>
 	<fieldset class="homey-form-fieldset">
 		<legend class="homey-form-legend" data-i18n="settings.title"></legend>
-        <div class="homey-form-group">
+        <div class="homey-form-group" id="postalcode_div">
             <label class="homey-form-label" for="postcode" data-i18n="settings.postcode"></label>
             <input class="homey-form-input" placeholder="1234AB" id="postcode" maxlength="6" type="text" value=""/>
         </div>
 		<div class="homey-form-group" id="streetname_div">
             <label class="homey-form-label" for="streetname" data-i18n="settings.streetname"></label>
-            <input class="homey-form-input" placeholder="Van Homeystraat" id="streetname" type="text" value=""/>
+            <input class="homey-form-input" placeholder="Homeystreet" id="streetname" type="text" value=""/>
+        </div>
+		<div class="homey-form-group" id="cityname_div">
+            <label class="homey-form-label" for="cityname" data-i18n="settings.cityname"></label>
+            <input class="homey-form-input" placeholder="Homeycity" id="cityname" type="text" value=""/>
         </div>
         <div class="homey-form-group">
             <label class="homey-form-label" for="number" data-i18n="settings.hnumber"></label>
@@ -160,6 +164,7 @@
 				<option value="akel">Afvalkalender Etten-Leur (NL)</option>
 				<option value="akgr">Afvalkalender Groningen (NL)</option>
 				<option value="akird">Afvalkalender Irado (NL)</option>
+				<option value="aklbn">Afvalkalender Limburg.NET (BE)</option>
 				<option value="akm">Afvalkalender Meerlanden (NL)</option>
 				<option value="aknk">Afvalkalender Nijkerk (NL)</option>
 				<option value="nfd">Afvalkalender Noardeast-Fryslân & Dantumadiel (NL)</option>

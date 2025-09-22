@@ -54,6 +54,7 @@ class SettingScript {
     document.getElementById('labelGeneric')?.addEventListener('change', () => this.renderGlobalLabel());
 
     document.getElementById('country')?.addEventListener('change', () => this.toggleFieldsBasedOnCountry());
+    document.getElementById('api')?.addEventListener('change', () => this.toggleFieldsBasedOnSelectedProvider());
 
     // Output some loading details
     var respDates = document.getElementById('respDatesDebug') as HTMLInputElement;
@@ -126,7 +127,10 @@ class SettingScript {
     this.setInputValue('postcode', apiSettings?.zipcode?.toUpperCase() || '');
     this.setInputValue('number', apiSettings?.housenumber || '');
     this.setInputValue('streetname', apiSettings?.streetname || '');
+    this.setInputValue('cityname', apiSettings?.cityname || '');
     this.setInputValue('country', apiSettings?.country || 'NL');
+
+    this.toggleFieldsBasedOnSelectedProvider();
   }
 
   async handleGetManualAdditions(err: string, manualAdditions: string) {
@@ -175,6 +179,7 @@ class SettingScript {
       zipcode: this.getInputValue('postcode')?.toUpperCase()?.replace(' ', '') || null,
       housenumber: this.getInputValue('number') || null,
       streetname: this.getInputValue('streetname') || null,
+      cityname: this.getInputValue('cityname') || null,
       country: this.getInputValue('country') || null,
       apiId: this.getInputValue('api') || null,
       cleanApiId: this.getInputValue('cleanApi') || null,
@@ -203,7 +208,9 @@ class SettingScript {
       }
 
       resp.style.color = 'green';
-      resp.innerHTML = `${this.homey.__('settings.update')}: ${apiSettings.zipcode}, ${apiSettings.housenumber}`;
+      const values = [apiSettings.zipcode, apiSettings.streetname, apiSettings.housenumber, apiSettings.cityname].filter((v) => v && String(v).trim() !== '');
+
+      resp.innerHTML = `${this.homey.__('settings.update')}: ${values.join(', ')}`;
       this.setInputValue('api', trashResult.id);
 
       apiSettings.apiId = trashResult.id;
@@ -420,6 +427,29 @@ class SettingScript {
       document.getElementById('streetname_div')!.style.display = 'none';
     } else if (countrySelected === 'BE') {
       document.getElementById('streetname_div')!.style.display = 'block';
+    }
+  }
+
+  async toggleFieldsBasedOnSelectedProvider() {
+    const apiSelected = this.getInputValue('api') ?? 'default';
+
+    if (apiSelected === 'aklbn') {
+      document.getElementById('streetname_div')!.style.display = 'block';
+      document.getElementById('cityname_div')!.style.display = 'block';
+      document.getElementById('postalcode_div')!.style.display = 'none';
+      this.setInputValue('country', 'BE');
+      this.setInputValue('postcode', '');
+    } else if (apiSelected === 'recbe') {
+      document.getElementById('streetname_div')!.style.display = 'block';
+      document.getElementById('postalcode_div')!.style.display = 'block';
+      this.setInputValue('country', 'BE');
+    } else {
+      document.getElementById('streetname_div')!.style.display = 'none';
+      document.getElementById('cityname_div')!.style.display = 'none';
+      document.getElementById('postalcode_div')!.style.display = 'block';
+      this.setInputValue('country', 'NL');
+      this.setInputValue('streetname', '');
+      this.setInputValue('cityname', '');
     }
   }
 

@@ -77,8 +77,6 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       value: undefined,
     });
 
-    await this.migrateSettings();
-
     // Update API data every 48 hours
     this.homey.setInterval(() => {
       this.onUpdateData();
@@ -573,77 +571,5 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       addDate(this.collectionDates, trashType, date3);
       addDate(this.collectionDates, trashType, date4);
     }
-  }
-
-  // Function to help migrate settings from the old settings structure to the new to make for an easy upgrade
-  async migrateSettings() {
-    this.log('Checking for migration.');
-
-    const zipCode = this.homey.settings.get('postcode');
-    const hNumber = this.homey.settings.get('hnumber');
-
-    if (!zipCode || !hNumber) {
-      return;
-    }
-
-    this.log('Starting migration of settings.');
-
-    const country = this.homey.settings.get('country');
-    const apiId = this.homey.settings.get('apiId');
-    const cleanApiId = this.homey.settings.get('cleanApiId');
-    const streetName = this.homey.settings.get('streetName');
-    const oldManualSettings = this.homey.settings.get('manualEntryData');
-    const oldLabelSettings = this.homey.settings.get('labelSettings');
-
-    const apiSettings: ApiSettings = {
-      apiId: apiId,
-      cleanApiId: cleanApiId,
-      zipcode: zipCode,
-      housenumber: hNumber,
-      streetname: streetName,
-      country: country,
-    };
-
-    this.homey.settings.set('apiSettings', apiSettings);
-
-    const labelSettings: LabelSettings = {
-      timeindicator: oldLabelSettings.timeindicator,
-      generic: oldLabelSettings.generic,
-      GFT: { trashLong: oldLabelSettings?.gft || this.homey.__('tokens.output.type.GFT') },
-      REST: { trashLong: oldLabelSettings?.rest || this.homey.__('tokens.output.type.REST') },
-      PMD: { trashLong: oldLabelSettings?.pmd || this.homey.__('tokens.output.type.PMD') },
-      PLASTIC: { trashLong: oldLabelSettings?.plastic || this.homey.__('tokens.output.type.PLASTIC') },
-      PAPIER: { trashLong: oldLabelSettings?.papier || this.homey.__('tokens.output.type.PAPIER') },
-      TEXTIEL: { trashLong: oldLabelSettings?.textiel || this.homey.__('tokens.output.type.TEXTIEL') },
-      GROF: { trashLong: oldLabelSettings?.grof || this.homey.__('tokens.output.type.GROF') },
-      GLAS: { trashLong: oldLabelSettings?.glas || this.homey.__('tokens.output.type.GLAS') },
-      KERSTBOOM: { trashLong: oldLabelSettings?.kerstboom || this.homey.__('tokens.output.type.KERSTBOOM') },
-      NONE: { trashLong: oldLabelSettings?.none || this.homey.__('tokens.output.type.NONE') },
-    };
-
-    this.homey.settings.set('labelSettings', labelSettings);
-
-    const manualSettings: ManualSettings = {
-      GFT: oldManualSettings?.gft,
-      PLASTIC: oldManualSettings?.plastic,
-      PAPIER: oldManualSettings?.paper,
-      PMD: oldManualSettings?.pmd,
-      REST: oldManualSettings?.rest,
-      TEXTIEL: oldManualSettings?.textile,
-      GROF: oldManualSettings?.bulky,
-      GLAS: oldManualSettings?.glas,
-    };
-
-    this.homey.settings.set('manualEntryData', manualSettings);
-
-    this.homey.settings.unset('postcode');
-    this.homey.settings.unset('hnumber');
-    this.homey.settings.unset('country');
-    this.homey.settings.unset('apiId');
-    this.homey.settings.unset('cleanApiId');
-    this.homey.settings.unset('streetName');
-    this.homey.settings.unset('cleaningDays');
-    this.homey.settings.unset('collectingDays');
-    this.homey.settings.unset('manualAdditions');
   }
 };

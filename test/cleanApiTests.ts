@@ -21,6 +21,7 @@ describe('CleanApiCleanProfs', function () {
       apiId: '',
       cleanApiId: 'cpfs',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -36,6 +37,7 @@ describe('CleanApiCleanProfs', function () {
       apiId: '',
       cleanApiId: 'cpfs',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);

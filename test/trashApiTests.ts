@@ -21,6 +21,7 @@ describe('Blink Manager', function () {
       apiId: 'mba',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -36,6 +37,7 @@ describe('Blink Manager', function () {
       apiId: 'mba',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -53,6 +55,7 @@ describe('GAD - Gooi and Vechtstreek', function () {
       apiId: 'gad',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -70,6 +73,7 @@ describe('Kliko Manager', function () {
       apiId: 'kmuit',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -85,6 +89,7 @@ describe('Kliko Manager', function () {
       apiId: 'kmoij',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -102,6 +107,7 @@ describe('TrashApiApn', function () {
       apiId: 'apn',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -120,6 +126,7 @@ describe('TrashApiAkwl', function () {
       apiId: 'akwl',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -137,6 +144,7 @@ describe('TrashApiRmn', function () {
       apiId: 'afrm',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -154,6 +162,7 @@ describe('TrashApiAvx', function () {
       apiId: 'avx',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -171,6 +180,7 @@ describe('TrashApiAfrm', function () {
       apiId: 'afrm',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -188,6 +198,7 @@ describe('TrashApiAkm', function () {
       apiId: 'akm',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -205,6 +216,7 @@ describe('TrashApiGemas', function () {
       apiId: 'gemas',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -222,6 +234,7 @@ describe('TrashApiAfc', function () {
       apiId: 'afc',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -237,6 +250,7 @@ describe('TrashApiAfc', function () {
       apiId: 'afc',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -254,6 +268,7 @@ describe('TrashApiSvr', function () {
       apiId: 'svr',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -269,6 +284,7 @@ describe('TrashApiSvr', function () {
       apiId: 'svr',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -284,6 +300,7 @@ describe('TrashApiSvr', function () {
       apiId: 'svr',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -301,6 +318,7 @@ describe('TrashApiRov', function () {
       apiId: 'rov',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -316,6 +334,7 @@ describe('TrashApiRov', function () {
       apiId: 'rov',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     try {
@@ -337,6 +356,7 @@ describe('TrashApiRad', function () {
       apiId: 'rad',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -352,6 +372,7 @@ describe('TrashApiRad', function () {
       apiId: 'rad',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -446,6 +467,7 @@ describe('TrashApiAvr', function () {
       apiId: 'avr',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -463,6 +485,7 @@ describe('TrashApiTwenteMilieu', function () {
       apiId: 'twm',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -478,6 +501,7 @@ describe('TrashApiTwenteMilieu', function () {
       apiId: 'twm',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -495,6 +519,7 @@ describe('HuisvuilDenHaag', function () {
       apiId: 'hkdh',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -512,6 +537,7 @@ describe('TrashApiRd4', function () {
       apiId: 'rd4',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -527,6 +553,7 @@ describe('TrashApiRd4', function () {
       apiId: 'rd4',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -545,6 +572,7 @@ describe('TrashApiAfw', function () {
       apiId: 'afw',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -560,6 +588,7 @@ describe('TrashApiAfw', function () {
       apiId: 'afw',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -575,6 +604,7 @@ describe('TrashApiAfw', function () {
       apiId: 'afw',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -590,6 +620,7 @@ describe('TrashApiAfw', function () {
       apiId: 'afw',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -605,6 +636,7 @@ describe('TrashApiAfw', function () {
       apiId: 'afw',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -620,6 +652,7 @@ describe('TrashApiAfw', function () {
       apiId: 'afw',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -635,6 +668,7 @@ describe('TrashApiAfw', function () {
       apiId: 'afw',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -650,6 +684,7 @@ describe('TrashApiAfw', function () {
       apiId: 'dbafw',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -667,6 +702,7 @@ describe('Woerden Ximmio', function () {
       apiId: 'akwrd',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -685,6 +721,7 @@ describe('TrashApiAknw', function () {
       apiId: 'aknw',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -702,6 +739,7 @@ describe('TrashApiArei', function () {
       apiId: 'arei',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -719,6 +757,7 @@ describe('TrashApiArn', function () {
       apiId: 'arn',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -736,6 +775,7 @@ describe('TrashApiRewl', function () {
       apiId: 'rewl',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -753,6 +793,7 @@ describe('TrashApiAfzrd', function () {
       apiId: 'afzrd',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -768,6 +809,7 @@ describe('TrashApiAfzrd', function () {
       apiId: 'afzrd',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -785,6 +827,7 @@ describe('TrashApiMba', function () {
       apiId: 'mba',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -802,6 +845,7 @@ describe('TrashApiAcb', function () {
       apiId: 'acb',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -817,6 +861,7 @@ describe('TrashApiAcb', function () {
       apiId: 'acb',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -832,6 +877,7 @@ describe('TrashApiAcb', function () {
       apiId: 'acb',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -849,6 +895,7 @@ describe('TrashApiAfa', function () {
       apiId: 'afa',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -864,6 +911,7 @@ describe('TrashApiAfa', function () {
       apiId: 'afa',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -881,6 +929,7 @@ describe('TrashApiSwf', function () {
       apiId: 'swf',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -898,6 +947,7 @@ describe('TrashApiAfc', function () {
       apiId: 'afc',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -915,6 +965,7 @@ describe('TrashApiRwm', function () {
       apiId: 'rwm',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -932,6 +983,7 @@ describe('TrashApiBAR', function () {
       apiId: 'afbar',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -949,6 +1001,7 @@ describe('TrashApiHVC', function () {
       apiId: 'hvc',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -964,6 +1017,7 @@ describe('TrashApiHVC', function () {
       apiId: 'hvc',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -981,6 +1035,7 @@ describe('TrashApiBurgerportaalAssen', function () {
       apiId: 'gemas',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -998,6 +1053,7 @@ describe('TrashApiVenlo', function () {
       apiId: 'akvnl',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -1015,6 +1071,7 @@ describe('TrashApiGroningen', function () {
       apiId: 'akgr',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -1032,6 +1089,7 @@ describe('TrashApiIrado', function () {
       apiId: 'akird',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -1047,6 +1105,7 @@ describe('TrashApiIrado', function () {
       apiId: 'akird',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
     };
 
     const result = await testAPI(apiSettings);
@@ -1064,6 +1123,25 @@ describe('TrashApiOmrin', function () {
       apiId: 'akom',
       cleanApiId: '',
       streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+
+describe('TrashApiLimburgNET', function () {
+  it('API - Limburg.NET - 1', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '3600',
+      housenumber: '67',
+      country: 'BE',
+      apiId: 'aklbn',
+      cleanApiId: '',
+      streetname: 'Reinpadstraat',
+      cityname: 'Genk',
     };
 
     const result = await testAPI(apiSettings);

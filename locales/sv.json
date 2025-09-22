@@ -6,6 +6,7 @@
 		"postcode": "Postnummer",
 		"hnumber": "Husnummer",
 		"streetname": "Gata",
+		"cityname": "Stad",
 		"country": "Land",
 		"api": "Källa",
 		"cleanApi": "Städservice?",

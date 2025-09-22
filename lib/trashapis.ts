@@ -1,7 +1,20 @@
 'use strict';
 
 import { ActivityDates, ApiDefinition, ApiFindResult } from '../types/localTypes';
-import { addDate, formatDate, httpsPromise, parseDutchDate, processWasteData, validateCountry, validateHousenumber, validateZipcode, verifyByName, verifyDate } from './helpers';
+import {
+  addDate,
+  formatDate,
+  httpsPromise,
+  parseDutchDate,
+  processWasteData,
+  validateCity,
+  validateCountry,
+  validateHousenumber,
+  validateStreet,
+  validateZipcode,
+  verifyByName,
+  verifyDate,
+} from './helpers';
 import { ApiSettings, TrashType } from '../assets/publicTypes';
 import { parseDocument, DomUtils } from 'htmlparser2';
 import crypto from 'crypto';
@@ -63,6 +76,7 @@ export class TrashApis {
     this.#apiList.push({ name: 'Reinigingsdienst Waardlanden', id: 'rewl', execute: (apiSettings) => this.#reinigingsdienstWaardlanden(apiSettings) });
     this.#apiList.push({ name: 'Twente Milieu', id: 'twm', execute: (apiSettings) => this.#twenteMilieu(apiSettings) });
 
+    this.#apiList.push({ name: 'Afvalkalender Limburg.NET', id: 'aklbn', execute: (apiSettings) => this.#afvalkalenderLimburgNET(apiSettings) });
     this.#apiList.push({ name: 'Recycle App (BE)', id: 'recbe', execute: (apiSettings) => this.#recycleApp(apiSettings) });
   }
 
@@ -798,8 +812,7 @@ export class TrashApis {
 
     let fDates: ActivityDates[] = [];
 
-    await validateCountry(apiSettings, 'NL');
-    await validateZipcode(apiSettings);
+    await validateCountry(apiSettings, 'BE');
     await validateHousenumber(apiSettings);
 
     const houseNumberMatch = `${apiSettings.housenumber}`.match(/\d+/g);
@@ -1390,6 +1403,120 @@ ${publicKey}
 
     for (let trashEntry of trashDataResult['CalendarV2']) {
       verifyByName(fDates, trashEntry.WelkAfval, trashEntry.Omschrijving, trashEntry.Datum, undefined, trashEntry.Kleur);
+    }
+
+    return fDates;
+  }
+
+  async #afvalkalenderLimburgNET(apiSettings: ApiSettings) {
+    let fDates: ActivityDates[] = [];
+
+    await validateCountry(apiSettings, 'BE'); // Limburg.net is Belgium
+    //await validateZipcode(apiSettings); // keep behavior consistent with other providers
+    await validateHousenumber(apiSettings);
+    await validateStreet(apiSettings);
+    await validateCity(apiSettings);
+
+    const houseNumberMatch = `${apiSettings.housenumber}`.match(/\d+/g);
+    const numberAdditionMatch = `${apiSettings.housenumber}`.match(/[a-zA-Z]+/g);
+
+    if (!houseNumberMatch || houseNumberMatch.length === 0) {
+      throw new Error('Invalid house number');
+    }
+
+    let queryAddition = '';
+    if (numberAdditionMatch !== null && numberAdditionMatch.length > 0 && numberAdditionMatch[0] !== null) {
+      queryAddition = '&toevoeging=' + numberAdditionMatch[0];
+    }
+
+    // Helpers
+    const headers = {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    };
+
+    const baseHost = 'limburg.net';
+    const basePath = '/api-proxy/public';
+
+    // Find cityId (nisCode)
+    const cityQuery = encodeURIComponent(apiSettings.cityname);
+    const cityResp = await httpsPromise({
+      hostname: baseHost,
+      path: `${basePath}/afval-kalender/gemeenten/search?query=${cityQuery}`,
+      method: 'GET',
+      headers,
+      family: 4,
+      rejectUnauthorized: false,
+    });
+
+    const cityList = <any[]>cityResp.body || [];
+
+    if (!Array.isArray(cityList) || cityList.length === 0 || !cityList[0]?.nisCode) {
+      throw new Error('City not found on Limburg.net');
+    }
+
+    const cityId = String(cityList[0].nisCode);
+
+    // Find streetId (nummer)
+    const streetQuery = encodeURIComponent(apiSettings.streetname);
+    const streetResp = await httpsPromise({
+      hostname: baseHost,
+      path: `${basePath}/afval-kalender/gemeente/${cityId}/straten/search?query=${streetQuery}`,
+      method: 'GET',
+      headers,
+      family: 4,
+      rejectUnauthorized: false,
+    });
+
+    const streetList = <any[]>streetResp.body || [];
+    if (!Array.isArray(streetList) || streetList.length === 0 || !streetList[0]?.nummer) {
+      throw new Error('Street not found on Limburg.net');
+    }
+
+    const streetId = String(streetList[0].nummer);
+
+    // Fetch current + next 2 months
+    const collectEvents: any[] = [];
+    let cur = new Date();
+    cur.setDate(1); // normalize
+
+    for (let i = 0; i < 3; i++) {
+      const year = cur.getFullYear();
+      const month = cur.getMonth() + 1; // 1..12
+      const path = `${basePath}/kalender/${cityId}/${year}-${month}?straatNummer=${encodeURIComponent(streetId)}&huisNummer=${encodeURIComponent(houseNumberMatch[0])}${queryAddition}`;
+
+      const mResp = await httpsPromise({
+        hostname: baseHost,
+        path,
+        method: 'GET',
+        headers,
+        family: 4,
+        rejectUnauthorized: false,
+      });
+
+      const monthJson = <any>mResp.body || {};
+      if (Array.isArray(monthJson?.events)) {
+        collectEvents.push(...monthJson.events);
+      }
+
+      // move to first of next month
+      cur = new Date(year, month, 1);
+    }
+
+    // Map to ActivityDates[]
+    for (const item of collectEvents) {
+      if (!item || !item.date) continue;
+
+      console.log(item);
+
+      const type = (item.title ?? '').toString().trim();
+      if (!type) continue;
+
+      // API date like "2025-09-22T00:00:00+0200"
+      const dt = new Date(item.date);
+      if (Number.isNaN(dt.getTime())) continue;
+
+      verifyByName(fDates, '', type, dt);
     }
 
     return fDates;

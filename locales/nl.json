@@ -6,6 +6,7 @@
 		"postcode": "Postcode",
 		"hnumber": "Huisnummer",
 		"streetname": "Straat",
+		"cityname": "Plaats",
 		"country": "Land",
 		"api": "Bron",
 		"cleanApi": "Schoonmaakservice?",

@@ -64,6 +64,22 @@ export async function validateHousenumber(apiSettings: ApiSettings) {
   return true;
 }
 
+export async function validateStreet(apiSettings: ApiSettings) {
+  if (!apiSettings?.streetname || apiSettings?.streetname === '') {
+    throw new Error('Street should be filled.');
+  }
+
+  return true;
+}
+
+export async function validateCity(apiSettings: ApiSettings) {
+  if (!apiSettings?.cityname || apiSettings?.cityname === '') {
+    throw new Error('City should be filled.');
+  }
+
+  return true;
+}
+
 export async function validateZipcode(apiSettings: ApiSettings) {
   if (!apiSettings?.zipcode || apiSettings?.zipcode === '') {
     throw new Error('Zipcode should be filled.');

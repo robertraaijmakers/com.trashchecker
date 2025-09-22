@@ -6,6 +6,7 @@
 		"postcode": "Code postal",
 		"hnumber": "Numéro",
 		"streetname": "Rue",
+		"cityname": "Ville",
 		"country": "Pays",
 		"api": "Source",
 		"cleanApi": "Nettoyage des bacs ?",
