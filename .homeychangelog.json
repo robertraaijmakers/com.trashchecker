@@ -228,5 +228,9 @@
   "5.1.18": {
     "en": "Push fix for older Homey models, added fix for Groningen and added new city Nijkerk and provider Irado.",
     "nl": "Update met een patch voor oudere Homey modellen, fix voor Groningen en Nijkerk als nieuwe stad toegevoegd samen met Irado als nieuwe dienstverlener."
+  },
+  "5.1.19": {
+    "en": "Push fix for older Homey models, fixed Groningen and added: Nijkerk, Irado and Omrin!",
+    "nl": "Update met een patch voor oudere Homey modellen, fix voor Groningen, Nijkerk, Irado en Omrin worden nu ook ondersteund!"
   }
 }
