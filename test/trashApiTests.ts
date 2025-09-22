@@ -43,7 +43,24 @@ describe('Blink Manager', function () {
     assert.equal(isValid, true);
   });
 });
-/*
+
+describe('GAD - Gooi and Vechtstreek', function () {
+  it('API - GAD', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '1221GC',
+      housenumber: '79',
+      country: 'NL',
+      apiId: 'gad',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+
 describe('Kliko Manager', function () {
   it('API - Klikomanager Uithoorn', async function () {
     const apiSettings: ApiSettings = {
@@ -806,6 +823,21 @@ describe('TrashApiAcb', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
+
+  it('API - Circulus Berkel - Francien', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '7425PE',
+      housenumber: '40',
+      country: 'NL',
+      apiId: 'acb',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
 });
 
 describe('TrashApiAfa', function () {
@@ -909,10 +941,25 @@ describe('TrashApiBAR', function () {
 });
 
 describe('TrashApiHVC', function () {
-  it('API - HVC', async function () {
+  it('API - HVC - 1', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '2671BK',
       housenumber: '12',
+      country: 'NL',
+      apiId: 'hvc',
+      cleanApiId: '',
+      streetname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+
+  it('API - HVC - 2', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '1771AW',
+      housenumber: '45',
       country: 'NL',
       apiId: 'hvc',
       cleanApiId: '',
