@@ -1169,6 +1169,24 @@ describe('TrashApiLimburgNET', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
+});
+
+describe('TrashApiReinis', function () {
+  it('API - Reinis', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '3206SN',
+      housenumber: '9',
+      country: 'NL',
+      apiId: 'aknw',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
 });*/
 
 function testAPI(apiSettings: ApiSettings) {

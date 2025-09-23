@@ -43,7 +43,7 @@ export class TrashApis {
     this.#apiList.push({ name: 'Afvalkalender Purmerend', id: 'akpu', execute: (apiSettings) => this.#afvalkalenderPurmerend(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender RAD', id: 'rad', execute: (apiSettings) => this.#afvalkalenderRad(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender RD4', id: 'rd4', execute: (apiSettings) => this.#afvalkalenderRD4(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Reinis', id: 'aknw', execute: (apiSettings) => this.#nissewaard(apiSettings) });
+    this.#apiList.push({ name: 'Afvalkalender Reinis', id: 'aknw', execute: (apiSettings) => this.#reinis(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender RMN', id: 'afrm', execute: (apiSettings) => this.#afvalRmn(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender ROVA', id: 'rov', execute: (apiSettings) => this.#rovaAfvalkalender(apiSettings) });
     this.#apiList.push({ name: 'Afvalkalender RWM', id: 'rwm', execute: (apiSettings) => this.#afvalkalenderRwm(apiSettings) });
@@ -254,8 +254,8 @@ export class TrashApis {
     return this.#generalImplementationWasteApi(apiSettings, '8d97bb56-5afd-4cbc-a651-b4f7314264b4', 'twentemilieuapi.ximmio.com');
   }
 
-  async #nissewaard(apiSettings: ApiSettings) {
-    return this.#generalImplementationWasteApi(apiSettings, '9dc25c8a-175a-4a41-b7a1-83f237a80b77', 'wasteapi.ximmio.com');
+  async #reinis(apiSettings: ApiSettings) {
+    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'reinis.nl');
   }
 
   async #gemeenteHellendoorn(apiSettings: ApiSettings) {
