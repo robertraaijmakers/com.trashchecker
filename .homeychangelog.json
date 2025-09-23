@@ -236,5 +236,9 @@
   "5.1.20": {
     "en": "Push fix for older Homey models, fixed Groningen and Recycle BE also added: Nijkerk, Irado, Limburg.NET and Omrin!",
     "nl": "Update met een patch voor oudere Homey modellen, fix voor Groningen en Recyle BE, daarnaast Nijkerk, Irado, Limburg.NET en Omrin toegevoegd als nieuwe dienstverleners!"
+  },
+  "5.1.21": {
+    "en": "Push fix for older Homey models, fixed Groningen, Recycle BE, Reinis also added: Nijkerk, Irado, Limburg.NET and Omrin!",
+    "nl": "Update met een patch voor oudere Homey modellen, fix voor Groningen, Recyle BE en Reinis, daarnaast Nijkerk, Irado, Limburg.NET en Omrin toegevoegd als nieuwe dienstverleners!"
   }
 }
