@@ -1032,8 +1032,8 @@ describe('TrashApiHVC', function () {
 
   it('API - HVC - 2', async function () {
     const apiSettings: ApiSettings = {
-      zipcode: '1771AW',
-      housenumber: '45',
+      zipcode: '1771AR',
+      housenumber: '42',
       country: 'NL',
       apiId: 'hvc',
       cleanApiId: '',
