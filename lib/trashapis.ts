@@ -828,7 +828,7 @@ export class TrashApis {
 
     let fDates: ActivityDates[] = [];
 
-    await validateCountry(apiSettings, 'BE');
+    await validateCountry(apiSettings, 'NL');
     await validateHousenumber(apiSettings);
 
     const houseNumberMatch = `${apiSettings.housenumber}`.match(/\d+/g);
