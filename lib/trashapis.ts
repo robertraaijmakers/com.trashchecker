@@ -1415,10 +1415,8 @@ ${publicKey}
 
     const trashDataResult = <any>getOmrinTrashData.body;
 
-    console.log(trashDataResult['CalendarV2']);
-
     for (let trashEntry of trashDataResult['CalendarV2']) {
-      verifyByName(fDates, trashEntry.WelkAfval, trashEntry.Omschrijving, trashEntry.Datum, undefined, trashEntry.Kleur);
+      verifyByName(fDates, trashEntry.WelkAfval, trashEntry.Omschrijving, trashEntry.Datum.substr(0, 19), undefined, trashEntry.Kleur);
     }
 
     return fDates;
