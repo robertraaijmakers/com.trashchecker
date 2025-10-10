@@ -125,6 +125,13 @@
 	</header>
 	<fieldset class="homey-form-fieldset">
 		<legend class="homey-form-legend" data-i18n="settings.title"></legend>
+        <div class="homey-form-group">
+			<label class="homey-form-label" for="country" data-i18n="settings.country"></label>
+			<select class="homey-form-select" id="country">
+				<option value="NL">NL</option>
+				<option value="BE">BE</option>
+			</select>
+        </div>
         <div class="homey-form-group" id="postalcode_div">
             <label class="homey-form-label" for="postcode" data-i18n="settings.postcode"></label>
             <input class="homey-form-input" placeholder="1234AB" id="postcode" maxlength="6" type="text" value=""/>
@@ -142,15 +149,9 @@
             <input class="homey-form-input" placeholder="42" id="number" type="text" value=""/>
         </div>
         <div class="homey-form-group">
-			<label class="homey-form-label" for="country" data-i18n="settings.country"></label>
-			<select class="homey-form-select" id="country">
-				<option value="NL">NL</option>
-				<option value="BE">BE</option>
-			</select>
-        </div>
-        <div class="homey-form-group">
 			<label class="homey-form-label" for="api" data-i18n="settings.api"></label>
-			<select class="homey-form-select" id="api">
+			<input class="homey-form-input" placeholder="Search..." list="dl-api-list" type="text" id="dl-api-input"/>
+			<select class="homey-form-select" id="api" style="display:none;">
 				<option value="" data-i18n="settings.unknown"></option>
 				<option value="not-applicable" data-i18n="settings.notapplicable"></option>
 				<option value="afa">Afval App (NL)</option>
@@ -205,6 +206,7 @@
 				<option value="twm">Twente Milieu (NL)</option>
 				<option value="recbe">Recycle! App (BE)</option>
 			</select>
+			<datalist id="dl-api-list"></datalist>
         </div>
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="cleanApi" data-i18n="settings.cleanApi"></label>

@@ -11,7 +11,7 @@ export class CleanApis {
   constructor(logger: (...args: any[]) => void) {
     this.#log = logger || console.log;
 
-    this.#apiList.push({ name: 'Clean Profs', id: 'cpfs', execute: (apiSettings) => this.#cleanProfs(apiSettings) });
+    this.#apiList.push({ name: 'Clean Profs', id: 'cpfs', country: 'NL', execute: (apiSettings) => this.#cleanProfs(apiSettings) });
   }
 
   async ExecuteApi(apiSettings: ApiSettings) {

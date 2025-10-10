@@ -1,7 +1,7 @@
 'use strict';
 
 import type HomeySettings from 'homey/lib/HomeySettings.js';
-import { ApiSettings, LabelSettings, TrashType } from '../assets/publicTypes.js';
+import { ApiSettings, LabelSettings, TrashType, API_REGISTRY } from '../assets/publicTypes.js';
 import { AllTrashTypes, AllTrashTypesExtended, createManualAdditons, TrashColors } from './settingTypes.mjs';
 
 class SettingScript {
@@ -55,6 +55,7 @@ class SettingScript {
 
     document.getElementById('country')?.addEventListener('change', () => this.toggleFieldsBasedOnCountry());
     document.getElementById('api')?.addEventListener('change', () => this.toggleFieldsBasedOnSelectedProvider());
+    this.makeSearchableSelect(document.getElementById('api') as HTMLSelectElement);
 
     // Output some loading details
     var respDates = document.getElementById('respDatesDebug') as HTMLInputElement;
@@ -129,6 +130,7 @@ class SettingScript {
     this.setInputValue('streetname', apiSettings?.streetname || '');
     this.setInputValue('cityname', apiSettings?.cityname || '');
     this.setInputValue('country', apiSettings?.country || 'NL');
+    this.setInputValue('dl-api-input', (document.getElementById('api') as HTMLSelectElement).selectedOptions[0]?.text || '');
 
     this.toggleFieldsBasedOnSelectedProvider();
   }
@@ -212,6 +214,7 @@ class SettingScript {
 
       resp.innerHTML = `${this.homey.__('settings.update')}: ${values.join(', ')}`;
       this.setInputValue('api', trashResult.id);
+      this.setInputValue('dl-api-input', (document.getElementById('api') as HTMLSelectElement).selectedOptions[0]?.text || '');
 
       apiSettings.apiId = trashResult.id;
       this.homey.set('apiSettings', apiSettings, this.#onSettingsSet);
@@ -492,6 +495,36 @@ class SettingScript {
     }
 
     return null;
+  }
+
+  makeSearchableSelect(sel: HTMLSelectElement) {
+    const dl = document.getElementById('dl-api-list') as HTMLDataListElement;
+    const inp = document.getElementById('dl-api-input') as HTMLInputElement;
+    inp.value = sel.selectedOptions[0]?.text || '';
+
+    // ✅ Convert to array for iteration
+    Array.from(sel.options).forEach((o) => {
+      const opt = document.createElement('option');
+      opt.value = o.text;
+      opt.dataset.value = o.value;
+      dl.appendChild(opt);
+    });
+
+    inp.addEventListener('change', () => {
+      const match = Array.from(dl.options).find((x) => x.value === inp.value);
+      if (match) sel.value = match.dataset.value || '';
+    });
+
+    inp.addEventListener('input', () => {
+      if (!inp.value) sel.selectedIndex = -1;
+    });
+
+    inp.addEventListener('blur', () => {
+      if (!Array.from(dl.options).some((x) => x.value === inp.value)) {
+        inp.value = '';
+        sel.selectedIndex = -1;
+      }
+    });
   }
 
   #capitalizeFirstLetter(input: string) {

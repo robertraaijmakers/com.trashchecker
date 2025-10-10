@@ -67,6 +67,7 @@ export interface WidgetSettings {
 export interface ApiDefinition {
   name: string;
   id: string;
+  country: string;
   execute: (apiSettings: ApiSettings) => Promise<ActivityDates[]>;
 }
 

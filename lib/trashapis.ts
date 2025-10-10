@@ -15,69 +15,32 @@ import {
   verifyByName,
   verifyDate,
 } from './helpers';
-import { ApiSettings, TrashType } from '../assets/publicTypes';
+import { API_REGISTRY, ApiSettings, TrashType } from '../assets/publicTypes';
 import { parseDocument, DomUtils } from 'htmlparser2';
 import crypto from 'crypto';
 
+type Exec = (apiSettings: ApiDefinition) => Promise<unknown>;
+
 export class TrashApis {
-  #apiList: ApiDefinition[] = [];
-  #log: (...args: any[]) => void;
+  private apiList: ApiDefinition[] = [];
+  private log: (...args: any[]) => void;
 
   constructor(logger: (...args: any[]) => void) {
-    this.#log = logger || console.log;
-
-    this.#apiList.push({ name: 'Afval App', id: 'afa', execute: (apiSettings) => this.#afvalapp(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender ACV', id: 'acv', execute: (apiSettings) => this.#acvAfvalkalender(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Almere', id: 'alm', execute: (apiSettings) => this.#almereAfvalkalender(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Alphen aan den Rijn', id: 'apn', execute: (apiSettings) => this.#afvalkalenderApn(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender BAR', id: 'afbar', execute: (apiSettings) => this.#afvalkalenderBar(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Circulus-Berkel', id: 'acb', execute: (apiSettings) => this.#circulusBerkel(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Cyclus', id: 'afc', execute: (apiSettings) => this.#afvalkalenderCyclus(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender DAR', id: 'dar', execute: (apiSettings) => this.#darAfvalkalender(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Etten-Leur', id: 'akel', execute: (apiSettings) => this.#huisvuilkalenderEttenLeur(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Irado', id: 'akird', execute: (apiSettings) => this.#afvalkalenderIrado(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Meerlanden', id: 'akm', execute: (apiSettings) => this.#afvalkalenderMeerlanden(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Noardeast-Fryslân', id: 'nfd', execute: (apiSettings) => this.#afvalkalenderNoordOostFriesland(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Omrin', id: 'akom', execute: (apiSettings) => this.#afvalkalenderOmrin(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Peel en Maas', id: 'akpm', execute: (apiSettings) => this.#afvalkalenderPeelEnMaas(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Purmerend', id: 'akpu', execute: (apiSettings) => this.#afvalkalenderPurmerend(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender RAD', id: 'rad', execute: (apiSettings) => this.#afvalkalenderRad(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender RD4', id: 'rd4', execute: (apiSettings) => this.#afvalkalenderRD4(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Reinis', id: 'aknw', execute: (apiSettings) => this.#reinis(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender RMN', id: 'afrm', execute: (apiSettings) => this.#afvalRmn(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender ROVA', id: 'rov', execute: (apiSettings) => this.#rovaAfvalkalender(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender RWM', id: 'rwm', execute: (apiSettings) => this.#afvalkalenderRwm(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Saver', id: 'svr', execute: (apiSettings) => this.#afvalkalenderSaver(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Súdwest-Fryslân', id: 'swf', execute: (apiSettings) => this.#afvalkalenderSudwestFryslan(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Venlo', id: 'akvnl', execute: (apiSettings) => this.#afvalKalenderVenlo(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Venray', id: 'akvr', execute: (apiSettings) => this.#afvalkalenderVenray(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Westland', id: 'akwl', execute: (apiSettings) => this.#afvalKalenderWestland(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender Woerden', id: 'akwrd', execute: (apiSettings) => this.#afvalKalenderWoerden(apiSettings) });
-    this.#apiList.push({ name: 'Afvalkalender ZRD', id: 'afzrd', execute: (apiSettings) => this.#afvalkalenderZrd(apiSettings) });
-    this.#apiList.push({ name: 'Avalwijzer Montferland', id: 'mont', execute: (apiSettings) => this.#afvalwijzerMontferland(apiSettings) });
-    this.#apiList.push({ name: 'Afvalwijzer Pre Zero', id: 'arn', execute: (apiSettings) => this.#afvalwijzerPreZero(apiSettings) });
-    this.#apiList.push({ name: 'Area Reiniging', id: 'arei', execute: (apiSettings) => this.#areaReiniging(apiSettings) });
-    this.#apiList.push({ name: 'Avalex', id: 'avx', execute: (apiSettings) => this.#afvalAvalex(apiSettings) });
-    this.#apiList.push({ name: 'Avri', id: 'avr', execute: (apiSettings) => this.#afvalkalenderAvri(apiSettings) });
-    this.#apiList.push({ name: 'Den Bosch Afvalstoffendienstkalender', id: 'dbafw', execute: (apiSettings) => this.#denBoschAfvalstoffendienstCalendar(apiSettings) });
-    this.#apiList.push({ name: 'GAD Gooi en Vechtstreek', id: 'gad', execute: (apiSettings) => this.#GadGooiAndVechtstreek(apiSettings) });
-    this.#apiList.push({ name: 'Gemeente Assen', id: 'gemas', execute: (apiSettings) => this.#afvalkalenderAssen(apiSettings) });
-    this.#apiList.push({ name: 'Gemeente Groningen', id: 'akgr', execute: (apiSettings) => this.#afvalkalenderGroningen(apiSettings) });
-    this.#apiList.push({ name: 'Gemeente Hellendoorn', id: 'geh', execute: (apiSettings) => this.#gemeenteHellendoorn(apiSettings) });
-    this.#apiList.push({ name: 'Gemeente Nijkerk', id: 'aknk', execute: (apiSettings) => this.#afvalkalenderNijkerk(apiSettings) });
-    this.#apiList.push({ name: 'Gemeente Meppel', id: 'gem', execute: (apiSettings) => this.#gemeenteMeppel(apiSettings) });
-    this.#apiList.push({ name: 'Huisvulkalender Den Haag', id: 'hkdh', execute: (apiSettings) => this.#huisvuilkalenderDenHaag(apiSettings) });
-    this.#apiList.push({ name: 'Inzamelkalender HVC', id: 'hvc', execute: (apiSettings) => this.#inzamelkalenderHVC(apiSettings) });
-    this.#apiList.push({ name: 'Klikomanager Oude IJsselstreek', id: 'kmoij', execute: (apiSettings) => this.#klikoManagerOudeIJsselstreek(apiSettings) });
-    this.#apiList.push({ name: 'Klikomanager Uithoorn', id: 'kmuit', execute: (apiSettings) => this.#klikoManagerUithoorn(apiSettings) });
-    this.#apiList.push({ name: 'Mijn Afvalwijzer', id: 'afw', execute: (apiSettings) => this.#mijnAfvalWijzer(apiSettings) });
-    this.#apiList.push({ name: 'Mijn Blink Afvalkalender', id: 'mba', execute: (apiSettings) => this.#BlinkAfvalkalender(apiSettings) });
-    this.#apiList.push({ name: 'Recyclemanager', id: 'remg', execute: (apiSettings) => this.#recycleManager(apiSettings) });
-    this.#apiList.push({ name: 'Reinigingsdienst Waardlanden', id: 'rewl', execute: (apiSettings) => this.#reinigingsdienstWaardlanden(apiSettings) });
-    this.#apiList.push({ name: 'Twente Milieu', id: 'twm', execute: (apiSettings) => this.#twenteMilieu(apiSettings) });
-
-    this.#apiList.push({ name: 'Afvalkalender Limburg.NET', id: 'aklbn', execute: (apiSettings) => this.#afvalkalenderLimburgNET(apiSettings) });
-    this.#apiList.push({ name: 'Recycle App (BE)', id: 'recbe', execute: (apiSettings) => this.#recycleApp(apiSettings) });
+    this.log = logger || console.log;
+    this.apiList = API_REGISTRY.map((meta: any) => {
+      const fn = (this as any)[meta.handler];
+      if (typeof fn !== 'function') {
+        throw new Error(`Missing handler method: ${String(meta.handler)}`);
+      }
+      // Ensure all ApiDefinition properties are present
+      return {
+        ...meta,
+        execute: fn.bind(this) as Exec,
+        name: meta.name,
+        id: meta.id,
+        country: meta.country,
+      } as ApiDefinition;
+    });
   }
 
   async ExecuteApi(apiSettings: ApiSettings) {
@@ -85,7 +48,7 @@ export class TrashApis {
       return [];
     }
 
-    const executingApi = this.#apiList.find((x) => x.id === apiSettings.apiId);
+    const executingApi = this.apiList.find((x) => x.id === apiSettings.apiId);
     if (!executingApi || typeof executingApi === 'undefined') {
       throw new Error(`Couldn\'t find specified API ID: ${apiSettings.apiId}`);
     }
@@ -111,8 +74,8 @@ export class TrashApis {
         apiFindResult.id = apiSettings.apiId;
         apiFindResult.days = collectionDays;
       } catch (error) {
-        this.#log(`Executing API: ${apiSettings.apiId}.`);
-        this.#log(error);
+        this.log(`Executing API: ${apiSettings.apiId}.`);
+        this.log(error);
       }
 
       return apiFindResult;
@@ -127,7 +90,7 @@ export class TrashApis {
     return new Promise(async (resolve, reject) => {
       let resolved = false;
 
-      for (const apiDefinition of this.#apiList) {
+      for (const apiDefinition of this.apiList) {
         apiDefinition
           .execute(apiSettings)
           .then((collectionDays) => {
@@ -141,7 +104,7 @@ export class TrashApis {
               resolve(apiFindResult);
             }
           })
-          .catch((error) => this.#log(`API failed: ${apiDefinition.id} - ${error}`));
+          .catch((error) => this.log(`API failed: ${apiDefinition.id} - ${error}`));
       }
 
       setTimeout(() => {
@@ -150,187 +113,187 @@ export class TrashApis {
     });
   }
 
-  async #mijnAfvalWijzer(apiSettings: ApiSettings) {
-    return this.#generalMijnAfvalwijzerApiImplementation(apiSettings, 'www.mijnafvalwijzer.nl');
+  private async mijnAfvalWijzer(apiSettings: ApiSettings) {
+    return this.generalMijnAfvalwijzerApiImplementation(apiSettings, 'www.mijnafvalwijzer.nl');
   }
 
-  async #denBoschAfvalstoffendienstCalendar(apiSettings: ApiSettings) {
-    return this.#generalMijnAfvalwijzerApiImplementation(apiSettings, 'denbosch.afvalstoffendienstkalender.nl');
+  private async denBoschAfvalstoffendienstCalendar(apiSettings: ApiSettings) {
+    return this.generalMijnAfvalwijzerApiImplementation(apiSettings, 'denbosch.afvalstoffendienstkalender.nl');
   }
 
-  async #rovaAfvalkalender(apiSettings: ApiSettings) {
-    return this.#rovaWasteCalendar(apiSettings, 'www.rova.nl', '/api/waste-calendar/year');
+  private async rovaAfvalkalender(apiSettings: ApiSettings) {
+    return this.rovaWasteCalendar(apiSettings, 'www.rova.nl', '/api/waste-calendar/year');
   }
 
-  async #afvalkalenderCyclus(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'cyclusnv.nl');
+  private async afvalkalenderCyclus(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'cyclusnv.nl');
   }
 
-  async #afvalkalenderZrd(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'zrd.nl');
+  private async afvalkalenderZrd(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'zrd.nl');
   }
 
-  async #afvalkalenderRwm(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'rwm.nl');
+  private async afvalkalenderRwm(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'rwm.nl');
   }
 
-  async #afvalRmn(apiSettings: ApiSettings) {
-    return this.#generalImplementationBurgerportaal(apiSettings, '138204213564933597');
+  private async afvalRmn(apiSettings: ApiSettings) {
+    return this.generalImplementationBurgerportaal(apiSettings, '138204213564933597');
   }
 
-  async #afvalkalenderBar(apiSettings: ApiSettings) {
-    return this.#generalImplementationBurgerportaal(apiSettings, '138204213564933497');
+  private async afvalkalenderBar(apiSettings: ApiSettings) {
+    return this.generalImplementationBurgerportaal(apiSettings, '138204213564933497');
   }
 
-  async #afvalkalenderAssen(apiSettings: ApiSettings) {
-    return this.#generalImplementationBurgerportaal(apiSettings, '138204213565303512');
+  private async afvalkalenderAssen(apiSettings: ApiSettings) {
+    return this.generalImplementationBurgerportaal(apiSettings, '138204213565303512');
   }
 
-  async #afvalkalenderGroningen(apiSettings: ApiSettings) {
-    return this.#generalImplementationBurgerportaal(apiSettings, '452048812597326549');
+  private async afvalkalenderGroningen(apiSettings: ApiSettings) {
+    return this.generalImplementationBurgerportaal(apiSettings, '452048812597326549');
   }
 
-  async #afvalkalenderNijkerk(apiSettings: ApiSettings) {
-    return this.#generalImplementationBurgerportaal(apiSettings, '138204213565304094');
+  private async afvalkalenderNijkerk(apiSettings: ApiSettings) {
+    return this.generalImplementationBurgerportaal(apiSettings, '138204213565304094');
   }
 
-  async #afvalkalenderPeelEnMaas(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.peelenmaas.nl');
+  private async afvalkalenderPeelEnMaas(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.peelenmaas.nl');
   }
 
-  async #afvalkalenderVenray(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.venray.nl');
+  private async afvalkalenderVenray(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.venray.nl');
   }
 
-  async #darAfvalkalender(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.dar.nl');
+  private async darAfvalkalender(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.dar.nl');
   }
 
-  async #inzamelkalenderHVC(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'inzamelkalender.hvcgroep.nl');
+  private async inzamelkalenderHVC(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'inzamelkalender.hvcgroep.nl');
   }
 
-  async #BlinkAfvalkalender(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'mijnblink.nl');
+  private async BlinkAfvalkalender(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'mijnblink.nl');
   }
 
-  async #GadGooiAndVechtstreek(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'inzamelkalender.gad.nl');
+  private async GadGooiAndVechtstreek(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'inzamelkalender.gad.nl');
   }
 
-  async #afvalwijzerPreZero(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'inzamelwijzer.prezero.nl');
+  private async afvalwijzerPreZero(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'inzamelwijzer.prezero.nl');
   }
 
-  async #afvalkalenderPurmerend(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.purmerend.nl');
+  private async afvalkalenderPurmerend(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.purmerend.nl');
   }
 
-  async #huisvuilkalenderDenHaag(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'huisvuilkalender.denhaag.nl');
+  private async huisvuilkalenderDenHaag(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'huisvuilkalender.denhaag.nl');
   }
 
-  async #huisvuilkalenderEttenLeur(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'afval3xbeter.nl');
+  private async huisvuilkalenderEttenLeur(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'afval3xbeter.nl');
   }
 
-  async #afvalkalenderMeerlanden(apiSettings: ApiSettings) {
-    return this.#generalImplementationWasteApi(apiSettings, '800bf8d7-6dd1-4490-ba9d-b419d6dc8a45', 'wasteprod2api.ximmio.com');
+  private async afvalkalenderMeerlanden(apiSettings: ApiSettings) {
+    return this.generalImplementationWasteApi(apiSettings, '800bf8d7-6dd1-4490-ba9d-b419d6dc8a45', 'wasteprod2api.ximmio.com');
   }
 
-  async #afvalkalenderRad(apiSettings: ApiSettings) {
-    return this.#generalImplementationWasteApi(apiSettings, '13a2cad9-36d0-4b01-b877-efcb421a864d', 'wasteapi2.ximmio.com');
+  private async afvalkalenderRad(apiSettings: ApiSettings) {
+    return this.generalImplementationWasteApi(apiSettings, '13a2cad9-36d0-4b01-b877-efcb421a864d', 'wasteapi2.ximmio.com');
   }
 
-  async #afvalkalenderAvri(apiSettings: ApiSettings) {
-    return this.#generalImplementationWasteApi(apiSettings, '78cd4156-394b-413d-8936-d407e334559a', 'wasteapi.ximmio.com');
+  private async afvalkalenderAvri(apiSettings: ApiSettings) {
+    return this.generalImplementationWasteApi(apiSettings, '78cd4156-394b-413d-8936-d407e334559a', 'wasteapi.ximmio.com');
   }
 
-  async #afvalAvalex(apiSettings: ApiSettings) {
-    return this.#generalImplementationWasteApi(apiSettings, 'f7a74ad1-fdbf-4a43-9f91-44644f4d4222', 'wasteprod2api.ximmio.com');
+  private async afvalAvalex(apiSettings: ApiSettings) {
+    return this.generalImplementationWasteApi(apiSettings, 'f7a74ad1-fdbf-4a43-9f91-44644f4d4222', 'wasteprod2api.ximmio.com');
   }
 
-  async #twenteMilieu(apiSettings: ApiSettings) {
-    return this.#generalImplementationWasteApi(apiSettings, '8d97bb56-5afd-4cbc-a651-b4f7314264b4', 'twentemilieuapi.ximmio.com');
+  private async twenteMilieu(apiSettings: ApiSettings) {
+    return this.generalImplementationWasteApi(apiSettings, '8d97bb56-5afd-4cbc-a651-b4f7314264b4', 'twentemilieuapi.ximmio.com');
   }
 
-  async #reinis(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'reinis.nl');
+  private async reinis(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'reinis.nl');
   }
 
-  async #gemeenteHellendoorn(apiSettings: ApiSettings) {
-    return this.#generalImplementationWasteApi(apiSettings, '24434f5b-7244-412b-9306-3a2bd1e22bc1', 'wasteapi.ximmio.com');
+  private async gemeenteHellendoorn(apiSettings: ApiSettings) {
+    return this.generalImplementationWasteApi(apiSettings, '24434f5b-7244-412b-9306-3a2bd1e22bc1', 'wasteapi.ximmio.com');
   }
 
-  async #gemeenteMeppel(apiSettings: ApiSettings) {
-    return this.#generalImplementationWasteApi(apiSettings, 'b7a594c7-2490-4413-88f9-94749a3ec62a', 'wasteapi.ximmio.com');
+  private async gemeenteMeppel(apiSettings: ApiSettings) {
+    return this.generalImplementationWasteApi(apiSettings, 'b7a594c7-2490-4413-88f9-94749a3ec62a', 'wasteapi.ximmio.com');
   }
 
-  async #acvAfvalkalender(apiSettings: ApiSettings) {
-    return this.#generalImplementationWasteApi(apiSettings, 'f8e2844a-095e-48f9-9f98-71fceb51d2c3', 'wasteapi.ximmio.com');
+  private async acvAfvalkalender(apiSettings: ApiSettings) {
+    return this.generalImplementationWasteApi(apiSettings, 'f8e2844a-095e-48f9-9f98-71fceb51d2c3', 'wasteapi.ximmio.com');
   }
 
-  async #almereAfvalkalender(apiSettings: ApiSettings) {
-    return this.#generalImplementationWasteApi(apiSettings, '53d8db94-7945-42fd-9742-9bbc71dbe4c1', 'wasteapi.ximmio.com');
+  private async almereAfvalkalender(apiSettings: ApiSettings) {
+    return this.generalImplementationWasteApi(apiSettings, '53d8db94-7945-42fd-9742-9bbc71dbe4c1', 'wasteapi.ximmio.com');
   }
 
-  async #areaReiniging(apiSettings: ApiSettings) {
-    return this.#generalImplementationWasteApi(apiSettings, 'adc418da-d19b-11e5-ab30-625662870761');
+  private async areaReiniging(apiSettings: ApiSettings) {
+    return this.generalImplementationWasteApi(apiSettings, 'adc418da-d19b-11e5-ab30-625662870761');
   }
 
-  async #afvalKalenderWestland(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'inzamelkalender.hvcgroep.nl');
+  private async afvalKalenderWestland(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'inzamelkalender.hvcgroep.nl');
   }
 
-  async #afvalKalenderWoerden(apiSettings: ApiSettings) {
-    return this.#generalImplementationWasteApi(apiSettings, '06856f74-6826-4c6a-aabf-69bc9d20b5a6', 'wasteprod2api.ximmio.com');
+  private async afvalKalenderWoerden(apiSettings: ApiSettings) {
+    return this.generalImplementationWasteApi(apiSettings, '06856f74-6826-4c6a-aabf-69bc9d20b5a6', 'wasteprod2api.ximmio.com');
   }
 
-  async #reinigingsdienstWaardlanden(apiSettings: ApiSettings) {
-    return this.#generalImplementationWasteApi(apiSettings, '942abcf6-3775-400d-ae5d-7380d728b23c', 'wasteapi.ximmio.com');
+  private async reinigingsdienstWaardlanden(apiSettings: ApiSettings) {
+    return this.generalImplementationWasteApi(apiSettings, '942abcf6-3775-400d-ae5d-7380d728b23c', 'wasteapi.ximmio.com');
   }
 
-  async #recycleApp(apiSettings: ApiSettings) {
-    return this.#generalImplementationRecycleApp(apiSettings);
+  private async recycleApp(apiSettings: ApiSettings) {
+    return this.generalImplementationRecycleApp(apiSettings);
   }
 
-  async #afvalkalenderSudwestFryslan(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.sudwestfryslan.nl');
+  private async afvalkalenderSudwestFryslan(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.sudwestfryslan.nl');
   }
 
-  async #afvalwijzerMontferland(apiSettings: ApiSettings) {
-    return this.#afvalwijzerMontferlandApiImplementation(apiSettings, 'appapi.montferland.info');
+  private async afvalwijzerMontferland(apiSettings: ApiSettings) {
+    return this.afvalwijzerMontferlandApiImplementation(apiSettings, 'appapi.montferland.info');
   }
 
-  async #afvalkalenderSaver(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'saver.nl');
+  private async afvalkalenderSaver(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'saver.nl');
   }
 
-  async #afvalkalenderNoordOostFriesland(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'offalkalinder.nl');
+  private async afvalkalenderNoordOostFriesland(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'offalkalinder.nl');
   }
 
-  async #afvalkalenderApn(apiSettings: ApiSettings) {
-    return this.#newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.alphenaandenrijn.nl');
+  private async afvalkalenderApn(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.alphenaandenrijn.nl');
   }
 
-  async #afvalKalenderVenlo(apiSettings: ApiSettings) {
-    return this.#afvalkalenderVenlo(apiSettings, 'www.venlo.nl');
+  private async afvalKalenderVenlo(apiSettings: ApiSettings) {
+    return this.afvalkalenderVenlo(apiSettings, 'www.venlo.nl');
   }
 
-  async #klikoManagerUithoorn(apiSettings: ApiSettings) {
-    return this.#generalImplementationContainerManager(apiSettings, 'cp-uithoorn.klikocontainermanager.com', '474');
+  private async klikoManagerUithoorn(apiSettings: ApiSettings) {
+    return this.generalImplementationContainerManager(apiSettings, 'cp-uithoorn.klikocontainermanager.com', '474');
   }
 
-  async #klikoManagerOudeIJsselstreek(apiSettings: ApiSettings) {
-    return this.#generalImplementationContainerManager(apiSettings, 'cp-oudeijsselstreek.klikocontainermanager.com', '454');
+  private async klikoManagerOudeIJsselstreek(apiSettings: ApiSettings) {
+    return this.generalImplementationContainerManager(apiSettings, 'cp-oudeijsselstreek.klikocontainermanager.com', '454');
   }
 
   /**
    * Generic API waste providers
    */
-  async #newGeneralAfvalkalendersNederlandRest(apiSettings: ApiSettings, baseUrl: string) {
-    this.#log('Checking new general afvalkalenders REST with URL: ' + baseUrl);
+  private async newGeneralAfvalkalendersNederlandRest(apiSettings: ApiSettings, baseUrl: string) {
+    this.log('Checking new general afvalkalenders REST with URL: ' + baseUrl);
 
     await validateCountry(apiSettings, 'NL');
     await validateZipcode(apiSettings);
@@ -353,7 +316,7 @@ export class TrashApis {
     }
 
     let identificatie = result[0].bagid;
-    this.#log(identificatie);
+    this.log(identificatie);
 
     const retrieveTrashTypes = await httpsPromise({
       hostname: baseUrl,
@@ -385,8 +348,8 @@ export class TrashApis {
     return fDates;
   }
 
-  async #generalMijnAfvalwijzerApiImplementation(apiSettings: ApiSettings, baseUrl: string) {
-    this.#log('Checking general afvalkalenders API implementation URL: ' + baseUrl);
+  private async generalMijnAfvalwijzerApiImplementation(apiSettings: ApiSettings, baseUrl: string) {
+    this.log('Checking general afvalkalenders API implementation URL: ' + baseUrl);
 
     let fDates: ActivityDates[] = [];
 
@@ -444,8 +407,8 @@ export class TrashApis {
     return fDates;
   }
 
-  async #generalImplementationWasteApi(apiSettings: ApiSettings, companyCode: string, hostName = 'wasteapi.ximmio.com') {
-    this.#log(`Checking company code ${companyCode} for hostname ${hostName}.`);
+  private async generalImplementationWasteApi(apiSettings: ApiSettings, companyCode: string, hostName = 'wasteapi.ximmio.com') {
+    this.log(`Checking company code ${companyCode} for hostname ${hostName}.`);
 
     let fDates: ActivityDates[] = [];
 
@@ -507,7 +470,7 @@ export class TrashApis {
     return fDates;
   }
 
-  async #generalImplementationRecycleApp(apiSettings: ApiSettings) {
+  private async generalImplementationRecycleApp(apiSettings: ApiSettings) {
     let fDates: ActivityDates[] = [];
 
     await validateCountry(apiSettings, 'BE');
@@ -654,7 +617,7 @@ export class TrashApis {
     return fDates;
   }
 
-  async #generalImplementationBurgerportaal(apiSettings: ApiSettings, organisationId = '138204213564933597') {
+  private async generalImplementationBurgerportaal(apiSettings: ApiSettings, organisationId = '138204213564933597') {
     let fDates: ActivityDates[] = [];
 
     await validateCountry(apiSettings, 'NL');
@@ -744,7 +707,7 @@ export class TrashApis {
     return fDates;
   }
 
-  async #generalImplementationContainerManager(apiSettings: ApiSettings, hostName: string, organizationId: string) {
+  private async generalImplementationContainerManager(apiSettings: ApiSettings, hostName: string, organizationId: string) {
     let fDates: ActivityDates[] = [];
 
     await validateCountry(apiSettings, 'NL');
@@ -785,8 +748,8 @@ export class TrashApis {
   /**
    * Vendor specific API implementations
    */
-  async #recycleManager(apiSettings: ApiSettings) {
-    this.#log('Recyclemanager met: ' + apiSettings.zipcode + ' ' + apiSettings.housenumber);
+  private async recycleManager(apiSettings: ApiSettings) {
+    this.log('Recyclemanager met: ' + apiSettings.zipcode + ' ' + apiSettings.housenumber);
 
     let fDates: ActivityDates[] = [];
 
@@ -823,8 +786,8 @@ export class TrashApis {
     return fDates;
   }
 
-  async #afvalkalenderIrado(apiSettings: ApiSettings) {
-    this.#log('Checking afvalkalender Irado');
+  private async afvalkalenderIrado(apiSettings: ApiSettings) {
+    this.log('Checking afvalkalender Irado');
 
     let fDates: ActivityDates[] = [];
 
@@ -844,7 +807,6 @@ export class TrashApis {
     }
 
     // Retrieve Irado data
-    const d = new Date();
     const getRecycleData = await httpsPromise({
       hostname: 'irado.nl',
       path: `/wp-json/wsa/v1/location/address/calendar/pickups?zipcode=${apiSettings.zipcode}&number=${houseNumberMatch[0]}${queryAddition}`,
@@ -908,8 +870,8 @@ export class TrashApis {
     return fDates;
   }
 
-  async #afvalkalenderRD4(apiSettings: ApiSettings) {
-    this.#log('Checking afvalkalender RD4');
+  private async afvalkalenderRD4(apiSettings: ApiSettings) {
+    this.log('Checking afvalkalender RD4');
 
     let fDates: ActivityDates[] = [];
 
@@ -955,8 +917,8 @@ export class TrashApis {
     return fDates;
   }
 
-  async #rovaWasteCalendar(apiSettings: ApiSettings, hostname: string, startPath: string) {
-    this.#log('Checking afvalkalender Rova');
+  private async rovaWasteCalendar(apiSettings: ApiSettings, hostname: string, startPath: string) {
+    this.log('Checking afvalkalender Rova');
 
     await validateCountry(apiSettings, 'NL');
     await validateZipcode(apiSettings);
@@ -1006,8 +968,8 @@ export class TrashApis {
     return fDates;
   }
 
-  async #afvalapp(apiSettings: ApiSettings) {
-    this.#log('Checking De Afval App');
+  private async afvalapp(apiSettings: ApiSettings) {
+    this.log('Checking De Afval App');
 
     const fDates: ActivityDates[] = [];
 
@@ -1058,7 +1020,7 @@ export class TrashApis {
     return fDates;
   }
 
-  async #circulusBerkel(apiSettings: ApiSettings) {
+  private async circulusBerkel(apiSettings: ApiSettings) {
     const fDates: ActivityDates[] = [];
 
     await validateCountry(apiSettings, 'NL');
@@ -1179,8 +1141,8 @@ export class TrashApis {
     return fDates;
   }
 
-  async #afvalwijzerMontferlandApiImplementation(apiSettings: ApiSettings, baseUrl: string) {
-    this.#log('Checking afvalwijzer Montferland with URL: ' + baseUrl);
+  private async afvalwijzerMontferlandApiImplementation(apiSettings: ApiSettings, baseUrl: string) {
+    this.log('Checking afvalwijzer Montferland with URL: ' + baseUrl);
 
     await validateCountry(apiSettings, 'NL');
     await validateZipcode(apiSettings);
@@ -1227,7 +1189,7 @@ export class TrashApis {
       const date = collection.collectionDate.split('T')[0] || null; // get rid of the time part
 
       if (date === null || isNaN(Date.parse(date))) {
-        this.#log(`Unable to parse date: ${date}`);
+        this.log(`Unable to parse date: ${date}`);
         continue;
       }
 
@@ -1249,7 +1211,7 @@ export class TrashApis {
           break;
 
         default:
-          this.#log(`Unknown fraction: ${collection.fraction}`);
+          this.log(`Unknown fraction: ${collection.fraction}`);
           break;
       }
     }
@@ -1257,14 +1219,14 @@ export class TrashApis {
     return fDates;
   }
 
-  async #afvalkalenderVenlo(apiSettings: ApiSettings, baseUrl: string) {
+  private async afvalkalenderVenlo(apiSettings: ApiSettings, baseUrl: string) {
     let fDates: ActivityDates[] = [];
 
     await validateCountry(apiSettings, 'NL');
     await validateZipcode(apiSettings);
     await validateHousenumber(apiSettings);
 
-    this.#log(`Checking new Venlo afvalkalender REST with URL: ${baseUrl}/mijn-afvalkalender/${apiSettings.zipcode}/${apiSettings.housenumber}/`);
+    this.log(`Checking new Venlo afvalkalender REST with URL: ${baseUrl}/mijn-afvalkalender/${apiSettings.zipcode}/${apiSettings.housenumber}/`);
 
     const retrieveCalendarDataRequest = await httpsPromise({
       hostname: baseUrl,
@@ -1294,7 +1256,7 @@ export class TrashApis {
 
       const monthElement = DomUtils.findOne((el) => DomUtils.isTag(el) && el.tagName === 'caption', doc.children);
       if (!monthElement) {
-        this.#log('No month element found in the table');
+        this.log('No month element found in the table');
         break;
       }
 
@@ -1304,7 +1266,7 @@ export class TrashApis {
       for (const row of rows) {
         const cells = DomUtils.findAll((el) => DomUtils.isTag(el) && el.tagName === 'td', row.children);
         if (cells.length < 2) {
-          this.#log('Row has less then 2 cells.');
+          this.log('Row has less then 2 cells.');
           continue;
         }
 
@@ -1312,13 +1274,13 @@ export class TrashApis {
         const fullDateText = `${dateText} ${monthText}`; // e.g. "dinsdag 1 juli 2025"
         const parsedDate = parseDutchDate(fullDateText);
         if (!parsedDate) {
-          this.#log('Parsed date invalid: ' + fullDateText);
+          this.log('Parsed date invalid: ' + fullDateText);
           continue;
         }
 
         const trashTypesContainer = DomUtils.findOne((el) => DomUtils.isTag(el) && el.attribs.role === 'text' && el.attribs.class?.includes('trash-types'), cells[1].children);
         if (!trashTypesContainer) {
-          this.#log('No trash type found.');
+          this.log('No trash type found.');
           continue;
         }
 
@@ -1330,7 +1292,7 @@ export class TrashApis {
 
           if (!label) continue;
           const trashType = DomUtils.innerText(label).trim();
-          const trashIcon = svg ? this.#svgToBase64(svg) : undefined;
+          const trashIcon = svg ? this.svgToBase64(svg) : undefined;
 
           verifyByName(fDates, '', trashType, parsedDate, trashIcon);
         }
@@ -1343,8 +1305,8 @@ export class TrashApis {
     return fDates;
   }
 
-  async #afvalkalenderOmrin(apiSettings: ApiSettings) {
-    this.#log('Checking afvalkalender Omrin');
+  private async afvalkalenderOmrin(apiSettings: ApiSettings) {
+    this.log('Checking afvalkalender Omrin');
 
     let fDates: ActivityDates[] = [];
 
@@ -1422,7 +1384,7 @@ ${publicKey}
     return fDates;
   }
 
-  async #afvalkalenderLimburgNET(apiSettings: ApiSettings) {
+  private async afvalkalenderLimburgNET(apiSettings: ApiSettings) {
     let fDates: ActivityDates[] = [];
 
     await validateCountry(apiSettings, 'BE'); // Limburg.net is Belgium
@@ -1536,13 +1498,13 @@ ${publicKey}
     return fDates;
   }
 
-  #svgToBase64(svgElement: any): string {
-    const svgHtml = this.#serializeNode(svgElement);
+  private svgToBase64(svgElement: any): string {
+    const svgHtml = this.serializeNode(svgElement);
     const base64 = Buffer.from(svgHtml).toString('base64');
     return `data:image/svg+xml;base64,${base64}`;
   }
 
-  #serializeNode(node: any): string {
+  private serializeNode(node: any): string {
     if (node.type === 'text') return node.data || '';
     if (node.type === 'comment') return `<!--${node.data}-->`;
     if (!node.name) return '';
@@ -1551,7 +1513,7 @@ ${publicKey}
       .map(([key, val]) => `${key}="${val}"`)
       .join(' ');
 
-    const children = (node.children || []).map((child: any) => this.#serializeNode(child)).join('');
+    const children = (node.children || []).map((child: any) => this.serializeNode(child)).join('');
     return `<${node.name}${attrs ? ' ' + attrs : ''}>${children}</${node.name}>`;
   }
 }

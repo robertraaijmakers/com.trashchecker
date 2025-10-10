@@ -248,5 +248,9 @@
   "5.1.24": {
     "en": "Fix for Irado",
     "nl": "Omrin aangepast en fout opgelost"
+  },
+  "5.2.0": {
+    "en": "Rebuild the backoffice of the app to make it easier to find the right trash provider and add more and more providers!",
+    "nl": "De app aan de achterkant opnieuw opgebouwd zodat het makkelijker wordt om de juiste afvaldienst te vinden en er steeds meer dienstverleners toegevoegd kunnen worden!"
   }
 }
