@@ -1,12 +1,13 @@
 'use strict';
 
 import type HomeySettings from 'homey/lib/HomeySettings.js';
-import { ApiSettings, LabelSettings, TrashType, API_REGISTRY } from '../assets/publicTypes.js';
+import { ApiMeta, ApiSettings, LabelSettings, TrashType } from '../assets/publicTypes.js';
 import { AllTrashTypes, AllTrashTypesExtended, createManualAdditons, TrashColors } from './settingTypes.mjs';
 
 class SettingScript {
   private homey: HomeySettings;
   private iconCache: { [key in TrashType]: string };
+  apiRegistry: ApiMeta[];
 
   constructor(homey: HomeySettings) {
     this.homey = homey;
@@ -21,6 +22,8 @@ class SettingScript {
       KERSTBOOM: '',
       GLAS: '',
     };
+
+    this.apiRegistry = {} as ApiMeta[];
   }
 
   public async onHomeyReady(): Promise<void> {
@@ -30,6 +33,11 @@ class SettingScript {
     document.getElementById('labelInput')?.addEventListener('click', () => this.saveLabelInput());
     document.getElementById('saveManaulDataEntry')?.addEventListener('click', () => this.saveManualEntryDates());
     document.getElementById('refreshDebugInformation')?.addEventListener('click', () => this.retrieveCollectionDaysDebug(true));
+
+    // Await fetch and parse JSON
+    this.apiRegistry = await (await fetch('../assets/api-registry.json')).json();
+
+    console.log(this.apiRegistry);
 
     // Render type specific event listners
     for (let type in AllTrashTypes) {
@@ -431,6 +439,8 @@ class SettingScript {
     } else if (countrySelected === 'BE') {
       document.getElementById('streetname_div')!.style.display = 'block';
     }
+
+    this.fillApis(countrySelected || undefined);
   }
 
   async toggleFieldsBasedOnSelectedProvider() {
@@ -502,17 +512,12 @@ class SettingScript {
     const inp = document.getElementById('dl-api-input') as HTMLInputElement;
     inp.value = sel.selectedOptions[0]?.text || '';
 
-    // ✅ Convert to array for iteration
-    Array.from(sel.options).forEach((o) => {
-      const opt = document.createElement('option');
-      opt.value = o.text;
-      opt.dataset.value = o.value;
-      dl.appendChild(opt);
-    });
-
     inp.addEventListener('change', () => {
       const match = Array.from(dl.options).find((x) => x.value === inp.value);
-      if (match) sel.value = match.dataset.value || '';
+      if (match) {
+        sel.value = match.dataset.value || '';
+        this.toggleFieldsBasedOnSelectedProvider();
+      }
     });
 
     inp.addEventListener('input', () => {
@@ -524,6 +529,26 @@ class SettingScript {
         inp.value = '';
         sel.selectedIndex = -1;
       }
+    });
+  }
+
+  fillApis(country?: string) {
+    const apiSel = document.getElementById('api') as HTMLSelectElement;
+    const dl = document.getElementById('dl-api-list') as HTMLDataListElement;
+
+    apiSel.replaceChildren();
+    apiSel.add(new Option(this.homey.__('settings.unknown'), ''));
+    apiSel.add(new Option(this.homey.__('settings.notapplicable'), 'not-applicable'));
+
+    this.apiRegistry.filter((x) => !country || x.country === country).forEach(({ id, name }) => apiSel.add(new Option(name, id)));
+
+    // Convert to array for iteration
+    dl.replaceChildren();
+    Array.from(apiSel.options).forEach((o) => {
+      const opt = document.createElement('option');
+      opt.value = o.text;
+      opt.dataset.value = o.value;
+      dl.appendChild(opt);
     });
   }
 

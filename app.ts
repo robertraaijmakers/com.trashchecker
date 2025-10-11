@@ -9,7 +9,7 @@ import { ApiSettings, LabelSettings, ManualSetting, ManualSettings, TrashType } 
 import { DateTimeHelper } from './lib/datetimehelper';
 
 // TODO: find solution to import this from the .mts file
-const AllTrashTypes: string[] = ['GFT', 'PLASTIC', 'PAPIER', 'PMD', 'REST', 'TEXTIEL', 'GROF', 'KERSTBOOM', 'GLAS'];
+const AllTrashTypes = Object.freeze(['GFT', 'PLASTIC', 'PAPIER', 'PMD', 'REST', 'TEXTIEL', 'GROF', 'KERSTBOOM', 'GLAS'] as const);
 
 module.exports = class TrashCollectionReminder extends Homey.App {
   collectionDates: ActivityDates[] = [];

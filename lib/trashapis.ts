@@ -15,7 +15,7 @@ import {
   verifyByName,
   verifyDate,
 } from './helpers';
-import { API_REGISTRY, ApiSettings, TrashType } from '../assets/publicTypes';
+import { ApiMeta, ApiSettings, TrashType } from '../assets/publicTypes';
 import { parseDocument, DomUtils } from 'htmlparser2';
 import crypto from 'crypto';
 
@@ -27,6 +27,9 @@ export class TrashApis {
 
   constructor(logger: (...args: any[]) => void) {
     this.log = logger || console.log;
+
+    const API_REGISTRY = require('../assets/api-registry.json') as ApiMeta[];
+
     this.apiList = API_REGISTRY.map((meta: any) => {
       const fn = (this as any)[meta.handler];
       if (typeof fn !== 'function') {
