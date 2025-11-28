@@ -1023,7 +1023,7 @@ export class TrashApis {
     return fDates;
   }
 
-  private async circulusBerkel(apiSettings: ApiSettings) {
+  private async mijnCirculus(apiSettings: ApiSettings) {
     const fDates: ActivityDates[] = [];
 
     await validateCountry(apiSettings, 'NL');

@@ -4,7 +4,7 @@
   { "name": "Afvalkalender Almere", "id": "alm", "country": "NL", "handler": "almereAfvalkalender" },
   { "name": "Afvalkalender Alphen aan den Rijn", "id": "apn", "country": "NL", "handler": "afvalkalenderApn" },
   { "name": "Afvalkalender BAR", "id": "afbar", "country": "NL", "handler": "afvalkalenderBar" },
-  { "name": "Afvalkalender Circulus-Berkel", "id": "acb", "country": "NL", "handler": "circulusBerkel" },
+  { "name": "Afvalkalender Circulus", "id": "acb", "country": "NL", "handler": "mijnCirculus" },
   { "name": "Afvalkalender Cyclus", "id": "afc", "country": "NL", "handler": "afvalkalenderCyclus" },
   { "name": "Afvalkalender DAR", "id": "dar", "country": "NL", "handler": "darAfvalkalender" },
   { "name": "Afvalkalender Etten-Leur", "id": "akel", "country": "NL", "handler": "huisvuilkalenderEttenLeur" },

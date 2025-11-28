@@ -871,8 +871,9 @@ describe('TrashApiMba', function () {
     assert.equal(isValid, true);
   });
 });
-
+*/
 describe('TrashApiAcb', function () {
+  /*
   it('API - Circulus Berkel', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '7415TW',
@@ -889,7 +890,7 @@ describe('TrashApiAcb', function () {
     assert.equal(isValid, true);
   });
 
-  it('API - Circulus Berkel - Henk', async function () {
+  it('API - Circulus - Henk', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '7326RK',
       housenumber: '305',
@@ -905,7 +906,7 @@ describe('TrashApiAcb', function () {
     assert.equal(isValid, true);
   });
 
-  it('API - Circulus Berkel - Francien', async function () {
+  it('API - Circulus - Francien', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '7425PE',
       housenumber: '40',
@@ -919,8 +920,25 @@ describe('TrashApiAcb', function () {
     const result = await testAPI(apiSettings);
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
+  });*/
+
+  it('API - Circulus - Apeldoorn', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '7331VE',
+      housenumber: '42',
+      country: 'NL',
+      apiId: 'acb',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
   });
 });
+/*
 
 describe('TrashApiAfa', function () {
   it('API - Afval App', async function () {

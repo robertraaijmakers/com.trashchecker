@@ -16,7 +16,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Afvalkalender ACV](https://www.acv-groep.nl/)
 - [Afvalkalender Almere](https://almere.ximmio.com/modules/53d8db94-7945-42fd-9742-9bbc71dbe4c1/kalender/)
 - [Afvalkalender Alphen aan de Rijn](https://afvalkalender.alphenaandenrijn.nl/overzicht)
-- [Afvalkalender Circulus-Berkel](https://mijn.circulus.nl/)
+- [Afvalkalender Circulus](https://mijn.circulus.nl/)
 - [Afvalkalender Cyclus](https://afvalkalender.cyclusnv.nl/)
 - [Afvalkalender Dar](https://afvalkalender.dar.nl)
 - [Afvalkalender Meerlanden](https://afvalkalender.meerlanden.nl)
