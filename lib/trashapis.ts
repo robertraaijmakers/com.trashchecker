@@ -121,7 +121,7 @@ export class TrashApis {
   }
 
   private async denBoschAfvalstoffendienstCalendar(apiSettings: ApiSettings) {
-    return this.generalMijnAfvalwijzerApiImplementation(apiSettings, 'denbosch.afvalstoffendienstkalender.nl');
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalstoffendienst.nl');
   }
 
   private async rovaAfvalkalender(apiSettings: ApiSettings) {

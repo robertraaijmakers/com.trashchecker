@@ -252,5 +252,9 @@
   "5.2.0": {
     "en": "Rebuild the backoffice of the app to make it easier to find the right trash provider and add more and more providers!",
     "nl": "De app aan de achterkant opnieuw opgebouwd zodat het makkelijker wordt om de juiste afvaldienst te vinden en er steeds meer dienstverleners toegevoegd kunnen worden!"
+  },
+  "5.2.1": {
+    "en": "Fix for Den Bosch. #246",
+    "nl": "De regio Den Bosch werkt weer. #246"
   }
 }

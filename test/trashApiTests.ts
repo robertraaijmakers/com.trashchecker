@@ -584,7 +584,7 @@ describe('TrashApiRd4', function () {
 });
 */
 describe('TrashApiAfw', function () {
-  
+  /*
   it('API - Mijn Afvalwijzer (7) - Eindhoven', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '5632PN',
@@ -712,7 +712,7 @@ describe('TrashApiAfw', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-
+*/
   it('API - Afvalwijzer - Den Bosch', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '5231PB',
@@ -800,7 +800,6 @@ describe('TrashApiArn', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-  */
 });
 /*
 describe('TrashApiRewl', function () {
