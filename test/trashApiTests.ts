@@ -712,11 +712,27 @@ describe('TrashApiAfw', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-*/
+
   it('API - Afvalwijzer - Den Bosch', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '5231PB',
       housenumber: '4',
+      country: 'NL',
+      apiId: 'dbafw',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+*/
+   it('API - Afvalwijzer - Den Bosch', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '5384HN',
+      housenumber: '10',
       country: 'NL',
       apiId: 'dbafw',
       cleanApiId: '',

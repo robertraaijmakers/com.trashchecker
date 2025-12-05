@@ -256,5 +256,13 @@
   "5.2.2": {
     "en": "Fix for Den Bosch (#246) and Circulus (#243)",
     "nl": "De regio Den Bosch werkt weer (#246) en Circulus is ook gefixt (#243)"
+  },
+  "5.2.3": {
+    "en": "Somehow some dates were parsed as tomorrow instead of today.",
+    "nl": "Fix for some dates that were being parsed as a day late."
+  },
+  "5.2.4": {
+    "en": "Reverting change",
+    "nl": "Reverting change"
   }
 }
