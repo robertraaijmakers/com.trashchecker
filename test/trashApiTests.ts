@@ -134,7 +134,7 @@ describe('TrashApiAkwl', function () {
     assert.equal(isValid, true);
   });
 });
-*/
+
 describe('TrashApiRmn', function () {
   it('API - Afvalkalender RMN', async function () {
     const apiSettings: ApiSettings = {
@@ -581,8 +581,8 @@ describe('TrashApiRd4', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-});
-*/
+});*/
+
 describe('TrashApiAfw', function () {
   /*
   it('API - Mijn Afvalwijzer (7) - Eindhoven', async function () {
@@ -728,13 +728,45 @@ describe('TrashApiAfw', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-*/
-   it('API - Afvalwijzer - Den Bosch', async function () {
+  
+  it('API - Afvalwijzer - Den Bosch', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '5384HN',
       housenumber: '10',
       country: 'NL',
       apiId: 'dbafw',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+
+  it('API - Mijn Afvalwijzer - Oosterhout', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '4902BX',
+      housenumber: '42',
+      country: 'NL',
+      apiId: 'afw',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+*/
+  it('API - Mijn Afvalwijzer - Dongen', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '5103NN',
+      housenumber: '42',
+      country: 'NL',
+      apiId: 'afw',
       cleanApiId: '',
       streetname: '',
       cityname: '',
@@ -936,7 +968,7 @@ describe('TrashApiAcb', function () {
     const result = await testAPI(apiSettings);
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
-  });*/
+  });
 
   it('API - Circulus - Apeldoorn', async function () {
     const apiSettings: ApiSettings = {
@@ -952,7 +984,7 @@ describe('TrashApiAcb', function () {
     const result = await testAPI(apiSettings);
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
-  });
+  });*/
 });
 /*
 

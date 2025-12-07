@@ -264,5 +264,9 @@
   "5.2.4": {
     "en": "Reverting change",
     "nl": "Reverting change"
+  },
+  "5.3.0": {
+    "en": "Updated a couple of trash APIs to better support the year end period. Now for RD4, Rova, Afvalwijzer and some other municipalities the dates for 2026 are also available.",
+    "nl": "Een aantal wijzigingen doorgevoerd in diverse afval APIs om de jaarwisseling beter te ondersteunen. Voor RD4, Rova, Afvalwijzer en een aantal andere gemeentes zijn nu ook de data voor 2026 beschikbaar."
   }
 }

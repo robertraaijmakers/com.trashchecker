@@ -116,6 +116,23 @@ export class TrashApis {
     });
   }
 
+  private filterFutureDates(dates: ActivityDates[]): ActivityDates[] {
+    const today = new Date();
+    today.setDate(today.getDate() - 7); // Include today
+    today.setHours(0, 0, 0, 0); // Start of today
+
+    return dates
+      .map((activity) => ({
+        ...activity,
+        dates: activity.dates.filter((date) => {
+          const collectionDate = new Date(date);
+          collectionDate.setHours(0, 0, 0, 0);
+          return collectionDate >= today;
+        }),
+      }))
+      .filter((activity) => activity.dates.length > 0); // Remove activities with no future dates
+  }
+
   private async mijnAfvalWijzer(apiSettings: ApiSettings) {
     return this.generalMijnAfvalwijzerApiImplementation(apiSettings, 'www.mijnafvalwijzer.nl');
   }
@@ -335,6 +352,8 @@ export class TrashApis {
     let today = new Date();
     today.setDate(today.getDate() + 7);
     let year = today.getFullYear();
+    const currentMonth = new Date().getMonth(); // 0-11
+    const isDecember = currentMonth === 11;
 
     let retrieveCollectionDays = await httpsPromise({
       hostname: baseUrl,
@@ -348,7 +367,37 @@ export class TrashApis {
     });
 
     let fDates = processWasteData(retrieveTrashTypes.body, retrieveCollectionDays.body);
-    return fDates;
+
+    // In December, also fetch next year's data if available
+    if (isDecember) {
+      try {
+        const nextYearData = await httpsPromise({
+          hostname: baseUrl,
+          path: `/rest/adressen/${identificatie}/kalender/${year + 1}`,
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          family: 4,
+          rejectUnauthorized: false,
+        });
+
+        const nextYearDates = processWasteData(retrieveTrashTypes.body, nextYearData.body);
+        // Merge next year's dates with current year's dates
+        nextYearDates.forEach((nextYearActivity) => {
+          const existingActivity = fDates.find((a) => a.type === nextYearActivity.type);
+          if (existingActivity) {
+            existingActivity.dates.push(...nextYearActivity.dates);
+          } else {
+            fDates.push(nextYearActivity);
+          }
+        });
+      } catch (error) {
+        this.log(`Next year data not yet available for ${baseUrl}: ${error}`);
+      }
+    }
+
+    return this.filterFutureDates(fDates);
   }
 
   private async generalMijnAfvalwijzerApiImplementation(apiSettings: ApiSettings, baseUrl: string) {
@@ -371,34 +420,112 @@ export class TrashApis {
       rejectUnauthorized: false,
     });
 
-    // Skip lot of data from body to prevent memory overflow
+    // Month name mappings (both English and Dutch)
+    const monthMapping: { [key: string]: number } = {
+      january: 0,
+      januari: 0,
+      february: 1,
+      februari: 1,
+      march: 2,
+      maart: 2,
+      april: 3,
+      may: 4,
+      mei: 4,
+      june: 5,
+      juni: 5,
+      july: 6,
+      juli: 6,
+      august: 7,
+      augustus: 7,
+      september: 8,
+      october: 9,
+      oktober: 9,
+      november: 10,
+      december: 11,
+    };
+
     const body = <string>retrieveCalendarDataRequest.body;
-    const regex = /<a href="#waste-.*?" class="[^"]*\bwasteInfoIcon\b[^"]*"[^\>]*>[\s\S]*?<\/a>/gi;
-    let match;
+    const currentYear = new Date().getFullYear();
 
-    while ((match = regex.exec(body)) !== null) {
-      const result = match[0];
-      const doc = parseDocument(result);
+    // Find all month sections with IDs like "january-2025" or "januari-2025"
+    const monthSectionRegex = /<div[^>]*id="([a-z]+-\d{4})"[^>]*class="month-section[^"]*"[^>]*>([\s\S]*?)<\/div>\s*<\/div>\s*<\/div>/gi;
+    let monthMatch;
 
-      // Find all `<a>` elements with class `wasteInfoIcon`
-      const wasteInfoLinks = DomUtils.findAll((elem) => DomUtils.isTag(elem) && elem.tagName === 'a' && elem.attribs.class?.includes('wasteInfoIcon'), doc.children);
+    while ((monthMatch = monthSectionRegex.exec(body)) !== null) {
+      const monthId = monthMatch[1]; // e.g., "january-2025" or "januari-2025"
+      const monthContent = monthMatch[2];
 
-      for (const link of wasteInfoLinks) {
-        const firstParagraph = DomUtils.findOne((elem) => DomUtils.isTag(elem) && elem.tagName === 'p', link.children);
+      // Extract month and year from the ID
+      const idParts = monthId.split('-');
+      if (idParts.length !== 2) continue;
 
-        if (!firstParagraph || !firstParagraph.children || firstParagraph.children.length < 2) continue;
+      const monthName = idParts[0].toLowerCase();
+      const monthIndex = monthMapping[monthName];
+      const year = parseInt(idParts[1], 10);
 
-        const trashType = link.attribs?.title || 'Unknown';
-        const spanElement = DomUtils.findOne((el) => DomUtils.isTag(el) && el.name === 'span', firstParagraph.children);
-        if (!spanElement) continue;
+      if (monthIndex === undefined || isNaN(year)) {
+        this.log(`Could not parse month section ID: ${monthId}`);
+        continue;
+      }
 
-        const trashDate = DomUtils.innerText(spanElement).trim();
-        if (trashDate === 'Unknown') continue;
+      const regex = /<a href="#waste-.*?" class="[^"]*\bwasteInfoIcon\b[^"]*"[^\>]*>[\s\S]*?<\/a>/gi;
+      let match;
 
-        const parsedTrashDate = parseDutchDate(trashDate);
-        if (parsedTrashDate === null) continue;
+      while ((match = regex.exec(monthContent)) !== null) {
+        const result = match[0];
+        const doc = parseDocument(result);
 
-        verifyByName(fDates, '', trashType, parsedTrashDate);
+        const wasteInfoLinks = DomUtils.findAll((elem) => DomUtils.isTag(elem) && elem.tagName === 'a' && elem.attribs.class?.includes('wasteInfoIcon'), doc.children);
+
+        for (const link of wasteInfoLinks) {
+          const firstParagraph = DomUtils.findOne((elem) => DomUtils.isTag(elem) && elem.tagName === 'p', link.children);
+
+          if (!firstParagraph || !firstParagraph.children || firstParagraph.children.length < 2) continue;
+
+          const trashType = link.attribs?.title || 'Unknown';
+          const spanElement = DomUtils.findOne((el) => DomUtils.isTag(el) && el.name === 'span', firstParagraph.children);
+          if (!spanElement) continue;
+
+          const trashDate = DomUtils.innerText(spanElement).trim();
+          if (trashDate === 'Unknown') continue;
+
+          const parsedTrashDate = parseDutchDate(trashDate, year);
+          if (parsedTrashDate === null) continue;
+
+          verifyByName(fDates, '', trashType, parsedTrashDate);
+        }
+      }
+    }
+
+    // Fallback: Try old format if no month sections were found
+    if (fDates.length === 0) {
+      this.log('No month sections found, trying old format parsing.');
+      const regex = /<a href="#waste-.*?" class="[^"]*\bwasteInfoIcon\b[^"]*"[^\>]*>[\s\S]*?<\/a>/gi;
+      let match;
+
+      while ((match = regex.exec(body)) !== null) {
+        const result = match[0];
+        const doc = parseDocument(result);
+
+        const wasteInfoLinks = DomUtils.findAll((elem) => DomUtils.isTag(elem) && elem.tagName === 'a' && elem.attribs.class?.includes('wasteInfoIcon'), doc.children);
+
+        for (const link of wasteInfoLinks) {
+          const firstParagraph = DomUtils.findOne((elem) => DomUtils.isTag(elem) && elem.tagName === 'p', link.children);
+
+          if (!firstParagraph || !firstParagraph.children || firstParagraph.children.length < 2) continue;
+
+          const trashType = link.attribs?.title || 'Unknown';
+          const spanElement = DomUtils.findOne((el) => DomUtils.isTag(el) && el.name === 'span', firstParagraph.children);
+          if (!spanElement) continue;
+
+          const trashDate = DomUtils.innerText(spanElement).trim();
+          if (trashDate === 'Unknown') continue;
+
+          const parsedTrashDate = parseDutchDate(trashDate);
+          if (parsedTrashDate === null) continue;
+
+          verifyByName(fDates, '', trashType, parsedTrashDate);
+        }
       }
     }
 
@@ -407,7 +534,7 @@ export class TrashApis {
       activity.dates = Array.from(new Map(activity.dates.map((d) => [d.toISOString(), d])).values());
     });
 
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   private async generalImplementationWasteApi(apiSettings: ApiSettings, companyCode: string, hostName = 'wasteapi.ximmio.com') {
@@ -470,7 +597,7 @@ export class TrashApis {
         verifyByName(fDates, '', calendarResult.dataList[i]._pickupTypeText, calendarResult.dataList[i].pickupDates[j]);
       }
     }
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   private async generalImplementationRecycleApp(apiSettings: ApiSettings) {
@@ -617,7 +744,7 @@ export class TrashApis {
       verifyByName(fDates, '', description, dateStr);
     }
 
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   private async generalImplementationBurgerportaal(apiSettings: ApiSettings, organisationId = '138204213564933597') {
@@ -707,7 +834,7 @@ export class TrashApis {
       verifyByName(fDates, '', entry.fraction, new Date(entry.collectionDate.substr(0, 10)));
     }
 
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   private async generalImplementationContainerManager(apiSettings: ApiSettings, hostName: string, organizationId: string) {
@@ -745,7 +872,7 @@ export class TrashApis {
       });
     }
 
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   /**
@@ -870,7 +997,7 @@ export class TrashApis {
       }
     }
 
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   private async afvalkalenderRD4(apiSettings: ApiSettings) {
@@ -896,28 +1023,44 @@ export class TrashApis {
 
     // Retrieve recyclemanager data
     const d = new Date();
-    const getRecycleData = await httpsPromise({
-      hostname: 'data.rd4.nl',
-      path: `/api/v1/waste-calendar?postal_code=${apiSettings.zipcode.substring(0, 4)}+${apiSettings.zipcode.substring(4, 6)}&house_number=${
-        houseNumberMatch[0]
-      }${queryAddition}&year=${d.getFullYear()}&types[]=residual_waste&types[]=gft&types[]=paper&types[]=pruning_waste&types[]=pmd&types[]=best_bag&types[]=christmas_trees`,
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      family: 4,
-      rejectUnauthorized: false,
-    });
+    const currentYear = d.getFullYear();
+    const currentMonth = d.getMonth(); // 0-11
+    const isDecember = currentMonth === 11;
 
-    var result = <any>getRecycleData.body;
-    for (var et in result.data.items[0]) {
-      var entry = result.data.items[0][et];
-      var trashDate = new Date(entry.date.substring(0, 4) + '-' + entry.date.substring(5, 7) + '-' + entry.date.substring(8, 10));
+    const yearsToFetch = isDecember ? [currentYear, currentYear + 1] : [currentYear];
 
-      verifyByName(fDates, '', entry.type, trashDate);
+    for (const year of yearsToFetch) {
+      try {
+        const getRecycleData = await httpsPromise({
+          hostname: 'data.rd4.nl',
+          path: `/api/v1/waste-calendar?postal_code=${apiSettings.zipcode.substring(0, 4)}+${apiSettings.zipcode.substring(4, 6)}&house_number=${
+            houseNumberMatch[0]
+          }${queryAddition}&year=${year}&types[]=residual_waste&types[]=gft&types[]=paper&types[]=pruning_waste&types[]=pmd&types[]=best_bag&types[]=christmas_trees`,
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          family: 4,
+          rejectUnauthorized: false,
+        });
+
+        var result = <any>getRecycleData.body;
+        for (var et in result.data.items[0]) {
+          var entry = result.data.items[0][et];
+          var trashDate = new Date(entry.date.substring(0, 4) + '-' + entry.date.substring(5, 7) + '-' + entry.date.substring(8, 10));
+
+          verifyByName(fDates, '', entry.type, trashDate);
+        }
+      } catch (error) {
+        if (year === currentYear + 1) {
+          this.log(`Next year data not yet available for RD4: ${error}`);
+        } else {
+          throw error; // Re-throw if current year fails
+        }
+      }
     }
 
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   private async rovaWasteCalendar(apiSettings: ApiSettings, hostname: string, startPath: string) {
@@ -941,34 +1084,48 @@ export class TrashApis {
     }
 
     const d = new Date();
-    const fullPath = `${startPath}?postalcode=${apiSettings.zipcode}&year=${d.getFullYear()}${queryAddition}&houseNumber=${
-      houseNumberMatch[0]
-    }&types[]=residual_waste&types[]=gft&types[]=paper&types[]=pruning_waste&types[]=pmd&types[]=best_bag&types[]=christmas_trees`;
+    const currentYear = d.getFullYear();
+    const currentMonth = d.getMonth(); // 0-11
+    const isDecember = currentMonth === 11;
 
-    // Retrieve rova data
-    const getRecycleData = await httpsPromise({
-      hostname: hostname,
-      path: fullPath,
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      family: 4,
-      rejectUnauthorized: false,
-    });
+    const yearsToFetch = isDecember ? [currentYear, currentYear + 1] : [currentYear];
 
-    const result = <any>getRecycleData.body;
-    if (result.length === 0) {
-      throw new Error('No data found for this address.');
+    for (const year of yearsToFetch) {
+      try {
+        const fullPath = `${startPath}?postalcode=${apiSettings.zipcode}&year=${year}${queryAddition}&houseNumber=${houseNumberMatch[0]}&types[]=residual_waste&types[]=gft&types[]=paper&types[]=pruning_waste&types[]=pmd&types[]=best_bag&types[]=christmas_trees`;
+
+        // Retrieve rova data
+        const getRecycleData = await httpsPromise({
+          hostname: hostname,
+          path: fullPath,
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          family: 4,
+          rejectUnauthorized: false,
+        });
+
+        const result = <any>getRecycleData.body;
+        if (result.length === 0 && year === currentYear) {
+          throw new Error('No data found for this address.');
+        }
+
+        for (var et in result) {
+          const entry = result[et];
+          const trashDate = new Date(entry.date.substring(0, 4) + '-' + entry.date.substring(5, 7) + '-' + entry.date.substring(8, 10));
+          verifyByName(fDates, entry.wasteType.code, entry.wasteType.title, trashDate);
+        }
+      } catch (error) {
+        if (year === currentYear + 1) {
+          this.log(`Next year data not yet available for Rova: ${error}`);
+        } else {
+          throw error; // Re-throw if current year fails
+        }
+      }
     }
 
-    for (var et in result) {
-      const entry = result[et];
-      const trashDate = new Date(entry.date.substring(0, 4) + '-' + entry.date.substring(5, 7) + '-' + entry.date.substring(8, 10));
-      verifyByName(fDates, entry.wasteType.code, entry.wasteType.title, trashDate);
-    }
-
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   private async afvalapp(apiSettings: ApiSettings) {
@@ -1020,7 +1177,7 @@ export class TrashApis {
       throw new Error('No dates found in Afval App.');
     }
 
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   private async mijnCirculus(apiSettings: ApiSettings) {
@@ -1141,7 +1298,7 @@ export class TrashApis {
       }
     }
 
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   private async afvalwijzerMontferlandApiImplementation(apiSettings: ApiSettings, baseUrl: string) {
@@ -1219,7 +1376,7 @@ export class TrashApis {
       }
     }
 
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   private async afvalkalenderVenlo(apiSettings: ApiSettings, baseUrl: string) {
@@ -1305,7 +1462,7 @@ export class TrashApis {
       searchResultIndex = nextResult >= 0 ? searchResultIndex + 8 + nextResult : -1;
     }
 
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   private async afvalkalenderOmrin(apiSettings: ApiSettings) {
@@ -1384,7 +1541,7 @@ ${publicKey}
       verifyByName(fDates, trashEntry.WelkAfval, trashEntry.Omschrijving, trashEntry.Datum.substr(0, 19), undefined, trashEntry.Kleur);
     }
 
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   private async afvalkalenderLimburgNET(apiSettings: ApiSettings) {
@@ -1498,7 +1655,7 @@ ${publicKey}
       verifyByName(fDates, '', type, dt);
     }
 
-    return fDates;
+    return this.filterFutureDates(fDates);
   }
 
   private svgToBase64(svgElement: any): string {

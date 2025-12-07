@@ -115,7 +115,7 @@ export function formatDate(date: Date | number) {
   return [year, month, day].join('-');
 }
 
-export function parseDutchDate(dutchDate: string): Date | null {
+export function parseDutchDate(dutchDate: string, givenYear?: number): Date | null {
   const months: { [key: string]: number } = {
     januari: 0,
     februari: 1,
@@ -137,7 +137,7 @@ export function parseDutchDate(dutchDate: string): Date | null {
 
     const day = parseInt(parts[1], 10);
     const month = months[parts[2]];
-    const year = new Date(Date.now()).getFullYear(); // Default to current year if not provided
+    const year = givenYear !== undefined ? givenYear : new Date(Date.now()).getFullYear(); // Default to current year if not provided
 
     if (isNaN(day) || month === undefined) return null;
     return new Date(Date.UTC(year, month, day));
@@ -145,7 +145,7 @@ export function parseDutchDate(dutchDate: string): Date | null {
 
   const day = parseInt(parts[1], 10);
   const month = months[parts[2]];
-  const year = parseInt(parts[3]);
+  const year = givenYear !== undefined ? givenYear : parseInt(parts[3]);
 
   if (isNaN(day) || month === undefined) return null;
   return new Date(Date.UTC(year, month, day));
