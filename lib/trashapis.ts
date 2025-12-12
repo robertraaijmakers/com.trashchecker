@@ -997,6 +997,10 @@ export class TrashApis {
       }
     }
 
+    if (fDates.length === 0) {
+      throw new Error('No trash data found for the given address in Irado.');
+    }
+
     return this.filterFutureDates(fDates);
   }
 
