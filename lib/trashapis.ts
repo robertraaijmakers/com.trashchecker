@@ -750,7 +750,7 @@ export class TrashApis {
 
     return this.filterFutureDates(fDates);
   }
-  12384898978671598;
+
   private async generalImplementationBurgerportaal(apiSettings: ApiSettings, organisationId = '138204213564933597') {
     let fDates: ActivityDates[] = [];
 
