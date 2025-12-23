@@ -38,6 +38,7 @@
   { "name": "Gemeente Groningen", "id": "akgr", "country": "NL", "handler": "afvalkalenderGroningen" },
   { "name": "Gemeente Hellendoorn", "id": "geh", "country": "NL", "handler": "gemeenteHellendoorn" },
   { "name": "Gemeente Nijkerk", "id": "aknk", "country": "NL", "handler": "afvalkalenderNijkerk" },
+  { "name": "Gemeente Tilburg", "id": "akrt", "country": "NL", "handler": "afvalkalenderTilburg" },
   { "name": "Gemeente Meppel", "id": "gem", "country": "NL", "handler": "gemeenteMeppel" },
   { "name": "Huisvulkalender Den Haag", "id": "hkdh", "country": "NL", "handler": "huisvuilkalenderDenHaag" },
   { "name": "Inzamelkalender HVC", "id": "hvc", "country": "NL", "handler": "inzamelkalenderHVC" },

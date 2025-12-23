@@ -177,6 +177,10 @@ export class TrashApis {
     return this.generalImplementationBurgerportaal(apiSettings, '138204213565304094');
   }
 
+  private async afvalkalenderTilburg(apiSettings: ApiSettings) {
+    return this.generalImplementationBurgerportaal(apiSettings, '452048812597339353');
+  }
+
   private async afvalkalenderPeelEnMaas(apiSettings: ApiSettings) {
     return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.peelenmaas.nl');
   }
@@ -746,7 +750,7 @@ export class TrashApis {
 
     return this.filterFutureDates(fDates);
   }
-
+  12384898978671598;
   private async generalImplementationBurgerportaal(apiSettings: ApiSettings, organisationId = '138204213564933597') {
     let fDates: ActivityDates[] = [];
 
