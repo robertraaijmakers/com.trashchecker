@@ -1,8 +1,9 @@
 name: Feature Request
 description: Suggest a new feature or enhancement
 title: "[FEATURE]: "
-labels: ["enhancement"]
-assignees: []
+labels: []
+assignees:
+  - robertraaijmakers
 body:
   - type: markdown
     attributes:
@@ -28,12 +29,13 @@ body:
       label: Type of Homey Device
       description: Which Homey device are you using?
       options:
+        - Homey Bridge
         - Homey Cloud
         - Homey Pro (2023)
         - Homey Pro (Early 2019)
-        - Homey Bridge
+        - Homey Self-Hosted Server
         - Not device-specific
-      default: 4
+      default: 6
     validations:
       required: true
   

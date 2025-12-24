@@ -1,8 +1,9 @@
 name: API/Provider Issue
 description: Report an issue with a specific waste collection provider API
 title: "[API]: "
-labels: ["api-issue"]
-assignees: []
+labels: []
+assignees:
+  - robertraaijmakers
 body:
   - type: markdown
     attributes:
@@ -30,10 +31,11 @@ body:
       label: Type of Homey Device
       description: Which Homey device are you using?
       options:
+        - Homey Bridge
         - Homey Cloud
         - Homey Pro (2023)
         - Homey Pro (Early 2019)
-        - Homey Bridge
+        - Homey Self-Hosted Server
       default: 0
     validations:
       required: true
@@ -63,6 +65,7 @@ body:
       description: In which country is the provider located?
       options:
         - Netherlands (NL)
+        - Belgium (BE)
         - France (FR)
         - Sweden (SV)
         - Other

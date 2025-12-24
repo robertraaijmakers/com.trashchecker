@@ -1,0 +1,75 @@
+name: Auto Label and Assign Issues
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto Label Based on Issue Content
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const issueBody = issue.body || '';
+            const labelsToAdd = [];
+            
+            // Parse the issue body to extract form responses
+            console.log('Processing issue:', issue.number);
+            console.log('Issue body:', issueBody);
+            
+            // Bug Report Template Logic
+            if (issue.title.startsWith('[BUG]')) {
+              // Check Issue Type dropdown
+              if (issueBody.includes('### Issue Type') || issueBody.includes('Issue Type')) {
+                if (issueBody.match(/Issue Type[^\n]*\n+Bug/i)) {
+                  labelsToAdd.push('bug');
+                } else if (issueBody.match(/Issue Type[^\n]*\n+API Issue/i)) {
+                  labelsToAdd.push('fix-api');
+                } else if (issueBody.match(/Issue Type[^\n]*\n+Enhancement Request/i)) {
+                  labelsToAdd.push('enhancement');
+                }
+              }
+            }
+            
+            // Feature Request Template Logic
+            if (issue.title.startsWith('[FEATURE]')) {
+              // Check Request Type dropdown
+              if (issueBody.includes('### Request Type') || issueBody.includes('Request Type')) {
+                if (issueBody.match(/Request Type[^\n]*\n+New API\/Provider Support/i)) {
+                  labelsToAdd.push('new-api');
+                } else {
+                  // New Feature or Enhancement
+                  labelsToAdd.push('enhancement');
+                }
+              }
+            }
+            
+            // API Issue Template Logic
+            if (issue.title.startsWith('[API]')) {
+              labelsToAdd.push('fix-api');
+            }
+            
+            // Remove duplicates
+            const uniqueLabels = [...new Set(labelsToAdd)];
+            
+            console.log('Labels to add:', uniqueLabels);
+            
+            // Add labels if any were identified
+            if (uniqueLabels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: uniqueLabels
+              });
+              
+              console.log('Successfully added labels:', uniqueLabels);
+            } else {
+              console.log('No labels to add');
+            }

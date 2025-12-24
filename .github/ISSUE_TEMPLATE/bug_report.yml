@@ -1,8 +1,9 @@
 name: Bug Report
 description: Report a bug or issue with the Trashcan Reminder app
 title: "[BUG]: "
-labels: ["bug"]
-assignees: []
+labels: []
+assignees:
+  - robertraaijmakers
 body:
   - type: markdown
     attributes:
@@ -28,10 +29,11 @@ body:
       label: Type of Homey Device
       description: Which Homey device are you using?
       options:
+        - Homey Bridge
         - Homey Cloud
         - Homey Pro (2023)
         - Homey Pro (Early 2019)
-        - Homey Bridge
+        - Homey Self-Hosted Server
       default: 0
     validations:
       required: true
@@ -61,6 +63,7 @@ body:
       description: In which country are you located?
       options:
         - Netherlands (NL)
+        - Belgium (BE)
         - France (FR)
         - Sweden (SV)
         - Other
