@@ -1,0 +1,131 @@
+name: Bug Report
+description: Report a bug or issue with the Trashcan Reminder app
+title: "[BUG]: "
+labels: ["bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! Please provide as much detail as possible.
+  
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      description: What type of issue are you reporting?
+      options:
+        - Bug
+        - API Issue
+        - Enhancement Request
+      default: 0
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: homey-device
+    attributes:
+      label: Type of Homey Device
+      description: Which Homey device are you using?
+      options:
+        - Homey Cloud
+        - Homey Pro (2023)
+        - Homey Pro (Early 2019)
+        - Homey Bridge
+      default: 0
+    validations:
+      required: true
+  
+  - type: input
+    id: homey-version
+    attributes:
+      label: Homey Firmware Version
+      description: What version of Homey firmware are you running?
+      placeholder: "e.g., 12.1.2"
+    validations:
+      required: true
+  
+  - type: input
+    id: app-version
+    attributes:
+      label: App Version
+      description: What version of the Trashcan Reminder app are you using?
+      placeholder: "e.g., 5.3.1"
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: country
+    attributes:
+      label: Country/Region
+      description: In which country are you located?
+      options:
+        - Netherlands (NL)
+        - France (FR)
+        - Sweden (SV)
+        - Other
+      default: 0
+    validations:
+      required: true
+  
+  - type: input
+    id: provider
+    attributes:
+      label: Waste Collection Provider
+      description: Which waste collection service/municipality are you using?
+      placeholder: "e.g., Afval App, Mijn Afvalwijzer, HVC, etc."
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: language
+    attributes:
+      label: App Language
+      description: Which language are you using in the app?
+      options:
+        - English
+        - Nederlands
+        - Français
+        - Svenska
+      default: 0
+    validations:
+      required: false
+  
+  - type: input
+    id: crash-guid
+    attributes:
+      label: Crash Report GUID (Optional)
+      description: If you have a crash report GUID from Homey, please provide it here
+      placeholder: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    validations:
+      required: false
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please provide a clear and concise description of the bug
+      placeholder: Describe what happened and what you expected to happen
+    validations:
+      required: true
+  
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Please provide detailed steps to reproduce the issue
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+  
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here (screenshots, logs, etc.)
+    validations:
+      required: false

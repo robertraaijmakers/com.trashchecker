@@ -1,0 +1,142 @@
+name: API/Provider Issue
+description: Report an issue with a specific waste collection provider API
+title: "[API]: "
+labels: ["api-issue"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting an API issue! This helps us maintain compatibility with all providers.
+  
+  - type: dropdown
+    id: api-issue-type
+    attributes:
+      label: API Issue Type
+      description: What kind of API issue is this?
+      options:
+        - API not working/returning errors
+        - API returning incorrect data
+        - API returning incomplete data
+        - New API version detected
+        - Provider changed their API
+      default: 0
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: homey-device
+    attributes:
+      label: Type of Homey Device
+      description: Which Homey device are you using?
+      options:
+        - Homey Cloud
+        - Homey Pro (2023)
+        - Homey Pro (Early 2019)
+        - Homey Bridge
+      default: 0
+    validations:
+      required: true
+  
+  - type: input
+    id: homey-version
+    attributes:
+      label: Homey Firmware Version
+      description: What version of Homey firmware are you running?
+      placeholder: "e.g., 12.1.2"
+    validations:
+      required: true
+  
+  - type: input
+    id: app-version
+    attributes:
+      label: App Version
+      description: What version of the Trashcan Reminder app are you using?
+      placeholder: "e.g., 5.3.1"
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: country
+    attributes:
+      label: Country/Region
+      description: In which country is the provider located?
+      options:
+        - Netherlands (NL)
+        - France (FR)
+        - Sweden (SV)
+        - Other
+      default: 0
+    validations:
+      required: true
+  
+  - type: input
+    id: provider
+    attributes:
+      label: Waste Collection Provider
+      description: Which waste collection service/municipality API is affected?
+      placeholder: "e.g., Afval App, Mijn Afvalwijzer, HVC, etc."
+    validations:
+      required: true
+  
+  - type: input
+    id: municipality
+    attributes:
+      label: Municipality/City
+      description: What is your specific municipality or city?
+      placeholder: "e.g., Amsterdam, Rotterdam, etc."
+    validations:
+      required: true
+  
+  - type: input
+    id: postal-code
+    attributes:
+      label: Postal Code
+      description: Your postal code (helps with debugging API calls)
+      placeholder: "e.g., 1234AB"
+    validations:
+      required: false
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please provide a clear description of the API issue
+      placeholder: Describe what's wrong with the API response or behavior
+    validations:
+      required: true
+  
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What data should the API return?
+      placeholder: What collection dates or information should you be seeing?
+    validations:
+      required: true
+  
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: What is the API actually returning or doing?
+      placeholder: What error message or incorrect data are you seeing?
+    validations:
+      required: true
+  
+  - type: input
+    id: crash-guid
+    attributes:
+      label: Crash Report GUID (Optional)
+      description: If you have a crash report GUID from Homey, please provide it here
+      placeholder: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    validations:
+      required: false
+  
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem (screenshots, error logs, etc.)
+    validations:
+      required: false
