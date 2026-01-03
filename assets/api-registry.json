@@ -43,7 +43,6 @@
   { "name": "Huisvulkalender Den Haag", "id": "hkdh", "country": "NL", "handler": "huisvuilkalenderDenHaag" },
   { "name": "Inzamelkalender HVC", "id": "hvc", "country": "NL", "handler": "inzamelkalenderHVC" },
   { "name": "Klikomanager Oude IJsselstreek", "id": "kmoij", "country": "NL", "handler": "klikoManagerOudeIJsselstreek" },
-  { "name": "Klikomanager Uithoorn", "id": "kmuit", "country": "NL", "handler": "klikoManagerUithoorn" },
   { "name": "Mijn Afvalwijzer", "id": "afw", "country": "NL", "handler": "mijnAfvalWijzer" },
   { "name": "Mijn Blink Afvalkalender", "id": "mba", "country": "NL", "handler": "BlinkAfvalkalender" },
   { "name": "Recyclemanager", "id": "remg", "country": "NL", "handler": "recycleManager" },

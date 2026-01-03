@@ -305,10 +305,6 @@ export class TrashApis {
     return this.generalImplementationWasteApi(apiSettings, '280affe9-1428-443b-895a-b90431b8ca31', 'wasteapi.ximmio.com');
   }
 
-  private async klikoManagerUithoorn(apiSettings: ApiSettings) {
-    return this.generalImplementationContainerManager(apiSettings, 'cp-uithoorn.klikocontainermanager.com', '474');
-  }
-
   private async klikoManagerOudeIJsselstreek(apiSettings: ApiSettings) {
     return this.generalImplementationContainerManager(apiSettings, 'cp-oudeijsselstreek.klikocontainermanager.com', '454');
   }

@@ -64,22 +64,6 @@ describe('GAD - Gooi and Vechtstreek', function () {
 });
 
 describe('Kliko Manager', function () {
-  it('API - Klikomanager Uithoorn', async function () {
-    const apiSettings: ApiSettings = {
-      zipcode: '1421TZ',
-      housenumber: '9',
-      country: 'NL',
-      apiId: 'kmuit',
-      cleanApiId: '',
-      streetname: '',
-      cityname: '',
-    };
-
-    const result = await testAPI(apiSettings);
-    const isValid = validateApiResults(apiSettings, result);
-    assert.equal(isValid, true);
-  });
-
   it('API - Klikomanager Oude IJsselstreek', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '7051AA',
