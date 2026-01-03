@@ -198,7 +198,7 @@ export class TrashApis {
   }
 
   private async BlinkAfvalkalender(apiSettings: ApiSettings) {
-    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'mijnblink.nl');
+    return this.generalImplementationWasteApi(apiSettings, '252d30d0-2e74-469c-8f1e-c0e2e434eb58', 'wasteprod2api.ximmio.com');
   }
 
   private async GadGooiAndVechtstreek(apiSettings: ApiSettings) {

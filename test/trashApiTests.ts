@@ -11,7 +11,6 @@ import { ActivityDates } from '../types/localTypes';
 import assert from 'assert';
 import { ApiSettings } from '../assets/publicTypes';
 
-/*
 describe('Blink Manager', function () {
   it('API - Blink Manager', async function () {
     const apiSettings: ApiSettings = {
@@ -45,7 +44,7 @@ describe('Blink Manager', function () {
     assert.equal(isValid, true);
   });
 });
-
+/*
 describe('GAD - Gooi and Vechtstreek', function () {
   it('API - GAD', async function () {
     const apiSettings: ApiSettings = {
@@ -760,7 +759,7 @@ describe('TrashApiAfw', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-*/
+
   it('API - Mijn Afvalwijzer - Dongen', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '5103NN',
@@ -775,7 +774,7 @@ describe('TrashApiAfw', function () {
     const result = await testAPI(apiSettings);
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
-  });
+  });*/
 });
 /*
 describe('Woerden Ximmio', function () {
@@ -1221,6 +1220,22 @@ describe('TrashApiOmrin', function () {
     const apiSettings: ApiSettings = {
       zipcode: '8925JC',
       housenumber: '66',
+      country: 'NL',
+      apiId: 'akom',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+
+  it('API - Omrin - #255', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '3845EP',
+      housenumber: '51',
       country: 'NL',
       apiId: 'akom',
       cleanApiId: '',
