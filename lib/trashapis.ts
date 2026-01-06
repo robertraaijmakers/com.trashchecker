@@ -1471,7 +1471,7 @@ export class TrashApis {
       if (!item.date || item.date.startsWith('0001-01-01')) continue;
 
       const isoDate = item.date.replace('Z', '');
-      verifyByName(dates, item.type, '', isoDate.substring(0, 19), undefined, undefined);
+      verifyByName(dates, item.type, item.type, isoDate.substring(0, 19), undefined, undefined);
     }
 
     return this.filterFutureDates(dates);
