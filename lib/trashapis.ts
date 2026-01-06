@@ -1383,83 +1383,98 @@ export class TrashApis {
     return this.filterFutureDates(fDates);
   }
 
-  private async afvalkalenderOmrin(apiSettings: ApiSettings) {
-    this.log('Checking afvalkalender Omrin');
-
-    let fDates: ActivityDates[] = [];
+  private async afvalkalenderOmrin(apiSettings: ApiSettings): Promise<ActivityDates[]> {
+    this.log('Checking afvalkalender Omrin (Omrin API)');
 
     await validateCountry(apiSettings, 'NL');
     await validateZipcode(apiSettings);
     await validateHousenumber(apiSettings);
 
-    const houseNumberMatch = `${apiSettings.housenumber}`.match(/\d+/g);
-    const numberAdditionMatch = `${apiSettings.housenumber}`.match(/[a-zA-Z]+/g);
+    const houseNumberMatch = `${apiSettings.housenumber}`.match(/\d+/);
+    const additionMatch = `${apiSettings.housenumber}`.match(/[a-zA-Z]+/);
 
-    if (!houseNumberMatch || houseNumberMatch.length === 0) {
+    if (!houseNumberMatch) {
       throw new Error('Invalid house number');
     }
 
-    let queryAddition = '';
-    if (numberAdditionMatch !== null && numberAdditionMatch.length > 0 && numberAdditionMatch[0] !== null) {
-      queryAddition = '&extention=' + numberAdditionMatch[0];
+    const baseUrl = 'api.omrinafvalapp.nl';
+    const deviceId = crypto.randomUUID();
+
+    const loginPayload: any = {
+      Email: null,
+      Password: null,
+      PostalCode: apiSettings.zipcode,
+      HouseNumber: Number(houseNumberMatch[0]),
+      DeviceId: deviceId,
+      Platform: 'Homey',
+      AppVersion: '4.0.3.273',
+      OsVersion: 'Homey',
+    };
+
+    if (additionMatch) {
+      loginPayload.HouseNumberExtension = additionMatch[0];
     }
 
-    const hostname = 'api-omrin.freed.nl';
-    const uniqueAppId = '8e6f4b70-1d3a-11ee-be56-0242ac120002';
-
-    const post_data1 = `{'AppId':'${uniqueAppId}','AppVersion':'','OsVersion':'','Platform':'Homey'}`;
-
-    // Retrieve Omrin App Token
-    const getOmrinAppToken = await httpsPromise({
-      hostname: hostname,
-      path: `/Account/GetToken`,
+    const loginResponse = await httpsPromise({
       method: 'POST',
+      hostname: baseUrl,
+      path: `/api/auth/login`,
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        Accept: 'application/json',
+        'User-Agent': 'Omrin.Afvalapp.Client/1.0',
       },
-      body: post_data1,
-      family: 4,
-      rejectUnauthorized: false,
+      body: JSON.stringify(loginPayload),
     });
 
-    const result = <any>getOmrinAppToken.body;
-    const publicKey = result.PublicKey;
-    if (!publicKey || publicKey.length === 0) {
-      throw new Error('No public key received from Omrin');
+    const loginResult = <any>loginResponse.body;
+    const token = loginResult?.data?.accessToken;
+
+    if (!token) {
+      throw new Error(`Omrin login failed: ${JSON.stringify(loginResult?.errors ?? loginResult)}`);
     }
 
-    const post_data2 = `{'a':false,'Email':'','Password':'','PostalCode':'${apiSettings.zipcode}','HouseNumber':${houseNumberMatch[0]}}`;
-    const encryptedBuffer = crypto.publicEncrypt(
-      {
-        key: `-----BEGIN PUBLIC KEY-----
-${publicKey}
------END PUBLIC KEY-----`,
-        padding: crypto.constants.RSA_PKCS1_PADDING,
-      },
-      Buffer.from(post_data2, 'utf8'),
-    );
-
-    const getOmrinTrashData = await httpsPromise({
-      hostname: hostname,
-      path: `/Account/FetchAccount/${uniqueAppId}`,
+    const graphqlResponse = <any>await httpsPromise({
       method: 'POST',
+      hostname: baseUrl,
+      path: `/graphql`,
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        Authorization: `Bearer ${token}`,
+        'User-Agent': 'GraphQL.Client/6.1.0.0',
       },
-      body: `"${encryptedBuffer.toString('base64')}"`,
-      family: 4,
-      rejectUnauthorized: false,
+      body: JSON.stringify({
+        query: `
+        query FetchCalendar {
+          fetchCalendar {
+            id
+            date
+            description
+            type
+            containerType
+            placingTime
+            state
+          }
+        }
+      `,
+      }),
     });
 
-    const trashDataResult = <any>getOmrinTrashData.body;
-
-    for (let trashEntry of trashDataResult['CalendarV2']) {
-      verifyByName(fDates, trashEntry.WelkAfval, trashEntry.Omschrijving, trashEntry.Datum.substr(0, 19), undefined, trashEntry.Kleur);
+    const calendar = graphqlResponse.body?.data?.fetchCalendar;
+    if (!Array.isArray(calendar)) {
+      throw new Error('No calendar data received from Omrin');
     }
 
-    return this.filterFutureDates(fDates);
+    const dates: ActivityDates[] = [];
+
+    for (const item of calendar) {
+      if (!item.date || item.date.startsWith('0001-01-01')) continue;
+
+      const isoDate = item.date.replace('Z', '');
+      verifyByName(dates, item.type, '', isoDate.substring(0, 19), undefined, undefined);
+    }
+
+    return this.filterFutureDates(dates);
   }
 
   private async afvalkalenderLimburgNET(apiSettings: ApiSettings) {

@@ -1198,7 +1198,7 @@ describe('TrashApiIrado', function () {
     assert.equal(isValid, true);
   });
 });
-
+*/
 describe('TrashApiOmrin', function () {
   it('API - Omrin - 1', async function () {
     const apiSettings: ApiSettings = {
@@ -1232,7 +1232,7 @@ describe('TrashApiOmrin', function () {
     assert.equal(isValid, true);
   });
 });
-
+/*
 describe('TrashApiLimburgNET', function () {
   it('API - Limburg.NET - 1', async function () {
     const apiSettings: ApiSettings = {
