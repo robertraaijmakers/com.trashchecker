@@ -117,6 +117,24 @@ describe('TrashApiApn', function () {
 });
 
 
+describe('TrashApiWaalre', function () {
+  it('API - Afvalkalender Waalre', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '5581GK',
+      housenumber: '22',
+      country: 'NL',
+      apiId: 'akwr',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+
 describe('TrashApiAkwl', function () {
   it('API - Afvalkalender Westland', async function () {
     const apiSettings: ApiSettings = {
