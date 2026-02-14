@@ -31,6 +31,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Afvalkalender RWM](https://rwm.nl)
 - [Afvalkalender Saver](https://saver.nl)
 - [Afvalkalender Venray](https://afvalkalender.venray.nl)
+- [Afvalkalender Waalre](https://afvalkalender.waalre.nl)
 - [Afvalkalender ZRD](https://afvalkalender.zrd.nl)
 - [Afvalwijzer Pre Zero](https://inzamelwijzer.prezero.nl/)
 - [Area Reiniging](https://www.area-afval.nl/voor-bewoners/afvalkalender/digitale-afvalkalender)
