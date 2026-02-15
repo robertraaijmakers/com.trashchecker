@@ -24,6 +24,7 @@
   { "name": "Afvalkalender Súdwest-Fryslân", "id": "swf", "country": "NL", "handler": "afvalkalenderSudwestFryslan" },
   { "name": "Afvalkalender Venlo", "id": "akvnl", "country": "NL", "handler": "afvalKalenderVenlo" },
   { "name": "Afvalkalender Venray", "id": "akvr", "country": "NL", "handler": "afvalkalenderVenray" },
+  { "name": "Afvalkalender Waalre", "id": "akwr", "country": "NL", "handler": "afvalkalenderWaalre" },
   { "name": "Afvalkalender Westland", "id": "akwl", "country": "NL", "handler": "afvalKalenderWestland" },
   { "name": "Afvalkalender Woerden", "id": "akwrd", "country": "NL", "handler": "afvalKalenderWoerden" },
   { "name": "Afvalkalender ZRD", "id": "afzrd", "country": "NL", "handler": "afvalkalenderZrd" },

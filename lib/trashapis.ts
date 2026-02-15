@@ -301,6 +301,10 @@ export class TrashApis {
     return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.alphenaandenrijn.nl');
   }
 
+  private async afvalkalenderWaalre(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'afvalkalender.waalre.nl');
+  }
+
   private async afvalKalenderVenlo(apiSettings: ApiSettings) {
     return this.generalImplementationWasteApi(apiSettings, '280affe9-1428-443b-895a-b90431b8ca31', 'wasteapi.ximmio.com');
   }
