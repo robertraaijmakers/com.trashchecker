@@ -1481,6 +1481,67 @@ export class TrashApis {
     return this.filterFutureDates(dates);
   }
 
+  private async gemeenteDrimmelen(apiSettings: ApiSettings) {
+    this.log('Checking afvalkalender Drimmelen (straatbeeld.online)');
+
+    await validateCountry(apiSettings, 'NL');
+    await validateZipcode(apiSettings);
+    await validateHousenumber(apiSettings);
+
+    const fDates: ActivityDates[] = [];
+    const houseNumberMatch = `${apiSettings.housenumber}`.match(/\d+/g);
+    const numberAdditionMatch = `${apiSettings.housenumber}`.match(/[a-zA-Z]+/g);
+
+    if (!houseNumberMatch || houseNumberMatch.length === 0) {
+      throw new Error('Invalid house number');
+    }
+
+    const houseLetter = numberAdditionMatch !== null && numberAdditionMatch.length > 0 ? numberAdditionMatch[0] : 'null';
+    const boundary = '----WebKitFormBoundary' + Math.random().toString(36).slice(2, 18);
+    const requestBody = [
+      `--${boundary}\r\nContent-Disposition: form-data; name="postal_code"\r\n\r\n${apiSettings.zipcode}`,
+      `--${boundary}\r\nContent-Disposition: form-data; name="house_number"\r\n\r\n${houseNumberMatch[0]}`,
+      `--${boundary}\r\nContent-Disposition: form-data; name="house_letter"\r\n\r\n${houseLetter}`,
+      `--${boundary}--`,
+      '',
+    ].join('\r\n');
+
+    const getRecycleData = await httpsPromise({
+      hostname: 'api.straatbeeld.online',
+      path: '/v1/waste-calendar',
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': `multipart/form-data; boundary=${boundary}`,
+        'Content-Length': Buffer.byteLength(requestBody),
+        Origin: 'https://drimmelen.afvalkalender.straatbeeld.online',
+        Referer: 'https://drimmelen.afvalkalender.straatbeeld.online/',
+        'User-Agent': 'Mozilla/5.0',
+      },
+      body: requestBody,
+      family: 4,
+      rejectUnauthorized: false,
+    });
+
+    const result = <any>getRecycleData.body;
+    if (!result?.collections) {
+      throw new Error('No data found for this address.');
+    }
+
+    for (const year of Object.values(result.collections) as any[]) {
+      for (const month of Object.values(year) as any[]) {
+        for (const entry of month) {
+          const trashDate = new Date(entry.date.formatted);
+          for (const item of entry.data) {
+            verifyByName(fDates, item.name, item.display_name, trashDate);
+          }
+        }
+      }
+    }
+
+    return this.filterFutureDates(fDates);
+  }
+
   private async afvalkalenderLimburgNET(apiSettings: ApiSettings) {
     let fDates: ActivityDates[] = [];
 

@@ -36,6 +36,7 @@
   { "name": "Den Bosch Afvalstoffendienstkalender", "id": "dbafw", "country": "NL", "handler": "denBoschAfvalstoffendienstCalendar" },
   { "name": "GAD Gooi en Vechtstreek", "id": "gad", "country": "NL", "handler": "GadGooiAndVechtstreek" },
   { "name": "Gemeente Assen", "id": "gemas", "country": "NL", "handler": "afvalkalenderAssen" },
+  { "name": "Gemeente Drimmelen", "id": "akdr", "country": "NL", "handler": "gemeenteDrimmelen" },
   { "name": "Gemeente Groningen", "id": "akgr", "country": "NL", "handler": "afvalkalenderGroningen" },
   { "name": "Gemeente Hellendoorn", "id": "geh", "country": "NL", "handler": "gemeenteHellendoorn" },
   { "name": "Gemeente Nijkerk", "id": "aknk", "country": "NL", "handler": "afvalkalenderNijkerk" },

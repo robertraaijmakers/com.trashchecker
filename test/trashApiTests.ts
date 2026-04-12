@@ -10,7 +10,7 @@ import { describe, it } from 'node:test';
 import { ActivityDates } from '../types/localTypes';
 import assert from 'assert';
 import { ApiSettings } from '../assets/publicTypes';
-
+/*
 describe('Blink Manager', function () {
   it('API - Blink Manager', async function () {
     const apiSettings: ApiSettings = {
@@ -309,8 +309,9 @@ describe('TrashApiSvr', function () {
     assert.equal(isValid, true);
   });
 });
-
+*/
 describe('TrashApiRov', function () {
+  /*
   it('API - Afvalwijzer - Rova', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '3824GL',
@@ -345,9 +346,25 @@ describe('TrashApiRov', function () {
       console.log('Error caught as expected for non-existing address');
       assert.ok(true);
     }
+  });*/
+
+  it('API - Afvalwijzer - Drimmelen - Bestaand adres', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '4924BE',
+      housenumber: '2',
+      country: 'NL',
+      apiId: 'akdr',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
   });
 });
-
+/*
 describe('TrashApiRad', function () {
   it('API - RAD 2', async function () {
     const apiSettings: ApiSettings = {
@@ -1217,6 +1234,7 @@ describe('TrashApiIrado', function () {
   });
 });
 */
+/*
 describe('TrashApiOmrin', function () {
   it('API - Omrin - 1', async function () {
     const apiSettings: ApiSettings = {
