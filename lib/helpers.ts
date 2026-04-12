@@ -221,7 +221,8 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('residual') !== -1 ||
     description.indexOf('grey') !== -1 ||
     description.indexOf('sortibak') !== -1 ||
-    description.indexOf('huisvuil') !== -1
+    description.indexOf('huisvuil') !== -1 ||
+    description.indexOf('rst') !== -1
   ) {
     addDate(activityDates, TrashType.REST, date, icon, localDescription, color);
     foundType = true;
