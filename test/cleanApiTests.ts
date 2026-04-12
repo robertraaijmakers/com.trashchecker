@@ -10,7 +10,7 @@ import { describe, it } from 'node:test';
 import { ActivityDates } from '../types/localTypes';
 import assert from 'assert';
 import { ApiSettings } from '../assets/publicTypes';
-/*
+
 describe('CleanApiCleanProfs', function () {
   it('Clean API - Clean Profs 1', async function () {
     const apiSettings: ApiSettings = {
@@ -44,7 +44,7 @@ describe('CleanApiCleanProfs', function () {
     assert.equal(isValid, true);
   });
 });
-*/
+
 function testAPI(apiSettings: ApiSettings) {
   const trashApis = new CleanApis(console.log);
   try {

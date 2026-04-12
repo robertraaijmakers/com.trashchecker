@@ -479,15 +479,15 @@ export class TrashApis {
         const result = match[0];
         const doc = parseDocument(result);
 
-        const wasteInfoLinks = DomUtils.findAll((elem) => DomUtils.isTag(elem) && elem.tagName === 'a' && elem.attribs.class?.includes('wasteInfoIcon'), doc.children);
+        const wasteInfoLinks = DomUtils.findAll((elem) => elem.tagName === 'a' && elem.attribs.class?.includes('wasteInfoIcon'), doc.children);
 
         for (const link of wasteInfoLinks) {
-          const firstParagraph = DomUtils.findOne((elem) => DomUtils.isTag(elem) && elem.tagName === 'p', link.children);
+          const firstParagraph = DomUtils.findOne((elem) => elem.tagName === 'p', link.children);
 
           if (!firstParagraph || !firstParagraph.children || firstParagraph.children.length < 2) continue;
 
           const trashType = link.attribs?.title || 'Unknown';
-          const spanElement = DomUtils.findOne((el) => DomUtils.isTag(el) && el.name === 'span', firstParagraph.children);
+          const spanElement = DomUtils.findOne((el) => el.tagName === 'span', firstParagraph.children);
           if (!spanElement) continue;
 
           const trashDate = DomUtils.innerText(spanElement).trim();
@@ -511,15 +511,15 @@ export class TrashApis {
         const result = match[0];
         const doc = parseDocument(result);
 
-        const wasteInfoLinks = DomUtils.findAll((elem) => DomUtils.isTag(elem) && elem.tagName === 'a' && elem.attribs.class?.includes('wasteInfoIcon'), doc.children);
+        const wasteInfoLinks = DomUtils.findAll((elem) => elem.tagName === 'a' && elem.attribs.class?.includes('wasteInfoIcon'), doc.children);
 
         for (const link of wasteInfoLinks) {
-          const firstParagraph = DomUtils.findOne((elem) => DomUtils.isTag(elem) && elem.tagName === 'p', link.children);
+          const firstParagraph = DomUtils.findOne((elem) => elem.tagName === 'p', link.children);
 
           if (!firstParagraph || !firstParagraph.children || firstParagraph.children.length < 2) continue;
 
           const trashType = link.attribs?.title || 'Unknown';
-          const spanElement = DomUtils.findOne((el) => DomUtils.isTag(el) && el.name === 'span', firstParagraph.children);
+          const spanElement = DomUtils.findOne((el) => el.tagName === 'span', firstParagraph.children);
           if (!spanElement) continue;
 
           const trashDate = DomUtils.innerText(spanElement).trim();

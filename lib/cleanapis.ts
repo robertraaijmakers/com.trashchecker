@@ -11,7 +11,12 @@ export class CleanApis {
   constructor(logger: (...args: any[]) => void) {
     this.#log = logger || console.log;
 
-    this.#apiList.push({ name: 'Clean Profs', id: 'cpfs', country: 'NL', execute: (apiSettings) => this.#cleanProfs(apiSettings) });
+    this.#apiList.push({
+      name: 'Clean Profs',
+      id: 'cpfs',
+      country: 'NL',
+      execute: (apiSettings) => this.#cleanProfs(apiSettings),
+    });
   }
 
   async ExecuteApi(apiSettings: ApiSettings) {
@@ -73,7 +78,7 @@ export class CleanApis {
    * Generic Clean API Providers
    */
   async #cleanProfsApi(apiSettings: ApiSettings) {
-    let fDates: ActivityDates[] = [];
+    const fDates: ActivityDates[] = [];
 
     await validateCountry(apiSettings, 'NL');
     await validateZipcode(apiSettings);
@@ -83,7 +88,7 @@ export class CleanApis {
     const endDate = new Date().setDate(new Date().getDate() + 30);
 
     const getCleanProfsRequest = await httpsPromise({
-      hostname: `cleanprofs.jmsdev.nl`,
+      hostname: 'cleanprofs.jmsdev.nl',
       path: `/api/get-plannings-address?zipcode=${apiSettings.zipcode}&house_number=${apiSettings.housenumber}&start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}&code=crm`,
       method: 'GET',
       headers: {
@@ -92,13 +97,13 @@ export class CleanApis {
       },
     });
 
-    var result = <any>getCleanProfsRequest.body;
+    const result = <any>getCleanProfsRequest.body;
 
     if (result.length <= 0) {
       throw new Error('No cleaning data found for: cleanprofs.jmsdev.nl');
     }
 
-    for (let i in result) {
+    for (const i in result) {
       const entry = result[i];
       const dateStr = entry['full_date'];
       const description = entry['product_name']?.toLowerCase();
