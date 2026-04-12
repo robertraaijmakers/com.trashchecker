@@ -32,6 +32,8 @@ class WidgetScript {
 
   public async Init() {
     try {
+      this.settings = this.convertSettings(this.homey.getSettings());
+
       const collectionInfo = (await this.homey.api('GET', `/collectiondata?displayYesterday=${this.settings.displayYesterday}`)) as WidgetItem[];
 
       const tbody = document.querySelector('#trashCollections');
