@@ -78,9 +78,12 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     });
 
     // Update API data every 48 hours
-    this.homey.setInterval(() => {
-      this.onUpdateData();
-    }, 48 * 60 * 60 * 1000);
+    this.homey.setInterval(
+      () => {
+        this.onUpdateData();
+      },
+      48 * 60 * 60 * 1000,
+    );
 
     // Manually kick off data retrieval
     await this.onUpdateData();
@@ -399,7 +402,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       let multiTypeString = '';
       for (var i = 0, len = items.length; i < len; i++) {
         multiTypeString +=
-          (labelSettings?.[items[i]?.type]?.trashLong || this.homey.__(`tokens.output.type.${items[0].type}`)) +
+          (labelSettings?.[items[i]?.type]?.trashLong || this.homey.__(`tokens.output.type.${items[i].type}`)) +
           (i < len - 2 ? ', ' : i == len - 2 ? ' ' + this.homey.__('tokens.output.and') + ' ' : '');
       }
 
