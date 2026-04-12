@@ -71,6 +71,13 @@
 			"entryFieldLabel": "Advanced Date Input",
 			"save": "Save All Settings"
 		},
+		"manualremove":
+		{
+			"title": "Advanced Date Removal",
+			"description": "Via this field you can remove dates from the generated sequence. This is not recommended, but for advanced users only. The dates should be entered in the format YYYY-mm-dd.",
+			"entryFieldLabel": "Advanced Date Removal Input",
+			"save": "Save All Settings"
+		},
 		"startdate": "starting on",
 		"labeltitle": "Local Trash Type Values",
 		"labeldescription": "The values entered below are used to customize your trash experience. The values are used in the global tags available in your flows, in the widget and set in labels on cards available in advanced flows.",

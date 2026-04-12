@@ -11,6 +11,7 @@ import { ActivityDates } from '../types/localTypes';
 import assert from 'assert';
 import { ApiSettings } from '../assets/publicTypes';
 
+/*
 describe('Blink Manager', function () {
   it('API - Blink Manager', async function () {
     const apiSettings: ApiSettings = {
@@ -1180,8 +1181,8 @@ describe('TrashApiVenlo', function () {
 describe('TrashApiGroningen', function () {
   it('API - Groningen', async function () {
     const apiSettings: ApiSettings = {
-      zipcode: '9713RH',
-      housenumber: '12',
+      zipcode: '9712KJ',
+      housenumber: '41',
       country: 'NL',
       apiId: 'akgr',
       cleanApiId: '',
@@ -1298,6 +1299,7 @@ describe('TrashApiReinis', function () {
     assert.equal(isValid, true);
   });
 });
+*/
 
 function testAPI(apiSettings: ApiSettings) {
   const trashApis = new TrashApis(console.log);

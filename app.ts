@@ -320,6 +320,21 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       }
     }
 
+    // Manual removals have the highest priority and are applied after all generated/manual-added dates.
+    const manualRemovals = this.homey.settings.get('manualRemovals');
+    if (manualRemovals !== null) {
+      for (let type in AllTrashTypes) {
+        const trashType = <TrashType>AllTrashTypes[type];
+        if (!manualRemovals?.[trashType]) continue;
+
+        const datesToRemove = new Set<number>(manualRemovals[trashType].map((d: string) => new Date(d).setHours(0, 0, 0, 0)));
+        const targetType = this.collectionDates.find((x) => x.type === trashType);
+        if (!targetType) continue;
+
+        targetType.dates = targetType.dates.filter((d) => !datesToRemove.has(new Date(d).setHours(0, 0, 0, 0)));
+      }
+    }
+
     // After everything, force an update of the label
     await this.onUpdateLabel();
   }

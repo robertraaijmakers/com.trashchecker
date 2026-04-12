@@ -71,6 +71,13 @@
 			"entryFieldLabel": "Geavanceerde afvaldata",
 			"save": "Sla alles op"
 		},
+		"manualremove":
+		{
+			"title": "Geavanceerde afvaldata verwijderen",
+			"description": "Via deze instellingen kan je dagen uit de gegenereerde reeks verwijderen. Het wordt niet geadviseerd en is alleen voor geavanceerde gebruikers. De datums moeten in het formaat YYYY-mm-dd opgevoerd worden.",
+			"entryFieldLabel": "Geavanceerde verwijderdata",
+			"save": "Sla alles op"
+		},
 		"startdate": "startend op",
 		"labeltitle": "Afvaltype namen personaliseren",
 		"labeldescription": "Deze waarden worden ingesteld in de globale tag wanneer een specifiek type afval wordt opgehaald. Daarnaast worden deze waarden gebruikt in de widget en voor tags bij kaarten gebruikt in advanced flows.",

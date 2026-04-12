@@ -32,6 +32,7 @@ class SettingScript {
     document.getElementById('manualSettingsSave')?.addEventListener('click', () => this.saveManualInput(true));
     document.getElementById('labelInput')?.addEventListener('click', () => this.saveLabelInput());
     document.getElementById('saveManaulDataEntry')?.addEventListener('click', () => this.saveManualEntryDates());
+    document.getElementById('saveManualDataRemove')?.addEventListener('click', () => this.saveManualRemovalDates());
     document.getElementById('refreshDebugInformation')?.addEventListener('click', () => this.retrieveCollectionDaysDebug(true));
 
     // Await fetch and parse JSON
@@ -75,6 +76,7 @@ class SettingScript {
     this.homey.get('manualEntryData', (err: string, result: any) => this.handleGetManualInputSettings(err, result));
     this.homey.get('labelSettings', (err: string, result: any) => this.handleGetLabelSettings(err, result));
     this.homey.get('manualAdditions', (err: string, result: any) => this.handleGetManualAdditions(err, result));
+    this.homey.get('manualRemovals', (err: string, result: any) => this.handleGetManualRemovals(err, result));
     this.retrieveCollectionDaysDebug(false);
 
     // Set properties
@@ -150,6 +152,15 @@ class SettingScript {
     }
 
     this.setInputValue('manualDataEntry', JSON.stringify(manualAdditions, null, 2));
+  }
+
+  async handleGetManualRemovals(err: string, manualRemovals: string) {
+    if (err || manualRemovals === null) {
+      this.setInputValue('manualDataRemove', JSON.stringify(createManualAdditons(), null, 2));
+      return;
+    }
+
+    this.setInputValue('manualDataRemove', JSON.stringify(manualRemovals, null, 2));
   }
 
   async retrieveCollectionDaysDebug(recalculate: boolean) {
@@ -300,6 +311,34 @@ class SettingScript {
 
     // Retrieve them again & update field (for formatting & feedback purposes)
     this.homey.get('manualAdditions', (err: string, result: any) => this.handleGetManualAdditions(err, result));
+  }
+
+  async saveManualRemovalDates() {
+    var data = createManualAdditons();
+
+    var textualInput = {};
+
+    try {
+      textualInput = JSON.parse(this.getInputValue('manualDataRemove') ?? '{}');
+    } catch (err: any) {
+      document.getElementById('respManualDataRemove')!.innerHTML = err;
+      return;
+    }
+
+    document.getElementById('respManualDataRemove')!.innerHTML = '';
+    for (let type in AllTrashTypes) {
+      const trashType = AllTrashTypes[type];
+      data[trashType] = await this.validateManualEntryDates(textualInput, trashType as TrashType);
+    }
+
+    this.homey.set('manualRemovals', data, this.#onSettingsSet);
+
+    // We trigger a full save, to make sure everything is recalculated.
+    await this.save();
+    await this.saveLabelInput();
+
+    // Retrieve them again & update field (for formatting & feedback purposes)
+    this.homey.get('manualRemovals', (err: string, result: any) => this.handleGetManualRemovals(err, result));
   }
 
   async saveLabelInput() {

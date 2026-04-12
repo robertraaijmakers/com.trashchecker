@@ -745,6 +745,18 @@
 	<br /><br />
 
 	<fieldset id="debug_settings" class="homey-form-fieldset">
+		<legend class="homey-form-legend" data-i18n="settings.manualremove.title"></legend>
+		<p style="display:block" data-i18n="settings.manualremove.description"></p>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="manualDataRemove" data-i18n="settings.manualremove.entryFieldLabel"></label>
+			<textarea class="homey-form-textarea" id="manualDataRemove" name="manualDataRemove" width="100%" rows="10"></textarea>
+		</div>
+		<span id="respManualDataRemove"></span>
+	</fieldset>
+	<button id="saveManualDataRemove" class="homey-button-primary-full" style="display:block" data-i18n="settings.manualremove.save" ></button>
+	<br /><br />
+
+	<fieldset id="debug_settings" class="homey-form-fieldset">
 		<legend class="homey-form-legend" data-i18n="debug.labeltitle"></legend>
 		<p style="display:block" data-i18n="debug.labeldescription"></p>
 		<div class="homey-form-group" id="respDatesDebug">
