@@ -903,8 +903,8 @@ describe('TrashApiAfzrd', function () {
 
   it('API - ZRD - 2 - Lege respons', async function () {
     const apiSettings: ApiSettings = {
-      zipcode: '4463LG',
-      housenumber: '19',
+      zipcode: '4443AK',
+      housenumber: '22',
       country: 'NL',
       apiId: 'afzrd',
       cleanApiId: '',
@@ -913,8 +913,10 @@ describe('TrashApiAfzrd', function () {
     };
 
     const result = await testAPI(apiSettings);
+    console.log(result);
     const isValid = validateApiResults(apiSettings, result);
-    assert.equal(isValid, true);
+    assert.equal(isValid, false);
+    assert.equal(result?.length, 0);
   });
 });
 
