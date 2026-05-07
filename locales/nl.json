@@ -10,6 +10,8 @@
 		"country": "Land",
 		"api": "Bron",
 		"cleanApi": "Schoonmaakservice?",
+		"countyId": "Gemeente (ID)",
+		"apiKey": "API Sleutel",
 		"save": "Opslaan",
 		"fail": "Dit adres wordt niet ondersteund",
 		"manualonly": "De ophaaldata is ververst op basis van de handmatige invoer",
@@ -17,7 +19,9 @@
 		"updateCleaning": "Schoonmaakservice is aangepast",
 		"checking": "adres checken...",
 		"gft": "GFT",
+		"kca": "Klein Chemisch Afval",
 		"rest": "Restafval",
+		"snoei": "Snoeiafval",
 		"plastic": "Plastic",
 		"pmd": "PMD",
 		"papier": "Papier",
@@ -117,7 +121,9 @@
 			"type":
 			{
 				"GFT": "De groene container",
+				"KCA": "Het klein chemisch afval",
 				"REST": "De grijze container",
+				"SNOEI": "Het snoeiafval",
 				"PLASTIC": "De oranje container",
 				"PMD": "Het plastic, de metalen en de drankenkartons",
 				"PAPIER": "De blauwe container",
@@ -150,7 +156,9 @@
 	{
 		"trashType": {
 			"GFT": "GFT",
+			"KCA": "KCA",
 			"REST": "Rest",
+			"SNOEI": "Snoei",
 			"PLASTIC": "Plastic",
 			"PMD": "PMD",
 			"PAPIER": "Papier",

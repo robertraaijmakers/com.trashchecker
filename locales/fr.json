@@ -10,6 +10,8 @@
 		"country": "Pays",
 		"api": "Source",
 		"cleanApi": "Nettoyage des bacs ?",
+		"countyId": "Code de commune",
+		"apiKey": "Clé API",
 		"save": "Enregistrer",
 		"fail": "Cette adresse n'est pas prise en charge",
 		"manualonly": "Les données ont été actualisées sur la base des paramètres manuels uniquement",
@@ -17,7 +19,9 @@
 		"updateCleaning": "Le service de nettoyage des bacs a été mis à jour.",
 		"checking": "vérification de l'adresse...",
 		"gft": "Déchets biodégradables",
+		"kca": "Déchets chimiques ménagers",
 		"rest": "Déchets résiduels",
+		"snoei": "Déchets de taille",
 		"plastic": "Plastique",
 		"pmd": "Plastiques, métaux et emballages cartons",
 		"papier": "Papier et carton",
@@ -101,7 +105,9 @@
 			"replacementplural": "sont",
 			"type": {
 				"GFT": "Les déchets biodégradables",
+				"KCA": "Les déchets chimiques ménagers",
 				"REST": "Les déchets résiduels",
+				"SNOEI": "Les déchets de taille",
 				"PLASTIC": "Les déchets plastiques",
 				"PMD": "Les plastiques, métaux et emballages cartons",
 				"PAPIER": "Le papier et le carton",
@@ -131,7 +137,9 @@
 	"widgets": {
 		"trashType": {
 			"GFT": "Biodégradables",
+			"KCA": "Chimiques",
 			"REST": "Résiduels",
+			"SNOEI": "Taille",
 			"PLASTIC": "Plastique",
 			"PMD": "PMD",
 			"PAPIER": "Papier et carton",

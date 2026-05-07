@@ -10,6 +10,8 @@
 		"country": "Country",
 		"api": "Source",
 		"cleanApi": "Cleaning Service?",
+		"countyId": "County ID",
+		"apiKey": "API Key",
 		"save": "Save Changes",
 		"fail": "This address is not supported",
 		"manualonly": "The data was refreshed based on the manual settings only",
@@ -17,7 +19,9 @@
 		"updateCleaning": "Cleaning service has been updated.",
 		"checking": "checking address...",
 		"gft": "Organic",
+		"kca": "Household Chemical Waste",
 		"rest": "Residual",
+		"snoei": "Pruning Waste",
 		"plastic": "Plastic",
 		"pmd": "PMD",
 		"papier": "Paper",
@@ -117,7 +121,9 @@
 			"type":
 			{
 				"GFT": "The organic waste",
+				"KCA": "The household chemical waste",
 				"REST": "The residual waste",
+				"SNOEI": "The pruning waste",
 				"PLASTIC": "The plastic waste",
 				"PMD": "The plastics, metal and drinking carton",
 				"PAPIER": "The paper",
@@ -150,7 +156,9 @@
 	{
 		"trashType": {
 			"GFT": "Organic",
+			"KCA": "Chemical",
 			"REST": "Rest",
+			"SNOEI": "Pruning",
 			"PLASTIC": "Plastic",
 			"PMD": "PMD",
 			"PAPIER": "Paper",

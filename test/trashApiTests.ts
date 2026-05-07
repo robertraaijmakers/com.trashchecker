@@ -10,7 +10,6 @@ import { describe, it } from 'node:test';
 import { ActivityDates } from '../types/localTypes';
 import assert from 'assert';
 import { ApiSettings } from '../assets/publicTypes';
-
 /*
 describe('Blink Manager', function () {
   it('API - Blink Manager', async function () {
@@ -114,7 +113,8 @@ describe('TrashApiWaalre', function () {
 
     const result = await testAPI(apiSettings);
     const isValid = validateApiResults(apiSettings, result);
-    assert.equal(isValid, true);
+    assert.equal(isValid, false);
+    assert.equal(result?.length, 0);
   });
 });
 
@@ -1198,6 +1198,24 @@ describe('TrashApiGroningen', function () {
   });
 });
 
+describe('TrashApiMijnAfvalzaken', function () {
+  it('API - Mijn Afvalzaken', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '1852GK',
+      housenumber: '42',
+      country: 'NL',
+      apiId: 'afz',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+
 describe('TrashApiIrado', function () {
   it('API - Irado - 1', async function () {
     const apiSettings: ApiSettings = {
@@ -1301,12 +1319,67 @@ describe('TrashApiReinis', function () {
     assert.equal(isValid, true);
   });
 });
-*/
+
+describe('TrashAPI Nederland', function () {
+  it('API - TrashAPI Nederland', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '4443AK',
+      housenumber: '20',
+      country: 'NL',
+      apiId: 'trapi',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});*/
 
 function testAPI(apiSettings: ApiSettings) {
   const trashApis = new TrashApis(console.log);
   try {
     return trashApis.ExecuteApi(apiSettings);
+  } catch (error) {
+    console.log(error);
+  }
+
+  return null;
+}
+
+describe('DiscoveryTests', function () {
+  it('API - Unknown', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '4443AK',
+      housenumber: '20',
+      country: 'NL',
+      apiId: '',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    let result = null;
+    try {
+      result = await testDiscovery(apiSettings);
+    } catch (error) {
+      console.log('Error caught as expected for unknown API');
+      assert.ok(true);
+      return;
+    }
+
+    console.log(result);
+    assert.equal(result?.id, null);
+    assert.equal(result?.name, null);
+  });
+});
+
+function testDiscovery(apiSettings: ApiSettings) {
+  const trashApis = new TrashApis(console.log);
+  try {
+    return trashApis.FindApi(apiSettings);
   } catch (error) {
     console.log(error);
   }

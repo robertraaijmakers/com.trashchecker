@@ -16,8 +16,41 @@ import {
   verifyDate,
 } from './helpers';
 import { ApiMeta, ApiSettings, TrashType } from '../assets/publicTypes';
-import { parseDocument, DomUtils } from 'htmlparser2';
 import crypto from 'crypto';
+
+type HtmlParser2Module = typeof import('htmlparser2');
+
+interface TrashApiCalendarItem {
+  date?: string;
+  name?: string;
+}
+
+interface RenovasjonFraction {
+  id?: number;
+  name?: string;
+  fraksjonId?: number;
+  fraksjonDag?: string;
+  fraksjonNavn?: string;
+}
+
+interface RenovasjonCollectionItem {
+  fraksjonId?: number;
+  fraksjonDag?: string;
+  henteDato?: string;
+  fraksjonNavn?: string;
+}
+
+let htmlParser2ModulePromise: Promise<HtmlParser2Module> | null = null;
+
+function loadHtmlParser2(): Promise<HtmlParser2Module> {
+  if (!htmlParser2ModulePromise) {
+    // Use native import() in CommonJS runtimes to avoid require() on ESM-only packages.
+    const dynamicImport = new Function('specifier', 'return import(specifier)') as (specifier: string) => Promise<unknown>;
+    htmlParser2ModulePromise = dynamicImport('htmlparser2') as Promise<HtmlParser2Module>;
+  }
+
+  return htmlParser2ModulePromise;
+}
 
 type Exec = (apiSettings: ApiDefinition) => Promise<unknown>;
 
@@ -97,6 +130,10 @@ export class TrashApis {
         apiDefinition
           .execute(apiSettings)
           .then((collectionDays) => {
+            if (collectionDays.length === 0) {
+              throw new Error(`API ${apiDefinition.id} returned no collection days.`);
+            }
+
             if (!resolved) {
               resolved = true;
               let apiFindResult: ApiFindResult = {
@@ -219,6 +256,10 @@ export class TrashApis {
 
   private async huisvuilkalenderEttenLeur(apiSettings: ApiSettings) {
     return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'afval3xbeter.nl');
+  }
+
+  private async mijnAfvalZaken(apiSettings: ApiSettings) {
+    return this.newGeneralAfvalkalendersNederlandRest(apiSettings, 'www.mijnafvalzaken.nl');
   }
 
   private async afvalkalenderMeerlanden(apiSettings: ApiSettings) {
@@ -474,6 +515,7 @@ export class TrashApis {
 
       const regex = /<a href="#waste-.*?" class="[^"]*\bwasteInfoIcon\b[^"]*"[^\>]*>[\s\S]*?<\/a>/gi;
       let match;
+      const { parseDocument, DomUtils } = await loadHtmlParser2();
 
       while ((match = regex.exec(monthContent)) !== null) {
         const result = match[0];
@@ -506,6 +548,7 @@ export class TrashApis {
       this.log('No month sections found, trying old format parsing.');
       const regex = /<a href="#waste-.*?" class="[^"]*\bwasteInfoIcon\b[^"]*"[^\>]*>[\s\S]*?<\/a>/gi;
       let match;
+      const { parseDocument, DomUtils } = await loadHtmlParser2();
 
       while ((match = regex.exec(body)) !== null) {
         const result = match[0];
@@ -1071,6 +1114,77 @@ export class TrashApis {
     return this.filterFutureDates(fDates);
   }
 
+  private async trashApiNederland(apiSettings: ApiSettings) {
+    this.log('Checking TrashAPI Nederland');
+
+    const fDates: ActivityDates[] = [];
+
+    await validateCountry(apiSettings, 'NL');
+    await validateZipcode(apiSettings);
+    await validateHousenumber(apiSettings);
+
+    const normalizedZipcode = `${apiSettings.zipcode}`.replace(/\s+/g, '').toUpperCase();
+    const trimmedHouseNumber = `${apiSettings.housenumber}`.trim();
+    const houseNumberMatch = trimmedHouseNumber.match(/^(\d+)\s*([a-zA-Z0-9\-/]*)$/);
+
+    if (!houseNumberMatch || !houseNumberMatch[1]) {
+      throw new Error('Invalid house number');
+    }
+
+    const houseNumber = houseNumberMatch[1];
+    const houseNumberSuffix = houseNumberMatch[2] || '';
+
+    const params = new URLSearchParams({
+      Location: '',
+      ZipCode: normalizedZipcode,
+      HouseNumber: houseNumber,
+      HouseNumberSuffix: houseNumberSuffix,
+      DiftarCode: '',
+      ShowWholeYear: 'true',
+      GetCleanprofsData: 'false',
+    });
+
+    const response = await httpsPromise({
+      hostname: 'trashapi.azurewebsites.net',
+      path: `/trash?${params.toString()}`,
+      method: 'GET',
+      headers: {
+        'User-Agent': 'HomeyAfvalkalender/1.0',
+        Accept: 'application/json',
+      },
+      family: 4,
+      rejectUnauthorized: false,
+    });
+
+    const items = <TrashApiCalendarItem[]>response.body;
+    if (!Array.isArray(items)) {
+      throw new Error('Unexpected response format from TrashAPI');
+    }
+
+    if (items.length === 0) {
+      throw new Error('Address not found. Check postcode and house number.');
+    }
+
+    for (const item of items) {
+      if (!item?.date || !item?.name) {
+        continue;
+      }
+
+      const trashDate = new Date(item.date);
+      if (isNaN(trashDate.getTime())) {
+        continue;
+      }
+
+      verifyByName(fDates, item.name, item.name, trashDate);
+    }
+
+    if (fDates.length === 0) {
+      throw new Error('No trash data found in TrashAPI response.');
+    }
+
+    return this.filterFutureDates(fDates);
+  }
+
   private async rovaWasteCalendar(apiSettings: ApiSettings, hostname: string, startPath: string) {
     this.log('Checking afvalkalender Rova');
 
@@ -1479,6 +1593,97 @@ export class TrashApis {
     }
 
     return this.filterFutureDates(dates);
+  }
+
+  private async renovasjonNorway(apiSettings: ApiSettings) {
+    this.log('Checking Renovasjon Norway');
+
+    const fDates: ActivityDates[] = [];
+
+    await validateCountry(apiSettings, 'NO');
+    await validateZipcode(apiSettings);
+    await validateHousenumber(apiSettings);
+    await validateStreet(apiSettings);
+
+    if (!apiSettings.countyId) {
+      throw new Error('County ID is required for Renovasjon API');
+    }
+
+    if (!apiSettings.apiKey) {
+      throw new Error('API key is required for Renovasjon API');
+    }
+
+    const apiBase = 'api.renovasjonsselskapet.no';
+
+    // Fetch available fractions (waste types)
+    const fractionsResponse = await httpsPromise({
+      hostname: apiBase,
+      path: '/fraksjoner',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Kommunenr: apiSettings.countyId,
+        RenovasjonAppKey: apiSettings.apiKey,
+      },
+      family: 4,
+      rejectUnauthorized: false,
+    });
+
+    const fractions = <RenovasjonFraction[]>fractionsResponse.body || [];
+    const fractionMap: { [key: number]: string } = {};
+
+    for (const frac of fractions) {
+      if (frac.fraksjonId !== undefined && frac.fraksjonNavn) {
+        fractionMap[frac.fraksjonId] = frac.fraksjonNavn;
+      }
+    }
+
+    // Fetch calendar using postal code and street
+    const params = new URLSearchParams({
+      postalCode: `${apiSettings.zipcode}`.replace(/\s+/g, '').toUpperCase(),
+      streetName: `${apiSettings.streetname}`.trim(),
+      houseNumber: `${apiSettings.housenumber}`.trim(),
+      'api-version': '2',
+    });
+
+    const calendarResponse = await httpsPromise({
+      hostname: apiBase,
+      path: `/tommekalender?${params.toString()}`,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Kommunenr: apiSettings.countyId,
+        RenovasjonAppKey: apiSettings.apiKey,
+      },
+      family: 4,
+      rejectUnauthorized: false,
+    });
+
+    const collections = <RenovasjonCollectionItem[]>calendarResponse.body || [];
+
+    if (collections.length === 0) {
+      throw new Error('No collection data found for this address.');
+    }
+
+    for (const item of collections) {
+      if (!item.henteDato) {
+        continue;
+      }
+
+      const collectionDate = new Date(item.henteDato);
+      if (isNaN(collectionDate.getTime())) {
+        continue;
+      }
+
+      const fractionName = item.fraksjonNavn || fractionMap[item.fraksjonId || 0] || 'Unknown';
+      verifyByName(fDates, fractionName, fractionName, collectionDate);
+    }
+
+    if (fDates.length === 0) {
+      throw new Error('No trash data found in Renovasjon response.');
+    }
+
+    return this.filterFutureDates(fDates);
   }
 
   private async gemeenteDrimmelen(apiSettings: ApiSettings) {

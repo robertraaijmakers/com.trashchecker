@@ -1,14 +1,16 @@
 'use strict';
 
-export const AllTrashTypes = Object.freeze(['GFT', 'PLASTIC', 'PAPIER', 'PMD', 'REST', 'TEXTIEL', 'GROF', 'KERSTBOOM', 'GLAS'] as const);
+export const AllTrashTypes = Object.freeze(['GFT', 'KCA', 'PLASTIC', 'PAPIER', 'PMD', 'REST', 'SNOEI', 'TEXTIEL', 'GROF', 'KERSTBOOM', 'GLAS'] as const);
 export const AllTrashTypesExtended = Object.freeze([...AllTrashTypes, 'NONE'] as const);
 
 export const TrashColors = {
   GFT: '#3a9600',
+  KCA: '#800080',
   PLASTIC: '#ffa203',
   PAPIER: '#060367',
   PMD: '#ffa203',
   REST: '#787878',
+  SNOEI: '#452200',
   TEXTIEL: '#6c0014',
   GROF: '#292929',
   KERSTBOOM: '#59bd1b',
@@ -21,11 +23,14 @@ export interface ManualAddition {
 
 export const createManualAdditons = (): ManualAddition => ({
   GFT: [],
+  KCA: [],
   REST: [],
   PAPIER: [],
   GROF: [],
   PLASTIC: [],
   PMD: [],
+  SNOEI: [],
   TEXTIEL: [],
   KERSTBOOM: [],
+  GLAS: [],
 });

@@ -129,7 +129,8 @@
 			<label class="homey-form-label" for="country" data-i18n="settings.country"></label>
 			<select class="homey-form-select" id="country">
 				<option value="NL">NL</option>
-				<option value="BE">BE</option>
+				<option value="BE">BE</option>				
+				<option value="NO">NO</option>			
 			</select>
         </div>
 		<div class="homey-form-group">
@@ -148,13 +149,21 @@
             <label class="homey-form-label" for="streetname" data-i18n="settings.streetname"></label>
             <input class="homey-form-input" placeholder="Homeystreet" id="streetname" type="text" value=""/>
         </div>
-		<div class="homey-form-group" id="cityname_div">
-            <label class="homey-form-label" for="cityname" data-i18n="settings.cityname"></label>
-            <input class="homey-form-input" placeholder="Homeycity" id="cityname" type="text" value=""/>
-        </div>
         <div class="homey-form-group">
             <label class="homey-form-label" for="number" data-i18n="settings.hnumber"></label>
             <input class="homey-form-input" placeholder="42" id="number" type="text" value=""/>
+        </div>
+		<div class="homey-form-group" id="cityname_div">
+            <label class="homey-form-label" for="cityname" data-i18n="settings.cityname"></label>
+            <input class="homey-form-input" placeholder="Homeycity" id="cityname" type="text" value=""/>
+        </div>		
+		<div class="homey-form-group" id="countyId_div">
+            <label class="homey-form-label" for="countyId" data-i18n="settings.countyId"></label>
+            <input class="homey-form-input" placeholder="e.g., 0301" id="countyId" type="text" value=""/>
+        </div>
+		<div class="homey-form-group" id="apiKey_div">
+            <label class="homey-form-label" for="apiKey" data-i18n="settings.apiKey"></label>
+            <input class="homey-form-input" placeholder="Enter your Renovasjon API key" id="apiKey" type="password" value=""/>
         </div>
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="cleanApi" data-i18n="settings.cleanApi"></label>
@@ -219,6 +228,100 @@
 				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="gft[startdate]" id="gft_startdate"></input>
 			</div>
         </div>
+
+		<!-- KCA -->
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="kca" data-i18n="settings.kca"></label>
+			<div>
+				<select class="homey-form-select" name="kca[option]" id="kca_option">
+					<option value="0" data-i18n="settings.interval.automatic"></option>
+					<option value="-1" data-i18n="settings.interval.na"></option>
+					<option value="1" data-i18n="settings.interval.everyweek"></option>
+					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
+					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
+					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
+					<option value="5" data-i18n="settings.interval.everyfiveweeks"></option>
+					<option value="6" data-i18n="settings.interval.everysixweeks"></option>
+					<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
+					<option value="11" data-i18n="settings.interval.everyfirst"></option>
+					<option value="12" data-i18n="settings.interval.everysecond"></option>
+					<option value="13" data-i18n="settings.interval.everythird"></option>
+					<option value="14" data-i18n="settings.interval.everyfourth"></option>
+					<option value="20" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="19" data-i18n="settings.interval.everylast"></option>
+				</select>
+			</div>
+			<div id="kca_day_div">
+				<select class="homey-form-select" style="margin-left: 5px;" name="kca[day_of_week]" id="kca_dayofweek">
+					<option value="1" data-i18n="settings.dayofweek.mo"></option>
+					<option value="2" data-i18n="settings.dayofweek.tu"></option>
+					<option value="3" data-i18n="settings.dayofweek.we"></option>
+					<option value="4" data-i18n="settings.dayofweek.th"></option>
+					<option value="5" data-i18n="settings.dayofweek.fr"></option>
+					<option value="6" data-i18n="settings.dayofweek.sa"></option>
+					<option value="0" data-i18n="settings.dayofweek.su"></option>
+				</select>
+			</div>
+			<div>
+				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="kca[option_extension]" id="kca_option_extension">
+					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
+					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
+					<option value="12" data-i18n="settings.interval_extra.year"></option>
+				</select>
+			</div>
+			<div id="kca_startdate_div">
+				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
+				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="kca[startdate]" id="kca_startdate"></input>
+			</div>
+		</div>
+
+		<!-- SNOEI -->
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="snoei" data-i18n="settings.snoei"></label>
+			<div>
+				<select class="homey-form-select" name="snoei[option]" id="snoei_option">
+					<option value="0" data-i18n="settings.interval.automatic"></option>
+					<option value="-1" data-i18n="settings.interval.na"></option>
+					<option value="1" data-i18n="settings.interval.everyweek"></option>
+					<option value="2" data-i18n="settings.interval.everyotherweek"></option>
+					<option value="3" data-i18n="settings.interval.everythreeweeks"></option>
+					<option value="4" data-i18n="settings.interval.everyfourweeks"></option>
+					<option value="5" data-i18n="settings.interval.everyfiveweeks"></option>
+					<option value="6" data-i18n="settings.interval.everysixweeks"></option>
+					<option value="8" data-i18n="settings.interval.everyeighthweeks"></option>
+					<option value="11" data-i18n="settings.interval.everyfirst"></option>
+					<option value="12" data-i18n="settings.interval.everysecond"></option>
+					<option value="13" data-i18n="settings.interval.everythird"></option>
+					<option value="14" data-i18n="settings.interval.everyfourth"></option>
+					<option value="20" data-i18n="settings.interval.everysecondlast"></option>
+					<option value="19" data-i18n="settings.interval.everylast"></option>
+				</select>
+			</div>
+			<div id="snoei_day_div">
+				<select class="homey-form-select" style="margin-left: 5px;" name="snoei[day_of_week]" id="snoei_dayofweek">
+					<option value="1" data-i18n="settings.dayofweek.mo"></option>
+					<option value="2" data-i18n="settings.dayofweek.tu"></option>
+					<option value="3" data-i18n="settings.dayofweek.we"></option>
+					<option value="4" data-i18n="settings.dayofweek.th"></option>
+					<option value="5" data-i18n="settings.dayofweek.fr"></option>
+					<option value="6" data-i18n="settings.dayofweek.sa"></option>
+					<option value="0" data-i18n="settings.dayofweek.su"></option>
+				</select>
+			</div>
+			<div>
+				<select class="homey-form-select" style="display:none; margin-left: 5px;" name="snoei[option_extension]" id="snoei_option_extension">
+					<option value="1" data-i18n="settings.interval_extra.month"></option>
+					<option value="2" data-i18n="settings.interval_extra.othermonth"></option>
+					<option value="3" data-i18n="settings.interval_extra.quarter"></option>
+					<option value="12" data-i18n="settings.interval_extra.year"></option>
+				</select>
+			</div>
+			<div id="snoei_startdate_div">
+				<p style="display: inline; margin-left: 5px;" for="startdate" data-i18n="settings.startdate"></p>
+				<input class="homey-form-input" style="display: inline; margin-left: 5px;" type="date" name="snoei[startdate]" id="snoei_startdate"></input>
+			</div>
+		</div>
 
 		<!-- REST -->
 		<div class="homey-form-group">
@@ -587,6 +690,40 @@
 				<input class="homey-form-input trash-form-custom" type="button" id="widgetIconButtonGft" value="&#x21BA;" />
 			</div>
         </div>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelKca" data-i18n="settings.kca"></label>
+			<input class="homey-form-input" type="text" id="labelKca" name="label[kca]" />
+			<p id="exampleKca"></p> <br />
+
+			<input class="homey-form-input" type="text" id="labelSmallKca" name="labelSmall[kca]" />
+			<div class="trash-item-container-compact">
+				<span class="dot-compact dot-type-KCA" id="trashDateColorKca"><img id="trashDateIconKca" src="trashIcons/trash-KCA.svg" /></span>
+				<div class="trash-date-container">
+					<p class="trash-date-title" id="trashDateTitleKca">KCA</p>
+					<p class="homey-text-small-light trash-date-subtitle" data-i18n="tokens.output.timeindicator.t-1"></p>
+				</div>
+				<input class="homey-form-input trash-form-custom" type="color" id="widgetColorKca" name="widgetColor[kca]" />
+				<input class="homey-form-input trash-form-custom" type="file" id="widgetIconKca" name="widgetIcon[kca]" accept="image/png, image/svg+xml" />
+				<input class="homey-form-input trash-form-custom" type="button" id="widgetIconButtonKca" value="&#x21BA;" />
+			</div>
+		</div>
+		<div class="homey-form-group">
+			<label class="homey-form-label" for="labelSnoei" data-i18n="settings.snoei"></label>
+			<input class="homey-form-input" type="text" id="labelSnoei" name="label[snoei]" />
+			<p id="exampleSnoei"></p> <br />
+
+			<input class="homey-form-input" type="text" id="labelSmallSnoei" name="labelSmall[snoei]" />
+			<div class="trash-item-container-compact">
+				<span class="dot-compact dot-type-SNOEI" id="trashDateColorSnoei"><img id="trashDateIconSnoei" src="trashIcons/trash-SNOEI.svg" /></span>
+				<div class="trash-date-container">
+					<p class="trash-date-title" id="trashDateTitleSnoei">SNOEI</p>
+					<p class="homey-text-small-light trash-date-subtitle" data-i18n="tokens.output.timeindicator.t-1"></p>
+				</div>
+				<input class="homey-form-input trash-form-custom" type="color" id="widgetColorSnoei" name="widgetColor[snoei]" />
+				<input class="homey-form-input trash-form-custom" type="file" id="widgetIconSnoei" name="widgetIcon[snoei]" accept="image/png, image/svg+xml" />
+				<input class="homey-form-input trash-form-custom" type="button" id="widgetIconButtonSnoei" value="&#x21BA;" />
+			</div>
+		</div>
 		<div class="homey-form-group">
 			<label class="homey-form-label" for="labelRest" data-i18n="settings.rest"></label>
 			<input class="homey-form-input" class="homey-form-input" type="text" id="labelRest" name="label[rest]" />

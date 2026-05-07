@@ -249,6 +249,33 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
   }
 
   if (
+    description.indexOf('kca') !== -1 ||
+    description.indexOf('klein chemisch') !== -1 ||
+    description.indexOf('chemisch afval') !== -1 ||
+    description.indexOf('chemical waste') !== -1 ||
+    description.indexOf('chemisch') !== -1 ||
+    description.indexOf('hazardous waste') !== -1 ||
+    description.indexOf('farlig avfall') !== -1 ||
+    description.indexOf('milieubox') !== -1 ||
+    description.indexOf('chemie') !== -1
+  ) {
+    addDate(activityDates, TrashType.KCA, date, icon, localDescription, color);
+    foundType = true;
+  }
+
+  if (
+    description.indexOf('snoei') !== -1 ||
+    description.indexOf('snoeiafval') !== -1 ||
+    description.indexOf('takken') !== -1 ||
+    description.indexOf('branches') !== -1 ||
+    description.indexOf('pruning') !== -1 ||
+    description.indexOf('tuinafval') !== -1
+  ) {
+    addDate(activityDates, TrashType.SNOEI, date, icon, localDescription, color);
+    foundType = true;
+  }
+
+  if (
     description.indexOf('textiel') !== -1 ||
     description.indexOf('retour') !== -1 ||
     description.indexOf('best') !== -1 ||
@@ -279,21 +306,6 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     addDate(activityDates, TrashType.GLAS, date, icon, localDescription, color);
     foundType = true;
   }
-
-  // if(description.indexOf('etensresten') !== -1) {
-  //     if (!fDates.FOOD) fDates.FOOD = [];
-  //     fDates.FOOD.push(dateStr);
-  // }
-
-  // if(description.indexOf('takken') !== -1 || description.indexOf('snoei') !== -1) {
-  //     if (!fDates.SNOEI) fDates.SNOEI = [];
-  //     fDates.SNOEI.push(dateStr);
-  // }
-
-  // if(description.indexOf('chemisch') !== -1) {
-  //     if (!fDates.CHEMISCH) fDates.CHEMISCH = [];
-  //     fDates.CHEMISCH.push(dateStr);
-  // }
 
   if (foundType === false) {
     console.log(`Type not identified: ${description}, ${className}`);

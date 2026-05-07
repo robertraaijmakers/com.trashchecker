@@ -87,6 +87,24 @@
           }
         },
         {
+          "id": "KCA",
+          "label": {
+            "en": "Household Chemical Waste",
+            "nl": "Klein Chemisch Afval",
+            "sv": "Farligt avfall",
+            "fr": "Déchets chimiques ménagers"
+          }
+        },
+        {
+          "id": "SNOEI",
+          "label": {
+            "en": "Pruning Waste",
+            "nl": "Snoeiafval",
+            "sv": "Beskärningsavfall",
+            "fr": "Déchets de taille"
+          }
+        },
+        {
           "id": "GROF",
           "label": {
             "en": "Bulky waste",

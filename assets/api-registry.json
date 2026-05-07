@@ -46,10 +46,13 @@
   { "name": "Inzamelkalender HVC", "id": "hvc", "country": "NL", "handler": "inzamelkalenderHVC" },
   { "name": "Klikomanager Oude IJsselstreek", "id": "kmoij", "country": "NL", "handler": "klikoManagerOudeIJsselstreek" },
   { "name": "Mijn Afvalwijzer", "id": "afw", "country": "NL", "handler": "mijnAfvalWijzer" },
+  { "name": "Mijn Afvalzaken", "id": "afz", "country": "NL", "handler": "mijnAfvalZaken" },
   { "name": "Mijn Blink Afvalkalender", "id": "mba", "country": "NL", "handler": "BlinkAfvalkalender" },
   { "name": "Recyclemanager", "id": "remg", "country": "NL", "handler": "recycleManager" },
   { "name": "Reinigingsdienst Waardlanden", "id": "rewl", "country": "NL", "handler": "reinigingsdienstWaardlanden" },
+  { "name": "TrashAPI Nederland", "id": "trapi", "country": "NL", "handler": "trashApiNederland" },
   { "name": "Twente Milieu", "id": "twm", "country": "NL", "handler": "twenteMilieu" },
   { "name": "Afvalkalender Limburg.NET", "id": "aklbn", "country": "BE", "handler": "afvalkalenderLimburgNET" },
-  { "name": "Recycle App", "id": "recbe", "country": "BE", "handler": "recycleApp" }
+  { "name": "Recycle App", "id": "recbe", "country": "BE", "handler": "recycleApp" },
+  { "name": "Renovasjon Norway", "id": "reno", "country": "NO", "handler": "renovasjonNorway" }
 ]

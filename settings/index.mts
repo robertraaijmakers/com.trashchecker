@@ -13,10 +13,12 @@ class SettingScript {
     this.homey = homey;
     this.iconCache = {
       GFT: '',
+      KCA: '',
       PLASTIC: '',
       PAPIER: '',
       PMD: '',
       REST: '',
+      SNOEI: '',
       TEXTIEL: '',
       GROF: '',
       KERSTBOOM: '',
@@ -140,6 +142,8 @@ class SettingScript {
     this.setInputValue('streetname', apiSettings?.streetname || '');
     this.setInputValue('cityname', apiSettings?.cityname || '');
     this.setInputValue('country', apiSettings?.country || 'NL');
+    this.setInputValue('countyId', apiSettings?.countyId || '');
+    this.setInputValue('apiKey', apiSettings?.apiKey || '');
     this.setInputValue('dl-api-input', (document.getElementById('api') as HTMLSelectElement).selectedOptions[0]?.text || '');
 
     this.toggleFieldsBasedOnSelectedProvider();
@@ -204,6 +208,8 @@ class SettingScript {
       country: this.getInputValue('country') || null,
       apiId: this.getInputValue('api') || null,
       cleanApiId: this.getInputValue('cleanApi') || null,
+      countyId: this.getInputValue('countyId') || undefined,
+      apiKey: this.getInputValue('apiKey') || undefined,
     };
 
     if (apiSettings.zipcode == null && apiSettings.housenumber == null && apiSettings.streetname == null) {
@@ -475,8 +481,16 @@ class SettingScript {
     const countrySelected = this.getInputValue('country') ?? 'NL';
     if (countrySelected === 'NL') {
       document.getElementById('streetname_div')!.style.display = 'none';
+      document.getElementById('countyId_div')!.style.display = 'none';
+      document.getElementById('apiKey_div')!.style.display = 'none';
     } else if (countrySelected === 'BE') {
       document.getElementById('streetname_div')!.style.display = 'block';
+      document.getElementById('countyId_div')!.style.display = 'none';
+      document.getElementById('apiKey_div')!.style.display = 'none';
+    } else if (countrySelected === 'NO') {
+      document.getElementById('streetname_div')!.style.display = 'block';
+      document.getElementById('countyId_div')!.style.display = 'block';
+      document.getElementById('apiKey_div')!.style.display = 'block';
     }
 
     this.fillApis(countrySelected || undefined);
@@ -489,15 +503,28 @@ class SettingScript {
       document.getElementById('streetname_div')!.style.display = 'block';
       document.getElementById('cityname_div')!.style.display = 'block';
       document.getElementById('postalcode_div')!.style.display = 'none';
+      document.getElementById('countyId_div')!.style.display = 'none';
+      document.getElementById('apiKey_div')!.style.display = 'none';
       this.setInputValue('country', 'BE');
       this.setInputValue('postcode', '');
     } else if (apiSelected === 'recbe') {
       document.getElementById('streetname_div')!.style.display = 'block';
       document.getElementById('postalcode_div')!.style.display = 'block';
+      document.getElementById('countyId_div')!.style.display = 'none';
+      document.getElementById('apiKey_div')!.style.display = 'none';
       this.setInputValue('country', 'BE');
+    } else if (apiSelected === 'reno') {
+      document.getElementById('streetname_div')!.style.display = 'block';
+      document.getElementById('postalcode_div')!.style.display = 'block';
+      document.getElementById('countyId_div')!.style.display = 'block';
+      document.getElementById('apiKey_div')!.style.display = 'block';
+      document.getElementById('cityname_div')!.style.display = 'none';
+      this.setInputValue('country', 'NO');
     } else {
       document.getElementById('streetname_div')!.style.display = 'none';
       document.getElementById('cityname_div')!.style.display = 'none';
+      document.getElementById('countyId_div')!.style.display = 'none';
+      document.getElementById('apiKey_div')!.style.display = 'none';
       document.getElementById('postalcode_div')!.style.display = 'block';
       this.setInputValue('country', 'NL');
       this.setInputValue('streetname', '');

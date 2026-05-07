@@ -81,7 +81,7 @@ describe('Manual Additions & Removals', function () {
       ];
 
       // Simulate manual removal logic
-      const manualRemovals = {
+      const manualRemovals: Partial<Record<TrashType, string[]>> = {
         GFT: ['2026-04-21'],
         PMD: [],
         PAPIER: [],
@@ -115,7 +115,7 @@ describe('Manual Additions & Removals', function () {
         },
       ];
 
-      const manualRemovals = {
+      const manualRemovals: Partial<Record<TrashType, string[]>> = {
         GFT: [],
         PMD: ['2026-04-21', '2026-04-30'],
         PAPIER: [],
@@ -148,7 +148,7 @@ describe('Manual Additions & Removals', function () {
         },
       ];
 
-      const manualRemovals = {
+      const manualRemovals: Partial<Record<TrashType, string[]>> = {
         GFT: [],
         PMD: [],
         PAPIER: [],
@@ -181,7 +181,7 @@ describe('Manual Additions & Removals', function () {
         },
       ];
 
-      const manualRemovals = {
+      const manualRemovals: Partial<Record<TrashType, string[]>> = {
         GFT: [],
         PMD: [],
         PAPIER: ['2026-04-17', '2026-04-24', '2026-05-01'],
@@ -215,7 +215,7 @@ describe('Manual Additions & Removals', function () {
       ];
 
       // Removal uses only date without time
-      const manualRemovals = {
+      const manualRemovals: Partial<Record<TrashType, string[]>> = {
         GFT: ['2026-04-21'], // Should match regardless of time
         PMD: [],
         PAPIER: [],
@@ -249,7 +249,7 @@ describe('Manual Additions & Removals', function () {
         },
       ];
 
-      const manualRemovals = {
+      const manualRemovals: Partial<Record<TrashType, string[]>> = {
         GFT: [],
         PMD: [],
         PAPIER: [],
@@ -316,7 +316,7 @@ describe('Manual Additions & Removals', function () {
         },
       ];
 
-      const manualRemovals = {
+      const manualRemovals: Partial<Record<TrashType, string[]>> = {
         GFT: ['2026-04-21'],
         PMD: ['2026-04-23'],
         PAPIER: [],
@@ -366,7 +366,7 @@ describe('Manual Additions & Removals', function () {
       assert.equal(activityDates[0].dates.length, 2);
 
       // Then, remove the manually added date
-      const manualRemovals = {
+      const manualRemovals: Partial<Record<TrashType, string[]>> = {
         GFT: [],
         PMD: [],
         PAPIER: [],
@@ -406,7 +406,7 @@ describe('Manual Additions & Removals', function () {
       assert.equal(activityDates[0].dates.length, 3);
 
       // Then apply removals (which should have highest priority)
-      const manualRemovals = {
+      const manualRemovals: Partial<Record<TrashType, string[]>> = {
         GFT: ['2026-04-21', '2026-04-28'],
         PMD: [],
         PAPIER: [],

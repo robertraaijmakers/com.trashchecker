@@ -281,7 +281,10 @@
     "en": "Updated Omrin afvalkalender",
     "nl": "Wijziging in Omrin afvalkalender #255, werkt nu weer."
   },
-  "5.3.5": {
+  "5.3.6": {
     "en": "Added gemeente Drimmelen and fixed some issues"
+  },
+  "5.3.8": {
+    "en": "Added support for MijnAfvalzaken.nl"
   }
 }

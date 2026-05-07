@@ -2,29 +2,33 @@
 
 export enum TrashType {
   GFT = 'GFT',
-  PLASTIC = 'PLASTIC',
+  GLAS = 'GLAS',
+  GROF = 'GROF',
+  KCA = 'KCA',
   PAPIER = 'PAPIER',
+  PLASTIC = 'PLASTIC',
   PMD = 'PMD',
   REST = 'REST',
+  SNOEI = 'SNOEI',
   TEXTIEL = 'TEXTIEL',
-  GROF = 'GROF',
   KERSTBOOM = 'KERSTBOOM',
-  GLAS = 'GLAS',
 }
 
 export const TrashColors = {
   GFT: '#3a9600',
-  PLASTIC: '#ffa203',
+  GLAS: '#00cdae',
+  GROF: '#292929',
+  KCA: '#800080',
   PAPIER: '#060367',
+  PLASTIC: '#ffa203',
   PMD: '#ffa203',
   REST: '#787878',
+  SNOEI: '#452200',
   TEXTIEL: '#6c0014',
-  GROF: '#292929',
   KERSTBOOM: '#59bd1b',
-  GLAS: '#00cdae',
 };
 
-export type Country = 'NL' | 'BE';
+export type Country = 'NL' | 'BE' | 'NO';
 export interface ApiMeta {
   name: string;
   id: string;
@@ -34,13 +38,15 @@ export interface ApiMeta {
 
 export interface ManualSettings {
   GFT: ManualSetting;
-  PLASTIC: ManualSetting;
+  GLAS: ManualSetting;
+  GROF: ManualSetting;
+  KCA: ManualSetting;
   PAPIER: ManualSetting;
+  PLASTIC: ManualSetting;
   PMD: ManualSetting;
   REST: ManualSetting;
+  SNOEI: ManualSetting;
   TEXTIEL: ManualSetting;
-  GROF: ManualSetting;
-  GLAS: ManualSetting;
 }
 
 export interface ManualSetting {
@@ -54,13 +60,15 @@ export interface LabelSettings {
   timeindicator: number;
   generic: string;
   GFT?: LabelSetting;
-  REST?: LabelSetting;
-  PMD?: LabelSetting;
-  PLASTIC?: LabelSetting;
-  PAPIER?: LabelSetting;
-  TEXTIEL?: LabelSetting;
-  GROF?: LabelSetting;
   GLAS?: LabelSetting;
+  GROF?: LabelSetting;
+  KCA?: LabelSetting;
+  PAPIER?: LabelSetting;
+  PLASTIC?: LabelSetting;
+  PMD?: LabelSetting;
+  REST?: LabelSetting;
+  SNOEI?: LabelSetting;
+  TEXTIEL?: LabelSetting;
   KERSTBOOM?: LabelSetting;
   NONE?: LabelSetting;
 }
@@ -80,4 +88,6 @@ export interface ApiSettings {
   streetname: string;
   cityname: string;
   country: string;
+  countyId?: string;
+  apiKey?: string;
 }

@@ -46,6 +46,7 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - Klikomanager Oude IJsselstreek
 - Klikomanager Uithoorn
 - [Mijn Afvalwijzer](http://www.mijnafvalwijzer.nl)
+- [Mijn Afvalzaken](http://www.mijnafvalzaken.nl)
 - [Mijn Blink](https://mijnblink.nl/)
 - [Recyle Manager](http://www.recyclemanager.nl)
 - [Reinigingsdienst Waardlanden](https://www.waardlanden.nl/particulieren/afvalinzameling/afvalkalender)
@@ -55,6 +56,9 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 ### Belgium
 - [Recycle!](https://recycleapp.be/home)
 - [Limburg.NET](https://limburg.net)
+
+### Norwegian
+- [MinRenovasjon](https://www.rfd.no/)
 
 ## Supported Cards
 There is one card that you can place in the "and" column. The card lets you check whether or not trash is collected either today, tomorrow or the day after tomorrow. The type of trash that is checked for can be set to a specific one, or to 'any' to include all types. Check out the [Flow Examples](flow-examples.md) for some cool tips and tricks.

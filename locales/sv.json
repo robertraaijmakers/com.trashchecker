@@ -10,6 +10,8 @@
 		"country": "Land",
 		"api": "Källa",
 		"cleanApi": "Städservice?",
+		"countyId": "Kommun-ID",
+		"apiKey": "API-nyckel",
 		"save": "Spara ändringar",
 		"fail": "Den här adressen stöds inte",
 		"manualonly": "Datan är bara uppdaterad baserad på de manuella inställningarna",
@@ -17,7 +19,9 @@
 		"updateCleaning": "Städservice har uppdaterats.",
 		"checking": "Checkar adress...",
 		"gft": "Kompost",
+		"kca": "Farligt avfall",
 		"rest": "Övrigt",
+		"snoei": "Beskärningsavfall",
 		"plastic": "Plastförpackningar",
 		"pmd": "Plast, metall och dryckesförpackningar",
 		"papier": "Papper",
@@ -110,7 +114,9 @@
 			"type":
 			{
 				"GFT": "komposten",
+				"KCA": "det farliga avfallet",
 				"REST": "restavfallet",
+				"SNOEI": "beskärningsavfallet",
 				"PLASTIC": "plastavfal",
 				"PMD": "plast, metall och mjölkförpackningar",
 				"PAPIER": "papper & papp",
@@ -143,7 +149,9 @@
 	{
 		"trashType": {
 			"GFT": "komposten",
+			"KCA": "farligt avfall",
 			"REST": "restavfallet",
+			"SNOEI": "beskärning",
 			"PLASTIC": "plastavfal",
 			"PMD": "plast, metall",
 			"PAPIER": "papper & papp",

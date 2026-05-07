@@ -1,0 +1,171 @@
+{
+	"title": "Trash Checker",
+	"settings": {
+		"title": "Innstillinger for renovasjonspåminnelse",
+		"description":"Vær oppmerksom på at ikke alle adresser støttes. Du kan sjekke tilgjengelighet ved å oppgi postnummer og husnummer for å se om den støttes. Hvis adressen ikke støttes, kan du alltid legge til mønsteret via manuell inndatainställninger nedenfor og fortsatt bruke alle funksjonene i appen!",
+		"postcode": "Postnummer",
+		"hnumber": "Husnummer",
+		"streetname": "Gate",
+		"cityname": "By",
+		"country": "Land",
+		"api": "Kilde",
+		"cleanApi": "Rensetjeneste?",
+		"countyId": "Kommun-ID",
+		"apiKey": "API-nøkkel",
+		"save": "Lagre endringer",
+		"fail": "Denne adressen støttes ikke",
+		"manualonly": "Dataene ble oppdatert basert på de manuelle innstillingene",
+		"update": "Adressen oppdatert til",
+		"updateCleaning": "Rensetjenesten har blitt oppdatert.",
+		"checking": "sjekker adresse...",
+		"gft": "Organisk",
+		"kca": "Farlig avfall",
+		"rest": "Restavfall",
+		"snoei": "Hageavfall",
+		"plastic": "Plastikk",
+		"pmd": "PMD",
+		"papier": "Papir",
+		"textiel": "Tekstil",
+		"grof": "Storfe",
+		"glas": "Glass",
+		"kerstboom": "Juletre",
+		"unknown": "Ukjent",
+		"notapplicable": "Ikke aktuelt",
+		"none": "Når ingenting samles",
+		"titlemanualinput": "Datoinnstillinger",
+		"refreshDebugInformation": "Oppdater feilsøkingsinformasjon",
+		"interval":
+		{
+			"na": "N/A",
+			"automatic": "Basert på API",
+			"everyweek": "Hver uke på",
+			"everyotherweek": "Annenhver uke på",
+			"everythreeweeks": "Hver tredje uke på",
+			"everyfourweeks": "Hver fjerde uke på",
+			"everyfiveweeks": "Hver femte uke på",
+			"everysixweeks": "Hver sjette uke på",
+			"everyeighthweeks": "Hver åttende uke på",
+			"everyfirst": "Hver første",
+			"everysecond": "Hver andre",
+			"everythird": "Hver tredje",
+			"everyfourth": "Hver fjerde",
+			"everysecondlast": "Hver nest siste",
+			"everylast": "Hver siste"
+		},
+		"dayofweek": {
+			"mo": "Mandag",
+			"tu": "Tirsdag",
+			"we": "Onsdag",
+			"th": "Torsdag",
+			"fr": "Fredag",
+			"sa": "Lørdag",
+			"su": "Søndag"
+		},
+		"interval_extra":
+		{
+			"month": "av måneden",
+			"othermonth": "annenhver måned",
+			"quarter": "av kvartalet",
+			"year": "av året"
+		},
+		"manualdata":
+		{
+			"title": "Avansert datoinngang",
+			"description": "Via dette feltet kan du legge til (ekstra) datoer. Dette anbefales ikke, men bare for avanserte brukere. Datoene må oppgis i formatet ÅÅÅÅ-mm-dd.",
+			"entryFieldLabel": "Avansert datoinngang",
+			"save": "Lagre alle innstillinger"
+		},
+		"manualremove":
+		{
+			"title": "Avansert datofjerning",
+			"description": "Via dette feltet kan du fjerne datoer fra den genererte sekvensen. Dette anbefales ikke, men bare for avanserte brukere. Datoene må oppgis i formatet ÅÅÅÅ-mm-dd.",
+			"entryFieldLabel": "Avansert datofjerningsinndatang",
+			"save": "Lagre alle innstillinger"
+		},
+		"startdate": "starter på",
+		"labeltitle": "Lokale verdier for avfallstype",
+		"labeldescription": "Verdiene som angis nedenfor, brukes til å tilpasse avfallserfaringen din. Verdiene brukes i de globale taggene som er tilgjengelige i dine flyter, i widgeten og settes i etiketter på kort som er tilgjengelig i avanserte flyter.",
+		"saveLabelInput": "Lagre verdier for avfallstype",
+		"labelgeneric": "Global tagetikett-setning",
+		"genericlabelhelper": "Variabler som kan brukes i den globale tagetikett-setningen er __time__, __type__, __plural__.",
+		"timeindicator": "Global etiketttype",
+		"timeindicatorDescription": "Dette brukes til å gjengi eksemplene under etikettinnstillingene dine, for å gi et forhåndsvisning av teksten som er tilgjengelig gjennom de tre globale etikett."
+	},
+	"debug":
+	{
+		"labeltitle": "Feilsøking",
+		"labeldescription": "Dette er de kjente innsamlingsdatoene i appen."	
+	},
+	"error":
+	{
+		"typenotsupported":
+		{ 
+			"addviasettings": "Ingen kjente datoer for denne typen avfall. Legg dem til manuelt via innstillingssiden i appen.",
+			"onyouraddress": "Denne typen avfall støttes ikke på adressen din."
+		}
+	},
+	"tokens":
+	{
+		"trashcollection": {
+			"today": "Samlet i dag",
+			"tomorrow": "Samlet i morgen",
+			"dayaftertomorrow": "Samlet dagen etter i morgen",
+			"advancedcollectiondates": "Innsamlingsdager (JSON)"
+		},
+		"output":
+		{
+			"trashtypeycollectedonx": "__type__ __plural__ samlet __time__.",
+			"and": "og",
+			"replacementsingle": "er",
+			"replacementplural": "er",
+			"type":
+			{
+				"GFT": "Det organiske avfallet",
+				"KCA": "Det farlige avfallet",
+				"REST": "Restavfallet",
+				"SNOEI": "Hageavfallet",
+				"PLASTIC": "Plastikk-avfallet",
+				"PMD": "Plastikkene, metallenene og drikkekartonger",
+				"PAPIER": "Papiret",
+				"TEXTIEL": "Tekstilet",
+				"GROF": "Storfet",
+				"GLAS": "Glasset",
+				"KERSTBOOM": "Jultreet",
+				"NONE": "Ingenting"
+			},
+			"weekdays":
+			{
+				"d0": "Søndag",
+				"d1": "Mandag",
+				"d2": "Tirsdag",
+				"d3": "Onsdag",
+				"d4": "Torsdag",
+				"d5": "Fredag",
+				"d6": "Lørdag"
+			},
+			"timeindicator":
+			{
+				"t-1": "I går",
+				"t0": "I dag",
+				"t1": "I morgen",
+				"t2": "Dagen etter i morgen"
+			}
+		}
+	},
+	"widgets":
+	{
+		"trashType": {
+			"GFT": "Organisk",
+			"KCA": "Farlig avfall",
+			"REST": "Rest",
+			"SNOEI": "Hageavfall",
+			"PLASTIC": "Plastikk",
+			"PMD": "PMD",
+			"PAPIER": "Papir",
+			"TEXTIEL": "Tekstil",
+			"GROF": "Stor",
+			"GLAS": "Glass",
+			"KERSTBOOM": "Juletre"
+		}
+	}
+}

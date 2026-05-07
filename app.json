@@ -8,7 +8,7 @@
     "sv": "Avfallspåminnelse 2.0",
     "fr": "Rappel de collecte 2.0"
   },
-  "version": "5.3.5",
+  "version": "5.3.7",
   "platforms": [
     "local"
   ],
@@ -153,6 +153,24 @@
                   "nl": "GFT",
                   "sv": "Kompost",
                   "fr": "Déchets biodégradables"
+                }
+              },
+              {
+                "id": "KCA",
+                "label": {
+                  "en": "Household Chemical Waste",
+                  "nl": "Klein Chemisch Afval",
+                  "sv": "Farligt avfall",
+                  "fr": "Déchets chimiques ménagers"
+                }
+              },
+              {
+                "id": "SNOEI",
+                "label": {
+                  "en": "Pruning Waste",
+                  "nl": "Snoeiafval",
+                  "sv": "Beskärningsavfall",
+                  "fr": "Déchets de taille"
                 }
               },
               {
@@ -317,6 +335,24 @@
                   "nl": "GFT",
                   "sv": "Kompost",
                   "fr": "Déchets biodégradables"
+                }
+              },
+              {
+                "id": "KCA",
+                "label": {
+                  "en": "Household Chemical Waste",
+                  "nl": "Klein Chemisch Afval",
+                  "sv": "Farligt avfall",
+                  "fr": "Déchets chimiques ménagers"
+                }
+              },
+              {
+                "id": "SNOEI",
+                "label": {
+                  "en": "Pruning Waste",
+                  "nl": "Snoeiafval",
+                  "sv": "Beskärningsavfall",
+                  "fr": "Déchets de taille"
                 }
               },
               {
