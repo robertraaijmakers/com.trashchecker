@@ -40,3 +40,7 @@ The Trash Type Label, will give you the trash name as specified in the [Settings
 To have a simple notification on whether the container is collected and cleaned you can see the example below.
 It will make use of a combination of cards and local tags available from those cards.
 ![advanced-flow-with-cleaning](assets/advanced-flow-with-cleaning.png)
+
+### Trash collection with multiple addresses
+When you have multiple addresses configured you can easily build a flow that will notify you when the trash is collected at any of those addresses.
+![advanced-flow-multi-address](assets/advanced-flow-multi-address.png)

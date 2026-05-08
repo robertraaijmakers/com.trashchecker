@@ -1,0 +1,350 @@
+{
+  "conditions": [
+    {
+      "id": "days_to_collect_single_type_device",
+      "title": {
+        "en": "Selected trash type will be collected...",
+        "nl": "Geselecteerd type wordt opgehaald...",
+        "sv": "Vald avfallstyp samlas in...",
+        "fr": "Le type de dechet selectionne sera collecte..."
+      },
+      "titleFormatted": {
+        "en": "Selected type will !{{|not}} be collected [[when]]",
+        "nl": "Geselecteerd type wordt [[when]] !{{|niet}} opgehaald",
+        "sv": "Vald typ samlas !{{|inte}} in [[when]]",
+        "fr": "Le type selectionne sera !{{|pas}} collecte [[when]]"
+      },
+      "hint": {
+        "en": "This card checks the selected single-type device.",
+        "nl": "Deze kaart controleert het geselecteerde single-type apparaat.",
+        "sv": "Detta kort kontrollerar den valda enheten med en typ.",
+        "fr": "Cette carte verifie l'appareil mono-type selectionne."
+      },
+      "args": [
+        {
+          "name": "when",
+          "type": "dropdown",
+          "title": {
+            "en": "When?",
+            "nl": "Wanneer?",
+            "sv": "Nar?",
+            "fr": "Quand?"
+          },
+          "values": [
+            {
+              "id": "today",
+              "label": {
+                "en": "Today",
+                "nl": "Vandaag",
+                "sv": "Idag",
+                "fr": "Aujourd'hui"
+              }
+            },
+            {
+              "id": "tomorrow",
+              "label": {
+                "en": "Tomorrow",
+                "nl": "Morgen",
+                "sv": "Imorgon",
+                "fr": "Demain"
+              }
+            },
+            {
+              "id": "datomorrow",
+              "label": {
+                "en": "Day after tomorrow",
+                "nl": "Overmorgen",
+                "sv": "I overmorgon",
+                "fr": "Apres-demain"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "days_to_clean_single_type_device",
+      "title": {
+        "en": "Selected trash type will be cleaned...",
+        "nl": "Geselecteerd type wordt schoongemaakt...",
+        "sv": "Vald avfallstyp rengors...",
+        "fr": "Le type de dechet selectionne sera nettoye..."
+      },
+      "titleFormatted": {
+        "en": "Selected type will !{{|not}} be cleaned [[when]]",
+        "nl": "Geselecteerd type wordt [[when]] !{{|niet}} schoongemaakt",
+        "sv": "Vald typ rengors !{{|inte}} [[when]]",
+        "fr": "Le type selectionne sera !{{|pas}} nettoye [[when]]"
+      },
+      "hint": {
+        "en": "This card checks the selected single-type device.",
+        "nl": "Deze kaart controleert het geselecteerde single-type apparaat.",
+        "sv": "Detta kort kontrollerar den valda enheten med en typ.",
+        "fr": "Cette carte verifie l'appareil mono-type selectionne."
+      },
+      "args": [
+        {
+          "name": "when",
+          "type": "dropdown",
+          "title": {
+            "en": "When?",
+            "nl": "Wanneer?",
+            "sv": "Nar?",
+            "fr": "Quand?"
+          },
+          "values": [
+            {
+              "id": "today",
+              "label": {
+                "en": "Today",
+                "nl": "Vandaag",
+                "sv": "Idag",
+                "fr": "Aujourd'hui"
+              }
+            },
+            {
+              "id": "tomorrow",
+              "label": {
+                "en": "Tomorrow",
+                "nl": "Morgen",
+                "sv": "Imorgon",
+                "fr": "Demain"
+              }
+            },
+            {
+              "id": "datomorrow",
+              "label": {
+                "en": "Day after tomorrow",
+                "nl": "Overmorgen",
+                "sv": "I overmorgon",
+                "fr": "Apres-demain"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "days_to_collect_single_type_device",
+      "title": {
+        "en": "Selected trash type will be collected...",
+        "nl": "Geselecteerd type wordt opgehaald...",
+        "sv": "Vald avfallstyp samlas in...",
+        "fr": "Le type de dechet selectionne sera collecte..."
+      },
+      "titleFormatted": {
+        "en": "Will selected type be collected [[when]]",
+        "nl": "Wordt geselecteerd type [[when]] opgehaald",
+        "sv": "Samlas vald typ in [[when]]",
+        "fr": "Le type selectionne sera-t-il collecte [[when]]"
+      },
+      "hint": {
+        "en": "This card checks the selected single-type device.",
+        "nl": "Deze kaart controleert het geselecteerde single-type apparaat.",
+        "sv": "Detta kort kontrollerar den valda enheten med en typ.",
+        "fr": "Cette carte verifie l'appareil mono-type selectionne."
+      },
+      "advanced": true,
+      "args": [
+        {
+          "name": "when",
+          "type": "dropdown",
+          "title": {
+            "en": "When?",
+            "nl": "Wanneer?",
+            "sv": "Nar?",
+            "fr": "Quand?"
+          },
+          "values": [
+            {
+              "id": "today",
+              "label": {
+                "en": "Today",
+                "nl": "Vandaag",
+                "sv": "Idag",
+                "fr": "Aujourd'hui"
+              }
+            },
+            {
+              "id": "tomorrow",
+              "label": {
+                "en": "Tomorrow",
+                "nl": "Morgen",
+                "sv": "Imorgon",
+                "fr": "Demain"
+              }
+            },
+            {
+              "id": "datomorrow",
+              "label": {
+                "en": "Day after tomorrow",
+                "nl": "Overmorgen",
+                "sv": "I overmorgon",
+                "fr": "Apres-demain"
+              }
+            }
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "isCollected",
+          "type": "boolean",
+          "title": {
+            "en": "Collection day?",
+            "nl": "Ophaaldag?",
+            "fr": "Jour de collecte?"
+          },
+          "example": {
+            "en": "true",
+            "nl": "true",
+            "sv": "true",
+            "fr": "true"
+          }
+        },
+        {
+          "name": "trashType",
+          "type": "string",
+          "title": {
+            "en": "Short trash type",
+            "nl": "Containertype (kort)",
+            "fr": "Type de dechet (court)"
+          },
+          "example": {
+            "en": "PMD",
+            "nl": "PMD",
+            "sv": "PMD",
+            "fr": "PMD"
+          }
+        },
+        {
+          "name": "trashTypeLocalized",
+          "type": "string",
+          "title": {
+            "en": "Trash type label",
+            "nl": "Containertype (localized)",
+            "fr": "Libelle du type de dechet"
+          },
+          "example": {
+            "en": "The plastic container",
+            "nl": "De plastic container",
+            "sv": "Plastforpackningar",
+            "fr": "Le bac plastique"
+          }
+        }
+      ]
+    },
+    {
+      "id": "days_to_clean_single_type_device",
+      "title": {
+        "en": "Selected trash type will be cleaned...",
+        "nl": "Geselecteerd type wordt schoongemaakt...",
+        "sv": "Vald avfallstyp rengors...",
+        "fr": "Le type de dechet selectionne sera nettoye..."
+      },
+      "titleFormatted": {
+        "en": "Will selected type be cleaned [[when]]",
+        "nl": "Wordt geselecteerd type [[when]] schoongemaakt",
+        "sv": "Rengors vald typ [[when]]",
+        "fr": "Le type selectionne sera-t-il nettoye [[when]]"
+      },
+      "hint": {
+        "en": "This card checks the selected single-type device.",
+        "nl": "Deze kaart controleert het geselecteerde single-type apparaat.",
+        "sv": "Detta kort kontrollerar den valda enheten med en typ.",
+        "fr": "Cette carte verifie l'appareil mono-type selectionne."
+      },
+      "advanced": true,
+      "args": [
+        {
+          "name": "when",
+          "type": "dropdown",
+          "title": {
+            "en": "When?",
+            "nl": "Wanneer?",
+            "sv": "Nar?",
+            "fr": "Quand?"
+          },
+          "values": [
+            {
+              "id": "today",
+              "label": {
+                "en": "Today",
+                "nl": "Vandaag",
+                "sv": "Idag",
+                "fr": "Aujourd'hui"
+              }
+            },
+            {
+              "id": "tomorrow",
+              "label": {
+                "en": "Tomorrow",
+                "nl": "Morgen",
+                "sv": "Imorgon",
+                "fr": "Demain"
+              }
+            },
+            {
+              "id": "datomorrow",
+              "label": {
+                "en": "Day after tomorrow",
+                "nl": "Overmorgen",
+                "sv": "I overmorgon",
+                "fr": "Apres-demain"
+              }
+            }
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "isCleaned",
+          "type": "boolean",
+          "title": {
+            "en": "Cleaning day?",
+            "nl": "Schoonmaakdag?",
+            "fr": "Jour de nettoyage?"
+          },
+          "example": {
+            "en": "true",
+            "nl": "true",
+            "sv": "true",
+            "fr": "true"
+          }
+        },
+        {
+          "name": "trashType",
+          "type": "string",
+          "title": {
+            "en": "Short trash type",
+            "nl": "Containertype (kort)",
+            "fr": "Type de bac (court)"
+          },
+          "example": {
+            "en": "PMD",
+            "nl": "PMD",
+            "sv": "PMD",
+            "fr": "PMD"
+          }
+        },
+        {
+          "name": "trashTypeLocalized",
+          "type": "string",
+          "title": {
+            "en": "Trash type label",
+            "nl": "Containertype (localized)",
+            "fr": "Libelle du type de bac"
+          },
+          "example": {
+            "en": "The plastic container",
+            "nl": "De plastic container",
+            "sv": "Plastforpackningar",
+            "fr": "Le bac plastique"
+          }
+        }
+      ]
+    }
+  ]
+}

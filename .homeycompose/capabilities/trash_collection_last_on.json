@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Last Collected On",
+    "nl": "Laatst opgehaald op",
+    "sv": "Senast hamtad",
+    "fr": "Derniere collecte"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/settings/trashIcons/trash-REST.svg"
+}

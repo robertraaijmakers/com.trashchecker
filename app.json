@@ -8,11 +8,11 @@
     "sv": "Avfallspåminnelse 2.0",
     "fr": "Rappel de collecte 2.0"
   },
-  "version": "5.3.7",
+  "version": "5.9.0",
   "platforms": [
     "local"
   ],
-  "compatibility": ">=12.1.2",
+  "compatibility": ">=12.3.0",
   "author": {
     "name": "Robert Raaijmakers",
     "email": "dutchfighter@live.nl"
@@ -430,6 +430,514 @@
             ]
           }
         ]
+      },
+      {
+        "id": "days_to_collect_device",
+        "title": {
+          "en": "Trash will be collected...",
+          "nl": "Afval wordt opgehaald...",
+          "sv": "Papperskorgen samlas in...",
+          "fr": "Les déchets seront collectés..."
+        },
+        "titleFormatted": {
+          "en": "[[trash_type]] will !{{|not}} be collected [[when]]",
+          "nl": "[[trash_type]] wordt [[when]] !{{|niet}} opgehaald",
+          "sv": "[[trash_type]] samlas !{{|inte}} in [[when]]",
+          "fr": "[[trash_type]] sera !{{|pas}} collecté [[when]]"
+        },
+        "hint": {
+          "en": "This card checks the selected address device only.",
+          "nl": "Deze kaart controleert alleen het geselecteerde adresapparaat.",
+          "sv": "Detta kort kontrollerar endast den valda adressenheten.",
+          "fr": "Cette carte vérifie uniquement l'appareil d'adresse sélectionné."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=trash_address"
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "When?",
+              "fr": "Quand?"
+            },
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "Today",
+                  "nl": "Vandaag",
+                  "sv": "Hämtas idag",
+                  "fr": "Aujourd'hui"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "Tomorrow",
+                  "nl": "Morgen",
+                  "sv": "Hämtas imorgon",
+                  "fr": "Demain"
+                }
+              },
+              {
+                "id": "datomorrow",
+                "label": {
+                  "en": "Day after tomorrow",
+                  "nl": "Overmorgen",
+                  "sv": "Hämtas i övermorgon",
+                  "fr": "Après-demain"
+                }
+              }
+            ]
+          },
+          {
+            "name": "trash_type",
+            "type": "dropdown",
+            "title": {
+              "en": "Type?",
+              "nl": "Type?",
+              "sv": "Type?",
+              "fr": "Type?"
+            },
+            "values": [
+              {
+                "id": "ANY",
+                "label": {
+                  "en": "Any",
+                  "nl": "Iets",
+                  "sv": "Några",
+                  "fr": "N'importe lequel"
+                }
+              },
+              {
+                "id": "GFT",
+                "label": {
+                  "en": "Organic Waste",
+                  "nl": "GFT",
+                  "sv": "Kompost",
+                  "fr": "Déchets biodégradables"
+                }
+              },
+              {
+                "id": "KCA",
+                "label": {
+                  "en": "Household Chemical Waste",
+                  "nl": "Klein Chemisch Afval",
+                  "sv": "Farligt avfall",
+                  "fr": "Déchets chimiques ménagers"
+                }
+              },
+              {
+                "id": "SNOEI",
+                "label": {
+                  "en": "Pruning Waste",
+                  "nl": "Snoeiafval",
+                  "sv": "Beskärningsavfall",
+                  "fr": "Déchets de taille"
+                }
+              },
+              {
+                "id": "GROF",
+                "label": {
+                  "en": "Bulky waste",
+                  "nl": "Grof afval",
+                  "sv": "Grovsopor",
+                  "fr": "Déchets volumineux"
+                }
+              },
+              {
+                "id": "PAPIER",
+                "label": {
+                  "en": "Paper",
+                  "nl": "Papier",
+                  "sv": "Papper",
+                  "fr": "Papier et carton"
+                }
+              },
+              {
+                "id": "PLASTIC",
+                "label": {
+                  "en": "Plastic",
+                  "nl": "Plastic",
+                  "sv": "Plast",
+                  "fr": "Plastique"
+                }
+              },
+              {
+                "id": "PMD",
+                "label": {
+                  "en": "PMD",
+                  "nl": "PMD",
+                  "sv": "PMD",
+                  "fr": "PMD"
+                }
+              },
+              {
+                "id": "REST",
+                "label": {
+                  "en": "Residual",
+                  "nl": "Rest",
+                  "sv": "Restavfall",
+                  "fr": "Déchets résiduels"
+                }
+              },
+              {
+                "id": "TEXTIEL",
+                "label": {
+                  "en": "Textiles",
+                  "nl": "Textiel",
+                  "sv": "Textilier",
+                  "fr": "Textiles"
+                }
+              },
+              {
+                "id": "KERSTBOOM",
+                "label": {
+                  "en": "Christmas tree",
+                  "nl": "Kerstboom",
+                  "sv": "Julgran",
+                  "fr": "Sapin de Noël"
+                }
+              },
+              {
+                "id": "GLAS",
+                "label": {
+                  "en": "Glass",
+                  "nl": "Glas",
+                  "sv": "Glas",
+                  "fr": "Verre"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "days_to_clean_device",
+        "title": {
+          "en": "Container will be cleaned...",
+          "nl": "Container wordt schoongemaakt...",
+          "sv": "Behållaren håller på att rengöras...",
+          "fr": "Le bac sera nettoyé..."
+        },
+        "titleFormatted": {
+          "en": "[[trash_type]] will !{{|not}} be cleaned [[when]]",
+          "nl": "[[trash_type]] wordt [[when]] !{{|niet}} schoongemaakt",
+          "sv": "[[trash_type]] rengöras !{{|inte}} in [[when]]",
+          "fr": "[[trash_type]] sera !{{|pas}} nettoyé [[when]]"
+        },
+        "hint": {
+          "en": "This card checks the selected address device only.",
+          "nl": "Deze kaart controleert alleen het geselecteerde adresapparaat.",
+          "sv": "Detta kort kontrollerar endast den valda adressenheten.",
+          "fr": "Cette carte vérifie uniquement l'appareil d'adresse sélectionné."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=trash_address"
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "When?",
+              "fr": "Quand?"
+            },
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "Today",
+                  "nl": "Vandaag",
+                  "sv": "Hämtas idag",
+                  "fr": "Aujourd'hui"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "Tomorrow",
+                  "nl": "Morgen",
+                  "sv": "Hämtas imorgon",
+                  "fr": "Demain"
+                }
+              },
+              {
+                "id": "datomorrow",
+                "label": {
+                  "en": "Day after tomorrow",
+                  "nl": "Overmorgen",
+                  "sv": "Hämtas i övermorgon",
+                  "fr": "Après-demain"
+                }
+              }
+            ]
+          },
+          {
+            "name": "trash_type",
+            "type": "dropdown",
+            "title": {
+              "en": "Type?",
+              "nl": "Type?",
+              "sv": "Type?",
+              "fr": "Type?"
+            },
+            "values": [
+              {
+                "id": "ANY",
+                "label": {
+                  "en": "Any",
+                  "nl": "Iets",
+                  "sv": "Några",
+                  "fr": "N'importe lequel"
+                }
+              },
+              {
+                "id": "GFT",
+                "label": {
+                  "en": "Organic Waste",
+                  "nl": "GFT",
+                  "sv": "Kompost",
+                  "fr": "Déchets biodégradables"
+                }
+              },
+              {
+                "id": "KCA",
+                "label": {
+                  "en": "Household Chemical Waste",
+                  "nl": "Klein Chemisch Afval",
+                  "sv": "Farligt avfall",
+                  "fr": "Déchets chimiques ménagers"
+                }
+              },
+              {
+                "id": "SNOEI",
+                "label": {
+                  "en": "Pruning Waste",
+                  "nl": "Snoeiafval",
+                  "sv": "Beskärningsavfall",
+                  "fr": "Déchets de taille"
+                }
+              },
+              {
+                "id": "GROF",
+                "label": {
+                  "en": "Bulky waste",
+                  "nl": "Grof afval",
+                  "sv": "Grovsopor",
+                  "fr": "Déchets volumineux"
+                }
+              },
+              {
+                "id": "PAPIER",
+                "label": {
+                  "en": "Paper",
+                  "nl": "Papier",
+                  "sv": "Papper",
+                  "fr": "Papier et carton"
+                }
+              },
+              {
+                "id": "PLASTIC",
+                "label": {
+                  "en": "Plastic",
+                  "nl": "Plastic",
+                  "sv": "Plast",
+                  "fr": "Plastique"
+                }
+              },
+              {
+                "id": "PMD",
+                "label": {
+                  "en": "PMD",
+                  "nl": "PMD",
+                  "sv": "PMD",
+                  "fr": "PMD"
+                }
+              },
+              {
+                "id": "REST",
+                "label": {
+                  "en": "Residual",
+                  "nl": "Rest",
+                  "sv": "Restavfall",
+                  "fr": "Déchets résiduels"
+                }
+              },
+              {
+                "id": "TEXTIEL",
+                "label": {
+                  "en": "Textiles",
+                  "nl": "Textiel",
+                  "sv": "Textilier",
+                  "fr": "Textiles"
+                }
+              },
+              {
+                "id": "KERSTBOOM",
+                "label": {
+                  "en": "Christmas tree",
+                  "nl": "Kerstboom",
+                  "sv": "Julgran",
+                  "fr": "Sapin de Noël"
+                }
+              },
+              {
+                "id": "GLAS",
+                "label": {
+                  "en": "Glass",
+                  "nl": "Glas",
+                  "sv": "Glas",
+                  "fr": "Verre"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "days_to_collect_single_type_device",
+        "title": {
+          "en": "Selected trash type will be collected...",
+          "nl": "Geselecteerd type wordt opgehaald...",
+          "sv": "Vald avfallstyp samlas in...",
+          "fr": "Le type de dechet selectionne sera collecte..."
+        },
+        "titleFormatted": {
+          "en": "Selected type will !{{|not}} be collected [[when]]",
+          "nl": "Geselecteerd type wordt [[when]] !{{|niet}} opgehaald",
+          "sv": "Vald typ samlas !{{|inte}} in [[when]]",
+          "fr": "Le type selectionne sera !{{|pas}} collecte [[when]]"
+        },
+        "hint": {
+          "en": "This card checks the selected single-type device.",
+          "nl": "Deze kaart controleert het geselecteerde single-type apparaat.",
+          "sv": "Detta kort kontrollerar den valda enheten med en typ.",
+          "fr": "Cette carte verifie l'appareil mono-type selectionne."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=trash_type_address"
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "Nar?",
+              "fr": "Quand?"
+            },
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "Today",
+                  "nl": "Vandaag",
+                  "sv": "Idag",
+                  "fr": "Aujourd'hui"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "Tomorrow",
+                  "nl": "Morgen",
+                  "sv": "Imorgon",
+                  "fr": "Demain"
+                }
+              },
+              {
+                "id": "datomorrow",
+                "label": {
+                  "en": "Day after tomorrow",
+                  "nl": "Overmorgen",
+                  "sv": "I overmorgon",
+                  "fr": "Apres-demain"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "days_to_clean_single_type_device",
+        "title": {
+          "en": "Selected trash type will be cleaned...",
+          "nl": "Geselecteerd type wordt schoongemaakt...",
+          "sv": "Vald avfallstyp rengors...",
+          "fr": "Le type de dechet selectionne sera nettoye..."
+        },
+        "titleFormatted": {
+          "en": "Selected type will !{{|not}} be cleaned [[when]]",
+          "nl": "Geselecteerd type wordt [[when]] !{{|niet}} schoongemaakt",
+          "sv": "Vald typ rengors !{{|inte}} [[when]]",
+          "fr": "Le type selectionne sera !{{|pas}} nettoye [[when]]"
+        },
+        "hint": {
+          "en": "This card checks the selected single-type device.",
+          "nl": "Deze kaart controleert het geselecteerde single-type apparaat.",
+          "sv": "Detta kort kontrollerar den valda enheten med en typ.",
+          "fr": "Cette carte verifie l'appareil mono-type selectionne."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=trash_type_address"
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "Nar?",
+              "fr": "Quand?"
+            },
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "Today",
+                  "nl": "Vandaag",
+                  "sv": "Idag",
+                  "fr": "Aujourd'hui"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "Tomorrow",
+                  "nl": "Morgen",
+                  "sv": "Imorgon",
+                  "fr": "Demain"
+                }
+              },
+              {
+                "id": "datomorrow",
+                "label": {
+                  "en": "Day after tomorrow",
+                  "nl": "Overmorgen",
+                  "sv": "I overmorgon",
+                  "fr": "Apres-demain"
+                }
+              }
+            ]
+          }
+        ]
       }
     ],
     "actions": [
@@ -652,9 +1160,560 @@
             }
           }
         ]
+      },
+      {
+        "id": "days_to_collect_device",
+        "title": {
+          "en": "Trash will be collected...",
+          "nl": "Afval wordt opgehaald...",
+          "sv": "Papperskorgen samlas in...",
+          "fr": "Les déchets seront collectés..."
+        },
+        "titleFormatted": {
+          "en": "What type will be collected [[when]]",
+          "nl": "Welk type wordt [[when]] opgehaald",
+          "sv": "Vilken typ samlas in [[when]]",
+          "fr": "Quel type sera collecté [[when]]"
+        },
+        "hint": {
+          "en": "This card checks the selected address device only.",
+          "nl": "Deze kaart controleert alleen het geselecteerde adresapparaat.",
+          "sv": "Detta kort kontrollerar endast den valda adressenheten.",
+          "fr": "Cette carte vérifie uniquement l'appareil d'adresse sélectionné."
+        },
+        "advanced": true,
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=trash_address"
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "When?",
+              "fr": "Quand?"
+            },
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "Today",
+                  "nl": "Vandaag",
+                  "sv": "Hämtas idag",
+                  "fr": "Aujourd'hui"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "Tomorrow",
+                  "nl": "Morgen",
+                  "sv": "Hämtas imorgon",
+                  "fr": "Demain"
+                }
+              },
+              {
+                "id": "datomorrow",
+                "label": {
+                  "en": "Day after tomorrow",
+                  "nl": "Overmorgen",
+                  "sv": "Hämtas i övermorgon",
+                  "fr": "Après-demain"
+                }
+              }
+            ]
+          }
+        ],
+        "tokens": [
+          {
+            "name": "isCollected",
+            "type": "boolean",
+            "title": {
+              "en": "Collection day?",
+              "nl": "Ophaaldag?",
+              "fr": "Jour de collecte?"
+            },
+            "example": {
+              "en": "true",
+              "nl": "true",
+              "sv": "true",
+              "fr": "true"
+            }
+          },
+          {
+            "name": "trashType",
+            "type": "string",
+            "title": {
+              "en": "Short trash type",
+              "nl": "Containertype (kort)",
+              "fr": "Type de déchet (court)"
+            },
+            "example": {
+              "en": "PMD",
+              "nl": "PMD",
+              "sv": "PMD",
+              "fr": "PMD"
+            }
+          },
+          {
+            "name": "trashTypeLocalized",
+            "type": "string",
+            "title": {
+              "en": "Trash type label",
+              "nl": "Containertype (localized)",
+              "fr": "Libellé du type de déchet"
+            },
+            "example": {
+              "en": "The plastic container",
+              "nl": "De plastic container",
+              "sv": "Plastförpackningar",
+              "fr": "Le bac plastique"
+            }
+          }
+        ]
+      },
+      {
+        "id": "days_to_clean_device",
+        "title": {
+          "en": "Container will be cleaned...",
+          "nl": "Container wordt schoongemaakt...",
+          "sv": "Behållaren håller på att rengöras...",
+          "fr": "Le bac sera nettoyé..."
+        },
+        "titleFormatted": {
+          "en": "What trash type will be cleaned [[when]]",
+          "nl": "Welk type container wordt [[when]] schoongemaakt",
+          "sv": "Vilken typ av skräp rensas [[when]]",
+          "fr": "Quel type de bac sera nettoyé [[when]]"
+        },
+        "hint": {
+          "en": "This card checks the selected address device only.",
+          "nl": "Deze kaart controleert alleen het geselecteerde adresapparaat.",
+          "sv": "Detta kort kontrollerar endast den valda adressenheten.",
+          "fr": "Cette carte vérifie uniquement l'appareil d'adresse sélectionné."
+        },
+        "advanced": true,
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=trash_address"
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "When?",
+              "fr": "Quand ?"
+            },
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "Today",
+                  "nl": "Vandaag",
+                  "sv": "Hämtas idag",
+                  "fr": "Aujourd'hui"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "Tomorrow",
+                  "nl": "Morgen",
+                  "sv": "Hämtas imorgon",
+                  "fr": "Demain"
+                }
+              },
+              {
+                "id": "datomorrow",
+                "label": {
+                  "en": "Day after tomorrow",
+                  "nl": "Overmorgen",
+                  "sv": "Hämtas i övermorgon",
+                  "fr": "Après-demain"
+                }
+              }
+            ]
+          }
+        ],
+        "tokens": [
+          {
+            "name": "isCleaned",
+            "type": "boolean",
+            "title": {
+              "en": "Cleaning day?",
+              "nl": "Schoonmaakdag?",
+              "fr": "Jour de nettoyage?"
+            },
+            "example": {
+              "en": "true",
+              "nl": "true",
+              "sv": "true",
+              "fr": "true"
+            }
+          },
+          {
+            "name": "trashType",
+            "type": "string",
+            "title": {
+              "en": "Short trash type",
+              "nl": "Containertype (kort)",
+              "fr": "Type de bac (court)"
+            },
+            "example": {
+              "en": "PMD",
+              "nl": "PMD",
+              "sv": "PMD",
+              "fr": "PMD"
+            }
+          },
+          {
+            "name": "trashTypeLocalized",
+            "type": "string",
+            "title": {
+              "en": "Trash type label",
+              "nl": "Containertype (localized)",
+              "fr": "Libellé du type de bac"
+            },
+            "example": {
+              "en": "The plastic container",
+              "nl": "De plastic container",
+              "sv": "Plastförpackningar",
+              "fr": "Le bac plastique"
+            }
+          }
+        ]
+      },
+      {
+        "id": "days_to_collect_single_type_device",
+        "title": {
+          "en": "Selected trash type will be collected...",
+          "nl": "Geselecteerd type wordt opgehaald...",
+          "sv": "Vald avfallstyp samlas in...",
+          "fr": "Le type de dechet selectionne sera collecte..."
+        },
+        "titleFormatted": {
+          "en": "Will selected type be collected [[when]]",
+          "nl": "Wordt geselecteerd type [[when]] opgehaald",
+          "sv": "Samlas vald typ in [[when]]",
+          "fr": "Le type selectionne sera-t-il collecte [[when]]"
+        },
+        "hint": {
+          "en": "This card checks the selected single-type device.",
+          "nl": "Deze kaart controleert het geselecteerde single-type apparaat.",
+          "sv": "Detta kort kontrollerar den valda enheten med en typ.",
+          "fr": "Cette carte verifie l'appareil mono-type selectionne."
+        },
+        "advanced": true,
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=trash_type_address"
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "Nar?",
+              "fr": "Quand?"
+            },
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "Today",
+                  "nl": "Vandaag",
+                  "sv": "Idag",
+                  "fr": "Aujourd'hui"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "Tomorrow",
+                  "nl": "Morgen",
+                  "sv": "Imorgon",
+                  "fr": "Demain"
+                }
+              },
+              {
+                "id": "datomorrow",
+                "label": {
+                  "en": "Day after tomorrow",
+                  "nl": "Overmorgen",
+                  "sv": "I overmorgon",
+                  "fr": "Apres-demain"
+                }
+              }
+            ]
+          }
+        ],
+        "tokens": [
+          {
+            "name": "isCollected",
+            "type": "boolean",
+            "title": {
+              "en": "Collection day?",
+              "nl": "Ophaaldag?",
+              "fr": "Jour de collecte?"
+            },
+            "example": {
+              "en": "true",
+              "nl": "true",
+              "sv": "true",
+              "fr": "true"
+            }
+          },
+          {
+            "name": "trashType",
+            "type": "string",
+            "title": {
+              "en": "Short trash type",
+              "nl": "Containertype (kort)",
+              "fr": "Type de dechet (court)"
+            },
+            "example": {
+              "en": "PMD",
+              "nl": "PMD",
+              "sv": "PMD",
+              "fr": "PMD"
+            }
+          },
+          {
+            "name": "trashTypeLocalized",
+            "type": "string",
+            "title": {
+              "en": "Trash type label",
+              "nl": "Containertype (localized)",
+              "fr": "Libelle du type de dechet"
+            },
+            "example": {
+              "en": "The plastic container",
+              "nl": "De plastic container",
+              "sv": "Plastforpackningar",
+              "fr": "Le bac plastique"
+            }
+          }
+        ]
+      },
+      {
+        "id": "days_to_clean_single_type_device",
+        "title": {
+          "en": "Selected trash type will be cleaned...",
+          "nl": "Geselecteerd type wordt schoongemaakt...",
+          "sv": "Vald avfallstyp rengors...",
+          "fr": "Le type de dechet selectionne sera nettoye..."
+        },
+        "titleFormatted": {
+          "en": "Will selected type be cleaned [[when]]",
+          "nl": "Wordt geselecteerd type [[when]] schoongemaakt",
+          "sv": "Rengors vald typ [[when]]",
+          "fr": "Le type selectionne sera-t-il nettoye [[when]]"
+        },
+        "hint": {
+          "en": "This card checks the selected single-type device.",
+          "nl": "Deze kaart controleert het geselecteerde single-type apparaat.",
+          "sv": "Detta kort kontrollerar den valda enheten med en typ.",
+          "fr": "Cette carte verifie l'appareil mono-type selectionne."
+        },
+        "advanced": true,
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=trash_type_address"
+          },
+          {
+            "name": "when",
+            "type": "dropdown",
+            "title": {
+              "en": "When?",
+              "nl": "Wanneer?",
+              "sv": "Nar?",
+              "fr": "Quand?"
+            },
+            "values": [
+              {
+                "id": "today",
+                "label": {
+                  "en": "Today",
+                  "nl": "Vandaag",
+                  "sv": "Idag",
+                  "fr": "Aujourd'hui"
+                }
+              },
+              {
+                "id": "tomorrow",
+                "label": {
+                  "en": "Tomorrow",
+                  "nl": "Morgen",
+                  "sv": "Imorgon",
+                  "fr": "Demain"
+                }
+              },
+              {
+                "id": "datomorrow",
+                "label": {
+                  "en": "Day after tomorrow",
+                  "nl": "Overmorgen",
+                  "sv": "I overmorgon",
+                  "fr": "Apres-demain"
+                }
+              }
+            ]
+          }
+        ],
+        "tokens": [
+          {
+            "name": "isCleaned",
+            "type": "boolean",
+            "title": {
+              "en": "Cleaning day?",
+              "nl": "Schoonmaakdag?",
+              "fr": "Jour de nettoyage?"
+            },
+            "example": {
+              "en": "true",
+              "nl": "true",
+              "sv": "true",
+              "fr": "true"
+            }
+          },
+          {
+            "name": "trashType",
+            "type": "string",
+            "title": {
+              "en": "Short trash type",
+              "nl": "Containertype (kort)",
+              "fr": "Type de bac (court)"
+            },
+            "example": {
+              "en": "PMD",
+              "nl": "PMD",
+              "sv": "PMD",
+              "fr": "PMD"
+            }
+          },
+          {
+            "name": "trashTypeLocalized",
+            "type": "string",
+            "title": {
+              "en": "Trash type label",
+              "nl": "Containertype (localized)",
+              "fr": "Libelle du type de bac"
+            },
+            "example": {
+              "en": "The plastic container",
+              "nl": "De plastic container",
+              "sv": "Plastforpackningar",
+              "fr": "Le bac plastique"
+            }
+          }
+        ]
       }
     ]
   },
+  "drivers": [
+    {
+      "name": {
+        "en": "Collection Address",
+        "nl": "Ophaaladres",
+        "sv": "Hamtadress",
+        "fr": "Adresse de collecte"
+      },
+      "images": {
+        "large": "drivers/trash_address/assets/images/large.png",
+        "small": "drivers/trash_address/assets/images/small.png"
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "class": "other",
+      "capabilities": [],
+      "pair": [
+        {
+          "id": "enter_api_settings_address"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "prev": "enter_api_settings_address",
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "repair": [
+        {
+          "id": "reconfigure_api_settings_address"
+        }
+      ],
+      "id": "trash_address"
+    },
+    {
+      "name": {
+        "en": "Collection Type",
+        "nl": "Ophaaltype",
+        "sv": "Hamttyp",
+        "fr": "Type de collecte"
+      },
+      "images": {
+        "large": "drivers/trash_type_address/assets/images/large.png",
+        "small": "drivers/trash_type_address/assets/images/small.png"
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "class": "other",
+      "capabilities": [
+        "trash_collection_next_on",
+        "trash_collection_following_on"
+      ],
+      "pair": [
+        {
+          "id": "enter_api_settings_single_type"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "prev": "enter_api_settings_single_type",
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "repair": [
+        {
+          "id": "reconfigure_api_settings_single_type"
+        }
+      ],
+      "id": "trash_type_address"
+    }
+  ],
   "widgets": {
     "trash-reminder-list": {
       "name": {
@@ -860,6 +1919,204 @@
         }
       },
       "id": "trash-reminder-list"
+    }
+  },
+  "capabilities": {
+    "trash_collection_following_on": {
+      "type": "string",
+      "title": {
+        "en": "Following Collection On",
+        "nl": "Daaropvolgende ophaling op",
+        "sv": "Efterfoljande hamtning",
+        "fr": "Collecte suivante"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-REST.svg"
+    },
+    "trash_collection_gft": {
+      "type": "string",
+      "title": {
+        "en": "Organic waste",
+        "nl": "GFT",
+        "sv": "Organic waste",
+        "fr": "Organic waste"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-GFT.svg"
+    },
+    "trash_collection_glas": {
+      "type": "string",
+      "title": {
+        "en": "Glass",
+        "nl": "Glas",
+        "sv": "Glass",
+        "fr": "Glass"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-GLAS.svg"
+    },
+    "trash_collection_grof": {
+      "type": "string",
+      "title": {
+        "en": "Bulky waste",
+        "nl": "Grof afval",
+        "sv": "Bulky waste",
+        "fr": "Bulky waste"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-GROF.svg"
+    },
+    "trash_collection_kca": {
+      "type": "string",
+      "title": {
+        "en": "Chemical waste",
+        "nl": "Klein chemisch afval",
+        "sv": "Chemical waste",
+        "fr": "Chemical waste"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-KCA.svg"
+    },
+    "trash_collection_kerstboom": {
+      "type": "string",
+      "title": {
+        "en": "Christmas tree",
+        "nl": "Kerstboom",
+        "sv": "Christmas tree",
+        "fr": "Christmas tree"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-KERSTBOOM.svg"
+    },
+    "trash_collection_last_on": {
+      "type": "string",
+      "title": {
+        "en": "Last Collected On",
+        "nl": "Laatst opgehaald op",
+        "sv": "Senast hamtad",
+        "fr": "Derniere collecte"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-REST.svg"
+    },
+    "trash_collection_next_on": {
+      "type": "string",
+      "title": {
+        "en": "Next Collection On",
+        "nl": "Volgende ophaling op",
+        "sv": "Nasta hamtning",
+        "fr": "Prochaine collecte"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-REST.svg"
+    },
+    "trash_collection_papier": {
+      "type": "string",
+      "title": {
+        "en": "Paper",
+        "nl": "Papier",
+        "sv": "Paper",
+        "fr": "Paper"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-PAPIER.svg"
+    },
+    "trash_collection_plastic": {
+      "type": "string",
+      "title": {
+        "en": "Plastic",
+        "nl": "Plastic",
+        "sv": "Plastic",
+        "fr": "Plastic"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-PLASTIC.svg"
+    },
+    "trash_collection_pmd": {
+      "type": "string",
+      "title": {
+        "en": "PMD",
+        "nl": "PMD",
+        "sv": "PMD",
+        "fr": "PMD"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-PMD.svg"
+    },
+    "trash_collection_rest": {
+      "type": "string",
+      "title": {
+        "en": "Residual waste",
+        "nl": "Restafval",
+        "sv": "Residual waste",
+        "fr": "Residual waste"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-REST.svg"
+    },
+    "trash_collection_snoei": {
+      "type": "string",
+      "title": {
+        "en": "Pruning waste",
+        "nl": "Snoeiafval",
+        "sv": "Pruning waste",
+        "fr": "Pruning waste"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-SNOEI.svg"
+    },
+    "trash_collection_textiel": {
+      "type": "string",
+      "title": {
+        "en": "Textiles",
+        "nl": "Textiel",
+        "sv": "Textiles",
+        "fr": "Textiles"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/settings/trashIcons/trash-TEXTIEL.svg"
     }
   }
 }

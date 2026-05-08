@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Plastic",
+    "nl": "Plastic",
+    "sv": "Plastic",
+    "fr": "Plastic"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/settings/trashIcons/trash-PLASTIC.svg"
+}

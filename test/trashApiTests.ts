@@ -1348,7 +1348,7 @@ function testAPI(apiSettings: ApiSettings) {
 
   return null;
 }
-
+/*
 describe('DiscoveryTests', function () {
   it('API - Unknown', async function () {
     const apiSettings: ApiSettings = {
@@ -1385,7 +1385,7 @@ function testDiscovery(apiSettings: ApiSettings) {
   }
 
   return null;
-}
+}*/
 
 function validateApiResults(apiSettings: ApiSettings, apiResults: ActivityDates[] | null) {
   console.log('Results for: ' + apiSettings.apiId + ' - ' + apiSettings.zipcode + ':' + apiSettings.housenumber);

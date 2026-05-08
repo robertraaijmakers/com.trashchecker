@@ -1,0 +1,282 @@
+<style>
+  .form-group {
+    margin-bottom: 12px;
+  }
+
+  .mode-group {
+    margin-bottom: 16px;
+  }
+
+  .mode-option {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .hint {
+    font-size: 12px;
+    color: var(--homey-color-text-light);
+    margin: 0 0 12px 0;
+  }
+
+  #status {
+    margin-top: 12px;
+    font-size: 13px;
+  }
+
+  .status-error {
+    color: var(--homey-color-red);
+  }
+
+  .status-success {
+    color: var(--homey-color-green);
+  }
+
+  .hidden {
+    display: none;
+  }
+</style>
+
+<p class="hint">Use an existing configured address or add a new one. The next step will show the available device options for that address.</p>
+
+<div class="mode-group">
+  <label class="mode-option">
+    <input type="radio" name="address_mode" id="mode_existing" value="existing" checked /> Use existing configured address
+  </label>
+  <label class="mode-option">
+    <input type="radio" name="address_mode" id="mode_new" value="new" /> Add new address
+  </label>
+</div>
+
+<div class="form-group" id="existing_group">
+  <label class="homey-form-label" for="existing_address">Configured address</label>
+  <select class="homey-form-select" id="existing_address"></select>
+</div>
+
+<div id="new_address_group" class="hidden">
+  <div class="form-group">
+    <label class="homey-form-label" for="country">Country</label>
+    <select class="homey-form-select" id="country">
+      <option value="NL">Netherlands</option>
+      <option value="BE">Belgium</option>
+      <option value="NO">Norway</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="homey-form-label" for="api">Collection API</label>
+    <select class="homey-form-select" id="api"></select>
+  </div>
+
+  <div class="form-group">
+    <label class="homey-form-label" for="postcode">Zipcode / Postcode</label>
+    <input class="homey-form-input" id="postcode" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label class="homey-form-label" for="number">House Number</label>
+    <input class="homey-form-input" id="number" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label class="homey-form-label" for="streetname">Street Name</label>
+    <input class="homey-form-input" id="streetname" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label class="homey-form-label" for="cityname">City</label>
+    <input class="homey-form-input" id="cityname" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label class="homey-form-label" for="countyId">County ID (optional)</label>
+    <input class="homey-form-input" id="countyId" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label class="homey-form-label" for="apiKey">API Key (optional)</label>
+    <input class="homey-form-input" id="apiKey" type="text" />
+  </div>
+</div>
+
+<button class="homey-button-primary-full" id="validate">Validate And Continue</button>
+<p id="status"></p>
+
+<script>
+  Homey.setTitle('Collection Address');
+
+  const form = {
+    modeExisting: document.getElementById('mode_existing'),
+    modeNew: document.getElementById('mode_new'),
+    existingGroup: document.getElementById('existing_group'),
+    existingAddress: document.getElementById('existing_address'),
+    newAddressGroup: document.getElementById('new_address_group'),
+    country: document.getElementById('country'),
+    api: document.getElementById('api'),
+    postcode: document.getElementById('postcode'),
+    number: document.getElementById('number'),
+    streetname: document.getElementById('streetname'),
+    cityname: document.getElementById('cityname'),
+    countyId: document.getElementById('countyId'),
+    apiKey: document.getElementById('apiKey'),
+    validate: document.getElementById('validate'),
+    status: document.getElementById('status'),
+  };
+
+  let registry = [];
+  let configuredAddresses = [];
+
+  function usingExistingAddress() {
+    return form.modeExisting.checked;
+  }
+
+  function updateModeUi() {
+    if (usingExistingAddress()) {
+      form.existingGroup.classList.remove('hidden');
+      form.newAddressGroup.classList.add('hidden');
+      form.validate.textContent = 'Use Address And Continue';
+      return;
+    }
+
+    form.existingGroup.classList.add('hidden');
+    form.newAddressGroup.classList.remove('hidden');
+    form.validate.textContent = 'Validate And Continue';
+  }
+
+  function setStatus(text, type) {
+    form.status.textContent = text || '';
+    form.status.className = '';
+    if (type === 'error') {
+      form.status.classList.add('status-error');
+    }
+    if (type === 'success') {
+      form.status.classList.add('status-success');
+    }
+  }
+
+  function fillForm(settings) {
+    if (!settings) return;
+
+    form.country.value = settings.country || 'NL';
+    form.api.value = settings.apiId || '';
+    form.postcode.value = settings.zipcode || '';
+    form.number.value = settings.housenumber || '';
+    form.streetname.value = settings.streetname || '';
+    form.cityname.value = settings.cityname || '';
+    form.countyId.value = settings.countyId || '';
+    form.apiKey.value = settings.apiKey || '';
+  }
+
+  function renderApiOptions(country, selectedApiId) {
+    const options = ['<option value="">Auto detect</option>'];
+
+    registry
+      .filter((entry) => entry.country === country)
+      .forEach((entry) => {
+        const selected = entry.id === selectedApiId ? ' selected="selected"' : '';
+        options.push('<option value="' + entry.id + '"' + selected + '>' + entry.name + '</option>');
+      });
+
+    form.api.innerHTML = options.join('');
+  }
+
+  function renderConfiguredAddresses() {
+    const options = [];
+
+    configuredAddresses.forEach((entry) => {
+      options.push('<option value="' + entry.index + '">' + entry.label + '</option>');
+    });
+
+    form.existingAddress.innerHTML = options.join('');
+
+    if (configuredAddresses.length === 0) {
+      form.modeExisting.disabled = true;
+      form.modeNew.checked = true;
+      updateModeUi();
+      return;
+    }
+
+    form.modeExisting.disabled = false;
+  }
+
+  function getPayload() {
+    return {
+      country: form.country.value,
+      apiId: form.api.value,
+      zipcode: form.postcode.value,
+      housenumber: form.number.value,
+      streetname: form.streetname.value,
+      cityname: form.cityname.value,
+      countyId: form.countyId.value,
+      apiKey: form.apiKey.value,
+      cleanApiId: '',
+    };
+  }
+
+  function loadContext() {
+    Homey.emit('get_pair_context', null, (error, context) => {
+      if (error) {
+        setStatus(error, 'error');
+        return;
+      }
+
+      registry = context.apiRegistry || [];
+      configuredAddresses = context.configuredAddresses || [];
+      renderConfiguredAddresses();
+      fillForm(context.apiSettings || {});
+      renderApiOptions(form.country.value, (context.apiSettings || {}).apiId || '');
+      updateModeUi();
+    });
+  }
+
+  form.country.addEventListener('change', function() {
+    Homey.emit('get_api_registry', form.country.value, (error, result) => {
+      if (error) {
+        setStatus(error, 'error');
+        return;
+      }
+
+      registry = result || [];
+      renderApiOptions(form.country.value, '');
+    });
+  });
+
+  form.validate.addEventListener('click', function() {
+    if (usingExistingAddress()) {
+      const selectedIndex = Number(form.existingAddress.value);
+      if (!Number.isFinite(selectedIndex)) {
+        setStatus('Please select an address.', 'error');
+        return;
+      }
+
+      setStatus('Using selected address...', '');
+      Homey.emit('set_existing_api_settings', selectedIndex, (error, result) => {
+        if (error || !result || !result.success) {
+          setStatus((result && result.error) || error || 'Could not use selected address.', 'error');
+          return;
+        }
+
+        setStatus('Address selected. Continue to add this device.', 'success');
+        Homey.showView('list_devices');
+      });
+      return;
+    }
+
+    setStatus('Validating...', '');
+    const payload = getPayload();
+
+    Homey.emit('set_api_settings', payload, (error, result) => {
+      if (error || !result || !result.success) {
+        setStatus((result && result.error) || error || 'Validation failed.', 'error');
+        return;
+      }
+
+      setStatus('Validation successful. Continue to add this device.', 'success');
+      Homey.showView('list_devices');
+    });
+  });
+
+  form.modeExisting.addEventListener('change', updateModeUi);
+  form.modeNew.addEventListener('change', updateModeUi);
+
+  loadContext();
+</script>

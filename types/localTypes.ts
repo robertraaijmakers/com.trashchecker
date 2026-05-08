@@ -11,6 +11,8 @@ export interface TrashCollectionReminder extends Homey.App {
   trashApis: TrashApis;
   cleanApis: CleanApis;
   recalculate: () => Promise<void>;
+  ensureAddressDeviceCapabilities: (device?: any) => Promise<void>;
+  ensureTrashTypeDeviceCapabilities: (device?: any) => Promise<void>;
 }
 
 export type TrashArgumentType = TrashType | 'ANY';
@@ -52,6 +54,8 @@ export interface WidgetItem extends ActivityItem {
 export interface TrashFlowCardArgument {
   trash_type: TrashArgumentType;
   when: When;
+  address_device?: any;
+  device?: any;
 }
 
 export interface WidgetSettings {

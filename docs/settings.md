@@ -32,6 +32,8 @@ When you change the dropdown field after "Type Collected" to: today/tomorrow/day
 
 This way you are in full control of the text that is displayed in the global tags. This is especially usefull for plastics/PMD collection as this is very region/city specific and isn't always mentioned and categorized in the correct way.
 
+When you configure multiple addresses/devices, these global tags use the combined result of all configured addresses. In other words: if any configured address has a collection for a type on the selected day, that type can appear in the global tag output. You can use the device specific cards if you want labels and information per address.
+
 You can see some [optimal flow examples here](flow-examples.md).
 
 ## Configure Widget Settings
@@ -39,6 +41,12 @@ These settings allow you to configure the individual look and feel per trash typ
 
 ## Advanced Data Entry
 Here you can enter custom dates for trashcan pick-up in JSON format. These dates will be *added* to the existing dates that already exist based on other selected options. This is only for advanced users and isn't recommended to use.
+
+Custom additions/removals are now applied consistently to:
+* Global output (global tags, debug information)
+* Per-address output (address-based devices, single-type devices and device flows)
+
+If the same date is present in both additions and removals, removal wins because removals are applied last.
 
 ```
 {

@@ -1,0 +1,40 @@
+{
+  "name": {
+    "en": "Collection Type",
+    "nl": "Ophaaltype",
+    "sv": "Hamttyp",
+    "fr": "Type de collecte"
+  },
+  "images": {
+    "large": "drivers/trash_type_address/assets/images/large.png",
+    "small": "drivers/trash_type_address/assets/images/small.png"
+  },
+  "platforms": ["local"],
+  "connectivity": ["lan"],
+  "class": "other",
+  "capabilities": ["trash_collection_next_on", "trash_collection_following_on"],
+  "pair": [
+    {
+      "id": "enter_api_settings_single_type",
+      "$template": "enter_api_settings_address"
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "prev": "enter_api_settings_single_type",
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "repair": [
+    {
+      "id": "reconfigure_api_settings_single_type",
+      "$template": "reconfigure_api_settings_address"
+    }
+  ]
+}

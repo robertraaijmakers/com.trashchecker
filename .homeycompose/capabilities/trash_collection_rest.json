@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Residual waste",
+    "nl": "Restafval",
+    "sv": "Residual waste",
+    "fr": "Residual waste"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/settings/trashIcons/trash-REST.svg"
+}

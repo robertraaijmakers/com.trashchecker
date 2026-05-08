@@ -361,8 +361,11 @@ export function processWasteData(afvalstromenResponse: any, kalenderResponse: an
       collectionType = TrashType.GLAS;
       typeFound = true;
     }
-    //if (checkTitle.includes('ELEKTRISCH')) title = 'ELEKTRISCH';
-    //if (checkTitle.includes('SNOEI')) title = 'SNOEI';
+
+    if (checkTitle.includes('SNOEI')) {
+      collectionType = TrashType.SNOEI;
+      typeFound = true;
+    }
 
     if (collectionType === null) {
       console.log(`Couldn't find type: ${checkTitle}.`);

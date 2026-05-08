@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Glass",
+    "nl": "Glas",
+    "sv": "Glass",
+    "fr": "Glass"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/settings/trashIcons/trash-GLAS.svg"
+}

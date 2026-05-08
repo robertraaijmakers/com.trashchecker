@@ -8,12 +8,32 @@ import { addDate } from './lib/helpers';
 import { ApiSettings, LabelSettings, ManualSetting, ManualSettings, TrashType } from './assets/publicTypes';
 import { DateTimeHelper } from './lib/datetimehelper';
 
-// TODO: find solution to import this from the .mts file
 const AllTrashTypes = Object.freeze(['GFT', 'PLASTIC', 'PAPIER', 'PMD', 'REST', 'TEXTIEL', 'GROF', 'KERSTBOOM', 'GLAS'] as const);
+const CapabilityTrashTypes = Object.freeze(['GFT', 'PLASTIC', 'PAPIER', 'PMD', 'REST', 'TEXTIEL', 'GROF', 'GLAS', 'KCA', 'SNOEI', 'KERSTBOOM'] as const);
+const TrashTypeCapabilityMap: Record<TrashType, string> = {
+  GFT: 'trash_collection_gft',
+  GLAS: 'trash_collection_glas',
+  GROF: 'trash_collection_grof',
+  KCA: 'trash_collection_kca',
+  PAPIER: 'trash_collection_papier',
+  PLASTIC: 'trash_collection_plastic',
+  PMD: 'trash_collection_pmd',
+  REST: 'trash_collection_rest',
+  SNOEI: 'trash_collection_snoei',
+  TEXTIEL: 'trash_collection_textiel',
+  KERSTBOOM: 'trash_collection_kerstboom',
+};
+const SingleTypeDeviceCapabilities = Object.freeze({
+  nextCollectionOn: 'trash_collection_next_on',
+  followingCollectionOn: 'trash_collection_following_on',
+});
 
 module.exports = class TrashCollectionReminder extends Homey.App {
   collectionDates: ActivityDates[] = [];
   cleanDates: ActivityDates[] = [];
+  collectionDatesByAddress: Map<string, ActivityDates[]> = new Map<string, ActivityDates[]>();
+  cleanDatesByAddress: Map<string, ActivityDates[]> = new Map<string, ActivityDates[]>();
+  deviceAddressLookup: Map<string, string> = new Map<string, string>();
   trashApis: TrashApis = new TrashApis(this.log);
   cleanApis: CleanApis = new CleanApis(this.log);
 
@@ -26,6 +46,8 @@ module.exports = class TrashCollectionReminder extends Homey.App {
    * onInit is called when the app is initialized.
    */
   async onInit() {
+    await this.migrateApiSettingsStorage();
+
     // Update manual input dates when settings change.
     this.homey.settings.on('set', (settingName) => {
       this.onSettingsChanged(settingName);
@@ -97,23 +119,56 @@ module.exports = class TrashCollectionReminder extends Homey.App {
 	********************/
   async flowTrashIsCollectedAction(args: TrashFlowCardArgument) {
     args.trash_type = 'ANY';
-    return this.flowDaysToCollect(args, FlowCardType.ACTION);
+    return this.flowDaysToCollect(args, FlowCardType.ACTION, this.collectionDates);
   }
 
   async flowTrashIsCollectedCondition(args: TrashFlowCardArgument) {
-    return this.flowDaysToCollect(args, FlowCardType.CONDITION);
+    return this.flowDaysToCollect(args, FlowCardType.CONDITION, this.collectionDates);
   }
 
-  async flowDaysToCollect(args: TrashFlowCardArgument, type: FlowCardType) {
+  async flowTrashIsCollectedForDeviceAction(args: TrashFlowCardArgument, state?: any) {
+    args.trash_type = 'ANY';
+    const addressSignature = this.resolveFlowAddressSignature(args, state);
+    return this.flowDaysToCollect(args, FlowCardType.ACTION, this.collectionDatesByAddress.get(addressSignature) || []);
+  }
+
+  async flowTrashIsCollectedForDeviceCondition(args: TrashFlowCardArgument, state?: any) {
+    const addressSignature = this.resolveFlowAddressSignature(args, state);
+    return this.flowDaysToCollect(args, FlowCardType.CONDITION, this.collectionDatesByAddress.get(addressSignature) || []);
+  }
+
+  async flowTrashTypeIsCollectedForDeviceAction(args: TrashFlowCardArgument, state?: any) {
+    const trashType = this.resolveFlowTrashType(args, state);
+    if (!trashType) {
+      return this.handleResultTrashCollection(FlowCardType.ACTION, false, '', '');
+    }
+
+    args.trash_type = trashType;
+    const addressSignature = this.resolveFlowAddressSignature(args, state);
+    return this.flowDaysToCollect(args, FlowCardType.ACTION, this.collectionDatesByAddress.get(addressSignature) || []);
+  }
+
+  async flowTrashTypeIsCollectedForDeviceCondition(args: TrashFlowCardArgument, state?: any) {
+    const trashType = this.resolveFlowTrashType(args, state);
+    if (!trashType) {
+      return false;
+    }
+
+    args.trash_type = trashType;
+    const addressSignature = this.resolveFlowAddressSignature(args, state);
+    return this.flowDaysToCollect(args, FlowCardType.CONDITION, this.collectionDatesByAddress.get(addressSignature) || []);
+  }
+
+  async flowDaysToCollect(args: TrashFlowCardArgument, type: FlowCardType, dates: ActivityDates[]) {
     let result = false;
     let trashTypeCollected = '';
     let trashTypeCollectedLocalized = '';
 
-    if (!this.collectionDates || this.collectionDates.length === 0) {
+    if (!dates || dates.length === 0) {
       return this.handleResultTrashCollection(type, result, trashTypeCollected, trashTypeCollectedLocalized);
     }
 
-    if (args.trash_type !== 'ANY' && !this.collectionDates.some((x) => x.type === args.trash_type)) {
+    if (args.trash_type !== 'ANY' && !dates.some((x) => x.type === args.trash_type)) {
       var message = this.homey.__('error.typenotsupported.addviasettings');
       this.log(message);
       return this.handleResultTrashCollection(type, result, trashTypeCollected, trashTypeCollectedLocalized);
@@ -127,7 +182,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     }
 
     const labelSettings = this.homey.settings.get('labelSettings');
-    const itemsCollectedToday = await this.findTrashResultsByDate(now);
+    const itemsCollectedToday = await this.findResultsByDate(dates, now);
 
     if (args.trash_type == 'ANY') {
       if (itemsCollectedToday.length > 0) {
@@ -151,23 +206,56 @@ module.exports = class TrashCollectionReminder extends Homey.App {
 
   async flowTrashIsCleanedAction(args: TrashFlowCardArgument) {
     args.trash_type = 'ANY';
-    return this.flowTrashIsCleaned(args, FlowCardType.ACTION);
+    return this.flowTrashIsCleaned(args, FlowCardType.ACTION, this.cleanDates);
   }
 
   async flowTrashIsCleanedCondition(args: TrashFlowCardArgument) {
-    return this.flowTrashIsCleaned(args, FlowCardType.CONDITION);
+    return this.flowTrashIsCleaned(args, FlowCardType.CONDITION, this.cleanDates);
   }
 
-  async flowTrashIsCleaned(args: TrashFlowCardArgument, type: FlowCardType) {
+  async flowTrashIsCleanedForDeviceAction(args: TrashFlowCardArgument, state?: any) {
+    args.trash_type = 'ANY';
+    const addressSignature = this.resolveFlowAddressSignature(args, state);
+    return this.flowTrashIsCleaned(args, FlowCardType.ACTION, this.cleanDatesByAddress.get(addressSignature) || []);
+  }
+
+  async flowTrashIsCleanedForDeviceCondition(args: TrashFlowCardArgument, state?: any) {
+    const addressSignature = this.resolveFlowAddressSignature(args, state);
+    return this.flowTrashIsCleaned(args, FlowCardType.CONDITION, this.cleanDatesByAddress.get(addressSignature) || []);
+  }
+
+  async flowTrashTypeIsCleanedForDeviceAction(args: TrashFlowCardArgument, state?: any) {
+    const trashType = this.resolveFlowTrashType(args, state);
+    if (!trashType) {
+      return this.handleResultTrashCleaning(FlowCardType.ACTION, false, '', '');
+    }
+
+    args.trash_type = trashType;
+    const addressSignature = this.resolveFlowAddressSignature(args, state);
+    return this.flowTrashIsCleaned(args, FlowCardType.ACTION, this.cleanDatesByAddress.get(addressSignature) || []);
+  }
+
+  async flowTrashTypeIsCleanedForDeviceCondition(args: TrashFlowCardArgument, state?: any) {
+    const trashType = this.resolveFlowTrashType(args, state);
+    if (!trashType) {
+      return false;
+    }
+
+    args.trash_type = trashType;
+    const addressSignature = this.resolveFlowAddressSignature(args, state);
+    return this.flowTrashIsCleaned(args, FlowCardType.CONDITION, this.cleanDatesByAddress.get(addressSignature) || []);
+  }
+
+  async flowTrashIsCleaned(args: TrashFlowCardArgument, type: FlowCardType, dates: ActivityDates[]) {
     let result = false;
     let trashTypeCleaned = '';
     let trashTypeCleanedLocalized = '';
 
-    if (!this.cleanDates || this.cleanDates.length === 0) {
+    if (!dates || dates.length === 0) {
       return this.handleResultTrashCleaning(type, result, trashTypeCleaned, trashTypeCleanedLocalized);
     }
 
-    if (args.trash_type !== 'ANY' && !this.cleanDates.some((x) => x.type === args.trash_type.toUpperCase())) {
+    if (args.trash_type !== 'ANY' && !dates.some((x) => x.type === args.trash_type.toUpperCase())) {
       var message = this.homey.__('error.typenotsupported.addviasettings');
       this.log(message);
       return this.handleResultTrashCleaning(type, result, trashTypeCleaned, trashTypeCleanedLocalized);
@@ -181,7 +269,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     }
 
     const labelSettings = this.homey.settings.get('labelSettings');
-    const itemsCleanedToday = await this.findCleanResultsByDate(now);
+    const itemsCleanedToday = await this.findResultsByDate(dates, now);
 
     if (args.trash_type == 'ANY') {
       if (itemsCleanedToday.length > 0) {
@@ -203,6 +291,70 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     return this.handleResultTrashCleaning(type, result, trashTypeCleaned, trashTypeCleanedLocalized);
   }
 
+  private resolveFlowAddressSignature(args: TrashFlowCardArgument, state?: any): string {
+    const addressDeviceArg = this.resolveFlowDevice(args, state);
+    if (!addressDeviceArg) return '';
+
+    const fromSettings = this.getDeviceAddressSignature(addressDeviceArg);
+    if (fromSettings) {
+      return fromSettings;
+    }
+
+    const fromGetData = addressDeviceArg.getData?.()?.addressSignature || addressDeviceArg.getData?.()?.id;
+    if (typeof fromGetData === 'string' && fromGetData !== '') {
+      return fromGetData;
+    }
+
+    const fromData = addressDeviceArg.data?.id;
+    if (typeof fromData === 'string' && fromData !== '') {
+      return fromData;
+    }
+
+    const argId = String(addressDeviceArg.id || '');
+    if (argId.startsWith('trash-address-') || argId.startsWith('trash-type-address-')) {
+      return argId;
+    }
+
+    return this.deviceAddressLookup.get(argId) || '';
+  }
+
+  private resolveFlowTrashType(args: TrashFlowCardArgument, state?: any): TrashType | undefined {
+    const addressDeviceArg = this.resolveFlowDevice(args, state);
+    if (!addressDeviceArg) {
+      return undefined;
+    }
+
+    const fromGetSettings = addressDeviceArg.getSettings?.()?.trashType;
+    if (typeof fromGetSettings === 'string' && fromGetSettings !== '') {
+      return fromGetSettings as TrashType;
+    }
+
+    const fromSettings = addressDeviceArg.settings?.trashType;
+    if (typeof fromSettings === 'string' && fromSettings !== '') {
+      return fromSettings as TrashType;
+    }
+
+    return undefined;
+  }
+
+  private resolveFlowDevice(args: TrashFlowCardArgument, state?: any): any {
+    return args.address_device || args.device || state?.device || state;
+  }
+
+  private getDeviceAddressSignature(deviceLike: any): string {
+    const settings = deviceLike?.getSettings?.() || deviceLike?.settings;
+    if (!settings) {
+      return '';
+    }
+
+    const normalized = this.normalizeApiSettings(settings);
+    if (!this.hasAddressInput(normalized)) {
+      return '';
+    }
+
+    return this.createAddressSignature(normalized);
+  }
+
   /* ******************
 		EVENT HANDLERS
   ********************/
@@ -218,65 +370,279 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   async onUpdateData() {
     this.log(`Start refreshing data`);
 
-    let settingsUpdated = false;
-    let collectionDays: ActivityDates[] = [];
-    let cleaningDays: ActivityDates[] = [];
-    const apiSettings = <ApiSettings>this.homey.settings.get('apiSettings');
+    await this.refreshDeviceAddressLookup();
 
-    if (!apiSettings?.housenumber && !apiSettings?.zipcode && !apiSettings?.zipcode) {
-      this.cleanDates = cleaningDays;
-      this.collectionDates = collectionDays;
+    let settingsUpdated = false;
+    const settingsList = this.getApiSettingsList();
+    const collectionDatesByAddress = new Map<string, ActivityDates[]>();
+    const cleanDatesByAddress = new Map<string, ActivityDates[]>();
+
+    if (settingsList.length === 0) {
+      this.cleanDatesByAddress = cleanDatesByAddress;
+      this.collectionDatesByAddress = collectionDatesByAddress;
+      this.cleanDates = [];
+      this.collectionDates = [];
 
       await this.calculateManualDays();
       return false;
     }
 
-    if (!apiSettings?.apiId) {
-      const apiResult = await this.trashApis.FindApi(apiSettings);
-      if (apiResult.id !== '') {
-        apiSettings.apiId = apiResult.id;
-        collectionDays = apiResult.days;
-        settingsUpdated = true;
-      } else {
-        apiSettings.apiId = 'not-applicable';
-        settingsUpdated = true;
+    for (let index = 0; index < settingsList.length; index += 1) {
+      const apiSettings = settingsList[index];
+      const addressKey = this.createAddressSignature(apiSettings);
+      let collectionDays: ActivityDates[] = [];
+      let cleaningDays: ActivityDates[] = [];
+
+      if (!this.hasAddressInput(apiSettings)) {
+        collectionDatesByAddress.set(addressKey, collectionDays);
+        cleanDatesByAddress.set(addressKey, cleaningDays);
+        continue;
       }
-    } else if (apiSettings?.apiId !== 'not-applicable') {
-      try {
-        collectionDays = await this.trashApis.ExecuteApi(apiSettings);
-      } catch (error) {
-        this.log(error);
+
+      if (!apiSettings?.apiId) {
+        const apiResult = await this.trashApis.FindApi(apiSettings);
+        if (apiResult.id !== '') {
+          apiSettings.apiId = apiResult.id;
+          collectionDays = apiResult.days;
+          settingsUpdated = true;
+        } else {
+          apiSettings.apiId = 'not-applicable';
+          settingsUpdated = true;
+        }
+      } else if (apiSettings?.apiId !== 'not-applicable') {
+        try {
+          collectionDays = await this.trashApis.ExecuteApi(apiSettings);
+        } catch (error) {
+          const shouldRediscover = this.shouldRediscoverApiForError(error);
+          if (!shouldRediscover) {
+            this.log(error);
+          }
+
+          if (shouldRediscover) {
+            try {
+              const fallbackResult = await this.trashApis.FindApi({ ...apiSettings, apiId: '' });
+              if (fallbackResult.id !== '') {
+                apiSettings.apiId = fallbackResult.id;
+                collectionDays = fallbackResult.days;
+              } else {
+                apiSettings.apiId = 'not-applicable';
+              }
+              settingsUpdated = true;
+            } catch (fallbackError) {
+              this.log('Failed rediscovery after trash API execution error', fallbackError);
+            }
+          }
+        }
       }
+
+      if (!apiSettings?.cleanApiId && apiSettings?.cleanApiId !== 'not-applicable') {
+        const apiResult = await this.cleanApis.FindApi(apiSettings);
+        if (apiResult.id !== '') {
+          apiSettings.cleanApiId = apiResult.id;
+          cleaningDays = apiResult.days;
+          settingsUpdated = true;
+        } else {
+          apiSettings.cleanApiId = 'not-applicable';
+          settingsUpdated = true;
+        }
+      } else if (apiSettings?.cleanApiId !== 'not-applicable') {
+        try {
+          cleaningDays = await this.cleanApis.ExecuteApi(apiSettings);
+        } catch (error) {
+          const shouldRediscover = this.shouldRediscoverApiForError(error);
+          if (!shouldRediscover) {
+            this.log(error);
+          }
+
+          if (shouldRediscover) {
+            try {
+              const fallbackResult = await this.cleanApis.FindApi({ ...apiSettings, cleanApiId: '' });
+              if (fallbackResult.id !== '') {
+                apiSettings.cleanApiId = fallbackResult.id;
+                cleaningDays = fallbackResult.days;
+              } else {
+                apiSettings.cleanApiId = 'not-applicable';
+              }
+              settingsUpdated = true;
+            } catch (fallbackError) {
+              this.log('Failed rediscovery after clean API execution error', fallbackError);
+            }
+          }
+        }
+      }
+
+      settingsList[index] = apiSettings;
+      collectionDatesByAddress.set(addressKey, collectionDays);
+      cleanDatesByAddress.set(addressKey, cleaningDays);
     }
 
-    if (!apiSettings?.cleanApiId && apiSettings?.cleanApiId !== 'not-applicable') {
-      const apiResult = await this.cleanApis.FindApi(apiSettings);
-      if (apiResult.id !== '') {
-        apiSettings.cleanApiId = apiResult.id;
-        cleaningDays = apiResult.days;
-        settingsUpdated = true;
-      } else {
-        apiSettings.cleanApiId = 'not-applicable';
-        settingsUpdated = true;
-      }
-    } else if (apiSettings?.cleanApiId !== 'not-applicable') {
-      try {
-        cleaningDays = await this.cleanApis.ExecuteApi(apiSettings);
-      } catch (error) {
-        this.log(error);
-      }
-    }
+    this.collectionDatesByAddress = collectionDatesByAddress;
+    this.cleanDatesByAddress = cleanDatesByAddress;
 
-    this.cleanDates = cleaningDays;
-    this.collectionDates = collectionDays;
+    this.collectionDates = this.mergeAddressDates(collectionDatesByAddress);
+    this.cleanDates = this.mergeAddressDates(cleanDatesByAddress);
 
     await this.calculateManualDays();
+    await this.updateAddressDeviceCapabilities();
+    await this.updateTrashTypeDeviceCapabilities();
 
     if (settingsUpdated) {
-      this.homey.settings.set('apiSettings', apiSettings);
+      this.homey.settings.set('apiSettingsList', settingsList);
+      this.homey.settings.set('apiSettings', settingsList[0]);
     }
 
     return true;
+  }
+
+  private normalizeApiSettings(input: any): ApiSettings {
+    return {
+      apiId: input?.apiId || '',
+      cleanApiId: input?.cleanApiId || '',
+      zipcode: String(input?.zipcode || '')
+        .trim()
+        .replace(/\s+/g, '')
+        .toUpperCase(),
+      housenumber: String(input?.housenumber || '').trim(),
+      streetname: String(input?.streetname || '').trim(),
+      cityname: String(input?.cityname || '').trim(),
+      country: String(input?.country || 'NL')
+        .trim()
+        .toUpperCase(),
+      countyId: String(input?.countyId || '').trim() || undefined,
+      apiKey: String(input?.apiKey || '').trim() || undefined,
+    };
+  }
+
+  private shouldRediscoverApiForError(error: unknown): boolean {
+    const msg = String((error as any)?.message || error || '').toLowerCase();
+    return msg.includes('no zipcode found') || msg.includes('invalid zipcode') || msg.includes('postal code not identified') || msg.includes('no trash data found');
+  }
+
+  private hasAddressInput(settings: ApiSettings): boolean {
+    return settings.zipcode.trim() !== '' || settings.housenumber.trim() !== '' || settings.streetname.trim() !== '' || settings.cityname.trim() !== '';
+  }
+
+  private getApiSettingsList(): ApiSettings[] {
+    const list = this.homey.settings.get('apiSettingsList');
+    if (!Array.isArray(list)) {
+      return [];
+    }
+
+    return list.map((item) => this.normalizeApiSettings(item)).filter((item) => this.hasAddressInput(item));
+  }
+
+  private createAddressSignature(settings: ApiSettings): string {
+    return ['trash-address', settings.country, settings.zipcode, settings.housenumber, settings.streetname, settings.cityname]
+      .map((x) =>
+        String(x || '')
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, '-'),
+      )
+      .join('-');
+  }
+
+  private mergeAddressDates(source: Map<string, ActivityDates[]>): ActivityDates[] {
+    const typeMap = new Map<TrashType, ActivityDates>();
+
+    for (const dates of source.values()) {
+      for (const entry of dates) {
+        const existing = typeMap.get(entry.type);
+        if (!existing) {
+          typeMap.set(entry.type, {
+            type: entry.type,
+            icon: entry.icon,
+            color: entry.color,
+            localText: entry.localText,
+            dates: [...entry.dates],
+          });
+          continue;
+        }
+
+        existing.icon = existing.icon || entry.icon;
+        existing.color = existing.color || entry.color;
+        existing.localText = existing.localText || entry.localText;
+        existing.dates.push(...entry.dates);
+      }
+    }
+
+    for (const entry of typeMap.values()) {
+      const deduplicated = Array.from(new Set(entry.dates.map((d) => new Date(d).setHours(0, 0, 0, 0))));
+      entry.dates = deduplicated.map((d) => new Date(d)).sort((a, b) => a.getTime() - b.getTime());
+    }
+
+    return Array.from(typeMap.values());
+  }
+
+  private async refreshDeviceAddressLookup() {
+    const lookup = new Map<string, string>();
+
+    try {
+      const driver = this.homey.drivers.getDriver('trash_address');
+      if (driver) {
+        const devices = await driver.getDevices();
+        for (const [deviceId, device] of Object.entries(devices)) {
+          const dataId = this.getDeviceAddressSignature(device) || String(device.getData()?.addressSignature || device.getData()?.id || '');
+          if (dataId) {
+            lookup.set(deviceId, dataId);
+          }
+        }
+      }
+
+      const singleTypeDriver = this.homey.drivers.getDriver('trash_type_address');
+      if (singleTypeDriver) {
+        const devices = await singleTypeDriver.getDevices();
+        for (const [deviceId, device] of Object.entries(devices)) {
+          const dataId = this.getDeviceAddressSignature(device) || String(device.getData()?.addressSignature || device.getData()?.id || '');
+          if (dataId) {
+            lookup.set(deviceId, dataId);
+          }
+        }
+      }
+    } catch (error) {
+      const message = String((error as any)?.message || error || '');
+      if (!message.includes('Driver Not Initialized')) {
+        this.log('Failed to refresh device address lookup', error);
+      }
+    }
+
+    this.deviceAddressLookup = lookup;
+  }
+
+  private getPrimaryApiSettings(): ApiSettings {
+    const settingsList = this.getApiSettingsList();
+    if (settingsList.length > 0) {
+      this.homey.settings.set('apiSettings', settingsList[0]);
+      return settingsList[0];
+    }
+
+    return this.normalizeApiSettings(this.homey.settings.get('apiSettings'));
+  }
+
+  private async migrateApiSettingsStorage() {
+    const rawList = this.homey.settings.get('apiSettingsList');
+    const rawSingle = this.homey.settings.get('apiSettings');
+
+    let normalizedList: ApiSettings[] = [];
+    if (Array.isArray(rawList)) {
+      normalizedList = rawList.map((item) => this.normalizeApiSettings(item)).filter((item) => this.hasAddressInput(item));
+    }
+
+    if (normalizedList.length === 0 && rawSingle) {
+      const normalizedSingle = this.normalizeApiSettings(rawSingle);
+      if (this.hasAddressInput(normalizedSingle)) {
+        normalizedList = [normalizedSingle];
+      }
+    }
+
+    if (normalizedList.length > 0) {
+      this.homey.settings.set('apiSettingsList', normalizedList);
+      this.homey.settings.set('apiSettings', normalizedList[0]);
+      return;
+    }
+
+    this.homey.settings.set('apiSettingsList', []);
+    this.homey.settings.set('apiSettings', this.normalizeApiSettings(rawSingle));
   }
 
   async onUpdateLabel() {
@@ -311,36 +677,74 @@ module.exports = class TrashCollectionReminder extends Homey.App {
 
     // Parse manual additions
     const manualAdditions = this.homey.settings.get('manualAdditions');
-    for (let type in AllTrashTypes) {
-      const trashType = <TrashType>AllTrashTypes[type];
-      if (!manualAdditions?.[trashType]) continue;
+    this.applyManualAdditions(this.collectionDates, manualAdditions);
 
-      for (let index in manualAdditions[trashType]) {
-        addDate(this.collectionDates, trashType, new Date(manualAdditions[trashType][index]));
-      }
+    for (const datesForAddress of this.collectionDatesByAddress.values()) {
+      this.applyManualAdditions(datesForAddress, manualAdditions);
     }
 
     // Manual removals have the highest priority and are applied after all generated/manual-added dates.
     const manualRemovals = this.homey.settings.get('manualRemovals');
-    if (manualRemovals !== null) {
-      for (let type in AllTrashTypes) {
-        const trashType = <TrashType>AllTrashTypes[type];
-        if (!manualRemovals?.[trashType]) continue;
+    this.applyManualRemovals(this.collectionDates, manualRemovals);
 
-        const datesToRemove = new Set<number>(manualRemovals[trashType].map((d: string) => new Date(d).setHours(0, 0, 0, 0)));
-        const targetType = this.collectionDates.find((x) => x.type === trashType);
-        if (!targetType) continue;
+    for (const datesForAddress of this.collectionDatesByAddress.values()) {
+      this.applyManualRemovals(datesForAddress, manualRemovals);
+    }
 
-        targetType.dates = targetType.dates.filter((d) => !datesToRemove.has(new Date(d).setHours(0, 0, 0, 0)));
-      }
+    this.normalizeActivityDates(this.collectionDates);
+    for (const datesForAddress of this.collectionDatesByAddress.values()) {
+      this.normalizeActivityDates(datesForAddress);
     }
 
     // After everything, force an update of the label
     await this.onUpdateLabel();
   }
 
+  private applyManualAdditions(targetDates: ActivityDates[], manualAdditions: any) {
+    for (let type in AllTrashTypes) {
+      const trashType = <TrashType>AllTrashTypes[type];
+      if (!manualAdditions?.[trashType]) {
+        continue;
+      }
+
+      for (let index in manualAdditions[trashType]) {
+        addDate(targetDates, trashType, new Date(manualAdditions[trashType][index]));
+      }
+    }
+  }
+
+  private applyManualRemovals(targetDates: ActivityDates[], manualRemovals: any) {
+    if (manualRemovals === null) {
+      return;
+    }
+
+    for (let type in AllTrashTypes) {
+      const trashType = <TrashType>AllTrashTypes[type];
+      if (!manualRemovals?.[trashType]) {
+        continue;
+      }
+
+      const datesToRemove = new Set<number>(manualRemovals[trashType].map((d: string) => new Date(d).setHours(0, 0, 0, 0)));
+      const targetType = targetDates.find((x) => x.type === trashType);
+      if (!targetType) {
+        continue;
+      }
+
+      targetType.dates = targetType.dates.filter((d) => !datesToRemove.has(new Date(d).setHours(0, 0, 0, 0)));
+    }
+  }
+
+  private normalizeActivityDates(targetDates: ActivityDates[]) {
+    for (const entry of targetDates) {
+      const deduplicated = Array.from(new Set(entry.dates.map((d) => new Date(d).setHours(0, 0, 0, 0))));
+      entry.dates = deduplicated.map((d) => new Date(d)).sort((a, b) => a.getTime() - b.getTime());
+    }
+  }
+
   async dailyRefresh() {
     await this.onUpdateLabel(); // Update labels on daily interval
+    await this.updateAddressDeviceCapabilities(); // Refresh relative capability strings (today/tomorrow)
+    await this.updateTrashTypeDeviceCapabilities();
     this.homey.api.realtime('settings_changed', '{}'); // Trigger daily widget refresh
 
     // Set new timeout to midnight
@@ -465,6 +869,175 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       isCleaned: result,
       trashType,
       trashTypeLocalized,
+    };
+  }
+
+  async ensureAddressDeviceCapabilities(device?: Homey.Device) {
+    await this.updateAddressDeviceCapabilities(device);
+  }
+
+  async ensureTrashTypeDeviceCapabilities(device?: Homey.Device) {
+    await this.updateTrashTypeDeviceCapabilities(device);
+  }
+
+  private async updateAddressDeviceCapabilities(device?: Homey.Device) {
+    try {
+      const driver = this.homey.drivers.getDriver('trash_address');
+      if (!driver) {
+        return;
+      }
+
+      const devices = device ? [device] : Object.values(await driver.getDevices());
+      const today = await this.getLocalDate();
+      today.setHours(0, 0, 0, 0);
+
+      for (const currentDevice of devices) {
+        const addressSignature = this.getDeviceAddressSignature(currentDevice) || String(currentDevice.getData()?.addressSignature || currentDevice.getData()?.id || '');
+        const datesForAddress = this.collectionDatesByAddress.get(addressSignature) || [];
+
+        for (const type of CapabilityTrashTypes) {
+          const trashType = type as TrashType;
+          const capabilityId = TrashTypeCapabilityMap[trashType];
+          const nextDate = this.getFirstUpcomingDateForType(datesForAddress, trashType, today);
+          const hasCapability = currentDevice.hasCapability(capabilityId);
+
+          if (!nextDate) {
+            if (hasCapability) {
+              await currentDevice.removeCapability(capabilityId);
+            }
+            continue;
+          }
+
+          if (!hasCapability) {
+            await currentDevice.addCapability(capabilityId);
+          }
+
+          const formattedDate = await this.getCapabilityDateLabel(nextDate);
+          await currentDevice.setCapabilityValue(capabilityId, formattedDate);
+        }
+      }
+    } catch (error) {
+      const message = String((error as any)?.message || error || '');
+      if (!message.includes('Driver Not Initialized')) {
+        this.log('Failed to update device capabilities', error);
+      }
+    }
+  }
+
+  private getFirstUpcomingDateForType(dates: ActivityDates[], type: TrashType, today: Date): Date | null {
+    const typeDates = dates.find((x) => x.type === type)?.dates || [];
+    const upcoming = typeDates
+      .map((x) => new Date(x))
+      .filter((x) => {
+        x.setHours(0, 0, 0, 0);
+        return x.getTime() >= today.getTime();
+      })
+      .sort((a, b) => a.getTime() - b.getTime());
+
+    return upcoming.length > 0 ? upcoming[0] : null;
+  }
+
+  private async getCapabilityDateLabel(collectionDate: Date): Promise<string> {
+    const now = await this.getLocalDate();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    const target = new Date(collectionDate);
+    target.setHours(0, 0, 0, 0);
+
+    if (target.getTime() === yesterday.getTime()) {
+      return this.homey.__('tokens.output.timeindicator.t-1');
+    }
+
+    if (target.getTime() === today.getTime()) {
+      return this.homey.__('tokens.output.timeindicator.t0');
+    }
+
+    if (target.getTime() === tomorrow.getTime()) {
+      return this.homey.__('tokens.output.timeindicator.t1');
+    }
+
+    return target.toLocaleDateString(undefined, {
+      day: 'numeric',
+      month: 'long',
+    });
+  }
+
+  private async updateTrashTypeDeviceCapabilities(device?: Homey.Device) {
+    try {
+      const driver = this.homey.drivers.getDriver('trash_type_address');
+      if (!driver) {
+        return;
+      }
+
+      const devices = device ? [device] : Object.values(await driver.getDevices());
+      const today = await this.getLocalDate();
+      today.setHours(0, 0, 0, 0);
+
+      for (const currentDevice of devices) {
+        const addressSignature = this.getDeviceAddressSignature(currentDevice) || String(currentDevice.getData()?.addressSignature || currentDevice.getData()?.id || '');
+        const trashType = String(currentDevice.getSettings?.()?.trashType || '') as TrashType;
+        if (!trashType) {
+          continue;
+        }
+
+        const datesForAddress = this.collectionDatesByAddress.get(addressSignature) || [];
+        const timeline = this.getCollectionTimelineForType(datesForAddress, trashType, today);
+
+        const nextValue = timeline.next ? await this.getCapabilityDateLabel(timeline.next) : '';
+        const followingValue = timeline.following ? await this.getCapabilityDateLabel(timeline.following) : '';
+
+        if (currentDevice.hasCapability(SingleTypeDeviceCapabilities.nextCollectionOn)) {
+          await currentDevice.setCapabilityValue(SingleTypeDeviceCapabilities.nextCollectionOn, nextValue);
+        }
+
+        if (currentDevice.hasCapability(SingleTypeDeviceCapabilities.followingCollectionOn)) {
+          await currentDevice.setCapabilityValue(SingleTypeDeviceCapabilities.followingCollectionOn, followingValue);
+        }
+      }
+    } catch (error) {
+      const message = String((error as any)?.message || error || '');
+      if (!message.includes('Driver Not Initialized')) {
+        this.log('Failed to update single type device capabilities', error);
+      }
+    }
+  }
+
+  private getCollectionTimelineForType(dates: ActivityDates[], type: TrashType, today: Date): { last: Date | null; next: Date | null; following: Date | null } {
+    const typeDates = dates.find((x) => x.type === type)?.dates || [];
+    const normalized = typeDates
+      .map((x) => new Date(x))
+      .map((x) => {
+        x.setHours(0, 0, 0, 0);
+        return x;
+      })
+      .sort((a, b) => a.getTime() - b.getTime());
+
+    let last: Date | null = null;
+    let next: Date | null = null;
+    const upcoming: Date[] = [];
+
+    for (const date of normalized) {
+      if (date.getTime() <= today.getTime()) {
+        last = date;
+      }
+
+      if (date.getTime() >= today.getTime()) {
+        upcoming.push(date);
+      }
+    }
+
+    if (upcoming.length > 0) {
+      next = upcoming[0];
+    }
+
+    return {
+      last,
+      next,
+      following: upcoming.length > 1 ? upcoming[1] : null,
     };
   }
 

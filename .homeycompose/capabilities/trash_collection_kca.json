@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Chemical waste",
+    "nl": "Klein chemisch afval",
+    "sv": "Chemical waste",
+    "fr": "Chemical waste"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/settings/trashIcons/trash-KCA.svg"
+}

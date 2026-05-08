@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Following Collection On",
+    "nl": "Daaropvolgende ophaling op",
+    "sv": "Efterfoljande hamtning",
+    "fr": "Collecte suivante"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/settings/trashIcons/trash-REST.svg"
+}

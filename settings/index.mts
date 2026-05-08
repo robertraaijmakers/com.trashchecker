@@ -74,7 +74,8 @@ class SettingScript {
     respDates.innerHTML = 'Loading collection days...';
 
     // Retrieve settings
-    this.homey.get('apiSettings', (err: string, result: any) => this.handleGetApiSettings(err, result));
+    this.homey.get('apiSettingsList', (err: string, result: any) => this.handleGetApiSettingsList(err, result));
+    this.homey.get('apiSettings', (err: string, result: any) => this.handleGetApiSettingsFallback(err, result));
     this.homey.get('manualEntryData', (err: string, result: any) => this.handleGetManualInputSettings(err, result));
     this.homey.get('labelSettings', (err: string, result: any) => this.handleGetLabelSettings(err, result));
     this.homey.get('manualAdditions', (err: string, result: any) => this.handleGetManualAdditions(err, result));
@@ -149,6 +150,39 @@ class SettingScript {
     this.toggleFieldsBasedOnSelectedProvider();
   }
 
+  async handleGetApiSettingsList(err: string, apiSettingsList: ApiSettings[]) {
+    if (err || !Array.isArray(apiSettingsList) || apiSettingsList.length === 0) {
+      return;
+    }
+
+    await this.handleGetApiSettings(err, apiSettingsList[0]);
+  }
+
+  async handleGetApiSettingsFallback(err: string, apiSettings: ApiSettings) {
+    this.homey.get('apiSettingsList', async (listError: string, apiSettingsList: ApiSettings[]) => {
+      if (!listError && Array.isArray(apiSettingsList) && apiSettingsList.length > 0) {
+        return;
+      }
+
+      await this.handleGetApiSettings(err, apiSettings);
+    });
+  }
+
+  private async updatePrimaryApiSettings(apiSettings: ApiSettings) {
+    this.homey.set('apiSettings', apiSettings, this.#onSettingsSet);
+
+    this.homey.get('apiSettingsList', (err: string, currentList: ApiSettings[]) => {
+      const list = Array.isArray(currentList) ? currentList : [];
+      if (list.length > 0) {
+        list[0] = apiSettings;
+      } else {
+        list.push(apiSettings);
+      }
+
+      this.homey.set('apiSettingsList', list, this.#onSettingsSet);
+    });
+  }
+
   async handleGetManualAdditions(err: string, manualAdditions: string) {
     if (err || manualAdditions === null) {
       this.setInputValue('manualDataEntry', JSON.stringify(createManualAdditons(), null, 2));
@@ -213,7 +247,7 @@ class SettingScript {
     };
 
     if (apiSettings.zipcode == null && apiSettings.housenumber == null && apiSettings.streetname == null) {
-      this.homey.set('apiSettings', apiSettings, this.#onSettingsSet);
+      await this.updatePrimaryApiSettings(apiSettings as ApiSettings);
       resp.innerHTML = this.homey.__('settings.manualonly');
       resp.style.color = 'green';
       this.retrieveCollectionDaysDebug(true);
@@ -242,7 +276,7 @@ class SettingScript {
       this.setInputValue('dl-api-input', (document.getElementById('api') as HTMLSelectElement).selectedOptions[0]?.text || '');
 
       apiSettings.apiId = trashResult.id;
-      this.homey.set('apiSettings', apiSettings, this.#onSettingsSet);
+      this.updatePrimaryApiSettings(apiSettings as ApiSettings);
       this.retrieveCollectionDaysDebug(false);
 
       this.homey.api('POST', '/clean', apiSettings, (cleanError: string, cleanResult: any) => {
@@ -257,7 +291,7 @@ class SettingScript {
         }
 
         this.setInputValue('cleanApi', apiSettings.cleanApiId || 'not-applicable');
-        this.homey.set('apiSettings', apiSettings, this.#onSettingsSet);
+        this.updatePrimaryApiSettings(apiSettings as ApiSettings);
       });
     });
   }

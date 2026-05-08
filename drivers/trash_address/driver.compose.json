@@ -1,0 +1,40 @@
+{
+  "name": {
+    "en": "Collection Address",
+    "nl": "Ophaaladres",
+    "sv": "Hamtadress",
+    "fr": "Adresse de collecte"
+  },
+  "images": {
+    "large": "drivers/trash_address/assets/images/large.png",
+    "small": "drivers/trash_address/assets/images/small.png"
+  },
+  "platforms": ["local"],
+  "connectivity": ["lan"],
+  "class": "other",
+  "capabilities": [],
+  "pair": [
+    {
+      "id": "enter_api_settings_address",
+      "$template": "enter_api_settings_address"
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "prev": "enter_api_settings_address",
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "repair": [
+    {
+      "id": "reconfigure_api_settings_address",
+      "$template": "reconfigure_api_settings_address"
+    }
+  ]
+}

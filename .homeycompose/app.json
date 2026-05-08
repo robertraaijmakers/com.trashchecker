@@ -7,11 +7,11 @@
     "sv": "Avfallspåminnelse 2.0",
     "fr": "Rappel de collecte 2.0"
   },
-  "version": "5.3.8",
+  "version": "5.9.0",
   "platforms": [
     "local"
   ],
-  "compatibility": ">=12.1.2",
+  "compatibility": ">=12.3.0",
   "author": {
     "name": "Robert Raaijmakers",
     "email": "dutchfighter@live.nl"
@@ -63,5 +63,49 @@
       "method": "GET",
       "path": "/trashcollectiondays"
     }
-  }
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Collection Address",
+        "nl": "Ophaaladres",
+        "sv": "Hamtadress",
+        "fr": "Adresse de collecte"
+      },
+      "images": {
+        "large": "drivers/trash_address/assets/images/large.png",
+        "small": "drivers/trash_address/assets/images/small.png"
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "class": "other",
+      "capabilities": [],
+      "pair": [
+        {
+          "id": "enter_api_settings"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "prev": "enter_api_settings",
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "repair": [
+        {
+          "id": "reconfigure_api_settings"
+        }
+      ]
+    }
+  ]
 }

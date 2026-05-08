@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Pruning waste",
+    "nl": "Snoeiafval",
+    "sv": "Pruning waste",
+    "fr": "Pruning waste"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/settings/trashIcons/trash-SNOEI.svg"
+}

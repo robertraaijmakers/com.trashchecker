@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Christmas tree",
+    "nl": "Kerstboom",
+    "sv": "Christmas tree",
+    "fr": "Christmas tree"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/settings/trashIcons/trash-KERSTBOOM.svg"
+}

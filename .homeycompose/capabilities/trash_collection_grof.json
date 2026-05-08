@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Bulky waste",
+    "nl": "Grof afval",
+    "sv": "Bulky waste",
+    "fr": "Bulky waste"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/settings/trashIcons/trash-GROF.svg"
+}

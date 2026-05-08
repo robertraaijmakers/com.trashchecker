@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Paper",
+    "nl": "Papier",
+    "sv": "Paper",
+    "fr": "Paper"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/settings/trashIcons/trash-PAPIER.svg"
+}

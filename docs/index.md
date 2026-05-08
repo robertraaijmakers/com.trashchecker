@@ -1,12 +1,14 @@
 # Trashcan Reminder 2.0
-Homey will remind you to put the trash out! You can do this by providing a postal code, house number and country (NL/BE).
-
-*NOTE* NO this app will NOT work on Homey Cloud. I'm not investing [100 euro's](https://homey.app/nl-nl/store/product/homey_developer_athom_12m/) a year and my free time on this.
+Homey will remind you to put the trash out! You can do this by providing a postal code, house number and country. Or by configuring it fully manual when your country or postal code is not (yet) supported.
 
 Here you can find information regarding:
 - [Configuring the app](settings.md)
 - [Flow Examples](flow-examples.md)
 - [Developer Guidelines](developer-guidelines.md)
+
+If you add your location through devices, it is even possible to support multiple locations! Can be handy if you live on a corner of the street with two different pick-up possibilities, or if you have a vacation home and want to know when the trash is collected there when you are on vacation. Endless possibilities! :)
+
+Do you like it?! Please don't [forget to donate](https://paypal.me/robertraaijmakers) to help me (and my family) continue investing time in making the app even better and keeping all the API connections up-to-date with the continous changes.
 
 ## Supported Cities
 A lot of cities are supported with this trashcan reminder. If your city is not supported you can always add your schedule manually. You can add new cities yourself, but requests to add new cities aren't honoured. If you wish to contribute to the project (for example by adding support for a city). I would advise you to take a look at [this explanation](developer-guidelines.md).
@@ -43,8 +45,6 @@ A lot of cities are supported with this trashcan reminder. If your city is not s
 - [Gemeente Hellendoorn](https://www.hellendoorn.nl/wonen-leven/publicatie/afval)
 - [Huisvuilkalender Den Haag](https://huisvuilkalender.denhaag.nl/)
 - [Inzamelkalender HVC](https://www.hvcgroep.nl/afval/afvalkalender)
-- Klikomanager Oude IJsselstreek
-- Klikomanager Uithoorn
 - [Mijn Afvalwijzer](http://www.mijnafvalwijzer.nl)
 - [Mijn Afvalzaken](http://www.mijnafvalzaken.nl)
 - [Mijn Blink](https://mijnblink.nl/)
@@ -73,4 +73,9 @@ Plase note that the tags are independent from the "What type of trash is collect
 The fourth tag has the result of all trash collection dates in JSON format available. If you like custom coding and need some additional flexibility, you can use this global tag.
 
 ## Widgets
-There is one widget available that displays the trash that is collected next. You can configure the height and amount of items to display through the widget configuration.
+There is one widget available that displays the trash that is collected next. You can configure the height, look and feel, and amount of items to display through the widget configuration.
+![widget-compact](assets/widget-compact.png)
+![widget-large](assets/widget-large.png)
+
+But next to these widgets, you can also add your address as device(s). This way you can add your devices to your dashboard to get another look & feel on when your trash is collected.
+![widget-devices](assets/devices-overview.png)

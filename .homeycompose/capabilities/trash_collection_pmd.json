@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "title": {
+    "en": "PMD",
+    "nl": "PMD",
+    "sv": "PMD",
+    "fr": "PMD"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/settings/trashIcons/trash-PMD.svg"
+}
