@@ -19,6 +19,18 @@ export class CleanApis {
     });
   }
 
+  getAvailableApis(country?: string) {
+    const selectedCountry = String(country || '').toUpperCase();
+
+    return this.#apiList
+      .filter((api) => selectedCountry === '' || String(api.country || '').toUpperCase() === selectedCountry)
+      .map((api) => ({
+        id: api.id,
+        name: api.name,
+        country: api.country,
+      }));
+  }
+
   async ExecuteApi(apiSettings: ApiSettings) {
     if (apiSettings.cleanApiId === 'not-applicable' || apiSettings.cleanApiId === '') {
       return [];

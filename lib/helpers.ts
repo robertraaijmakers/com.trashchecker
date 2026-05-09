@@ -5,6 +5,21 @@ import { HttpsPromiseOptions, HttpsPromiseResponse } from '../types/apiRequestTy
 import { ActivityDates } from '../types/localTypes';
 import { TrashType, ApiSettings } from '../assets/publicTypes';
 
+const DUTCH_MONTHS: { [key: string]: number } = {
+  januari: 0,
+  februari: 1,
+  maart: 2,
+  april: 3,
+  mei: 4,
+  juni: 5,
+  juli: 6,
+  augustus: 7,
+  september: 8,
+  oktober: 9,
+  november: 10,
+  december: 11,
+};
+
 export async function httpsPromise(options: HttpsPromiseOptions): Promise<HttpsPromiseResponse> {
   const { body, ...requestOptions } = options;
 
@@ -124,68 +139,32 @@ export function formatDate(date: Date | number) {
   return [year, month, day].join('-');
 }
 
-export function parseDutchDate(dutchDate: string, givenYear?: number): Date | null {
-  const months: { [key: string]: number } = {
-    januari: 0,
-    februari: 1,
-    maart: 2,
-    april: 3,
-    mei: 4,
-    juni: 5,
-    juli: 6,
-    augustus: 7,
-    september: 8,
-    oktober: 9,
-    november: 10,
-    december: 11,
-  };
-
-  const parts = dutchDate.split(' ');
-  if (parts.length !== 4) {
-    if (parts.length !== 3) return null;
-
-    const day = parseInt(parts[1], 10);
-    const month = months[parts[2]];
-    const year = givenYear !== undefined ? givenYear : new Date(Date.now()).getFullYear(); // Default to current year if not provided
-
-    if (isNaN(day) || month === undefined) return null;
-    return new Date(Date.UTC(year, month, day));
-  }
+function parseDutchDateParts(input: string): { day: number; month: number; year?: number } | null {
+  const parts = input.trim().toLowerCase().split(/\s+/);
+  if (parts.length !== 3 && parts.length !== 4) return null;
 
   const day = parseInt(parts[1], 10);
-  const month = months[parts[2]];
-  const year = givenYear !== undefined ? givenYear : parseInt(parts[3]);
-
+  const month = DUTCH_MONTHS[parts[2]];
   if (isNaN(day) || month === undefined) return null;
-  return new Date(Date.UTC(year, month, day));
+
+  if (parts.length === 3) {
+    return { day, month };
+  }
+
+  const year = parseInt(parts[3], 10);
+  if (isNaN(year)) return null;
+
+  return { day, month, year };
 }
 
-export function parseDate(input: string): Date | null {
-  const months: { [key: string]: number } = {
-    januari: 0,
-    februari: 1,
-    maart: 2,
-    april: 3,
-    mei: 4,
-    juni: 5,
-    juli: 6,
-    augustus: 7,
-    september: 8,
-    oktober: 9,
-    november: 10,
-    december: 11,
-  };
+export function parseDutchDate(dutchDate: string, givenYear?: number): Date | null {
+  const parsed = parseDutchDateParts(dutchDate);
+  if (!parsed) return null;
 
-  const parts = input.trim().toLowerCase().split(/\s+/);
-  if (parts.length !== 4) return null;
+  const year = givenYear !== undefined ? givenYear : (parsed.year ?? new Date(Date.now()).getFullYear());
+  if (isNaN(year)) return null;
 
-  const [_, dayStr, monthStr, yearStr] = parts;
-  const day = parseInt(dayStr, 10);
-  const month = months[monthStr];
-  const year = parseInt(yearStr, 10);
-
-  if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
-  return new Date(Date.UTC(year, month, day));
+  return new Date(Date.UTC(year, parsed.month, parsed.day));
 }
 
 export function verifyDate(dateString: string) {

@@ -326,59 +326,48 @@ class SettingScript {
   }
 
   async saveManualEntryDates() {
-    var data = createManualAdditons();
-
-    var textualInput = {};
-
-    try {
-      textualInput = JSON.parse(this.getInputValue('manualDataEntry') ?? '{}');
-    } catch (err: any) {
-      document.getElementById('respManualDataEntry')!.innerHTML = err;
-      return;
-    }
-
-    document.getElementById('respManualDataEntry')!.innerHTML = '';
-    for (let type in AllTrashTypes) {
-      const trashType = AllTrashTypes[type];
-      data[trashType] = await this.validateManualEntryDates(textualInput, trashType as TrashType);
-    }
-
-    this.homey.set('manualAdditions', data, this.#onSettingsSet);
-
-    // We trigger a full save, to make sure everything is recalculated (a bit heavy, but this feature shouldn't be used that often)
-    await this.save();
-    await this.saveLabelInput();
-
-    // Retrieve them again & update field (for formatting & feedback purposes)
-    this.homey.get('manualAdditions', (err: string, result: any) => this.handleGetManualAdditions(err, result));
+    await this.saveManualDateConfig({
+      inputId: 'manualDataEntry',
+      responseId: 'respManualDataEntry',
+      settingsKey: 'manualAdditions',
+      refresh: (err: string, result: any) => this.handleGetManualAdditions(err, result),
+    });
   }
 
   async saveManualRemovalDates() {
-    var data = createManualAdditons();
+    await this.saveManualDateConfig({
+      inputId: 'manualDataRemove',
+      responseId: 'respManualDataRemove',
+      settingsKey: 'manualRemovals',
+      refresh: (err: string, result: any) => this.handleGetManualRemovals(err, result),
+    });
+  }
 
-    var textualInput = {};
+  private async saveManualDateConfig(config: { inputId: string; responseId: string; settingsKey: 'manualAdditions' | 'manualRemovals'; refresh: (err: string, result: any) => void }) {
+    const data = createManualAdditons();
+
+    let textualInput: any = {};
 
     try {
-      textualInput = JSON.parse(this.getInputValue('manualDataRemove') ?? '{}');
+      textualInput = JSON.parse(this.getInputValue(config.inputId) ?? '{}');
     } catch (err: any) {
-      document.getElementById('respManualDataRemove')!.innerHTML = err;
+      document.getElementById(config.responseId)!.innerHTML = err;
       return;
     }
 
-    document.getElementById('respManualDataRemove')!.innerHTML = '';
+    document.getElementById(config.responseId)!.innerHTML = '';
     for (let type in AllTrashTypes) {
       const trashType = AllTrashTypes[type];
       data[trashType] = await this.validateManualEntryDates(textualInput, trashType as TrashType);
     }
 
-    this.homey.set('manualRemovals', data, this.#onSettingsSet);
+    this.homey.set(config.settingsKey, data, this.#onSettingsSet);
 
-    // We trigger a full save, to make sure everything is recalculated.
+    // Trigger a full save so all app-level derived values are recalculated.
     await this.save();
     await this.saveLabelInput();
 
-    // Retrieve them again & update field (for formatting & feedback purposes)
-    this.homey.get('manualRemovals', (err: string, result: any) => this.handleGetManualRemovals(err, result));
+    this.homey.get(config.settingsKey, (err: string, result: any) => config.refresh(err, result));
   }
 
   async saveLabelInput() {

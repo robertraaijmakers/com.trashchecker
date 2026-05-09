@@ -3,8 +3,8 @@
 import Homey from 'homey';
 import { ApiSettings, TrashType } from '../../assets/publicTypes';
 import { AddressPairState, BaseAddressDriver } from '../../lib/baseaddressdriver';
-import { createAddressSignature, createSingleTypeDeviceId, normalizeApiSettings } from '../../lib/driverhelper';
-import { ActivityDates, TrashCollectionReminder } from '../../types/localTypes';
+import { createAddressSignature, createSingleTypeDeviceId, getAddressDisplayParts } from '../../lib/driverhelper';
+import { ActivityDates } from '../../types/localTypes';
 
 interface ValidationResponse extends AddressPairState {
   success: boolean;
@@ -39,23 +39,28 @@ module.exports = class TrashTypeAddressDriver extends BaseAddressDriver<PairStat
   }
 
   protected registerDeviceFlowListeners() {
-    const app = this.homey.app as any;
-
-    this.homey.flow.getConditionCard('days_to_collect_single_type_device').registerRunListener(async (args, state) => {
-      return app.flowTrashTypeIsCollectedForDeviceCondition(args, state);
-    });
-
-    this.homey.flow.getActionCard('days_to_collect_single_type_device').registerRunListener(async (args, state) => {
-      return app.flowTrashTypeIsCollectedForDeviceAction(args, state);
-    });
-
-    this.homey.flow.getConditionCard('days_to_clean_single_type_device').registerRunListener(async (args, state) => {
-      return app.flowTrashTypeIsCleanedForDeviceCondition(args, state);
-    });
-
-    this.homey.flow.getActionCard('days_to_clean_single_type_device').registerRunListener(async (args, state) => {
-      return app.flowTrashTypeIsCleanedForDeviceAction(args, state);
-    });
+    this.registerFlowCardProxyListeners([
+      {
+        cardType: 'condition',
+        cardId: 'days_to_collect_single_type_device',
+        appMethod: 'flowTrashTypeIsCollectedForDeviceCondition',
+      },
+      {
+        cardType: 'action',
+        cardId: 'days_to_collect_single_type_device',
+        appMethod: 'flowTrashTypeIsCollectedForDeviceAction',
+      },
+      {
+        cardType: 'condition',
+        cardId: 'days_to_clean_single_type_device',
+        appMethod: 'flowTrashTypeIsCleanedForDeviceCondition',
+      },
+      {
+        cardType: 'action',
+        cardId: 'days_to_clean_single_type_device',
+        appMethod: 'flowTrashTypeIsCleanedForDeviceAction',
+      },
+    ]);
   }
 
   async onPair(session: any) {
@@ -88,7 +93,7 @@ module.exports = class TrashTypeAddressDriver extends BaseAddressDriver<PairStat
 
       const settings = state.apiSettings;
       const addressSignature = createAddressSignature(settings);
-      const addressParts = [settings.zipcode, settings.housenumber, settings.cityname].filter((v) => v && v.trim() !== '');
+      const addressParts = getAddressDisplayParts(settings);
       const existingDevices = await this.getDevices();
       const existingIds = new Set(Object.values(existingDevices).map((device) => String(device.getData()?.id || '')));
       const availableTypes = state.collectionDays.filter((entry) => Array.isArray(entry.dates) && entry.dates.length > 0).map((entry) => entry.type);

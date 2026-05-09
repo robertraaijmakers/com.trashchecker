@@ -3,27 +3,32 @@
 import Homey from 'homey';
 import { ApiSettings } from '../../assets/publicTypes';
 import { AddressPairState, BaseAddressDriver } from '../../lib/baseaddressdriver';
-import { createAddressSignature, normalizeApiSettings } from '../../lib/driverhelper';
+import { createAddressSignature, getAddressDisplayParts } from '../../lib/driverhelper';
 
 module.exports = class TrashAddressDriver extends BaseAddressDriver<AddressPairState> {
   protected registerDeviceFlowListeners() {
-    const app = this.homey.app as any;
-
-    this.homey.flow.getConditionCard('days_to_collect_device').registerRunListener(async (args, state) => {
-      return app.flowTrashIsCollectedForDeviceCondition(args, state);
-    });
-
-    this.homey.flow.getActionCard('days_to_collect_device').registerRunListener(async (args, state) => {
-      return app.flowTrashIsCollectedForDeviceAction(args, state);
-    });
-
-    this.homey.flow.getConditionCard('days_to_clean_device').registerRunListener(async (args, state) => {
-      return app.flowTrashIsCleanedForDeviceCondition(args, state);
-    });
-
-    this.homey.flow.getActionCard('days_to_clean_device').registerRunListener(async (args, state) => {
-      return app.flowTrashIsCleanedForDeviceAction(args, state);
-    });
+    this.registerFlowCardProxyListeners([
+      {
+        cardType: 'condition',
+        cardId: 'days_to_collect_device',
+        appMethod: 'flowTrashIsCollectedForDeviceCondition',
+      },
+      {
+        cardType: 'action',
+        cardId: 'days_to_collect_device',
+        appMethod: 'flowTrashIsCollectedForDeviceAction',
+      },
+      {
+        cardType: 'condition',
+        cardId: 'days_to_clean_device',
+        appMethod: 'flowTrashIsCleanedForDeviceCondition',
+      },
+      {
+        cardType: 'action',
+        cardId: 'days_to_clean_device',
+        appMethod: 'flowTrashIsCleanedForDeviceAction',
+      },
+    ]);
   }
 
   async onPair(session: any) {
@@ -41,7 +46,7 @@ module.exports = class TrashAddressDriver extends BaseAddressDriver<AddressPairS
       }
 
       const settings = state.apiSettings;
-      const addressParts = [settings.zipcode, settings.housenumber, settings.cityname].filter((v) => v && v.trim() !== '');
+      const addressParts = getAddressDisplayParts(settings);
       const signature = createAddressSignature(settings);
 
       const existingDevices = await this.getDevices();

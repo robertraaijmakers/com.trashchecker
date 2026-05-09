@@ -74,6 +74,10 @@ export function createAddressSignature(settings: ApiSettings): string {
   return createSignature(['trash-address', settings.country, settings.zipcode, settings.housenumber, settings.streetname, settings.cityname]);
 }
 
+export function getAddressDisplayParts(settings: ApiSettings): string[] {
+  return [settings.zipcode, settings.housenumber, settings.cityname].filter((value) => value && value.trim() !== '');
+}
+
 export function getDeviceAddressSignature(deviceLike: any, options?: NormalizeApiSettingsOptions): string {
   const settings = deviceLike?.getSettings?.() || deviceLike?.settings;
   if (!settings) {
@@ -210,9 +214,16 @@ export async function validateApiSettingsWithApis(homey: any, input: Partial<Api
 
     let collectionDays: ActivityDates[] | undefined;
     if (apiSettings.apiId && apiSettings.apiId !== 'not-applicable') {
-      apiSettings.apiId = apiSettings.apiId;
-      if (options?.includeCollectionDays) {
-        collectionDays = await app.trashApis.ExecuteApi(apiSettings);
+      try {
+        const selectedApiDays = await app.trashApis.ExecuteApi(apiSettings);
+        if (options?.includeCollectionDays) {
+          collectionDays = selectedApiDays;
+        }
+      } catch (error) {
+        return {
+          success: false,
+          error: (error as Error).message || homey.__('settings.fail'),
+        };
       }
     } else {
       const trashResult = await app.trashApis.FindApi(apiSettings);
@@ -227,8 +238,19 @@ export async function validateApiSettingsWithApis(homey: any, input: Partial<Api
       collectionDays = trashResult.days;
     }
 
-    const cleanResult = apiSettings.cleanApiId && apiSettings.cleanApiId !== 'not-applicable' ? { id: apiSettings.cleanApiId } : await app.cleanApis.FindApi(apiSettings);
-    apiSettings.cleanApiId = cleanResult?.id || 'not-applicable';
+    if (apiSettings.cleanApiId && apiSettings.cleanApiId !== 'not-applicable') {
+      try {
+        await app.cleanApis.ExecuteApi(apiSettings);
+      } catch (error) {
+        return {
+          success: false,
+          error: (error as Error).message || homey.__('settings.fail'),
+        };
+      }
+    } else {
+      const cleanResult = await app.cleanApis.FindApi(apiSettings);
+      apiSettings.cleanApiId = cleanResult?.id || 'not-applicable';
+    }
 
     return {
       success: true,

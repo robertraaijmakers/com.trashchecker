@@ -287,7 +287,7 @@
   "5.3.8": {
     "en": "Added support for MijnAfvalzaken.nl"
   },
-  "5.9.0": {
+  "5.9.1": {
     "en": "Added support for multiple addresses and devices! You can now set up the app for multiple addresses and link them to different devices. This also means that you can now have different types of trash linked to different devices. The possibilities are endless!",
     "nl": "We hebben de app verbeterd, met het ondersteuning van meerdere adressen en apparaten! Je kan nu de app instellen voor meerdere adressen en deze linken aan verschillende apparaten. Dit betekent ook dat je nu verschillende soorten afval aan verschillende apparaten kan koppelen. De mogelijkheden zijn eindeloos!"
   }

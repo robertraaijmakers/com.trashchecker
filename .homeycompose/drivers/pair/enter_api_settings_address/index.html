@@ -68,6 +68,11 @@
   </div>
 
   <div class="form-group">
+    <label class="homey-form-label" for="cleanApi">Cleaning API</label>
+    <select class="homey-form-select" id="cleanApi"></select>
+  </div>
+
+  <div class="form-group">
     <label class="homey-form-label" for="postcode">Zipcode / Postcode</label>
     <input class="homey-form-input" id="postcode" type="text" />
   </div>
@@ -112,6 +117,7 @@
     newAddressGroup: document.getElementById('new_address_group'),
     country: document.getElementById('country'),
     api: document.getElementById('api'),
+    cleanApi: document.getElementById('cleanApi'),
     postcode: document.getElementById('postcode'),
     number: document.getElementById('number'),
     streetname: document.getElementById('streetname'),
@@ -123,6 +129,7 @@
   };
 
   let registry = [];
+  let cleanRegistry = [];
   let configuredAddresses = [];
 
   function usingExistingAddress() {
@@ -158,6 +165,7 @@
 
     form.country.value = settings.country || 'NL';
     form.api.value = settings.apiId || '';
+    form.cleanApi.value = settings.cleanApiId || '';
     form.postcode.value = settings.zipcode || '';
     form.number.value = settings.housenumber || '';
     form.streetname.value = settings.streetname || '';
@@ -177,6 +185,30 @@
       });
 
     form.api.innerHTML = options.join('');
+  }
+
+  function renderCleanApiOptions(country, selectedCleanApiId) {
+    const options = [
+      '<option value="">Auto detect</option>',
+      '<option value="not-applicable">Not applicable</option>',
+    ];
+
+    cleanRegistry
+      .filter((entry) => entry.country === country)
+      .forEach((entry) => {
+        const selected = entry.id === selectedCleanApiId ? ' selected="selected"' : '';
+        options.push('<option value="' + entry.id + '"' + selected + '>' + entry.name + '</option>');
+      });
+
+    if (selectedCleanApiId && selectedCleanApiId !== 'not-applicable' && !cleanRegistry.some((entry) => entry.country === country && entry.id === selectedCleanApiId)) {
+      options.push('<option value="' + selectedCleanApiId + '" selected="selected">' + selectedCleanApiId + '</option>');
+    }
+
+    if (selectedCleanApiId === 'not-applicable') {
+      options[1] = '<option value="not-applicable" selected="selected">Not applicable</option>';
+    }
+
+    form.cleanApi.innerHTML = options.join('');
   }
 
   function renderConfiguredAddresses() {
@@ -208,7 +240,7 @@
       cityname: form.cityname.value,
       countyId: form.countyId.value,
       apiKey: form.apiKey.value,
-      cleanApiId: '',
+      cleanApiId: form.cleanApi.value,
     };
   }
 
@@ -220,10 +252,12 @@
       }
 
       registry = context.apiRegistry || [];
+      cleanRegistry = context.cleanApiRegistry || [];
       configuredAddresses = context.configuredAddresses || [];
       renderConfiguredAddresses();
       fillForm(context.apiSettings || {});
       renderApiOptions(form.country.value, (context.apiSettings || {}).apiId || '');
+      renderCleanApiOptions(form.country.value, (context.apiSettings || {}).cleanApiId || '');
       updateModeUi();
     });
   }
@@ -237,6 +271,16 @@
 
       registry = result || [];
       renderApiOptions(form.country.value, '');
+    });
+
+    Homey.emit('get_clean_api_registry', form.country.value, (error, result) => {
+      if (error) {
+        setStatus(error, 'error');
+        return;
+      }
+
+      cleanRegistry = result || [];
+      renderCleanApiOptions(form.country.value, '');
     });
   });
 

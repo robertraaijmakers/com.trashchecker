@@ -119,45 +119,73 @@ module.exports = class TrashCollectionReminder extends Homey.App {
 		FLOW FUNCTIONS
 	********************/
   async flowTrashIsCollectedAction(args: TrashFlowCardArgument) {
-    args.trash_type = 'ANY';
-    return this.flowDaysToCollect(args, FlowCardType.ACTION, this.collectionDates);
+    return this.executeGlobalFlow(args, FlowCardType.ACTION, this.collectionDates, this.flowDaysToCollect, true);
   }
 
   async flowTrashIsCollectedCondition(args: TrashFlowCardArgument) {
-    return this.flowDaysToCollect(args, FlowCardType.CONDITION, this.collectionDates);
+    return this.executeGlobalFlow(args, FlowCardType.CONDITION, this.collectionDates, this.flowDaysToCollect);
   }
 
   async flowTrashIsCollectedForDeviceAction(args: TrashFlowCardArgument, state?: any) {
-    args.trash_type = 'ANY';
-    const addressSignature = this.resolveFlowAddressSignature(args, state);
-    return this.flowDaysToCollect(args, FlowCardType.ACTION, this.collectionDatesByAddress.get(addressSignature) || []);
+    return this.executeDeviceFlowAnyType(args, state, FlowCardType.ACTION, this.collectionDatesByAddress, this.flowDaysToCollect);
   }
 
   async flowTrashIsCollectedForDeviceCondition(args: TrashFlowCardArgument, state?: any) {
-    const addressSignature = this.resolveFlowAddressSignature(args, state);
-    return this.flowDaysToCollect(args, FlowCardType.CONDITION, this.collectionDatesByAddress.get(addressSignature) || []);
+    return this.executeDeviceFlowAnyType(args, state, FlowCardType.CONDITION, this.collectionDatesByAddress, this.flowDaysToCollect);
   }
 
   async flowTrashTypeIsCollectedForDeviceAction(args: TrashFlowCardArgument, state?: any) {
-    const trashType = this.resolveFlowTrashType(args, state);
-    if (!trashType) {
-      return this.handleResultTrashCollection(FlowCardType.ACTION, false, '', '');
-    }
-
-    args.trash_type = trashType;
-    const addressSignature = this.resolveFlowAddressSignature(args, state);
-    return this.flowDaysToCollect(args, FlowCardType.ACTION, this.collectionDatesByAddress.get(addressSignature) || []);
+    return this.executeDeviceFlowResolvedType(args, state, FlowCardType.ACTION, this.collectionDatesByAddress, this.flowDaysToCollect, () =>
+      this.handleResultTrashCollection(FlowCardType.ACTION, false, '', ''),
+    );
   }
 
   async flowTrashTypeIsCollectedForDeviceCondition(args: TrashFlowCardArgument, state?: any) {
+    return this.executeDeviceFlowResolvedType(args, state, FlowCardType.CONDITION, this.collectionDatesByAddress, this.flowDaysToCollect, () => false);
+  }
+
+  private async executeGlobalFlow(
+    args: TrashFlowCardArgument,
+    type: FlowCardType,
+    dates: ActivityDates[],
+    runner: (args: TrashFlowCardArgument, type: FlowCardType, dates: ActivityDates[]) => Promise<any>,
+    forceAnyType = false,
+  ) {
+    if (forceAnyType) {
+      args.trash_type = 'ANY';
+    }
+
+    return runner.call(this, args, type, dates);
+  }
+
+  private async executeDeviceFlowAnyType(
+    args: TrashFlowCardArgument,
+    state: any,
+    type: FlowCardType,
+    datesByAddress: Map<string, ActivityDates[]>,
+    runner: (args: TrashFlowCardArgument, type: FlowCardType, dates: ActivityDates[]) => Promise<any>,
+  ) {
+    args.trash_type = 'ANY';
+    const addressSignature = this.resolveFlowAddressSignature(args, state);
+    return runner.call(this, args, type, datesByAddress.get(addressSignature) || []);
+  }
+
+  private async executeDeviceFlowResolvedType(
+    args: TrashFlowCardArgument,
+    state: any,
+    type: FlowCardType,
+    datesByAddress: Map<string, ActivityDates[]>,
+    runner: (args: TrashFlowCardArgument, type: FlowCardType, dates: ActivityDates[]) => Promise<any>,
+    fallback: () => Promise<any> | any,
+  ) {
     const trashType = this.resolveFlowTrashType(args, state);
     if (!trashType) {
-      return false;
+      return fallback();
     }
 
     args.trash_type = trashType;
     const addressSignature = this.resolveFlowAddressSignature(args, state);
-    return this.flowDaysToCollect(args, FlowCardType.CONDITION, this.collectionDatesByAddress.get(addressSignature) || []);
+    return runner.call(this, args, type, datesByAddress.get(addressSignature) || []);
   }
 
   async flowDaysToCollect(args: TrashFlowCardArgument, type: FlowCardType, dates: ActivityDates[]) {
@@ -206,45 +234,29 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   }
 
   async flowTrashIsCleanedAction(args: TrashFlowCardArgument) {
-    args.trash_type = 'ANY';
-    return this.flowTrashIsCleaned(args, FlowCardType.ACTION, this.cleanDates);
+    return this.executeGlobalFlow(args, FlowCardType.ACTION, this.cleanDates, this.flowTrashIsCleaned, true);
   }
 
   async flowTrashIsCleanedCondition(args: TrashFlowCardArgument) {
-    return this.flowTrashIsCleaned(args, FlowCardType.CONDITION, this.cleanDates);
+    return this.executeGlobalFlow(args, FlowCardType.CONDITION, this.cleanDates, this.flowTrashIsCleaned);
   }
 
   async flowTrashIsCleanedForDeviceAction(args: TrashFlowCardArgument, state?: any) {
-    args.trash_type = 'ANY';
-    const addressSignature = this.resolveFlowAddressSignature(args, state);
-    return this.flowTrashIsCleaned(args, FlowCardType.ACTION, this.cleanDatesByAddress.get(addressSignature) || []);
+    return this.executeDeviceFlowAnyType(args, state, FlowCardType.ACTION, this.cleanDatesByAddress, this.flowTrashIsCleaned);
   }
 
   async flowTrashIsCleanedForDeviceCondition(args: TrashFlowCardArgument, state?: any) {
-    const addressSignature = this.resolveFlowAddressSignature(args, state);
-    return this.flowTrashIsCleaned(args, FlowCardType.CONDITION, this.cleanDatesByAddress.get(addressSignature) || []);
+    return this.executeDeviceFlowAnyType(args, state, FlowCardType.CONDITION, this.cleanDatesByAddress, this.flowTrashIsCleaned);
   }
 
   async flowTrashTypeIsCleanedForDeviceAction(args: TrashFlowCardArgument, state?: any) {
-    const trashType = this.resolveFlowTrashType(args, state);
-    if (!trashType) {
-      return this.handleResultTrashCleaning(FlowCardType.ACTION, false, '', '');
-    }
-
-    args.trash_type = trashType;
-    const addressSignature = this.resolveFlowAddressSignature(args, state);
-    return this.flowTrashIsCleaned(args, FlowCardType.ACTION, this.cleanDatesByAddress.get(addressSignature) || []);
+    return this.executeDeviceFlowResolvedType(args, state, FlowCardType.ACTION, this.cleanDatesByAddress, this.flowTrashIsCleaned, () =>
+      this.handleResultTrashCleaning(FlowCardType.ACTION, false, '', ''),
+    );
   }
 
   async flowTrashTypeIsCleanedForDeviceCondition(args: TrashFlowCardArgument, state?: any) {
-    const trashType = this.resolveFlowTrashType(args, state);
-    if (!trashType) {
-      return false;
-    }
-
-    args.trash_type = trashType;
-    const addressSignature = this.resolveFlowAddressSignature(args, state);
-    return this.flowTrashIsCleaned(args, FlowCardType.CONDITION, this.cleanDatesByAddress.get(addressSignature) || []);
+    return this.executeDeviceFlowResolvedType(args, state, FlowCardType.CONDITION, this.cleanDatesByAddress, this.flowTrashIsCleaned, () => false);
   }
 
   async flowTrashIsCleaned(args: TrashFlowCardArgument, type: FlowCardType, dates: ActivityDates[]) {
@@ -807,8 +819,40 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   }
 
   private async updateAddressDeviceCapabilities(device?: Homey.Device) {
+    const currentDeviceHandler = async (currentDevice: any, datesForAddress: ActivityDates[], today: Date) => {
+      for (const type of CapabilityTrashTypes) {
+        const trashType = type as TrashType;
+        const capabilityId = TrashTypeCapabilityMap[trashType];
+        const nextDate = this.getFirstUpcomingDateForType(datesForAddress, trashType, today);
+        const hasCapability = currentDevice.hasCapability(capabilityId);
+
+        if (!nextDate) {
+          if (hasCapability) {
+            await currentDevice.removeCapability(capabilityId);
+          }
+          continue;
+        }
+
+        if (!hasCapability) {
+          await currentDevice.addCapability(capabilityId);
+        }
+
+        const formattedDate = await this.getCapabilityDateLabel(nextDate);
+        await currentDevice.setCapabilityValue(capabilityId, formattedDate);
+      }
+    };
+
+    await this.updateDevicesForDriver('trash_address', device, currentDeviceHandler, 'Failed to update device capabilities');
+  }
+
+  private async updateDevicesForDriver(
+    driverId: string,
+    device: Homey.Device | undefined,
+    handler: (currentDevice: any, datesForAddress: ActivityDates[], today: Date) => Promise<void>,
+    errorLogMessage: string,
+  ) {
     try {
-      const driver = this.homey.drivers.getDriver('trash_address');
+      const driver = this.homey.drivers.getDriver(driverId);
       if (!driver) {
         return;
       }
@@ -820,32 +864,12 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       for (const currentDevice of devices) {
         const addressSignature = getDeviceAddressSignature(currentDevice) || String(currentDevice.getData()?.addressSignature || currentDevice.getData()?.id || '');
         const datesForAddress = this.collectionDatesByAddress.get(addressSignature) || [];
-
-        for (const type of CapabilityTrashTypes) {
-          const trashType = type as TrashType;
-          const capabilityId = TrashTypeCapabilityMap[trashType];
-          const nextDate = this.getFirstUpcomingDateForType(datesForAddress, trashType, today);
-          const hasCapability = currentDevice.hasCapability(capabilityId);
-
-          if (!nextDate) {
-            if (hasCapability) {
-              await currentDevice.removeCapability(capabilityId);
-            }
-            continue;
-          }
-
-          if (!hasCapability) {
-            await currentDevice.addCapability(capabilityId);
-          }
-
-          const formattedDate = await this.getCapabilityDateLabel(nextDate);
-          await currentDevice.setCapabilityValue(capabilityId, formattedDate);
-        }
+        await handler(currentDevice, datesForAddress, today);
       }
     } catch (error) {
       const message = String((error as any)?.message || error || '');
       if (!message.includes('Driver Not Initialized')) {
-        this.log('Failed to update device capabilities', error);
+        this.log(errorLogMessage, error);
       }
     }
   }
@@ -893,43 +917,27 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   }
 
   private async updateTrashTypeDeviceCapabilities(device?: Homey.Device) {
-    try {
-      const driver = this.homey.drivers.getDriver('trash_type_address');
-      if (!driver) {
+    const currentDeviceHandler = async (currentDevice: any, datesForAddress: ActivityDates[], today: Date) => {
+      const trashType = String(currentDevice.getSettings?.()?.trashType || '') as TrashType;
+      if (!trashType) {
         return;
       }
 
-      const devices = device ? [device] : Object.values(await driver.getDevices());
-      const today = await this.getLocalDate();
-      today.setHours(0, 0, 0, 0);
+      const timeline = this.getCollectionTimelineForType(datesForAddress, trashType, today);
 
-      for (const currentDevice of devices) {
-        const addressSignature = getDeviceAddressSignature(currentDevice) || String(currentDevice.getData()?.addressSignature || currentDevice.getData()?.id || '');
-        const trashType = String(currentDevice.getSettings?.()?.trashType || '') as TrashType;
-        if (!trashType) {
-          continue;
-        }
+      const nextValue = timeline.next ? await this.getCapabilityDateLabel(timeline.next) : '';
+      const followingValue = timeline.following ? await this.getCapabilityDateLabel(timeline.following) : '';
 
-        const datesForAddress = this.collectionDatesByAddress.get(addressSignature) || [];
-        const timeline = this.getCollectionTimelineForType(datesForAddress, trashType, today);
-
-        const nextValue = timeline.next ? await this.getCapabilityDateLabel(timeline.next) : '';
-        const followingValue = timeline.following ? await this.getCapabilityDateLabel(timeline.following) : '';
-
-        if (currentDevice.hasCapability(SingleTypeDeviceCapabilities.nextCollectionOn)) {
-          await currentDevice.setCapabilityValue(SingleTypeDeviceCapabilities.nextCollectionOn, nextValue);
-        }
-
-        if (currentDevice.hasCapability(SingleTypeDeviceCapabilities.followingCollectionOn)) {
-          await currentDevice.setCapabilityValue(SingleTypeDeviceCapabilities.followingCollectionOn, followingValue);
-        }
+      if (currentDevice.hasCapability(SingleTypeDeviceCapabilities.nextCollectionOn)) {
+        await currentDevice.setCapabilityValue(SingleTypeDeviceCapabilities.nextCollectionOn, nextValue);
       }
-    } catch (error) {
-      const message = String((error as any)?.message || error || '');
-      if (!message.includes('Driver Not Initialized')) {
-        this.log('Failed to update single type device capabilities', error);
+
+      if (currentDevice.hasCapability(SingleTypeDeviceCapabilities.followingCollectionOn)) {
+        await currentDevice.setCapabilityValue(SingleTypeDeviceCapabilities.followingCollectionOn, followingValue);
       }
-    }
+    };
+
+    await this.updateDevicesForDriver('trash_type_address', device, currentDeviceHandler, 'Failed to update single type device capabilities');
   }
 
   private getCollectionTimelineForType(dates: ActivityDates[], type: TrashType, today: Date): { last: Date | null; next: Date | null; following: Date | null } {

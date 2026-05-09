@@ -20,6 +20,7 @@ import {
 export interface AddressPairContext {
   apiSettings: ApiSettings;
   apiRegistry: ApiMeta[];
+  cleanApiRegistry: Array<{ id: string; name: string; country: string }>;
   configuredAddresses: ConfiguredAddressOption[];
   selectedAddressIndex?: number;
 }
@@ -29,6 +30,11 @@ export interface AddressPairState {
 }
 
 export type DeviceSettingsTransformer = (nextSettings: ApiSettings, device: Homey.Device) => Record<string, unknown>;
+export type FlowCardProxyDefinition = {
+  cardType: 'condition' | 'action';
+  cardId: string;
+  appMethod: string;
+};
 
 export abstract class BaseAddressDriver<TPairState extends AddressPairState = AddressPairState> extends Homey.Driver {
   async onInit() {
@@ -36,6 +42,18 @@ export abstract class BaseAddressDriver<TPairState extends AddressPairState = Ad
   }
 
   protected abstract registerDeviceFlowListeners(): void;
+
+  protected registerFlowCardProxyListeners(definitions: FlowCardProxyDefinition[]) {
+    const app = this.homey.app as any;
+
+    for (const definition of definitions) {
+      const card = definition.cardType === 'condition' ? this.homey.flow.getConditionCard(definition.cardId) : this.homey.flow.getActionCard(definition.cardId);
+
+      card.registerRunListener(async (args, state) => {
+        return app[definition.appMethod](args, state);
+      });
+    }
+  }
 
   protected getValidationOptions(): ValidateApiSettingsOptions {
     return { defaultCleanApiId: '' };
@@ -60,6 +78,7 @@ export abstract class BaseAddressDriver<TPairState extends AddressPairState = Ad
     return {
       apiSettings: activeSettings,
       apiRegistry: getRegistryByCountry(activeSettings.country, apiRegistry as ApiMeta[]),
+      cleanApiRegistry: this.getCleanApiRegistry(activeSettings.country),
       configuredAddresses: getConfiguredAddressOptions(settingsList),
     };
   }
@@ -72,20 +91,28 @@ export abstract class BaseAddressDriver<TPairState extends AddressPairState = Ad
     return {
       apiSettings: settings,
       apiRegistry: getRegistryByCountry(settings.country, apiRegistry as ApiMeta[]),
+      cleanApiRegistry: this.getCleanApiRegistry(settings.country),
       configuredAddresses: getConfiguredAddressOptions(settingsList),
       selectedAddressIndex: settingsList.findIndex((entry) => createAddressSignature(entry) === currentSignature),
     };
   }
 
+  protected getCleanApiRegistry(country: string): Array<{ id: string; name: string; country: string }> {
+    const app = this.homey.app as TrashCollectionReminder;
+    return app.cleanApis.getAvailableApis(country);
+  }
+
   protected registerSharedPairHandlers(session: any) {
     session.setHandler('get_pair_context', async () => this.createPairContext());
     session.setHandler('get_api_registry', async (country: string) => getRegistryByCountry(country, apiRegistry as ApiMeta[]));
+    session.setHandler('get_clean_api_registry', async (country: string) => this.getCleanApiRegistry(country));
     session.setHandler('validate_api_settings', async (input: Partial<ApiSettings>): Promise<ApiSettingsValidationResult> => this.validateApiSettings(input));
   }
 
   protected registerSharedRepairHandlers(session: any, device: Homey.Device, transformDeviceSettings?: DeviceSettingsTransformer) {
     session.setHandler('get_pair_context', async () => this.createRepairContext(device));
     session.setHandler('get_api_registry', async (country: string) => getRegistryByCountry(country, apiRegistry as ApiMeta[]));
+    session.setHandler('get_clean_api_registry', async (country: string) => this.getCleanApiRegistry(country));
     session.setHandler('validate_api_settings', async (input: Partial<ApiSettings>): Promise<ApiSettingsValidationResult> => this.validateApiSettings(input));
 
     session.setHandler('set_existing_api_settings', async (index: number): Promise<ApiSettingsValidationResult> => {
