@@ -1,7 +1,7 @@
 'use strict';
 
 import Homey from 'homey';
-import { getConfiguredApiSettingsList, isAddressReferencedByOtherDevices, normalizeApiSettings, upsertApiSettingsInList } from '../../lib/driverhelper';
+import { normalizeApiSettings, persistApiSettingsList } from '../../lib/driverhelper';
 import { TrashCollectionReminder } from '../../types/localTypes';
 
 module.exports = class TrashTypeAddressDevice extends Homey.Device {
@@ -45,12 +45,10 @@ module.exports = class TrashTypeAddressDevice extends Homey.Device {
     const nextSettings = normalizeApiSettings(settings ?? this.getSettings(), { defaultCleanApiId: 'not-applicable' });
     const previousSettings = normalizeApiSettings(oldSettings ?? this.getSettings(), { defaultCleanApiId: 'not-applicable' });
 
-    const list = getConfiguredApiSettingsList(this.homey.settings.get('apiSettingsList'), { defaultCleanApiId: 'not-applicable' });
-    const keepPrevious = await isAddressReferencedByOtherDevices(this.homey, previousSettings, this);
-    const updatedList = upsertApiSettingsInList(list, nextSettings, previousSettings, { keepPrevious });
-
-    this.homey.settings.set('apiSettingsList', updatedList);
-    this.homey.settings.set('apiSettings', updatedList[0] || nextSettings);
+    await persistApiSettingsList(this.homey, nextSettings, previousSettings, {
+      defaultCleanApiId: 'not-applicable',
+      currentDevice: this,
+    });
 
     const app = this.homey.app as TrashCollectionReminder;
     await app.recalculate();

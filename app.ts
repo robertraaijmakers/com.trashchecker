@@ -4,7 +4,8 @@ import Homey from 'homey';
 import { ActivityDates, ActivityItem, FlowCardType, TrashFlowCardArgument, When } from './types/localTypes';
 import { TrashApis } from './lib/trashapis';
 import { CleanApis } from './lib/cleanapis';
-import { addDate } from './lib/helpers';
+import { addDate, normalizeActivityDates } from './lib/helpers';
+import { createAddressSignature, getConfiguredApiSettingsList, getDeviceAddressSignature, hasAddressInput, normalizeApiSettings } from './lib/driverhelper';
 import { ApiSettings, LabelSettings, ManualSetting, ManualSettings, TrashType } from './assets/publicTypes';
 import { DateTimeHelper } from './lib/datetimehelper';
 
@@ -295,7 +296,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     const addressDeviceArg = this.resolveFlowDevice(args, state);
     if (!addressDeviceArg) return '';
 
-    const fromSettings = this.getDeviceAddressSignature(addressDeviceArg);
+    const fromSettings = getDeviceAddressSignature(addressDeviceArg);
     if (fromSettings) {
       return fromSettings;
     }
@@ -341,20 +342,6 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     return args.address_device || args.device || state?.device || state;
   }
 
-  private getDeviceAddressSignature(deviceLike: any): string {
-    const settings = deviceLike?.getSettings?.() || deviceLike?.settings;
-    if (!settings) {
-      return '';
-    }
-
-    const normalized = this.normalizeApiSettings(settings);
-    if (!this.hasAddressInput(normalized)) {
-      return '';
-    }
-
-    return this.createAddressSignature(normalized);
-  }
-
   /* ******************
 		EVENT HANDLERS
   ********************/
@@ -389,11 +376,11 @@ module.exports = class TrashCollectionReminder extends Homey.App {
 
     for (let index = 0; index < settingsList.length; index += 1) {
       const apiSettings = settingsList[index];
-      const addressKey = this.createAddressSignature(apiSettings);
+      const addressKey = createAddressSignature(apiSettings);
       let collectionDays: ActivityDates[] = [];
       let cleaningDays: ActivityDates[] = [];
 
-      if (!this.hasAddressInput(apiSettings)) {
+      if (!hasAddressInput(apiSettings)) {
         collectionDatesByAddress.set(addressKey, collectionDays);
         cleanDatesByAddress.set(addressKey, cleaningDays);
         continue;
@@ -494,52 +481,13 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     return true;
   }
 
-  private normalizeApiSettings(input: any): ApiSettings {
-    return {
-      apiId: input?.apiId || '',
-      cleanApiId: input?.cleanApiId || '',
-      zipcode: String(input?.zipcode || '')
-        .trim()
-        .replace(/\s+/g, '')
-        .toUpperCase(),
-      housenumber: String(input?.housenumber || '').trim(),
-      streetname: String(input?.streetname || '').trim(),
-      cityname: String(input?.cityname || '').trim(),
-      country: String(input?.country || 'NL')
-        .trim()
-        .toUpperCase(),
-      countyId: String(input?.countyId || '').trim() || undefined,
-      apiKey: String(input?.apiKey || '').trim() || undefined,
-    };
-  }
-
   private shouldRediscoverApiForError(error: unknown): boolean {
     const msg = String((error as any)?.message || error || '').toLowerCase();
     return msg.includes('no zipcode found') || msg.includes('invalid zipcode') || msg.includes('postal code not identified') || msg.includes('no trash data found');
   }
 
-  private hasAddressInput(settings: ApiSettings): boolean {
-    return settings.zipcode.trim() !== '' || settings.housenumber.trim() !== '' || settings.streetname.trim() !== '' || settings.cityname.trim() !== '';
-  }
-
   private getApiSettingsList(): ApiSettings[] {
-    const list = this.homey.settings.get('apiSettingsList');
-    if (!Array.isArray(list)) {
-      return [];
-    }
-
-    return list.map((item) => this.normalizeApiSettings(item)).filter((item) => this.hasAddressInput(item));
-  }
-
-  private createAddressSignature(settings: ApiSettings): string {
-    return ['trash-address', settings.country, settings.zipcode, settings.housenumber, settings.streetname, settings.cityname]
-      .map((x) =>
-        String(x || '')
-          .toLowerCase()
-          .trim()
-          .replace(/\s+/g, '-'),
-      )
-      .join('-');
+    return getConfiguredApiSettingsList(this.homey.settings.get('apiSettingsList'), { requireAddressInput: true });
   }
 
   private mergeAddressDates(source: Map<string, ActivityDates[]>): ActivityDates[] {
@@ -566,12 +514,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       }
     }
 
-    for (const entry of typeMap.values()) {
-      const deduplicated = Array.from(new Set(entry.dates.map((d) => new Date(d).setHours(0, 0, 0, 0))));
-      entry.dates = deduplicated.map((d) => new Date(d)).sort((a, b) => a.getTime() - b.getTime());
-    }
-
-    return Array.from(typeMap.values());
+    return normalizeActivityDates(Array.from(typeMap.values()));
   }
 
   private async refreshDeviceAddressLookup() {
@@ -582,7 +525,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       if (driver) {
         const devices = await driver.getDevices();
         for (const [deviceId, device] of Object.entries(devices)) {
-          const dataId = this.getDeviceAddressSignature(device) || String(device.getData()?.addressSignature || device.getData()?.id || '');
+          const dataId = getDeviceAddressSignature(device) || String(device.getData()?.addressSignature || device.getData()?.id || '');
           if (dataId) {
             lookup.set(deviceId, dataId);
           }
@@ -593,7 +536,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       if (singleTypeDriver) {
         const devices = await singleTypeDriver.getDevices();
         for (const [deviceId, device] of Object.entries(devices)) {
-          const dataId = this.getDeviceAddressSignature(device) || String(device.getData()?.addressSignature || device.getData()?.id || '');
+          const dataId = getDeviceAddressSignature(device) || String(device.getData()?.addressSignature || device.getData()?.id || '');
           if (dataId) {
             lookup.set(deviceId, dataId);
           }
@@ -609,28 +552,18 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     this.deviceAddressLookup = lookup;
   }
 
-  private getPrimaryApiSettings(): ApiSettings {
-    const settingsList = this.getApiSettingsList();
-    if (settingsList.length > 0) {
-      this.homey.settings.set('apiSettings', settingsList[0]);
-      return settingsList[0];
-    }
-
-    return this.normalizeApiSettings(this.homey.settings.get('apiSettings'));
-  }
-
   private async migrateApiSettingsStorage() {
     const rawList = this.homey.settings.get('apiSettingsList');
     const rawSingle = this.homey.settings.get('apiSettings');
 
     let normalizedList: ApiSettings[] = [];
     if (Array.isArray(rawList)) {
-      normalizedList = rawList.map((item) => this.normalizeApiSettings(item)).filter((item) => this.hasAddressInput(item));
+      normalizedList = rawList.map((item) => normalizeApiSettings(item)).filter((item) => hasAddressInput(item));
     }
 
     if (normalizedList.length === 0 && rawSingle) {
-      const normalizedSingle = this.normalizeApiSettings(rawSingle);
-      if (this.hasAddressInput(normalizedSingle)) {
+      const normalizedSingle = normalizeApiSettings(rawSingle);
+      if (hasAddressInput(normalizedSingle)) {
         normalizedList = [normalizedSingle];
       }
     }
@@ -642,7 +575,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     }
 
     this.homey.settings.set('apiSettingsList', []);
-    this.homey.settings.set('apiSettings', this.normalizeApiSettings(rawSingle));
+    this.homey.settings.set('apiSettings', normalizeApiSettings(rawSingle));
   }
 
   async onUpdateLabel() {
@@ -691,9 +624,9 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       this.applyManualRemovals(datesForAddress, manualRemovals);
     }
 
-    this.normalizeActivityDates(this.collectionDates);
+    normalizeActivityDates(this.collectionDates);
     for (const datesForAddress of this.collectionDatesByAddress.values()) {
-      this.normalizeActivityDates(datesForAddress);
+      normalizeActivityDates(datesForAddress);
     }
 
     // After everything, force an update of the label
@@ -731,13 +664,6 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       }
 
       targetType.dates = targetType.dates.filter((d) => !datesToRemove.has(new Date(d).setHours(0, 0, 0, 0)));
-    }
-  }
-
-  private normalizeActivityDates(targetDates: ActivityDates[]) {
-    for (const entry of targetDates) {
-      const deduplicated = Array.from(new Set(entry.dates.map((d) => new Date(d).setHours(0, 0, 0, 0))));
-      entry.dates = deduplicated.map((d) => new Date(d)).sort((a, b) => a.getTime() - b.getTime());
     }
   }
 
@@ -892,7 +818,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       today.setHours(0, 0, 0, 0);
 
       for (const currentDevice of devices) {
-        const addressSignature = this.getDeviceAddressSignature(currentDevice) || String(currentDevice.getData()?.addressSignature || currentDevice.getData()?.id || '');
+        const addressSignature = getDeviceAddressSignature(currentDevice) || String(currentDevice.getData()?.addressSignature || currentDevice.getData()?.id || '');
         const datesForAddress = this.collectionDatesByAddress.get(addressSignature) || [];
 
         for (const type of CapabilityTrashTypes) {
@@ -978,7 +904,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       today.setHours(0, 0, 0, 0);
 
       for (const currentDevice of devices) {
-        const addressSignature = this.getDeviceAddressSignature(currentDevice) || String(currentDevice.getData()?.addressSignature || currentDevice.getData()?.id || '');
+        const addressSignature = getDeviceAddressSignature(currentDevice) || String(currentDevice.getData()?.addressSignature || currentDevice.getData()?.id || '');
         const trashType = String(currentDevice.getSettings?.()?.trashType || '') as TrashType;
         if (!trashType) {
           continue;

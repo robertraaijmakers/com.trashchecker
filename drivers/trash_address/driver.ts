@@ -1,32 +1,12 @@
 'use strict';
 
 import Homey from 'homey';
-import apiRegistry from '../../assets/api-registry.json';
-import { ApiMeta, ApiSettings } from '../../assets/publicTypes';
-import {
-  createAddressSignature,
-  getConfiguredAddressOptions,
-  getConfiguredApiSettingsList,
-  getRegistryByCountry,
-  hasAddressInput,
-  isAddressReferencedByOtherDevices,
-  normalizeApiSettings,
-  upsertApiSettingsInList,
-} from '../../lib/driverhelper';
-import { TrashCollectionReminder } from '../../types/localTypes';
+import { ApiSettings } from '../../assets/publicTypes';
+import { AddressPairState, BaseAddressDriver } from '../../lib/baseaddressdriver';
+import { createAddressSignature, normalizeApiSettings } from '../../lib/driverhelper';
 
-interface ValidationResponse {
-  success: boolean;
-  error?: string;
-  apiSettings?: ApiSettings;
-}
-
-module.exports = class TrashAddressDriver extends Homey.Driver {
-  async onInit() {
-    this.registerDeviceFlowListeners();
-  }
-
-  private registerDeviceFlowListeners() {
+module.exports = class TrashAddressDriver extends BaseAddressDriver<AddressPairState> {
+  protected registerDeviceFlowListeners() {
     const app = this.homey.app as any;
 
     this.homey.flow.getConditionCard('days_to_collect_device').registerRunListener(async (args, state) => {
@@ -47,54 +27,13 @@ module.exports = class TrashAddressDriver extends Homey.Driver {
   }
 
   async onPair(session: any) {
-    const state: { apiSettings?: ApiSettings } = {};
+    const state: AddressPairState = {};
 
-    session.setHandler('get_pair_context', async () => {
-      const settingsList = getConfiguredApiSettingsList(this.homey.settings.get('apiSettingsList'), { defaultCleanApiId: '', requireAddressInput: true });
-      const settings = settingsList[0] || normalizeApiSettings(this.homey.settings.get('apiSettings'), { defaultCleanApiId: '' });
+    this.registerSharedPairHandlers(session);
 
-      return {
-        apiSettings: settings,
-        apiRegistry: getRegistryByCountry(settings.country, apiRegistry as ApiMeta[]),
-        configuredAddresses: getConfiguredAddressOptions(settingsList),
-      };
-    });
+    session.setHandler('set_api_settings', async (input: Partial<ApiSettings>) => this.handlePairSetApiSettings(state, input));
 
-    session.setHandler('get_api_registry', async (country: string) => {
-      return getRegistryByCountry(country, apiRegistry as ApiMeta[]);
-    });
-
-    session.setHandler('validate_api_settings', async (input: Partial<ApiSettings>): Promise<ValidationResponse> => {
-      return this.validateApiSettings(input);
-    });
-
-    session.setHandler('set_api_settings', async (input: Partial<ApiSettings>): Promise<ValidationResponse> => {
-      const validation = await this.validateApiSettings(input);
-      if (!validation.success || !validation.apiSettings) {
-        return validation;
-      }
-
-      state.apiSettings = validation.apiSettings;
-      return validation;
-    });
-
-    session.setHandler('set_existing_api_settings', async (index: number): Promise<ValidationResponse> => {
-      const settingsList = getConfiguredApiSettingsList(this.homey.settings.get('apiSettingsList'), { defaultCleanApiId: '', requireAddressInput: true });
-      const selected = settingsList[Number(index)];
-
-      if (!selected) {
-        return {
-          success: false,
-          error: 'Selected address could not be found.',
-        };
-      }
-
-      state.apiSettings = normalizeApiSettings(selected, { defaultCleanApiId: '' });
-      return {
-        success: true,
-        apiSettings: state.apiSettings,
-      };
-    });
+    session.setHandler('set_existing_api_settings', async (index: number) => this.handlePairSelectExistingApiSettings(state, index));
 
     session.setHandler('list_devices', async () => {
       if (!state.apiSettings) {
@@ -123,140 +62,6 @@ module.exports = class TrashAddressDriver extends Homey.Driver {
   }
 
   async onRepair(session: any, device: Homey.Device) {
-    session.setHandler('get_pair_context', async () => {
-      const settings = normalizeApiSettings(device.getSettings(), { defaultCleanApiId: '' });
-      const settingsList = getConfiguredApiSettingsList(this.homey.settings.get('apiSettingsList'), { defaultCleanApiId: '', requireAddressInput: true });
-      const currentSignature = createAddressSignature(settings);
-
-      return {
-        apiSettings: settings,
-        apiRegistry: getRegistryByCountry(settings.country, apiRegistry as ApiMeta[]),
-        configuredAddresses: getConfiguredAddressOptions(settingsList),
-        selectedAddressIndex: settingsList.findIndex((entry) => createAddressSignature(entry) === currentSignature),
-      };
-    });
-
-    session.setHandler('get_api_registry', async (country: string) => {
-      return getRegistryByCountry(country, apiRegistry as ApiMeta[]);
-    });
-
-    session.setHandler('set_existing_api_settings', async (index: number): Promise<ValidationResponse> => {
-      const settingsList = getConfiguredApiSettingsList(this.homey.settings.get('apiSettingsList'), { defaultCleanApiId: '', requireAddressInput: true });
-      const selected = settingsList[Number(index)];
-
-      if (!selected) {
-        return {
-          success: false,
-          error: 'Selected address could not be found.',
-        };
-      }
-
-      const oldSettings = normalizeApiSettings(device.getSettings(), { defaultCleanApiId: '' });
-      const nextSettings = normalizeApiSettings(selected, { defaultCleanApiId: '' });
-      const keepPrevious = await isAddressReferencedByOtherDevices(this.homey, oldSettings, device);
-      const updatedSettingsList = upsertApiSettingsInList(settingsList, nextSettings, oldSettings, { keepPrevious });
-
-      this.homey.settings.set('apiSettingsList', updatedSettingsList);
-      this.homey.settings.set('apiSettings', updatedSettingsList[0] || nextSettings);
-
-      await device.setSettings(nextSettings);
-
-      const app = this.homey.app as TrashCollectionReminder;
-      await app.recalculate();
-
-      return {
-        success: true,
-        apiSettings: nextSettings,
-      };
-    });
-
-    session.setHandler('validate_api_settings', async (input: Partial<ApiSettings>): Promise<ValidationResponse> => {
-      return this.validateApiSettings(input);
-    });
-
-    session.setHandler('apply_api_settings', async (input: Partial<ApiSettings>) => {
-      const validation = await this.validateApiSettings(input);
-      if (!validation.success || !validation.apiSettings) {
-        return validation;
-      }
-
-      const oldSettings = normalizeApiSettings(device.getSettings(), { defaultCleanApiId: '' });
-      const nextSettings = validation.apiSettings;
-
-      const settingsList = getConfiguredApiSettingsList(this.homey.settings.get('apiSettingsList'), { defaultCleanApiId: '', requireAddressInput: true });
-      const keepPrevious = await isAddressReferencedByOtherDevices(this.homey, oldSettings, device);
-      const updatedSettingsList = upsertApiSettingsInList(settingsList, nextSettings, oldSettings, { keepPrevious });
-
-      this.homey.settings.set('apiSettingsList', updatedSettingsList);
-      this.homey.settings.set('apiSettings', updatedSettingsList[0] || nextSettings);
-
-      await device.setSettings(nextSettings);
-
-      const app = this.homey.app as TrashCollectionReminder;
-      await app.recalculate();
-
-      return {
-        success: true,
-        apiSettings: nextSettings,
-      };
-    });
-  }
-
-  private normalizeApiSettings(input: any): ApiSettings {
-    return {
-      apiId: input?.apiId || '',
-      cleanApiId: input?.cleanApiId || '',
-      zipcode: String(input?.zipcode || '')
-        .trim()
-        .replace(/\s+/g, '')
-        .toUpperCase(),
-      housenumber: String(input?.housenumber || '').trim(),
-      streetname: String(input?.streetname || '').trim(),
-      cityname: String(input?.cityname || '').trim(),
-      country: String(input?.country || 'NL')
-        .trim()
-        .toUpperCase(),
-      countyId: String(input?.countyId || '').trim() || undefined,
-      apiKey: String(input?.apiKey || '').trim() || undefined,
-    };
-  }
-
-  private async validateApiSettings(input: Partial<ApiSettings>): Promise<ValidationResponse> {
-    const apiSettings = normalizeApiSettings(input, { defaultCleanApiId: '' });
-
-    if (!hasAddressInput(apiSettings)) {
-      return {
-        success: false,
-        error: 'Please provide at least a postcode or street with house number.',
-      };
-    }
-
-    try {
-      const app = this.homey.app as TrashCollectionReminder;
-
-      const trashResult = apiSettings.apiId && apiSettings.apiId !== 'not-applicable' ? { id: apiSettings.apiId } : await app.trashApis.FindApi(apiSettings);
-      if (!trashResult?.id) {
-        return {
-          success: false,
-          error: this.homey.__('settings.fail'),
-        };
-      }
-
-      apiSettings.apiId = trashResult.id;
-
-      const cleanResult = apiSettings.cleanApiId && apiSettings.cleanApiId !== 'not-applicable' ? { id: apiSettings.cleanApiId } : await app.cleanApis.FindApi(apiSettings);
-      apiSettings.cleanApiId = cleanResult?.id || 'not-applicable';
-
-      return {
-        success: true,
-        apiSettings,
-      };
-    } catch (error) {
-      this.error('Error while validating API settings', error);
-      return {
-        success: false,
-        error: (error as Error).message || 'Validation failed',
-      };
-    }
+    this.registerSharedRepairHandlers(session, device);
   }
 };

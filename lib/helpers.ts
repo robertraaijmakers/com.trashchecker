@@ -103,6 +103,15 @@ export function addDate(activityDates: ActivityDates[], type: TrashType, date: D
   }
 }
 
+export function normalizeActivityDates(activityDates: ActivityDates[]): ActivityDates[] {
+  for (const entry of activityDates) {
+    const deduplicated = Array.from(new Set(entry.dates.map((date) => new Date(date).setHours(0, 0, 0, 0))));
+    entry.dates = deduplicated.map((date) => new Date(date)).sort((a, b) => a.getTime() - b.getTime());
+  }
+
+  return activityDates;
+}
+
 export function formatDate(date: Date | number) {
   var d = new Date(date),
     month = '' + (d.getMonth() + 1),

@@ -1,4 +1,5 @@
-import { ApiMeta, ApiSettings } from '../assets/publicTypes';
+import { ApiMeta, ApiSettings, TrashType } from '../assets/publicTypes';
+import { ActivityDates, TrashCollectionReminder } from '../types/localTypes';
 
 export interface ConfiguredAddressOption {
   index: number;
@@ -16,6 +17,21 @@ export interface ConfiguredApiSettingsListOptions extends NormalizeApiSettingsOp
 
 export interface UpsertApiSettingsInListOptions {
   keepPrevious?: boolean;
+}
+
+export interface PersistApiSettingsListOptions extends NormalizeApiSettingsOptions {
+  currentDevice?: any;
+}
+
+export interface ValidateApiSettingsOptions extends NormalizeApiSettingsOptions {
+  includeCollectionDays?: boolean;
+}
+
+export interface ApiSettingsValidationResult {
+  success: boolean;
+  error?: string;
+  apiSettings?: ApiSettings;
+  collectionDays?: ActivityDates[];
 }
 
 export function normalizeApiSettings(input: any, options?: NormalizeApiSettingsOptions): ApiSettings {
@@ -56,6 +72,24 @@ export function createSignature(parts: Array<string | number | null | undefined>
 
 export function createAddressSignature(settings: ApiSettings): string {
   return createSignature(['trash-address', settings.country, settings.zipcode, settings.housenumber, settings.streetname, settings.cityname]);
+}
+
+export function getDeviceAddressSignature(deviceLike: any, options?: NormalizeApiSettingsOptions): string {
+  const settings = deviceLike?.getSettings?.() || deviceLike?.settings;
+  if (!settings) {
+    return '';
+  }
+
+  const normalized = normalizeApiSettings(settings, options);
+  if (!hasAddressInput(normalized)) {
+    return '';
+  }
+
+  return createAddressSignature(normalized);
+}
+
+export function createSingleTypeDeviceId(settings: ApiSettings, trashType: TrashType): string {
+  return createSignature(['trash-type-address', settings.country, settings.zipcode, settings.housenumber, settings.streetname, settings.cityname, trashType]);
 }
 
 export function getRegistryByCountry(country: string, registry: ApiMeta[]): ApiMeta[] {
@@ -115,6 +149,20 @@ export function upsertApiSettingsInList(settingsList: ApiSettings[], nextSetting
   return [...filtered, nextSettings];
 }
 
+export async function persistApiSettingsList(homey: any, nextSettings: ApiSettings, previousSettings: ApiSettings, options?: PersistApiSettingsListOptions): Promise<ApiSettings[]> {
+  const settingsList = getConfiguredApiSettingsList(homey.settings.get('apiSettingsList'), {
+    defaultCleanApiId: options?.defaultCleanApiId,
+    requireAddressInput: true,
+  });
+  const keepPrevious = await isAddressReferencedByOtherDevices(homey, previousSettings, options?.currentDevice);
+  const updatedSettingsList = upsertApiSettingsInList(settingsList, nextSettings, previousSettings, { keepPrevious });
+
+  homey.settings.set('apiSettingsList', updatedSettingsList);
+  homey.settings.set('apiSettings', updatedSettingsList[0] || nextSettings);
+
+  return updatedSettingsList;
+}
+
 export async function isAddressReferencedByOtherDevices(homey: any, addressSettings: ApiSettings, currentDevice?: any): Promise<boolean> {
   const targetSignature = createAddressSignature(addressSettings);
   const currentDeviceId = String(currentDevice?.getId?.() || currentDevice?.id || '');
@@ -145,4 +193,52 @@ export async function isAddressReferencedByOtherDevices(homey: any, addressSetti
   }
 
   return false;
+}
+
+export async function validateApiSettingsWithApis(homey: any, input: Partial<ApiSettings>, options?: ValidateApiSettingsOptions): Promise<ApiSettingsValidationResult> {
+  const apiSettings = normalizeApiSettings(input, options);
+
+  if (!hasAddressInput(apiSettings)) {
+    return {
+      success: false,
+      error: 'Please provide at least a postcode or street with house number.',
+    };
+  }
+
+  try {
+    const app = homey.app as TrashCollectionReminder;
+
+    let collectionDays: ActivityDates[] | undefined;
+    if (apiSettings.apiId && apiSettings.apiId !== 'not-applicable') {
+      apiSettings.apiId = apiSettings.apiId;
+      if (options?.includeCollectionDays) {
+        collectionDays = await app.trashApis.ExecuteApi(apiSettings);
+      }
+    } else {
+      const trashResult = await app.trashApis.FindApi(apiSettings);
+      if (!trashResult?.id) {
+        return {
+          success: false,
+          error: homey.__('settings.fail'),
+        };
+      }
+
+      apiSettings.apiId = trashResult.id;
+      collectionDays = trashResult.days;
+    }
+
+    const cleanResult = apiSettings.cleanApiId && apiSettings.cleanApiId !== 'not-applicable' ? { id: apiSettings.cleanApiId } : await app.cleanApis.FindApi(apiSettings);
+    apiSettings.cleanApiId = cleanResult?.id || 'not-applicable';
+
+    return {
+      success: true,
+      apiSettings,
+      collectionDays,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: (error as Error).message || 'Validation failed',
+    };
+  }
 }
