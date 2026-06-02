@@ -165,7 +165,8 @@
 			"TEXTIEL": "Textiel",
 			"GROF": "Grof",
 			"GLAS": "Glas",
-			"KERSTBOOM": "Kerstboom"
+			"KERSTBOOM": "Kerstboom",
+			"NONE": "Niets"
 		}
 	}
 }

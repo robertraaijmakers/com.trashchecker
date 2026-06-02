@@ -158,7 +158,8 @@
 			"TEXTIEL": "textilier",
 			"GROF": "grovsopor",
 			"GLAS": "glas",
-			"KERSTBOOM": "julgranen"
+			"KERSTBOOM": "julgranen",
+			"NONE": "Ingenting"
 		}
 	}
 }

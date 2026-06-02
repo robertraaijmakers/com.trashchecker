@@ -165,7 +165,8 @@
 			"TEXTIEL": "Tekstil",
 			"GROF": "Stor",
 			"GLAS": "Glass",
-			"KERSTBOOM": "Juletre"
+			"KERSTBOOM": "Juletre",
+			"NONE": "Ingenting"
 		}
 	}
 }

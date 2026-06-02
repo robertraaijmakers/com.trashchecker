@@ -146,7 +146,8 @@
 			"TEXTIEL": "Textiles",
 			"GROF": "Volumineux",
 			"GLAS": "Verre",
-			"KERSTBOOM": "Sapin de Noël"
+			"KERSTBOOM": "Sapin de Noël",
+			"NONE": "Rien"
 		}
 	}
 }
