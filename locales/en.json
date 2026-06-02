@@ -165,7 +165,8 @@
 			"TEXTIEL": "Textile",
 			"GROF": "Bulky",
 			"GLAS": "Glass",
-			"KERSTBOOM": "Christmas Tree"
+			"KERSTBOOM": "Christmas Tree",
+			"NONE": "Nothing"
 		}
 	}
 }

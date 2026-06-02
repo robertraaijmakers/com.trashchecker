@@ -189,9 +189,11 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   }
 
   async flowDaysToCollect(args: TrashFlowCardArgument, type: FlowCardType, dates: ActivityDates[]) {
+    const labelSettings = this.homey.settings.get('labelSettings');
+
     let result = false;
-    let trashTypeCollected = '';
-    let trashTypeCollectedLocalized = '';
+    let trashTypeCollected = this.homey.__('widgets.trashType.NONE');
+    let trashTypeCollectedLocalized = labelSettings?.['NONE']?.trashLong || this.homey.__('tokens.output.type.NONE');
 
     if (!dates || dates.length === 0) {
       return this.handleResultTrashCollection(type, result, trashTypeCollected, trashTypeCollectedLocalized);
@@ -210,7 +212,6 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       now.setDate(now.getDate() + 2);
     }
 
-    const labelSettings = this.homey.settings.get('labelSettings');
     const itemsCollectedToday = await this.findResultsByDate(dates, now);
 
     if (args.trash_type == 'ANY') {
@@ -251,7 +252,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
 
   async flowTrashTypeIsCleanedForDeviceAction(args: TrashFlowCardArgument, state?: any) {
     return this.executeDeviceFlowResolvedType(args, state, FlowCardType.ACTION, this.cleanDatesByAddress, this.flowTrashIsCleaned, () =>
-      this.handleResultTrashCleaning(FlowCardType.ACTION, false, '', ''),
+      this.handleResultTrashCleaning(FlowCardType.ACTION, false, this.homey.__('widgets.trashType.NONE'), this.homey.__('tokens.output.type.NONE')),
     );
   }
 
@@ -260,9 +261,11 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   }
 
   async flowTrashIsCleaned(args: TrashFlowCardArgument, type: FlowCardType, dates: ActivityDates[]) {
+    const labelSettings = this.homey.settings.get('labelSettings');
+
     let result = false;
-    let trashTypeCleaned = '';
-    let trashTypeCleanedLocalized = '';
+    let trashTypeCleaned = this.homey.__('widgets.trashType.NONE');
+    let trashTypeCleanedLocalized = labelSettings?.['NONE']?.trashLong || this.homey.__('tokens.output.type.NONE');
 
     if (!dates || dates.length === 0) {
       return this.handleResultTrashCleaning(type, result, trashTypeCleaned, trashTypeCleanedLocalized);
@@ -281,7 +284,6 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       now.setDate(now.getDate() + 2);
     }
 
-    const labelSettings = this.homey.settings.get('labelSettings');
     const itemsCleanedToday = await this.findResultsByDate(dates, now);
 
     if (args.trash_type == 'ANY') {
