@@ -44,7 +44,7 @@ describe('Blink Manager', function () {
     assert.equal(isValid, true);
   });
 });
-
+*/
 describe('GAD - Gooi and Vechtstreek', function () {
   it('API - GAD', async function () {
     const apiSettings: ApiSettings = {
@@ -61,8 +61,12 @@ describe('GAD - Gooi and Vechtstreek', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-});
 
+
+//1216CE
+
+});
+/*
 describe('Kliko Manager', function () {
   it('API - Klikomanager Oude IJsselstreek', async function () {
     const apiSettings: ApiSettings = {

@@ -198,7 +198,8 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('groente') !== -1 ||
     description.indexOf('gft') !== -1 ||
     description.indexOf('bio') !== -1 ||
-    description.indexOf('green') !== -1
+    description.indexOf('green') !== -1 ||
+    description.indexOf('gfe') !== -1
   ) {
     addDate(activityDates, TrashType.GFT, date, icon, localDescription, color);
     foundType = true;
@@ -310,7 +311,7 @@ export function processWasteData(afvalstromenResponse: any, kalenderResponse: an
     let collectionType: TrashType | null = null;
     let typeFound = false;
 
-    if (checkTitle.includes('GFT') || checkTitle.includes('GROENTE') || checkTitle.includes('GROENE')) {
+    if (checkTitle.includes('GFT') || checkTitle.includes('GFE') || checkTitle.includes('GROENTE') || checkTitle.includes('GROENE')) {
       collectionType = TrashType.GFT;
       typeFound = true;
     }
