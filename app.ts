@@ -989,6 +989,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       currentDates.localText = undefined;
       currentDates.icon = undefined;
       currentDates.dates = [];
+      this.collectionDates[this.collectionDates.findIndex((x) => x.type === trashType)] = currentDates;
     }
 
     // Skip settings when N/A or Automatic
