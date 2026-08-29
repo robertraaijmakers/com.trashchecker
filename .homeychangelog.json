@@ -294,5 +294,9 @@
   "5.9.4": {
     "en": "Some minor fixes in trash type handling.",
     "nl": "Diverse aanpassingen in het afhandelen van afvaltypes."
+  },
+  "5.9.5": {
+    "en": "Fix for RecycleBE.",
+    "nl": "Fix voor RecycleBE."
   }
 }
