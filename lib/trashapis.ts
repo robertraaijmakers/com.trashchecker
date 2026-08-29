@@ -654,29 +654,20 @@ export class TrashApis {
     await validateZipcode(apiSettings);
     await validateHousenumber(apiSettings);
 
-    // API's moved to api.fostplus.be/recycle-public/app/v1
+    // API moved to api.fostplus.be/recyclecms/public/v1 (Recycle! app 3.1.15).
+    // The old /recycle-public/app/v1 access-token handshake (x-consumer + x-secret
+    // -> accessToken) is gone; the public endpoints now authenticate with static
+    // app headers instead, so no token request is needed.
     var hostName = 'api.fostplus.be';
-    var accessConsumer = 'recycleapp.be';
-    var accessSecret =
-      'Op2tDi2pBmh1wzeC5TaN2U3knZan7ATcfOQgxh4vqC0mDKmnPP2qzoQusmInpglfIkxx8SZrasBqi5zgMSvyHggK9j6xCQNQ8xwPFY2o03GCcQfcXVOyKsvGWLze7iwcfcgk2Ujpl0dmrt3hSJMCDqzAlvTrsvAEiaSzC9hKRwhijQAFHuFIhJssnHtDSB76vnFQeTCCvwVB27DjSVpDmq8fWQKEmjEncdLqIsRnfxLcOjGIVwX5V0LBntVbeiBvcjyKF2nQ08rIxqHHGXNJ6SbnAmTgsPTg7k6Ejqa7dVfTmGtEPdftezDbuEc8DdK66KDecqnxwOOPSJIN0zaJ6k2Ye2tgMSxxf16gxAmaOUqHS0i7dtG5PgPSINti3qlDdw6DTKEPni7X0rxM';
+    var accessConsumer = 'mobile-app';
+    var appHeaders = {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Homey',
+      'x-consumer': accessConsumer,
+      'x-app-version': '372',
+      'x-app-os': 'Android',
+    };
 
-    // Get access token
-    const accessTokenRequest = await httpsPromise({
-      hostname: hostName,
-      path: '/recycle-public/app/v1/access-token',
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'User-Agent': 'Homey',
-        'x-consumer': accessConsumer,
-        'x-secret': accessSecret,
-      },
-      family: 4,
-      rejectUnauthorized: false,
-    });
-
-    const accessTokenResult = <any>accessTokenRequest.body;
-    const accessToken = accessTokenResult.accessToken;
     let zipcodeId = '';
 
     if (apiSettings.zipcode.includes('-')) {
@@ -685,14 +676,9 @@ export class TrashApis {
       // Validate zipcode request
       const validateZipCodeRequest = await httpsPromise({
         hostname: hostName,
-        path: `/recycle-public/app/v1/zipcodes?q=${apiSettings.zipcode}`,
+        path: `/recyclecms/public/v1/zipcodes?q=${apiSettings.zipcode}`,
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Homey',
-          Authorization: accessToken,
-          'x-consumer': accessConsumer,
-        },
+        headers: appHeaders,
         family: 4,
         rejectUnauthorized: false,
       });
@@ -716,14 +702,9 @@ export class TrashApis {
       // Validate street request
       const validateStreetRequest = await httpsPromise({
         hostname: hostName,
-        path: encodeURI(`/recycle-public/app/v1/streets?q=${apiSettings.streetname.trim()}&zipcodes=${zipcodeId}`),
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Homey',
-          Authorization: accessToken,
-          'x-consumer': accessConsumer,
-        },
+        path: encodeURI(`/recyclecms/public/v1/streets?q=${apiSettings.streetname.trim()}&zipcodes=${zipcodeId}`),
+        method: 'GET',
+        headers: appHeaders,
         family: 4,
         rejectUnauthorized: false,
       });
@@ -753,15 +734,10 @@ export class TrashApis {
     var getTrashRequest = await httpsPromise({
       hostname: hostName,
       method: 'GET',
-      path: `/recycle-public/app/v1/collections?size=100&untilDate=${formatDate(endDate)}&fromDate=${formatDate(startDate)}&houseNumber=${
+      path: `/recyclecms/public/v1/collections?size=100&untilDate=${formatDate(endDate)}&fromDate=${formatDate(startDate)}&houseNumber=${
         apiSettings.housenumber
-      }&streetId=${streetId}&zipcodeId=${zipcodeId}`,
-      headers: {
-        'Content-Type': 'application/json',
-        'User-Agent': 'Homey',
-        Authorization: accessToken,
-        'x-consumer': accessConsumer,
-      },
+      }&streetId=${encodeURIComponent(streetId)}&zipcodeId=${zipcodeId}`,
+      headers: appHeaders,
       family: 4,
       rejectUnauthorized: false,
     });
@@ -769,9 +745,9 @@ export class TrashApis {
     var result = <any>getTrashRequest.body;
     if (result.items.length <= 0) {
       throw new Error(
-        `No trash data found for: /recycle-public/app/v1/collections?size=100&untilDate=${formatDate(endDate)}&fromDate=${formatDate(startDate)}&houseNumber=${
+        `No trash data found for: /recyclecms/public/v1/collections?size=100&untilDate=${formatDate(endDate)}&fromDate=${formatDate(startDate)}&houseNumber=${
           apiSettings.housenumber
-        }&streetId=${streetId}&zipcodeId=${zipcodeId}`,
+        }&streetId=${encodeURIComponent(streetId)}&zipcodeId=${zipcodeId}`,
       );
     }
 
