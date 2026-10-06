@@ -9,7 +9,7 @@ import { createAddressSignature, getConfiguredApiSettingsList, getDeviceAddressS
 import { ApiSettings, LabelSettings, ManualSetting, ManualSettings, TrashType } from './assets/publicTypes';
 import { DateTimeHelper } from './lib/datetimehelper';
 
-const AllTrashTypes = Object.freeze(['GFT', 'PLASTIC', 'PAPIER', 'PMD', 'REST', 'TEXTIEL', 'GROF', 'KERSTBOOM', 'GLAS'] as const);
+const AllTrashTypes = Object.freeze(['GFT', 'KCA', 'PLASTIC', 'PAPIER', 'PMD', 'REST', 'SNOEI', 'TEXTIEL', 'GROF', 'KERSTBOOM', 'GLAS'] as const);
 const CapabilityTrashTypes = Object.freeze(['GFT', 'PLASTIC', 'PAPIER', 'PMD', 'REST', 'TEXTIEL', 'GROF', 'GLAS', 'KCA', 'SNOEI', 'KERSTBOOM'] as const);
 const TrashTypeCapabilityMap: Record<TrashType, string> = {
   GFT: 'trash_collection_gft',
@@ -131,7 +131,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   }
 
   async flowTrashIsCollectedForDeviceCondition(args: TrashFlowCardArgument, state?: any) {
-    return this.executeDeviceFlowAnyType(args, state, FlowCardType.CONDITION, this.collectionDatesByAddress, this.flowDaysToCollect);
+    return this.executeDeviceFlowSelectedType(args, state, FlowCardType.CONDITION, this.collectionDatesByAddress, this.flowDaysToCollect);
   }
 
   async flowTrashTypeIsCollectedForDeviceAction(args: TrashFlowCardArgument, state?: any) {
@@ -166,6 +166,22 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     runner: (args: TrashFlowCardArgument, type: FlowCardType, dates: ActivityDates[]) => Promise<any>,
   ) {
     args.trash_type = 'ANY';
+    const addressSignature = this.resolveFlowAddressSignature(args, state);
+    return runner.call(this, args, type, datesByAddress.get(addressSignature) || []);
+  }
+
+  // Used by the address device condition cards, which let the user pick a trash type. The selected type must be respected.
+  private async executeDeviceFlowSelectedType(
+    args: TrashFlowCardArgument,
+    state: any,
+    type: FlowCardType,
+    datesByAddress: Map<string, ActivityDates[]>,
+    runner: (args: TrashFlowCardArgument, type: FlowCardType, dates: ActivityDates[]) => Promise<any>,
+  ) {
+    if (!args.trash_type) {
+      args.trash_type = 'ANY';
+    }
+
     const addressSignature = this.resolveFlowAddressSignature(args, state);
     return runner.call(this, args, type, datesByAddress.get(addressSignature) || []);
   }
@@ -247,7 +263,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
   }
 
   async flowTrashIsCleanedForDeviceCondition(args: TrashFlowCardArgument, state?: any) {
-    return this.executeDeviceFlowAnyType(args, state, FlowCardType.CONDITION, this.cleanDatesByAddress, this.flowTrashIsCleaned);
+    return this.executeDeviceFlowSelectedType(args, state, FlowCardType.CONDITION, this.cleanDatesByAddress, this.flowTrashIsCleaned);
   }
 
   async flowTrashTypeIsCleanedForDeviceAction(args: TrashFlowCardArgument, state?: any) {
@@ -983,12 +999,23 @@ module.exports = class TrashCollectionReminder extends Homey.App {
     }
 
     // When user set option to not applicable, clear any dates that we already automatically found, to prevent faulty manual setting data
-    const currentDates = this.collectionDates.find((x) => x.type === trashType);
-    if (currentDates !== undefined && currentDates !== null) {
-      currentDates.color = undefined;
-      currentDates.localText = undefined;
-      currentDates.icon = undefined;
-      currentDates.dates = [];
+    const clearDates = (dates: ActivityDates[]) => {
+      const currentDates = dates.find((x) => x.type === trashType);
+      if (currentDates !== undefined && currentDates !== null) {
+        currentDates.color = undefined;
+        currentDates.localText = undefined;
+        currentDates.icon = undefined;
+        currentDates.dates = [];
+      }
+    };
+
+    clearDates(this.collectionDates);
+
+    // N/A must also hide the type for the address devices (capabilities, per-type devices and their flow cards)
+    if (manualSetting.option < 0) {
+      for (const datesForAddress of this.collectionDatesByAddress.values()) {
+        clearDates(datesForAddress);
+      }
     }
 
     // Skip settings when N/A or Automatic
