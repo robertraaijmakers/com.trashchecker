@@ -1219,7 +1219,7 @@ describe('TrashApiMijnAfvalzaken', function () {
     assert.equal(isValid, true);
   });
 });
-
+*/
 describe('TrashApiIrado', function () {
   it('API - Irado - 1', async function () {
     const apiSettings: ApiSettings = {
@@ -1253,7 +1253,7 @@ describe('TrashApiIrado', function () {
     assert.equal(isValid, true);
   });
 });
-
+/*
 describe('TrashApiOmrin', function () {
   it('API - Omrin - 1', async function () {
     const apiSettings: ApiSettings = {

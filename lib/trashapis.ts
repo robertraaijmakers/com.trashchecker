@@ -654,20 +654,14 @@ export class TrashApis {
     await validateZipcode(apiSettings);
     await validateHousenumber(apiSettings);
 
-    // API moved to api.fostplus.be/recyclecms/public/v1 (Recycle! app 3.1.15).
-    // The old /recycle-public/app/v1 access-token handshake (x-consumer + x-secret
-    // -> accessToken) is gone; the public endpoints now authenticate with static
-    // app headers instead, so no token request is needed.
-    var hostName = 'api.fostplus.be';
-    var accessConsumer = 'mobile-app';
-    var appHeaders = {
+    // The Recycle! API moved from /app/v1 (token + secret based) to /public/v1, which only needs the x-consumer header.
+    const hostName = 'api.fostplus.be';
+    const basePath = '/recyclecms/public/v1';
+    const requestHeaders = {
       'Content-Type': 'application/json',
       'User-Agent': 'Homey',
-      'x-consumer': accessConsumer,
-      'x-app-version': '372',
-      'x-app-os': 'Android',
+      'x-consumer': 'recycleapp.be',
     };
-
     let zipcodeId = '';
 
     if (apiSettings.zipcode.includes('-')) {
@@ -676,9 +670,9 @@ export class TrashApis {
       // Validate zipcode request
       const validateZipCodeRequest = await httpsPromise({
         hostname: hostName,
-        path: `/recyclecms/public/v1/zipcodes?q=${apiSettings.zipcode}`,
+        path: `${basePath}/zipcodes?q=${apiSettings.zipcode}`,
         method: 'GET',
-        headers: appHeaders,
+        headers: requestHeaders,
         family: 4,
         rejectUnauthorized: false,
       });
@@ -702,9 +696,9 @@ export class TrashApis {
       // Validate street request
       const validateStreetRequest = await httpsPromise({
         hostname: hostName,
-        path: encodeURI(`/recyclecms/public/v1/streets?q=${apiSettings.streetname.trim()}&zipcodes=${zipcodeId}`),
+        path: encodeURI(`${basePath}/streets?q=${apiSettings.streetname.trim()}&zipcodes=${zipcodeId}`),
         method: 'GET',
-        headers: appHeaders,
+        headers: requestHeaders,
         family: 4,
         rejectUnauthorized: false,
       });
@@ -734,10 +728,10 @@ export class TrashApis {
     var getTrashRequest = await httpsPromise({
       hostname: hostName,
       method: 'GET',
-      path: `/recyclecms/public/v1/collections?size=100&untilDate=${formatDate(endDate)}&fromDate=${formatDate(startDate)}&houseNumber=${
+      path: `${basePath}/collections?size=100&untilDate=${formatDate(endDate)}&fromDate=${formatDate(startDate)}&houseNumber=${
         apiSettings.housenumber
-      }&streetId=${encodeURIComponent(streetId)}&zipcodeId=${zipcodeId}`,
-      headers: appHeaders,
+      }&streetId=${streetId}&zipcodeId=${zipcodeId}`,
+      headers: requestHeaders,
       family: 4,
       rejectUnauthorized: false,
     });
@@ -745,7 +739,7 @@ export class TrashApis {
     var result = <any>getTrashRequest.body;
     if (result.items.length <= 0) {
       throw new Error(
-        `No trash data found for: /recyclecms/public/v1/collections?size=100&untilDate=${formatDate(endDate)}&fromDate=${formatDate(startDate)}&houseNumber=${
+        `No trash data found for: ${basePath}/collections?size=100&untilDate=${formatDate(endDate)}&fromDate=${formatDate(startDate)}&houseNumber=${
           apiSettings.housenumber
         }&streetId=${encodeURIComponent(streetId)}&zipcodeId=${zipcodeId}`,
       );
@@ -961,7 +955,7 @@ export class TrashApis {
 
     // Retrieve Irado data
     const getRecycleData = await httpsPromise({
-      hostname: 'irado.nl',
+      hostname: 'www.irado.nl',
       path: `/wp-json/wsa/v1/location/address/calendar/pickups?zipcode=${apiSettings.zipcode}&number=${houseNumberMatch[0]}${queryAddition}`,
       method: 'GET',
       headers: {
