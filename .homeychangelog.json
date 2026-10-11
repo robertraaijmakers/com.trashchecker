@@ -298,5 +298,8 @@
   "5.9.5": {
     "en": "Fix for RecycleBE.",
     "nl": "Fix voor RecycleBE."
+  },
+  "5.9.6": {
+    "en": "Fixing device cards"
   }
 }
