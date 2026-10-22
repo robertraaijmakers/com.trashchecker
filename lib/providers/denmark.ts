@@ -15,79 +15,6 @@ const BROWSER_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) 
 export class DenmarkProviders {
   constructor(private log: (...args: any[]) => void) {}
 
-  // RenoWeb --------------------------------------------------------------------------------
-
-  async renoWebFrederiksberg(apiSettings: ApiSettings) {
-    return this.generalRenoWeb(apiSettings, 'frederiksberg');
-  }
-
-  async renoWebRudersdal(apiSettings: ApiSettings) {
-    return this.generalRenoWeb(apiSettings, 'rudersdal');
-  }
-
-  private async generalRenoWeb(apiSettings: ApiSettings, municipality: string) {
-    this.log(`Checking RenoWeb ${municipality}`);
-
-    const fDates: ActivityDates[] = [];
-
-    await validateCountry(apiSettings, 'DK');
-    await validateStreet(apiSettings);
-    await validateHousenumber(apiSettings);
-
-    // RenoWeb wraps its JSON responses in a JSON string inside the "d" property.
-    const post = async (endpoint: string, payload: object) => {
-      const response = await httpsPromise({
-        hostname: `${municipality}.renoweb.dk`,
-        path: `/Legacy/JService.asmx/${endpoint}`,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'User-Agent': BROWSER_USER_AGENT },
-        body: JSON.stringify(payload),
-      });
-      const body = <any>response.body;
-      return typeof body?.d === 'string' ? JSON.parse(body.d) : body?.d;
-    };
-
-    const addressSearch = await post('Adresse_SearchByString', {
-      searchterm: `${apiSettings.streetname} ${apiSettings.housenumber},`,
-      addresswithmateriel: 3,
-    });
-
-    const addressId = addressSearch?.list?.[0]?.value;
-    if (!addressId) {
-      throw new Error('Address not found in RenoWeb.');
-    }
-
-    const materials = await post('GetAffaldsplanMateriel_mitAffald', { adrid: addressId, common: false });
-    const status = materials?.status?.status;
-    if (status) {
-      throw new Error(`RenoWeb returned an error: ${status} ${materials?.status?.msg ?? ''}`);
-    }
-
-    for (const material of materials?.list ?? []) {
-      // Skip ordered pickups and materials without a planned emptying date.
-      if (material.afhentningsbestillingmateriel || !/dag den \d{2}-\d{2}-\d{4}/.test(material.toemningsdato)) {
-        continue;
-      }
-
-      const calendar = await post('GetCalender_mitAffald', { materialid: material.id });
-      for (const entry of calendar?.list ?? []) {
-        const [day, month, year] = String(entry).split(' ').pop()!.split('-');
-        const trashDate = new Date(`${year}-${month}-${day}`);
-        if (Number.isNaN(trashDate.getTime())) {
-          continue;
-        }
-
-        verifyByName(fDates, '', `${material.ordningnavn} ${material.materielnavn}`, trashDate);
-      }
-    }
-
-    if (fDates.length === 0) {
-      throw new Error('No trash data found for the given address in RenoWeb.');
-    }
-
-    return filterFutureDates(fDates);
-  }
-
   // Vestforbrænding -------------------------------------------------------------------------
 
   async vestforbraending(apiSettings: ApiSettings) {
@@ -175,29 +102,34 @@ export class DenmarkProviders {
       throw new Error('Address not found at RessourceIndsamling.');
     }
 
-    const start = new Date();
-    const end = new Date();
-    end.setDate(end.getDate() + 90);
+    // The API accepts at most 31 days per request, so fetch a few consecutive windows.
+    const windowDays = 31;
+    for (let windowIndex = 0; windowIndex < 4; windowIndex++) {
+      const start = new Date();
+      start.setDate(start.getDate() + windowIndex * windowDays);
+      const end = new Date(start);
+      end.setDate(end.getDate() + windowDays);
 
-    const servicesRequest = await httpsPromise({
-      hostname,
-      path: `/api/Services/Services/GetServicesForCustomer/${customerId}/${encodeURIComponent(start.toISOString())}/${encodeURIComponent(end.toISOString())}`,
-      method: 'GET',
-      headers,
-    });
+      const servicesRequest = await httpsPromise({
+        hostname,
+        path: `/api/Services/Services/GetServicesForCustomer/${customerId}/${encodeURIComponent(start.toISOString())}/${encodeURIComponent(end.toISOString())}`,
+        method: 'GET',
+        headers,
+      });
 
-    const services = <any>servicesRequest.body;
-    if (!Array.isArray(services)) {
-      throw new Error('Unexpected response from RessourceIndsamling.');
-    }
-
-    for (const service of services) {
-      const trashDate = new Date(service.stopTime);
-      if (!service.serviceTypePublicName || Number.isNaN(trashDate.getTime())) {
-        continue;
+      const services = <any>servicesRequest.body;
+      if (!Array.isArray(services)) {
+        throw new Error('Unexpected response from RessourceIndsamling.');
       }
 
-      verifyByName(fDates, '', service.serviceTypePublicName, trashDate);
+      for (const service of services) {
+        const trashDate = new Date(service.stopTime);
+        if (!service.serviceTypePublicName || Number.isNaN(trashDate.getTime())) {
+          continue;
+        }
+
+        verifyByName(fDates, '', service.serviceTypePublicName, trashDate);
+      }
     }
 
     if (fDates.length === 0) {
@@ -208,41 +140,6 @@ export class DenmarkProviders {
   }
 
   // Identifier based providers (identifier is stored in countyId) ----------------------------
-
-  async odenseRenovation(apiSettings: ApiSettings) {
-    this.log('Checking Odense Renovation');
-
-    const fDates: ActivityDates[] = [];
-
-    await validateCountry(apiSettings, 'DK');
-    this.requireIdentifier(apiSettings, 'address number (addressNo)');
-
-    const start = new Date();
-    const end = new Date();
-    end.setDate(end.getDate() + 365);
-
-    const response = await httpsPromise({
-      hostname: 'mit.odenserenovation.dk',
-      path: `/api/Calendar/GetCalendarByAddress?addressNo=${encodeURIComponent(apiSettings.externalId!)}&startDate=${encodeURIComponent(start.toISOString())}&endDate=${encodeURIComponent(end.toISOString())}&noCache=false`,
-      method: 'GET',
-      headers: { 'User-Agent': 'Homey' },
-    });
-
-    for (const month of (<any>response.body)?.Months ?? []) {
-      for (const day of month.Days ?? []) {
-        const trashDate = new Date(day.Date);
-        for (const bin of day.Bins ?? []) {
-          verifyByName(fDates, '', bin.Label, trashDate);
-        }
-      }
-    }
-
-    if (fDates.length === 0) {
-      throw new Error('No trash data found for the given address number at Odense Renovation.');
-    }
-
-    return filterFutureDates(fDates);
-  }
 
   async renosyd(apiSettings: ApiSettings) {
     this.log('Checking Renosyd');
@@ -347,13 +244,19 @@ export class DenmarkProviders {
       },
     });
 
-    const containers = <any>response.body;
-    if (!Array.isArray(containers)) {
+    // The portal returns containers grouped in chains ({ chainDetailsOwn, chainDetailsZero, chainDetailsUse }),
+    // older versions returned a plain list of containers.
+    const body = <any>response.body;
+    const containers: any[] = Array.isArray(body)
+      ? body
+      : ['chainDetailsOwn', 'chainDetailsZero', 'chainDetailsUse'].flatMap((key) => (body?.[key] ?? []).flatMap((chain: any) => chain?.containerDetails ?? []));
+
+    if (!Array.isArray(body) && (typeof body !== 'object' || body === null)) {
       throw new Error('Unexpected response from the municipality portal.');
     }
 
     for (const container of containers) {
-      const name = container?.containerType?.description;
+      const name = [container?.containerType?.fraction?.description, container?.containerType?.description].filter(Boolean).join(' ');
       if (!name) {
         continue;
       }

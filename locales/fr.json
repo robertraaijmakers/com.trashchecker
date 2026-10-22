@@ -191,16 +191,14 @@
 	},
 	"providers": {
 		"instructions": {
-			"streetNumber": "Saisissez le nom de votre rue et votre numéro de maison tels qu'ils figurent sur votre calendrier des déchets, par exemple « Roskildevej » et « 40 ».",
+			"streetNumber": "Saisissez le nom de votre rue et votre numéro de maison tels qu'ils figurent sur votre calendrier des déchets, par exemple « Kløvertoften » et « 61 ».",
 			"vestfor": "Saisissez votre rue, votre numéro et votre code postal à 4 chiffres, par exemple « Kløvertoften », « 61 » et « 2740 ».",
-			"odense": "Allez sur https://mit.odenserenovation.dk/hentkalender et recherchez votre adresse. Copiez le nombre qui suit « addressNo= » dans l'adresse de la page (par exemple 133517) dans le champ ci-dessous.",
 			"renosyd": "Saisissez le numéro de client (de maison) de votre collecte Renosyd. Le numéro est complété automatiquement à 6 chiffres, par exemple 013000.",
 			"renoDjurs": "Connectez-vous sur https://minside.renodjurs.dk. Le nombre qui suit « id= » dans l'adresse de la page est votre ID client, par exemple 46000.",
 			"kalundborg": "Allez sur https://kalundborg.infovision.dk/public/selectaddress et recherchez votre adresse. L'ID d'adresse est la dernière partie de l'adresse de la page, par exemple 00006ac8-0002-0001-4164-647265737320.",
 			"kolding": "Allez sur https://kolding.infovision.dk/public/selectaddress et recherchez votre adresse. L'ID d'adresse est la dernière partie de l'adresse de la page, par exemple 00007b8d-0002-0001-4164-647265737320."
 		},
 		"labels": {
-			"addressNumber": "Numéro d'adresse (addressNo)",
 			"customerNumber": "Numéro de client",
 			"customerId": "ID client",
 			"addressId": "ID d'adresse"

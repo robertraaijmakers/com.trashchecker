@@ -210,16 +210,14 @@
 	},
 	"providers": {
 		"instructions": {
-			"streetNumber": "Skriv inn gatenavn og husnummer slik de står i avfallskalenderen din, for eksempel «Roskildevej» og «40».",
+			"streetNumber": "Skriv inn gatenavn og husnummer slik de står i avfallskalenderen din, for eksempel «Kløvertoften» og «61».",
 			"vestfor": "Skriv inn gate, husnummer og postnummer på 4 siffer, for eksempel «Kløvertoften», «61» og «2740».",
-			"odense": "Gå til https://mit.odenserenovation.dk/hentkalender og søk opp adressen din. Kopier tallet etter «addressNo=» fra nettadressen (for eksempel 133517) til feltet under.",
 			"renosyd": "Skriv inn kundenummeret (husnummeret) fra Renosyd-innsamlingen din. Nummeret fylles automatisk ut til 6 sifre, for eksempel 013000.",
 			"renoDjurs": "Logg inn på https://minside.renodjurs.dk. Tallet etter «id=» i nettadressen er kunde-ID-en din, for eksempel 46000.",
 			"kalundborg": "Gå til https://kalundborg.infovision.dk/public/selectaddress og søk opp adressen din. Adresse-ID-en er siste del av nettadressen, for eksempel 00006ac8-0002-0001-4164-647265737320.",
 			"kolding": "Gå til https://kolding.infovision.dk/public/selectaddress og søk opp adressen din. Adresse-ID-en er siste del av nettadressen, for eksempel 00007b8d-0002-0001-4164-647265737320."
 		},
 		"labels": {
-			"addressNumber": "Adressenummer (addressNo)",
 			"customerNumber": "Kundenummer",
 			"customerId": "Kunde-ID",
 			"addressId": "Adresse-ID"
