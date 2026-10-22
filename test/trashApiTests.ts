@@ -1409,3 +1409,37 @@ function validateApiResults(apiSettings: ApiSettings, apiResults: ActivityDates[
     return false;
   }
 }
+
+describe('TrashApiBurgerportaalUtrechtBreda', function () {
+  it('API - Gemeente Utrecht', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '3544AA',
+      housenumber: '1',
+      country: 'NL',
+      apiId: 'akut',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+
+  it('API - Gemeente Breda', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '4811AA',
+      housenumber: '1',
+      country: 'NL',
+      apiId: 'akbr',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});

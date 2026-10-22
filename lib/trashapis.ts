@@ -210,6 +210,14 @@ export class TrashApis {
     return this.generalImplementationBurgerportaal(apiSettings, '452048812597326549');
   }
 
+  private async afvalkalenderBreda(apiSettings: ApiSettings) {
+    return this.generalImplementationBurgerportaal(apiSettings, '452048812597352613');
+  }
+
+  private async afvalkalenderUtrecht(apiSettings: ApiSettings) {
+    return this.generalImplementationBurgerportaal(apiSettings, '452048812597339479');
+  }
+
   private async afvalkalenderNijkerk(apiSettings: ApiSettings) {
     return this.generalImplementationBurgerportaal(apiSettings, '138204213565304094');
   }
