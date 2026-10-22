@@ -11,6 +11,7 @@
 		"api": "Source",
 		"cleanApi": "Cleaning Service?",
 		"countyId": "County ID",
+		"externalId": "ID",
 		"apiKey": "API Key",
 		"save": "Save Changes",
 		"fail": "This address is not supported",
@@ -167,6 +168,61 @@
 			"GLAS": "Glass",
 			"KERSTBOOM": "Christmas Tree",
 			"NONE": "Nothing"
+		}
+	},
+	"pair": {
+		"hintPair": "Use an existing configured address or add a new one. The next step will show the available device options for that address.",
+		"hintRepair": "Choose an existing configured address or validate a new one for this device. Other device-specific settings stay unchanged.",
+		"modeExisting": "Use existing configured address",
+		"modeNew": "Add new address",
+		"configuredAddress": "Configured address",
+		"country": "Country",
+		"countryNL": "Netherlands",
+		"countryBE": "Belgium",
+		"countryNO": "Norway",
+		"countryDK": "Denmark",
+		"api": "Collection API",
+		"cleanApi": "Cleaning API",
+		"postcode": "Zipcode / Postcode",
+		"number": "House Number",
+		"streetname": "Street Name",
+		"cityname": "City",
+		"externalId": "ID",
+		"countyId": "County ID (optional)",
+		"apiKey": "API Key (optional)",
+		"validateContinue": "Validate And Continue",
+		"useContinue": "Use Address And Continue",
+		"validateSave": "Validate And Save",
+		"useSave": "Use Address And Save",
+		"titlePair": "Collection Address",
+		"titleRepair": "Reconfigure Collection Address",
+		"autoDetect": "Auto detect",
+		"notApplicable": "Not applicable",
+		"selectAddress": "Please select an address.",
+		"usingSelected": "Using selected address...",
+		"savingSelected": "Saving selected address...",
+		"couldNotUse": "Could not use selected address.",
+		"addressSelected": "Address selected. Continue to add this device.",
+		"validating": "Validating...",
+		"validationFailed": "Validation failed.",
+		"validationSuccess": "Validation successful. Continue to add this device.",
+		"configSaved": "Configuration saved."
+	},
+	"providers": {
+		"instructions": {
+			"streetNumber": "Enter your street name and house number as they appear on your waste calendar, for example 'Roskildevej' and '40'.",
+			"vestfor": "Enter your street, house number and 4-digit postcode, for example 'Kløvertoften', '61' and '2740'.",
+			"odense": "Go to https://mit.odenserenovation.dk/hentkalender and look up your address. Copy the number after 'addressNo=' from the page address (for example 133517) into the field below.",
+			"renosyd": "Enter the customer (house) number from your Renosyd waste collection. The number is padded to 6 digits automatically, for example 013000.",
+			"renoDjurs": "Log in on https://minside.renodjurs.dk. The number after 'id=' in the page address is your customer ID, for example 46000.",
+			"kalundborg": "Go to https://kalundborg.infovision.dk/public/selectaddress and search for your address. The address ID is the last part of the page address, for example 00006ac8-0002-0001-4164-647265737320.",
+			"kolding": "Go to https://kolding.infovision.dk/public/selectaddress and search for your address. The address ID is the last part of the page address, for example 00007b8d-0002-0001-4164-647265737320."
+		},
+		"labels": {
+			"addressNumber": "Address number (addressNo)",
+			"customerNumber": "Customer number",
+			"customerId": "Customer ID",
+			"addressId": "Address ID"
 		}
 	}
 }

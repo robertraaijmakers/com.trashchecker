@@ -103,6 +103,23 @@ export async function validateZipcode(apiSettings: ApiSettings) {
   return true;
 }
 
+export function filterFutureDates(dates: ActivityDates[]): ActivityDates[] {
+  const today = new Date();
+  today.setDate(today.getDate() - 7); // Include the last week
+  today.setHours(0, 0, 0, 0);
+
+  return dates
+    .map((activity) => ({
+      ...activity,
+      dates: activity.dates.filter((date) => {
+        const collectionDate = new Date(date);
+        collectionDate.setHours(0, 0, 0, 0);
+        return collectionDate >= today;
+      }),
+    }))
+    .filter((activity) => activity.dates.length > 0); // Remove activities with no future dates
+}
+
 export function addDate(activityDates: ActivityDates[], type: TrashType, date: Date, icon?: string, localText?: string, color?: string): void {
   const activityDate = activityDates.find((activity) => activity.type === type);
   if (activityDate) {
@@ -199,7 +216,10 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('gft') !== -1 ||
     description.indexOf('bio') !== -1 ||
     description.indexOf('green') !== -1 ||
-    description.indexOf('gfe') !== -1
+    description.indexOf('gfe') !== -1 ||
+    description.indexOf('madaffald') !== -1 ||
+    description.indexOf('mad/') !== -1 ||
+    description.indexOf('bioaffald') !== -1
   ) {
     addDate(activityDates, TrashType.GFT, date, icon, localDescription, color);
     foundType = true;
@@ -211,7 +231,8 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('grey') !== -1 ||
     description.indexOf('sortibak') !== -1 ||
     description.indexOf('huisvuil') !== -1 ||
-    description.indexOf('rst') !== -1
+    description.indexOf('rst') !== -1 ||
+    description.indexOf('restaffald') !== -1
   ) {
     addDate(activityDates, TrashType.REST, date, icon, localDescription, color);
     foundType = true;
@@ -223,16 +244,17 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('pd') !== -1 ||
     description.indexOf('metaal') !== -1 ||
     description.indexOf('drankkartons') !== -1 ||
-    description.indexOf('packages') !== -1
+    description.indexOf('packages') !== -1 ||
+    description.indexOf('emballage') !== -1
   ) {
     addDate(activityDates, TrashType.PMD, date, icon, localDescription, color);
     foundType = true;
-  } else if (description.indexOf('plastic') !== -1 || description.indexOf('plc') !== -1) {
+  } else if (description.indexOf('plastic') !== -1 || description.indexOf('plast') !== -1 || description.indexOf('plc') !== -1) {
     addDate(activityDates, TrashType.PLASTIC, date, icon, localDescription, color);
     foundType = true;
   }
 
-  if (description.indexOf('papier') !== -1 || description.indexOf('paper') !== -1 || description.indexOf('opk') !== -1) {
+  if (description.indexOf('papier') !== -1 || description.indexOf('paper') !== -1 || description.indexOf('opk') !== -1 || description.indexOf('papir') !== -1 || description === 'pap') {
     addDate(activityDates, TrashType.PAPIER, date, icon, localDescription, color);
     foundType = true;
   }
@@ -246,6 +268,7 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('hazardous waste') !== -1 ||
     description.indexOf('farlig avfall') !== -1 ||
     description.indexOf('milieubox') !== -1 ||
+    description.indexOf('farligt affald') !== -1 ||
     description.indexOf('chemie') !== -1
   ) {
     addDate(activityDates, TrashType.KCA, date, icon, localDescription, color);
@@ -258,7 +281,8 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('takken') !== -1 ||
     description.indexOf('branches') !== -1 ||
     description.indexOf('pruning') !== -1 ||
-    description.indexOf('tuinafval') !== -1
+    description.indexOf('tuinafval') !== -1 ||
+    description.indexOf('haveaffald') !== -1
   ) {
     addDate(activityDates, TrashType.SNOEI, date, icon, localDescription, color);
     foundType = true;
@@ -269,6 +293,7 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('retour') !== -1 ||
     description.indexOf('best') !== -1 ||
     description.indexOf('textile') !== -1 ||
+    description.indexOf('tekstil') !== -1 ||
     description.indexOf('wijkinzameling') !== -1 ||
     description.indexOf('maas') !== -1 // Mobiel afvalaanbiedstation
   ) {
@@ -276,7 +301,7 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     foundType = true;
   }
 
-  if (description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1 || description.indexOf('christmas') !== -1) {
+  if (description.indexOf('kerstbomen') !== -1 || description.indexOf('kerst') !== -1 || description.indexOf('christmas') !== -1 || description.indexOf('juletr') !== -1) {
     addDate(activityDates, TrashType.KERSTBOOM, date, icon, localDescription, color);
     foundType = true;
   }
@@ -285,7 +310,8 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('grof') !== -1 ||
     (description.indexOf('vuil') !== -1 && description.indexOf('huisvuil') === -1) ||
     description.indexOf('pruning') !== -1 ||
-    description.indexOf('bulky') !== -1
+    description.indexOf('bulky') !== -1 ||
+    description.indexOf('storskrald') !== -1
   ) {
     addDate(activityDates, TrashType.GROF, date, icon, localDescription, color);
     foundType = true;

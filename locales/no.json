@@ -11,6 +11,7 @@
 		"api": "Kilde",
 		"cleanApi": "Rensetjeneste?",
 		"countyId": "Kommun-ID",
+		"externalId": "ID",
 		"apiKey": "API-nøkkel",
 		"save": "Lagre endringer",
 		"fail": "Denne adressen støttes ikke",
@@ -167,6 +168,61 @@
 			"GLAS": "Glass",
 			"KERSTBOOM": "Juletre",
 			"NONE": "Ingenting"
+		}
+	},
+	"pair": {
+		"hintPair": "Bruk en eksisterende konfigurert adresse eller legg til en ny. Neste steg viser tilgjengelige enhetsvalg for adressen.",
+		"hintRepair": "Velg en eksisterende konfigurert adresse eller valider en ny adresse for denne enheten. Andre enhetsspesifikke innstillinger forblir uendret.",
+		"modeExisting": "Bruk eksisterende konfigurert adresse",
+		"modeNew": "Legg til ny adresse",
+		"configuredAddress": "Konfigurert adresse",
+		"country": "Land",
+		"countryNL": "Nederland",
+		"countryBE": "Belgia",
+		"countryNO": "Norge",
+		"countryDK": "Danmark",
+		"api": "Innsamlings-API",
+		"cleanApi": "Rengjørings-API",
+		"postcode": "Postnummer",
+		"number": "Husnummer",
+		"streetname": "Gatenavn",
+		"cityname": "By",
+		"externalId": "ID",
+		"countyId": "Kommune-ID (valgfritt)",
+		"apiKey": "API-nøkkel (valgfritt)",
+		"validateContinue": "Valider og fortsett",
+		"useContinue": "Bruk adressen og fortsett",
+		"validateSave": "Valider og lagre",
+		"useSave": "Bruk adressen og lagre",
+		"titlePair": "Innsamlingsadresse",
+		"titleRepair": "Konfigurer innsamlingsadressen på nytt",
+		"autoDetect": "Oppdag automatisk",
+		"notApplicable": "Ikke relevant",
+		"selectAddress": "Velg en adresse.",
+		"usingSelected": "Bruker valgt adresse...",
+		"savingSelected": "Lagrer valgt adresse...",
+		"couldNotUse": "Kunne ikke bruke den valgte adressen.",
+		"addressSelected": "Adresse valgt. Fortsett for å legge til denne enheten.",
+		"validating": "Validerer...",
+		"validationFailed": "Validering mislyktes.",
+		"validationSuccess": "Validering vellykket. Fortsett for å legge til denne enheten.",
+		"configSaved": "Konfigurasjonen er lagret."
+	},
+	"providers": {
+		"instructions": {
+			"streetNumber": "Skriv inn gatenavn og husnummer slik de står i avfallskalenderen din, for eksempel «Roskildevej» og «40».",
+			"vestfor": "Skriv inn gate, husnummer og postnummer på 4 siffer, for eksempel «Kløvertoften», «61» og «2740».",
+			"odense": "Gå til https://mit.odenserenovation.dk/hentkalender og søk opp adressen din. Kopier tallet etter «addressNo=» fra nettadressen (for eksempel 133517) til feltet under.",
+			"renosyd": "Skriv inn kundenummeret (husnummeret) fra Renosyd-innsamlingen din. Nummeret fylles automatisk ut til 6 sifre, for eksempel 013000.",
+			"renoDjurs": "Logg inn på https://minside.renodjurs.dk. Tallet etter «id=» i nettadressen er kunde-ID-en din, for eksempel 46000.",
+			"kalundborg": "Gå til https://kalundborg.infovision.dk/public/selectaddress og søk opp adressen din. Adresse-ID-en er siste del av nettadressen, for eksempel 00006ac8-0002-0001-4164-647265737320.",
+			"kolding": "Gå til https://kolding.infovision.dk/public/selectaddress og søk opp adressen din. Adresse-ID-en er siste del av nettadressen, for eksempel 00007b8d-0002-0001-4164-647265737320."
+		},
+		"labels": {
+			"addressNumber": "Adressenummer (addressNo)",
+			"customerNumber": "Kundenummer",
+			"customerId": "Kunde-ID",
+			"addressId": "Adresse-ID"
 		}
 	}
 }

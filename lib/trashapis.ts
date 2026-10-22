@@ -3,6 +3,7 @@
 import { ActivityDates, ApiDefinition, ApiFindResult } from '../types/localTypes';
 import {
   addDate,
+  filterFutureDates,
   formatDate,
   httpsPromise,
   parseDutchDate,
@@ -17,6 +18,7 @@ import {
 } from './helpers';
 import { ApiMeta, ApiSettings, TrashType } from '../assets/publicTypes';
 import crypto from 'crypto';
+import { DenmarkProviders } from './providers/denmark';
 
 type HtmlParser2Module = typeof import('htmlparser2');
 
@@ -63,15 +65,19 @@ export class TrashApis {
 
     const API_REGISTRY = require('../assets/api-registry.json') as ApiMeta[];
 
+    // Providers that live in their own per-country module (lib/providers/*.ts) are looked up after the ones defined here.
+    const countryProviders = [new DenmarkProviders(this.log)];
+
     this.apiList = API_REGISTRY.map((meta: any) => {
-      const fn = (this as any)[meta.handler];
+      const owner = [this, ...countryProviders].find((candidate) => typeof (candidate as any)[meta.handler] === 'function');
+      const fn = (owner as any)?.[meta.handler];
       if (typeof fn !== 'function') {
         throw new Error(`Missing handler method: ${String(meta.handler)}`);
       }
       // Ensure all ApiDefinition properties are present
       return {
         ...meta,
-        execute: fn.bind(this) as Exec,
+        execute: fn.bind(owner) as Exec,
         name: meta.name,
         id: meta.id,
         country: meta.country,
@@ -154,20 +160,7 @@ export class TrashApis {
   }
 
   private filterFutureDates(dates: ActivityDates[]): ActivityDates[] {
-    const today = new Date();
-    today.setDate(today.getDate() - 7); // Include today
-    today.setHours(0, 0, 0, 0); // Start of today
-
-    return dates
-      .map((activity) => ({
-        ...activity,
-        dates: activity.dates.filter((date) => {
-          const collectionDate = new Date(date);
-          collectionDate.setHours(0, 0, 0, 0);
-          return collectionDate >= today;
-        }),
-      }))
-      .filter((activity) => activity.dates.length > 0); // Remove activities with no future dates
+    return filterFutureDates(dates);
   }
 
   private async mijnAfvalWijzer(apiSettings: ApiSettings) {

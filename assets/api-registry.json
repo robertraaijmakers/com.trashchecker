@@ -53,7 +53,16 @@
   { "name": "Reinigingsdienst Waardlanden", "id": "rewl", "country": "NL", "handler": "reinigingsdienstWaardlanden" },
   { "name": "TrashAPI Nederland", "id": "trapi", "country": "NL", "handler": "trashApiNederland" },
   { "name": "Twente Milieu", "id": "twm", "country": "NL", "handler": "twenteMilieu" },
-  { "name": "Afvalkalender Limburg.NET", "id": "aklbn", "country": "BE", "handler": "afvalkalenderLimburgNET" },
-  { "name": "Recycle App", "id": "recbe", "country": "BE", "handler": "recycleApp" },
-  { "name": "Renovasjon Norway", "id": "reno", "country": "NO", "handler": "renovasjonNorway" }
+  { "name": "Afvalkalender Limburg.NET", "id": "aklbn", "country": "BE", "handler": "afvalkalenderLimburgNET", "fields": ["streetname", "number", "cityname"] },
+  { "name": "Recycle App", "id": "recbe", "country": "BE", "handler": "recycleApp", "fields": ["postcode", "number", "streetname"] },
+  { "name": "Renovasjon Norway", "id": "reno", "country": "NO", "handler": "renovasjonNorway", "fields": ["postcode", "number", "streetname", "countyId", "apiKey"] },
+  { "name": "RenoWeb Frederiksberg", "id": "rwdkfb", "country": "DK", "handler": "renoWebFrederiksberg", "fields": ["streetname", "number"], "instructions": "providers.instructions.streetNumber" },
+  { "name": "RenoWeb Rudersdal", "id": "rwdkrd", "country": "DK", "handler": "renoWebRudersdal", "fields": ["streetname", "number"], "instructions": "providers.instructions.streetNumber" },
+  { "name": "Vestforbrænding", "id": "vfdk", "country": "DK", "handler": "vestforbraending", "fields": ["streetname", "number", "postcode"], "instructions": "providers.instructions.vestfor" },
+  { "name": "RessourceIndsamling", "id": "ridk", "country": "DK", "handler": "ressourceIndsamling", "fields": ["streetname", "number"], "instructions": "providers.instructions.streetNumber" },
+  { "name": "Odense Renovation", "id": "odk", "country": "DK", "handler": "odenseRenovation", "fields": ["externalId"], "fieldLabels": {"externalId": "providers.labels.addressNumber"}, "instructions": "providers.instructions.odense" },
+  { "name": "Renosyd", "id": "rsdk", "country": "DK", "handler": "renosyd", "fields": ["externalId"], "fieldLabels": {"externalId": "providers.labels.customerNumber"}, "instructions": "providers.instructions.renosyd" },
+  { "name": "Reno Djurs", "id": "rddk", "country": "DK", "handler": "renoDjurs", "fields": ["externalId"], "fieldLabels": {"externalId": "providers.labels.customerId"}, "instructions": "providers.instructions.renoDjurs" },
+  { "name": "Kalundborg Kommune", "id": "kbdk", "country": "DK", "handler": "kalundborg", "fields": ["externalId"], "fieldLabels": {"externalId": "providers.labels.addressId"}, "instructions": "providers.instructions.kalundborg" },
+  { "name": "Kolding Kommune", "id": "kodk", "country": "DK", "handler": "kolding", "fields": ["externalId"], "fieldLabels": {"externalId": "providers.labels.addressId"}, "instructions": "providers.instructions.kolding" }
 ]
