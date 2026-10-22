@@ -5,7 +5,7 @@ import { normalizeApiSettings, persistApiSettingsList } from '../../lib/driverhe
 import { TrashCollectionReminder } from '../../types/localTypes';
 
 module.exports = class TrashAddressDevice extends Homey.Device {
-  private readonly trackedKeys = ['apiId', 'cleanApiId', 'zipcode', 'housenumber', 'streetname', 'cityname', 'country', 'countyId', 'apiKey'];
+  private readonly trackedKeys = ['apiId', 'cleanApiId', 'zipcode', 'housenumber', 'streetname', 'cityname', 'country', 'countyId', 'apiKey', 'externalId'];
 
   async onInit() {
     this.log('Trash address device initialized');

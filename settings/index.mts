@@ -1,7 +1,7 @@
 'use strict';
 
 import type HomeySettings from 'homey/lib/HomeySettings.js';
-import { ApiMeta, ApiSettings, LabelSettings, TrashType } from '../assets/publicTypes.js';
+import { ApiField, ApiMeta, ApiSettings, LabelSettings, TrashType } from '../assets/publicTypes.js';
 import { AllTrashTypes, AllTrashTypesExtended, createManualAdditons, TrashColors } from './settingTypes.mjs';
 
 class SettingScript {
@@ -136,6 +136,9 @@ class SettingScript {
   async handleGetApiSettings(err: string, apiSettings: ApiSettings) {
     console.log(apiSettings);
 
+    // The provider list depends on the country, so fill that first.
+    this.setInputValue('country', apiSettings?.country || 'NL');
+    this.fillApis(apiSettings?.country || 'NL');
     this.setInputValue('api', apiSettings?.apiId || '');
     this.setInputValue('cleanApi', apiSettings?.cleanApiId || '');
     this.setInputValue('postcode', apiSettings?.zipcode?.toUpperCase() || '');
@@ -143,6 +146,7 @@ class SettingScript {
     this.setInputValue('streetname', apiSettings?.streetname || '');
     this.setInputValue('cityname', apiSettings?.cityname || '');
     this.setInputValue('country', apiSettings?.country || 'NL');
+    this.setInputValue('externalId', apiSettings?.externalId || '');
     this.setInputValue('countyId', apiSettings?.countyId || '');
     this.setInputValue('apiKey', apiSettings?.apiKey || '');
     this.setInputValue('dl-api-input', (document.getElementById('api') as HTMLSelectElement).selectedOptions[0]?.text || '');
@@ -242,11 +246,12 @@ class SettingScript {
       country: this.getInputValue('country') || null,
       apiId: this.getInputValue('api') || null,
       cleanApiId: this.getInputValue('cleanApi') || null,
+      externalId: this.getInputValue('externalId') || undefined,
       countyId: this.getInputValue('countyId') || undefined,
       apiKey: this.getInputValue('apiKey') || undefined,
     };
 
-    if (apiSettings.zipcode == null && apiSettings.housenumber == null && apiSettings.streetname == null) {
+    if (apiSettings.zipcode == null && apiSettings.housenumber == null && apiSettings.streetname == null && apiSettings.externalId == null) {
       await this.updatePrimaryApiSettings(apiSettings as ApiSettings);
       resp.innerHTML = this.homey.__('settings.manualonly');
       resp.style.color = 'green';
@@ -269,7 +274,7 @@ class SettingScript {
       }
 
       resp.style.color = 'green';
-      const values = [apiSettings.zipcode, apiSettings.streetname, apiSettings.housenumber, apiSettings.cityname].filter((v) => v && String(v).trim() !== '');
+      const values = [apiSettings.zipcode, apiSettings.streetname, apiSettings.housenumber, apiSettings.cityname, apiSettings.externalId].filter((v) => v && String(v).trim() !== '');
 
       resp.innerHTML = `${this.homey.__('settings.update')}: ${values.join(', ')}`;
       this.setInputValue('api', trashResult.id);
@@ -500,59 +505,67 @@ class SettingScript {
     }
   }
 
+  // Fields shown when the selected provider doesn't define its own list (or no provider is selected).
+  #getDefaultFieldsForCountry(country: string): ApiField[] {
+    switch (country) {
+      case 'BE':
+        return ['postcode', 'number', 'streetname'];
+      case 'NO':
+        return ['postcode', 'number', 'streetname', 'countyId', 'apiKey'];
+      case 'DK':
+        return ['postcode', 'number', 'streetname'];
+      default:
+        return ['postcode', 'number'];
+    }
+  }
+
   async toggleFieldsBasedOnCountry() {
     const countrySelected = this.getInputValue('country') ?? 'NL';
-    if (countrySelected === 'NL') {
-      document.getElementById('streetname_div')!.style.display = 'none';
-      document.getElementById('countyId_div')!.style.display = 'none';
-      document.getElementById('apiKey_div')!.style.display = 'none';
-    } else if (countrySelected === 'BE') {
-      document.getElementById('streetname_div')!.style.display = 'block';
-      document.getElementById('countyId_div')!.style.display = 'none';
-      document.getElementById('apiKey_div')!.style.display = 'none';
-    } else if (countrySelected === 'NO') {
-      document.getElementById('streetname_div')!.style.display = 'block';
-      document.getElementById('countyId_div')!.style.display = 'block';
-      document.getElementById('apiKey_div')!.style.display = 'block';
-    }
 
     this.fillApis(countrySelected || undefined);
+    this.applyFields(this.#getDefaultFieldsForCountry(countrySelected), undefined);
   }
 
   async toggleFieldsBasedOnSelectedProvider() {
-    const apiSelected = this.getInputValue('api') ?? 'default';
+    const provider = this.apiRegistry.find((entry) => entry.id === this.getInputValue('api'));
+    const country = provider?.country ?? this.getInputValue('country') ?? 'NL';
 
-    if (apiSelected === 'aklbn') {
-      document.getElementById('streetname_div')!.style.display = 'block';
-      document.getElementById('cityname_div')!.style.display = 'block';
-      document.getElementById('postalcode_div')!.style.display = 'none';
-      document.getElementById('countyId_div')!.style.display = 'none';
-      document.getElementById('apiKey_div')!.style.display = 'none';
-      this.setInputValue('country', 'BE');
-      this.setInputValue('postcode', '');
-    } else if (apiSelected === 'recbe') {
-      document.getElementById('streetname_div')!.style.display = 'block';
-      document.getElementById('postalcode_div')!.style.display = 'block';
-      document.getElementById('countyId_div')!.style.display = 'none';
-      document.getElementById('apiKey_div')!.style.display = 'none';
-      this.setInputValue('country', 'BE');
-    } else if (apiSelected === 'reno') {
-      document.getElementById('streetname_div')!.style.display = 'block';
-      document.getElementById('postalcode_div')!.style.display = 'block';
-      document.getElementById('countyId_div')!.style.display = 'block';
-      document.getElementById('apiKey_div')!.style.display = 'block';
-      document.getElementById('cityname_div')!.style.display = 'none';
-      this.setInputValue('country', 'NO');
-    } else {
-      document.getElementById('streetname_div')!.style.display = 'none';
-      document.getElementById('cityname_div')!.style.display = 'none';
-      document.getElementById('countyId_div')!.style.display = 'none';
-      document.getElementById('apiKey_div')!.style.display = 'none';
-      document.getElementById('postalcode_div')!.style.display = 'block';
-      this.setInputValue('country', 'NL');
-      this.setInputValue('streetname', '');
-      this.setInputValue('cityname', '');
+    if (provider) {
+      this.setInputValue('country', provider.country);
     }
+
+    this.applyFields(provider?.fields ?? this.#getDefaultFieldsForCountry(country), provider);
+  }
+
+  applyFields(visible: ApiField[], provider: ApiMeta | undefined) {
+    const groups: { [key in ApiField]: { div: string; input: string; label: string } } = {
+      postcode: { div: 'postalcode_div', input: 'postcode', label: 'settings.postcode' },
+      number: { div: 'number_div', input: 'number', label: 'settings.hnumber' },
+      streetname: { div: 'streetname_div', input: 'streetname', label: 'settings.streetname' },
+      cityname: { div: 'cityname_div', input: 'cityname', label: 'settings.cityname' },
+      externalId: { div: 'externalId_div', input: 'externalId', label: 'settings.externalId' },
+      countyId: { div: 'countyId_div', input: 'countyId', label: 'settings.countyId' },
+      apiKey: { div: 'apiKey_div', input: 'apiKey', label: 'settings.apiKey' },
+    };
+
+    for (const field of Object.keys(groups) as ApiField[]) {
+      const group = groups[field];
+      const isVisible = visible.includes(field);
+
+      document.getElementById(group.div)!.style.display = isVisible ? 'block' : 'none';
+      const customLabel = provider?.fieldLabels?.[field];
+      document.querySelector(`#${group.div} label`)!.textContent = (customLabel && this.homey.__(customLabel)) || this.homey.__(group.label);
+
+      // Don't keep values for fields the selected provider doesn't use.
+      if (!isVisible) {
+        this.setInputValue(group.input, '');
+      }
+    }
+
+    const instructions = document.getElementById('providerInstructions')!;
+    const instructionText = provider?.instructions ? this.homey.__(provider.instructions) : '';
+    instructions.textContent = instructionText;
+    instructions.style.display = instructionText ? 'block' : 'none';
   }
 
   async validateManualEntryDates(input: any, trashType: TrashType) {
