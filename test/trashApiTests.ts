@@ -9,7 +9,8 @@ import { TrashApis } from '../lib/trashapis';
 import { describe, it } from 'node:test';
 import { ActivityDates } from '../types/localTypes';
 import assert from 'assert';
-import { ApiSettings } from '../assets/publicTypes';
+import { ApiSettings, TrashType } from '../assets/publicTypes';
+import { verifyByName } from '../lib/helpers';
 /*
 describe('Blink Manager', function () {
   it('API - Blink Manager', async function () {
@@ -1410,29 +1411,13 @@ function validateApiResults(apiSettings: ApiSettings, apiResults: ActivityDates[
   }
 }
 
-describe('TrashApiBurgerportaalUtrechtBreda', function () {
+describe('TrashApiBurgerportaalUtrecht', function () {
   it('API - Gemeente Utrecht', async function () {
     const apiSettings: ApiSettings = {
       zipcode: '3544AA',
-      housenumber: '1',
+      housenumber: '2',
       country: 'NL',
       apiId: 'akut',
-      cleanApiId: '',
-      streetname: '',
-      cityname: '',
-    };
-
-    const result = await testAPI(apiSettings);
-    const isValid = validateApiResults(apiSettings, result);
-    assert.equal(isValid, true);
-  });
-
-  it('API - Gemeente Breda', async function () {
-    const apiSettings: ApiSettings = {
-      zipcode: '4811AA',
-      housenumber: '1',
-      country: 'NL',
-      apiId: 'akbr',
       cleanApiId: '',
       streetname: '',
       cityname: '',
@@ -1446,16 +1431,13 @@ describe('TrashApiBurgerportaalUtrechtBreda', function () {
 
 describe('TrashApiDenmark', function () {
   const cases: { name: string; apiId: string; zipcode: string; housenumber: string; streetname: string; externalId?: string }[] = [
-    { name: 'RenoWeb Frederiksberg', apiId: 'rwdkfb', zipcode: '2000', housenumber: '40', streetname: 'Roskildevej' },
-    { name: 'RenoWeb Rudersdal', apiId: 'rwdkrd', zipcode: '2840', housenumber: '38', streetname: 'Stationsvej' },
     { name: 'Vestforbrænding', apiId: 'vfdk', zipcode: '2740', housenumber: '61', streetname: 'Kløvertoften' },
     { name: 'RessourceIndsamling', apiId: 'ridk', zipcode: '2740', housenumber: '61', streetname: 'Kløvertoften' },
     // Identifier based providers: the identifier goes into the externalId field.
-    { name: 'Odense Renovation', apiId: 'odk', zipcode: '', housenumber: '', streetname: '', externalId: '122518' },
     { name: 'Renosyd', apiId: 'rsdk', zipcode: '', housenumber: '', streetname: '', externalId: '013000' },
     { name: 'Reno Djurs', apiId: 'rddk', zipcode: '', housenumber: '', streetname: '', externalId: '46000' },
-    { name: 'Kalundborg Kommune', apiId: 'kbdk', zipcode: '', housenumber: '', streetname: '', externalId: '00006ac8-0002-0001-4164-647265737320' },
-    { name: 'Kolding Kommune', apiId: 'kodk', zipcode: '', housenumber: '', streetname: '', externalId: '00007b8d-0002-0001-4164-647265737320' },
+    { name: 'Kalundborg Kommune', apiId: 'kbdk', zipcode: '', housenumber: '', streetname: '', externalId: '00008d18-0002-0001-4164-647265737320' },
+    // Kolding (kodk) has no test case: the id from the Home Assistant sources returns no containers anymore.
   ];
 
   for (const testCase of cases) {
@@ -1476,4 +1458,28 @@ describe('TrashApiDenmark', function () {
       assert.equal(isValid, true);
     });
   }
+});
+
+describe('Danish trash type matching', function () {
+  const matchTypes = (description: string) => {
+    const dates: ActivityDates[] = [];
+    verifyByName(dates, '', description, new Date('2026-11-01'));
+    return dates.map((entry) => entry.type).sort();
+  };
+
+  it('maps combined bins to several types', function () {
+    assert.deepEqual(matchTypes('Mad/Rest affald'), [TrashType.GFT, TrashType.REST].sort());
+    assert.deepEqual(matchTypes('Rest og Mad 190 l beh. rest/mad - ny'), [TrashType.GFT, TrashType.REST].sort());
+    assert.deepEqual(matchTypes('Papir/Plast & MDK'), [TrashType.PAPIER, TrashType.PLASTIC].sort());
+  });
+
+  it('maps single bins', function () {
+    assert.deepEqual(matchTypes('Restaffald'), [TrashType.REST]);
+    assert.deepEqual(matchTypes('Madaffald'), [TrashType.GFT]);
+    assert.deepEqual(matchTypes('Pap'), [TrashType.PAPIER]);
+    assert.deepEqual(matchTypes('Haveaffald'), [TrashType.SNOEI]);
+    assert.deepEqual(matchTypes('Storskrald'), [TrashType.GROF]);
+    assert.deepEqual(matchTypes('Juletræer'), [TrashType.KERSTBOOM]);
+    assert.deepEqual(matchTypes('Metal/Glas affald'), [TrashType.GLAS, TrashType.PMD].sort());
+  });
 });

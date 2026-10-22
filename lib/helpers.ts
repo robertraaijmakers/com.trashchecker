@@ -219,6 +219,8 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('gfe') !== -1 ||
     description.indexOf('madaffald') !== -1 ||
     description.indexOf('mad/') !== -1 ||
+    description.indexOf('/mad') !== -1 ||
+    description.indexOf('og mad') !== -1 ||
     description.indexOf('bioaffald') !== -1
   ) {
     addDate(activityDates, TrashType.GFT, date, icon, localDescription, color);
@@ -245,7 +247,9 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('metaal') !== -1 ||
     description.indexOf('drankkartons') !== -1 ||
     description.indexOf('packages') !== -1 ||
-    description.indexOf('emballage') !== -1
+    description.indexOf('emballage') !== -1 ||
+    description.indexOf('metal') !== -1 ||
+    description.indexOf('drikkekarton') !== -1
   ) {
     addDate(activityDates, TrashType.PMD, date, icon, localDescription, color);
     foundType = true;
