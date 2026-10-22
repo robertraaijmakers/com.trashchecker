@@ -1443,3 +1443,29 @@ describe('TrashApiBurgerportaalUtrechtBreda', function () {
     assert.equal(isValid, true);
   });
 });
+
+describe('TrashApiDenmark', function () {
+  const cases: { name: string; apiId: string; zipcode: string; housenumber: string; streetname: string }[] = [
+    { name: 'RenoWeb Frederiksberg', apiId: 'rwdkfb', zipcode: '2000', housenumber: '40', streetname: 'Roskildevej' },
+    { name: 'RenoWeb Rudersdal', apiId: 'rwdkrd', zipcode: '2840', housenumber: '38', streetname: 'Stationsvej' },
+    { name: 'Vestforbrænding', apiId: 'vfdk', zipcode: '2740', housenumber: '61', streetname: 'Kløvertoften' },
+  ];
+
+  for (const testCase of cases) {
+    it(`API - ${testCase.name}`, async function () {
+      const apiSettings: ApiSettings = {
+        zipcode: testCase.zipcode,
+        housenumber: testCase.housenumber,
+        country: 'DK',
+        apiId: testCase.apiId,
+        cleanApiId: '',
+        streetname: testCase.streetname,
+        cityname: '',
+      };
+
+      const result = await testAPI(apiSettings);
+      const isValid = validateApiResults(apiSettings, result);
+      assert.equal(isValid, true);
+    });
+  }
+});

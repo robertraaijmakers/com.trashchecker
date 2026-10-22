@@ -1573,6 +1573,141 @@ export class TrashApis {
     return this.filterFutureDates(dates);
   }
 
+  private async renoWebFrederiksberg(apiSettings: ApiSettings) {
+    return this.generalImplementationRenoWeb(apiSettings, 'frederiksberg');
+  }
+
+  private async renoWebRudersdal(apiSettings: ApiSettings) {
+    return this.generalImplementationRenoWeb(apiSettings, 'rudersdal');
+  }
+
+  private async generalImplementationRenoWeb(apiSettings: ApiSettings, municipality: string) {
+    this.log(`Checking RenoWeb ${municipality}`);
+
+    const fDates: ActivityDates[] = [];
+
+    await validateCountry(apiSettings, 'DK');
+    await validateStreet(apiSettings);
+    await validateHousenumber(apiSettings);
+
+    const hostname = `${municipality}.renoweb.dk`;
+    const basePath = '/Legacy/JService.asmx';
+    const headers = {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0',
+    };
+
+    // RenoWeb wraps its JSON responses in a JSON string inside the "d" property.
+    const post = async (endpoint: string, payload: object) => {
+      const response = await httpsPromise({
+        hostname,
+        path: `${basePath}/${endpoint}`,
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload),
+      });
+      const body = <any>response.body;
+      return typeof body?.d === 'string' ? JSON.parse(body.d) : body?.d;
+    };
+
+    const addressSearch = await post('Adresse_SearchByString', {
+      searchterm: `${apiSettings.streetname} ${apiSettings.housenumber},`,
+      addresswithmateriel: 3,
+    });
+
+    const addressId = addressSearch?.list?.[0]?.value;
+    if (!addressId) {
+      throw new Error('Address not found in RenoWeb.');
+    }
+
+    const materials = await post('GetAffaldsplanMateriel_mitAffald', { adrid: addressId, common: false });
+    const status = materials?.status?.status;
+    if (status) {
+      throw new Error(`RenoWeb returned an error: ${status} ${materials?.status?.msg ?? ''}`);
+    }
+
+    for (const material of materials?.list ?? []) {
+      // Skip ordered pickups and materials without a planned emptying date.
+      if (material.afhentningsbestillingmateriel || !/dag den \d{2}-\d{2}-\d{4}/.test(material.toemningsdato)) {
+        continue;
+      }
+
+      const calendar = await post('GetCalender_mitAffald', { materialid: material.id });
+      for (const entry of calendar?.list ?? []) {
+        const [day, month, year] = String(entry).split(' ').pop()!.split('-');
+        const trashDate = new Date(`${year}-${month}-${day}`);
+        if (Number.isNaN(trashDate.getTime())) {
+          continue;
+        }
+
+        verifyByName(fDates, '', `${material.ordningnavn} ${material.materielnavn}`, trashDate);
+      }
+    }
+
+    if (fDates.length === 0) {
+      throw new Error('No trash data found for the given address in RenoWeb.');
+    }
+
+    return this.filterFutureDates(fDates);
+  }
+
+  private async vestforbraending(apiSettings: ApiSettings) {
+    this.log('Checking Vestforbrænding');
+
+    const fDates: ActivityDates[] = [];
+
+    await validateCountry(apiSettings, 'DK');
+    await validateStreet(apiSettings);
+    await validateHousenumber(apiSettings);
+    await validateZipcode(apiSettings);
+
+    const hostname = 'selvbetjening.vestfor.dk';
+    const term = `${apiSettings.streetname} ${apiSettings.housenumber}, ${apiSettings.zipcode}`;
+
+    const addressRequest = await httpsPromise({
+      hostname,
+      path: `/Adresse/AddressByName?term=${encodeURIComponent(term)}&numberOfResults=1`,
+      method: 'GET',
+      headers: { 'User-Agent': 'Homey' },
+    });
+
+    const addresses = <any>addressRequest.body;
+    if (!Array.isArray(addresses) || addresses.length === 0) {
+      throw new Error('Address not found at Vestforbrænding.');
+    }
+
+    const start = new Date();
+    const end = new Date();
+    end.setDate(end.getDate() + 365);
+
+    const datesRequest = await httpsPromise({
+      hostname,
+      path: `/Adresse/ToemmeDates?start=${encodeURIComponent(start.toISOString())}&end=${encodeURIComponent(end.toISOString())}`,
+      method: 'GET',
+      headers: { 'User-Agent': 'Homey', Cookie: `addressId=${addresses[0].Id}` },
+    });
+
+    const items = <any>datesRequest.body;
+    if (!Array.isArray(items)) {
+      throw new Error('Unexpected response from Vestforbrænding.');
+    }
+
+    for (const item of items) {
+      const trashDate = new Date(item.start);
+      if (!item.title || Number.isNaN(trashDate.getTime())) {
+        continue;
+      }
+
+      verifyByName(fDates, '', item.title, trashDate);
+    }
+
+    if (fDates.length === 0) {
+      throw new Error('No trash data found for the given address at Vestforbrænding.');
+    }
+
+    return this.filterFutureDates(fDates);
+  }
+
   private async renovasjonNorway(apiSettings: ApiSettings) {
     this.log('Checking Renovasjon Norway');
 

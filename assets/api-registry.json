@@ -56,5 +56,8 @@
   { "name": "Twente Milieu", "id": "twm", "country": "NL", "handler": "twenteMilieu" },
   { "name": "Afvalkalender Limburg.NET", "id": "aklbn", "country": "BE", "handler": "afvalkalenderLimburgNET" },
   { "name": "Recycle App", "id": "recbe", "country": "BE", "handler": "recycleApp" },
-  { "name": "Renovasjon Norway", "id": "reno", "country": "NO", "handler": "renovasjonNorway" }
+  { "name": "Renovasjon Norway", "id": "reno", "country": "NO", "handler": "renovasjonNorway" },
+  { "name": "RenoWeb Frederiksberg", "id": "rwdkfb", "country": "DK", "handler": "renoWebFrederiksberg" },
+  { "name": "RenoWeb Rudersdal", "id": "rwdkrd", "country": "DK", "handler": "renoWebRudersdal" },
+  { "name": "Vestforbrænding", "id": "vfdk", "country": "DK", "handler": "vestforbraending" }
 ]

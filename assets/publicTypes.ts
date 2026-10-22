@@ -28,7 +28,7 @@ export const TrashColors = {
   KERSTBOOM: '#59bd1b',
 };
 
-export type Country = 'NL' | 'BE' | 'NO';
+export type Country = 'NL' | 'BE' | 'NO' | 'DK';
 export interface ApiMeta {
   name: string;
   id: string;
