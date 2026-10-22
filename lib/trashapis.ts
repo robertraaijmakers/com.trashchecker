@@ -210,10 +210,6 @@ export class TrashApis {
     return this.generalImplementationBurgerportaal(apiSettings, '452048812597326549');
   }
 
-  private async afvalkalenderBreda(apiSettings: ApiSettings) {
-    return this.generalImplementationBurgerportaal(apiSettings, '452048812597352613');
-  }
-
   private async afvalkalenderUtrecht(apiSettings: ApiSettings) {
     return this.generalImplementationBurgerportaal(apiSettings, '452048812597339479');
   }
@@ -810,10 +806,17 @@ export class TrashApis {
     const accessTokenBody = <any>accessTokenRequest.body;
     const accessToken = accessTokenBody.access_token;
 
+    // The API returns one entry per addition (1, 1A, 1B), so split the house number to pick the right one.
+    const houseNumberMatch = `${apiSettings.housenumber}`.match(/\d+/);
+    if (!houseNumberMatch) {
+      throw new Error('Invalid house number');
+    }
+    const addition = `${apiSettings.housenumber}`.replace(/^\D*\d+/, '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+
     // Retrieve address ID
     const addressIdRequest = await httpsPromise({
       hostname: hostName,
-      path: `/exposed/organisations/${organisationId}/address?zipcode=${apiSettings.zipcode}&housenumber=${apiSettings.housenumber}`,
+      path: `/exposed/organisations/${organisationId}/address?zipcode=${apiSettings.zipcode}&housenumber=${houseNumberMatch[0]}`,
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -830,7 +833,13 @@ export class TrashApis {
     }
 
     if (result.length > 1) {
-      throw new Error('Multiple zipcode entries found for: ' + apiSettings.zipcode);
+      // Prefer the exact addition; without one, the plain house number.
+      const matches = result.filter((entry: any) => `${entry.addition ?? ''}`.toUpperCase() === addition);
+      if (matches.length !== 1) {
+        throw new Error('Multiple address entries found for: ' + apiSettings.zipcode + ' ' + apiSettings.housenumber);
+      }
+
+      result = matches;
     }
 
     var addressId = result[0].addressId;
