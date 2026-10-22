@@ -169,5 +169,60 @@
 			"KERSTBOOM": "Kerstboom",
 			"NONE": "Niets"
 		}
+	},
+	"pair": {
+		"hintPair": "Gebruik een bestaand ingesteld adres of voeg een nieuw adres toe. De volgende stap toont de beschikbare apparaatopties voor dat adres.",
+		"hintRepair": "Kies een bestaand ingesteld adres of valideer een nieuw adres voor dit apparaat. Andere apparaatspecifieke instellingen blijven ongewijzigd.",
+		"modeExisting": "Bestaand ingesteld adres gebruiken",
+		"modeNew": "Nieuw adres toevoegen",
+		"configuredAddress": "Ingesteld adres",
+		"country": "Land",
+		"countryNL": "Nederland",
+		"countryBE": "België",
+		"countryNO": "Noorwegen",
+		"countryDK": "Denemarken",
+		"api": "Ophaal-API",
+		"cleanApi": "Schoonmaak-API",
+		"postcode": "Postcode",
+		"number": "Huisnummer",
+		"streetname": "Straatnaam",
+		"cityname": "Plaats",
+		"externalId": "ID",
+		"countyId": "Gemeente-ID (optioneel)",
+		"apiKey": "API-sleutel (optioneel)",
+		"validateContinue": "Valideren en doorgaan",
+		"useContinue": "Adres gebruiken en doorgaan",
+		"validateSave": "Valideren en opslaan",
+		"useSave": "Adres gebruiken en opslaan",
+		"titlePair": "Ophaaladres",
+		"titleRepair": "Ophaaladres opnieuw instellen",
+		"autoDetect": "Automatisch detecteren",
+		"notApplicable": "Niet van toepassing",
+		"selectAddress": "Selecteer een adres.",
+		"usingSelected": "Geselecteerd adres wordt gebruikt...",
+		"savingSelected": "Geselecteerd adres wordt opgeslagen...",
+		"couldNotUse": "Kon het geselecteerde adres niet gebruiken.",
+		"addressSelected": "Adres geselecteerd. Ga verder om dit apparaat toe te voegen.",
+		"validating": "Valideren...",
+		"validationFailed": "Validatie mislukt.",
+		"validationSuccess": "Validatie geslaagd. Ga verder om dit apparaat toe te voegen.",
+		"configSaved": "Configuratie opgeslagen."
+	},
+	"providers": {
+		"instructions": {
+			"streetNumber": "Vul je straatnaam en huisnummer in zoals ze op je afvalkalender staan, bijvoorbeeld 'Roskildevej' en '40'.",
+			"vestfor": "Vul je straat, huisnummer en 4-cijferige postcode in, bijvoorbeeld 'Kløvertoften', '61' en '2740'.",
+			"odense": "Ga naar https://mit.odenserenovation.dk/hentkalender en zoek je adres op. Kopieer het nummer achter 'addressNo=' uit het webadres (bijvoorbeeld 133517) naar het veld hieronder.",
+			"renosyd": "Vul het klantnummer (huisnummer) van je Renosyd-afvalinzameling in. Het nummer wordt automatisch aangevuld tot 6 cijfers, bijvoorbeeld 013000.",
+			"renoDjurs": "Log in op https://minside.renodjurs.dk. Het nummer achter 'id=' in het webadres is je klant-ID, bijvoorbeeld 46000.",
+			"kalundborg": "Ga naar https://kalundborg.infovision.dk/public/selectaddress en zoek je adres. Het adres-ID is het laatste deel van het webadres, bijvoorbeeld 00006ac8-0002-0001-4164-647265737320.",
+			"kolding": "Ga naar https://kolding.infovision.dk/public/selectaddress en zoek je adres. Het adres-ID is het laatste deel van het webadres, bijvoorbeeld 00007b8d-0002-0001-4164-647265737320."
+		},
+		"labels": {
+			"addressNumber": "Adresnummer (addressNo)",
+			"customerNumber": "Klantnummer",
+			"customerId": "Klant-ID",
+			"addressId": "Adres-ID"
+		}
 	}
 }

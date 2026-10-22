@@ -162,5 +162,60 @@
 			"KERSTBOOM": "julgranen",
 			"NONE": "Ingenting"
 		}
+	},
+	"pair": {
+		"hintPair": "Använd en befintlig konfigurerad adress eller lägg till en ny. Nästa steg visar tillgängliga enhetsalternativ för adressen.",
+		"hintRepair": "Välj en befintlig konfigurerad adress eller validera en ny adress för den här enheten. Andra enhetsspecifika inställningar förblir oförändrade.",
+		"modeExisting": "Använd befintlig konfigurerad adress",
+		"modeNew": "Lägg till ny adress",
+		"configuredAddress": "Konfigurerad adress",
+		"country": "Land",
+		"countryNL": "Nederländerna",
+		"countryBE": "Belgien",
+		"countryNO": "Norge",
+		"countryDK": "Danmark",
+		"api": "Insamlings-API",
+		"cleanApi": "Rengörings-API",
+		"postcode": "Postnummer",
+		"number": "Husnummer",
+		"streetname": "Gatunamn",
+		"cityname": "Ort",
+		"externalId": "ID",
+		"countyId": "Kommun-ID (valfritt)",
+		"apiKey": "API-nyckel (valfritt)",
+		"validateContinue": "Validera och fortsätt",
+		"useContinue": "Använd adressen och fortsätt",
+		"validateSave": "Validera och spara",
+		"useSave": "Använd adressen och spara",
+		"titlePair": "Insamlingsadress",
+		"titleRepair": "Konfigurera insamlingsadressen igen",
+		"autoDetect": "Identifiera automatiskt",
+		"notApplicable": "Ej tillämpligt",
+		"selectAddress": "Välj en adress.",
+		"usingSelected": "Använder vald adress...",
+		"savingSelected": "Sparar vald adress...",
+		"couldNotUse": "Det gick inte att använda den valda adressen.",
+		"addressSelected": "Adress vald. Fortsätt för att lägga till den här enheten.",
+		"validating": "Validerar...",
+		"validationFailed": "Valideringen misslyckades.",
+		"validationSuccess": "Valideringen lyckades. Fortsätt för att lägga till den här enheten.",
+		"configSaved": "Konfigurationen har sparats."
+	},
+	"providers": {
+		"instructions": {
+			"streetNumber": "Ange gatunamn och husnummer så som de står i din avfallskalender, till exempel ”Roskildevej” och ”40”.",
+			"vestfor": "Ange gata, husnummer och postnummer med 4 siffror, till exempel ”Kløvertoften”, ”61” och ”2740”.",
+			"odense": "Gå till https://mit.odenserenovation.dk/hentkalender och sök upp din adress. Kopiera numret efter ”addressNo=” i webbadressen (till exempel 133517) till fältet nedan.",
+			"renosyd": "Ange kundnumret (husnumret) från din Renosyd-insamling. Numret fylls automatiskt ut till 6 siffror, till exempel 013000.",
+			"renoDjurs": "Logga in på https://minside.renodjurs.dk. Numret efter ”id=” i webbadressen är ditt kund-ID, till exempel 46000.",
+			"kalundborg": "Gå till https://kalundborg.infovision.dk/public/selectaddress och sök upp din adress. Adress-ID är den sista delen av webbadressen, till exempel 00006ac8-0002-0001-4164-647265737320.",
+			"kolding": "Gå till https://kolding.infovision.dk/public/selectaddress och sök upp din adress. Adress-ID är den sista delen av webbadressen, till exempel 00007b8d-0002-0001-4164-647265737320."
+		},
+		"labels": {
+			"addressNumber": "Adressnummer (addressNo)",
+			"customerNumber": "Kundnummer",
+			"customerId": "Kund-ID",
+			"addressId": "Adress-ID"
+		}
 	}
 }

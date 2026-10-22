@@ -150,5 +150,60 @@
 			"KERSTBOOM": "Sapin de Noël",
 			"NONE": "Rien"
 		}
+	},
+	"pair": {
+		"hintPair": "Utilisez une adresse déjà configurée ou ajoutez-en une nouvelle. L'étape suivante affichera les options d'appareil disponibles pour cette adresse.",
+		"hintRepair": "Choisissez une adresse déjà configurée ou validez une nouvelle adresse pour cet appareil. Les autres réglages propres à l'appareil restent inchangés.",
+		"modeExisting": "Utiliser une adresse déjà configurée",
+		"modeNew": "Ajouter une nouvelle adresse",
+		"configuredAddress": "Adresse configurée",
+		"country": "Pays",
+		"countryNL": "Pays-Bas",
+		"countryBE": "Belgique",
+		"countryNO": "Norvège",
+		"countryDK": "Danemark",
+		"api": "API de collecte",
+		"cleanApi": "API de nettoyage",
+		"postcode": "Code postal",
+		"number": "Numéro de maison",
+		"streetname": "Nom de la rue",
+		"cityname": "Ville",
+		"externalId": "ID",
+		"countyId": "Code de commune (facultatif)",
+		"apiKey": "Clé API (facultatif)",
+		"validateContinue": "Valider et continuer",
+		"useContinue": "Utiliser l'adresse et continuer",
+		"validateSave": "Valider et enregistrer",
+		"useSave": "Utiliser l'adresse et enregistrer",
+		"titlePair": "Adresse de collecte",
+		"titleRepair": "Reconfigurer l'adresse de collecte",
+		"autoDetect": "Détection automatique",
+		"notApplicable": "Sans objet",
+		"selectAddress": "Veuillez sélectionner une adresse.",
+		"usingSelected": "Utilisation de l'adresse sélectionnée...",
+		"savingSelected": "Enregistrement de l'adresse sélectionnée...",
+		"couldNotUse": "Impossible d'utiliser l'adresse sélectionnée.",
+		"addressSelected": "Adresse sélectionnée. Continuez pour ajouter cet appareil.",
+		"validating": "Validation en cours...",
+		"validationFailed": "Échec de la validation.",
+		"validationSuccess": "Validation réussie. Continuez pour ajouter cet appareil.",
+		"configSaved": "Configuration enregistrée."
+	},
+	"providers": {
+		"instructions": {
+			"streetNumber": "Saisissez le nom de votre rue et votre numéro de maison tels qu'ils figurent sur votre calendrier des déchets, par exemple « Roskildevej » et « 40 ».",
+			"vestfor": "Saisissez votre rue, votre numéro et votre code postal à 4 chiffres, par exemple « Kløvertoften », « 61 » et « 2740 ».",
+			"odense": "Allez sur https://mit.odenserenovation.dk/hentkalender et recherchez votre adresse. Copiez le nombre qui suit « addressNo= » dans l'adresse de la page (par exemple 133517) dans le champ ci-dessous.",
+			"renosyd": "Saisissez le numéro de client (de maison) de votre collecte Renosyd. Le numéro est complété automatiquement à 6 chiffres, par exemple 013000.",
+			"renoDjurs": "Connectez-vous sur https://minside.renodjurs.dk. Le nombre qui suit « id= » dans l'adresse de la page est votre ID client, par exemple 46000.",
+			"kalundborg": "Allez sur https://kalundborg.infovision.dk/public/selectaddress et recherchez votre adresse. L'ID d'adresse est la dernière partie de l'adresse de la page, par exemple 00006ac8-0002-0001-4164-647265737320.",
+			"kolding": "Allez sur https://kolding.infovision.dk/public/selectaddress et recherchez votre adresse. L'ID d'adresse est la dernière partie de l'adresse de la page, par exemple 00007b8d-0002-0001-4164-647265737320."
+		},
+		"labels": {
+			"addressNumber": "Numéro d'adresse (addressNo)",
+			"customerNumber": "Numéro de client",
+			"customerId": "ID client",
+			"addressId": "ID d'adresse"
+		}
 	}
 }

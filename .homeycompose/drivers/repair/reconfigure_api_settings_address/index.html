@@ -36,86 +36,98 @@
   }
 </style>
 
-<p class="hint">Choose an existing configured address or validate a new one for this device. Other device-specific settings stay unchanged.</p>
+<p class="hint" data-i18n="pair.hintRepair">Choose an existing configured address or validate a new one for this device. Other device-specific settings stay unchanged.</p>
 
 <div class="mode-group">
   <label class="mode-option">
-    <input type="radio" name="address_mode" id="mode_existing" value="existing" checked /> Use existing configured address
+    <input type="radio" name="address_mode" id="mode_existing" value="existing" checked /> <span data-i18n="pair.modeExisting">Use existing configured address</span>
   </label>
   <label class="mode-option">
-    <input type="radio" name="address_mode" id="mode_new" value="new" /> Add new address
+    <input type="radio" name="address_mode" id="mode_new" value="new" /> <span data-i18n="pair.modeNew">Add new address</span>
   </label>
 </div>
 
 <div class="form-group" id="existing_group">
-  <label class="homey-form-label" for="existing_address">Configured address</label>
+  <label class="homey-form-label" for="existing_address" data-i18n="pair.configuredAddress">Configured address</label>
   <select class="homey-form-select" id="existing_address"></select>
 </div>
 
 <div id="new_address_group" class="hidden">
   <div class="form-group">
-    <label class="homey-form-label" for="country">Country</label>
+    <label class="homey-form-label" for="country" data-i18n="pair.country">Country</label>
     <select class="homey-form-select" id="country">
-      <option value="NL">Netherlands</option>
-      <option value="BE">Belgium</option>
-      <option value="NO">Norway</option>
-      <option value="DK">Denmark</option>
+      <option value="NL" data-i18n="pair.countryNL">Netherlands</option>
+      <option value="BE" data-i18n="pair.countryBE">Belgium</option>
+      <option value="NO" data-i18n="pair.countryNO">Norway</option>
+      <option value="DK" data-i18n="pair.countryDK">Denmark</option>
     </select>
   </div>
 
   <div class="form-group">
-    <label class="homey-form-label" for="api">Collection API</label>
+    <label class="homey-form-label" for="api" data-i18n="pair.api">Collection API</label>
     <select class="homey-form-select" id="api"></select>
   </div>
 
   <p class="hint hidden" id="providerInstructions"></p>
 
   <div class="form-group" id="group_postcode">
-    <label class="homey-form-label" for="postcode" data-default-label="Zipcode / Postcode">Zipcode / Postcode</label>
+    <label class="homey-form-label" for="postcode" data-i18n="pair.postcode" data-label-key="pair.postcode">Zipcode / Postcode</label>
     <input class="homey-form-input" id="postcode" type="text" />
   </div>
 
   <div class="form-group" id="group_number">
-    <label class="homey-form-label" for="number" data-default-label="House Number">House Number</label>
+    <label class="homey-form-label" for="number" data-i18n="pair.number" data-label-key="pair.number">House Number</label>
     <input class="homey-form-input" id="number" type="text" />
   </div>
 
   <div class="form-group" id="group_streetname">
-    <label class="homey-form-label" for="streetname" data-default-label="Street Name">Street Name</label>
+    <label class="homey-form-label" for="streetname" data-i18n="pair.streetname" data-label-key="pair.streetname">Street Name</label>
     <input class="homey-form-input" id="streetname" type="text" />
   </div>
 
   <div class="form-group" id="group_cityname">
-    <label class="homey-form-label" for="cityname" data-default-label="City">City</label>
+    <label class="homey-form-label" for="cityname" data-i18n="pair.cityname" data-label-key="pair.cityname">City</label>
     <input class="homey-form-input" id="cityname" type="text" />
   </div>
 
   <div class="form-group" id="group_externalId">
-    <label class="homey-form-label" for="externalId" data-default-label="ID">ID</label>
+    <label class="homey-form-label" for="externalId" data-i18n="pair.externalId" data-label-key="pair.externalId">ID</label>
     <input class="homey-form-input" id="externalId" type="text" />
   </div>
 
   <div class="form-group" id="group_countyId">
-    <label class="homey-form-label" for="countyId" data-default-label="County ID (optional)">County ID (optional)</label>
+    <label class="homey-form-label" for="countyId" data-i18n="pair.countyId" data-label-key="pair.countyId">County ID (optional)</label>
     <input class="homey-form-input" id="countyId" type="text" />
   </div>
 
   <div class="form-group" id="group_apiKey">
-    <label class="homey-form-label" for="apiKey" data-default-label="API Key (optional)">API Key (optional)</label>
+    <label class="homey-form-label" for="apiKey" data-i18n="pair.apiKey" data-label-key="pair.apiKey">API Key (optional)</label>
     <input class="homey-form-input" id="apiKey" type="text" />
   </div>
 
   <div class="form-group">
-    <label class="homey-form-label" for="cleanApi">Cleaning API</label>
+    <label class="homey-form-label" for="cleanApi" data-i18n="pair.cleanApi">Cleaning API</label>
     <select class="homey-form-select" id="cleanApi"></select>
   </div>
 </div>
 
-<button class="homey-button-primary-full" id="save">Validate And Save</button>
+<button class="homey-button-primary-full" id="save" data-i18n="pair.validateSave">Validate And Save</button>
 <p id="status"></p>
 
 <script>
-  Homey.setTitle('Reconfigure Collection Address');
+  // Translations come from the app's locales/*.json files.
+  function t(key, fallback) {
+    const value = Homey.__(key);
+    return value && value !== key ? value : fallback;
+  }
+
+  function translateStaticText() {
+    document.querySelectorAll('[data-i18n]').forEach((element) => {
+      element.textContent = t(element.getAttribute('data-i18n'), element.textContent);
+    });
+  }
+
+  Homey.setTitle(t('pair.titleRepair', 'Reconfigure Collection Address'));
 
   const form = {
     modeExisting: document.getElementById('mode_existing'),
@@ -150,13 +162,13 @@
     if (usingExistingAddress()) {
       form.existingGroup.classList.remove('hidden');
       form.newAddressGroup.classList.add('hidden');
-      form.save.textContent = 'Use Address And Save';
+      form.save.textContent = t('pair.useSave', 'Use Address And Save');
       return;
     }
 
     form.existingGroup.classList.add('hidden');
     form.newAddressGroup.classList.remove('hidden');
-    form.save.textContent = 'Validate And Save';
+    form.save.textContent = t('pair.validateSave', 'Validate And Save');
   }
 
   function setStatus(text, type) {
@@ -186,7 +198,7 @@
   }
 
   function renderApiOptions(country, selectedApiId) {
-    const options = ['<option value="">Auto detect</option>'];
+    const options = ['<option value="">' + t('pair.autoDetect', 'Auto detect') + '</option>'];
 
     registry
       .filter((entry) => entry.country === country)
@@ -200,8 +212,8 @@
 
   function renderCleanApiOptions(country, selectedCleanApiId) {
     const options = [
-      '<option value="">Auto detect</option>',
-      '<option value="not-applicable">Not applicable</option>',
+      '<option value="">' + t('pair.autoDetect', 'Auto detect') + '</option>',
+      '<option value="not-applicable">' + t('pair.notApplicable', 'Not applicable') + '</option>',
     ];
 
     cleanRegistry
@@ -216,7 +228,7 @@
     }
 
     if (selectedCleanApiId === 'not-applicable') {
-      options[1] = '<option value="not-applicable" selected="selected">Not applicable</option>';
+      options[1] = '<option value="not-applicable" selected="selected">' + t('pair.notApplicable', 'Not applicable') + '</option>';
     }
 
     form.cleanApi.innerHTML = options.join('');
@@ -269,11 +281,12 @@
     ALL_FIELDS.forEach((name) => {
       const group = document.getElementById('group_' + name);
       const label = group.querySelector('label');
-      label.textContent = (provider && provider.fieldLabels && provider.fieldLabels[name]) || label.dataset.defaultLabel;
+      const customLabel = provider && provider.fieldLabels && provider.fieldLabels[name];
+      label.textContent = (customLabel && t(customLabel, '')) || t(label.dataset.labelKey, label.textContent);
       group.classList.toggle('hidden', !visible.includes(name));
     });
 
-    const instructions = provider && provider.instructions;
+    const instructions = provider && provider.instructions && t(provider.instructions, '');
     form.instructions.textContent = instructions || '';
     form.instructions.classList.toggle('hidden', !instructions);
   }
@@ -343,32 +356,32 @@
     if (usingExistingAddress()) {
       const selectedIndex = Number(form.existingAddress.value);
       if (!Number.isFinite(selectedIndex)) {
-        setStatus('Please select an address.', 'error');
+        setStatus(t('pair.selectAddress', 'Please select an address.'), 'error');
         return;
       }
 
-      setStatus('Saving selected address...', '');
+      setStatus(t('pair.savingSelected', 'Saving selected address...'), '');
       Homey.emit('set_existing_api_settings', selectedIndex, (error, result) => {
         if (error || !result || !result.success) {
-          setStatus((result && result.error) || error || 'Could not use selected address.', 'error');
+          setStatus((result && result.error) || error || t('pair.couldNotUse', 'Could not use selected address.'), 'error');
           return;
         }
 
-        setStatus('Configuration saved.', 'success');
+        setStatus(t('pair.configSaved', 'Configuration saved.'), 'success');
         Homey.done();
       });
       return;
     }
 
-    setStatus('Validating...', '');
+    setStatus(t('pair.validating', 'Validating...'), '');
 
     Homey.emit('apply_api_settings', getPayload(), (error, result) => {
       if (error || !result || !result.success) {
-        setStatus((result && result.error) || error || 'Validation failed.', 'error');
+        setStatus((result && result.error) || error || t('pair.validationFailed', 'Validation failed.'), 'error');
         return;
       }
 
-      setStatus('Configuration saved.', 'success');
+      setStatus(t('pair.configSaved', 'Configuration saved.'), 'success');
       Homey.done();
     });
   });
@@ -376,5 +389,6 @@
   form.modeExisting.addEventListener('change', updateModeUi);
   form.modeNew.addEventListener('change', updateModeUi);
 
+  translateStaticText();
   loadContext();
 </script>

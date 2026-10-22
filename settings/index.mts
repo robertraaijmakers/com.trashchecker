@@ -553,7 +553,8 @@ class SettingScript {
       const isVisible = visible.includes(field);
 
       document.getElementById(group.div)!.style.display = isVisible ? 'block' : 'none';
-      document.querySelector(`#${group.div} label`)!.textContent = provider?.fieldLabels?.[field] ?? this.homey.__(group.label);
+      const customLabel = provider?.fieldLabels?.[field];
+      document.querySelector(`#${group.div} label`)!.textContent = (customLabel && this.homey.__(customLabel)) || this.homey.__(group.label);
 
       // Don't keep values for fields the selected provider doesn't use.
       if (!isVisible) {
@@ -562,8 +563,9 @@ class SettingScript {
     }
 
     const instructions = document.getElementById('providerInstructions')!;
-    instructions.textContent = provider?.instructions ?? '';
-    instructions.style.display = provider?.instructions ? 'block' : 'none';
+    const instructionText = provider?.instructions ? this.homey.__(provider.instructions) : '';
+    instructions.textContent = instructionText;
+    instructions.style.display = instructionText ? 'block' : 'none';
   }
 
   async validateManualEntryDates(input: any, trashType: TrashType) {

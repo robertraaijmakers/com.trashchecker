@@ -39,9 +39,9 @@ export interface ApiMeta {
   handler: string;
   // Fields to show when this provider is selected. Without it the default set of fields is shown.
   fields?: ApiField[];
-  // Provider specific label overrides, e.g. { "externalId": "Address number" }.
+  // Provider specific label overrides as locale keys (see locales/*.json), e.g. { "externalId": "providers.labels.addressNumber" }.
   fieldLabels?: Partial<Record<ApiField, string>>;
-  // Instructions shown to the user when this provider is selected.
+  // Locale key of the instructions shown when this provider is selected.
   instructions?: string;
 }
 
