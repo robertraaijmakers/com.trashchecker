@@ -1445,10 +1445,17 @@ describe('TrashApiBurgerportaalUtrechtBreda', function () {
 });
 
 describe('TrashApiDenmark', function () {
-  const cases: { name: string; apiId: string; zipcode: string; housenumber: string; streetname: string }[] = [
+  const cases: { name: string; apiId: string; zipcode: string; housenumber: string; streetname: string; countyId?: string }[] = [
     { name: 'RenoWeb Frederiksberg', apiId: 'rwdkfb', zipcode: '2000', housenumber: '40', streetname: 'Roskildevej' },
     { name: 'RenoWeb Rudersdal', apiId: 'rwdkrd', zipcode: '2840', housenumber: '38', streetname: 'Stationsvej' },
     { name: 'Vestforbrænding', apiId: 'vfdk', zipcode: '2740', housenumber: '61', streetname: 'Kløvertoften' },
+    { name: 'RessourceIndsamling', apiId: 'ridk', zipcode: '2740', housenumber: '61', streetname: 'Kløvertoften' },
+    // Identifier based providers: the identifier goes into the County ID field.
+    { name: 'Odense Renovation', apiId: 'odk', zipcode: '', housenumber: '', streetname: '', countyId: '122518' },
+    { name: 'Renosyd', apiId: 'rsdk', zipcode: '', housenumber: '', streetname: '', countyId: '013000' },
+    { name: 'Reno Djurs', apiId: 'rddk', zipcode: '', housenumber: '', streetname: '', countyId: '46000' },
+    { name: 'Kalundborg Kommune', apiId: 'kbdk', zipcode: '', housenumber: '', streetname: '', countyId: '00006ac8-0002-0001-4164-647265737320' },
+    { name: 'Kolding Kommune', apiId: 'kodk', zipcode: '', housenumber: '', streetname: '', countyId: '00007b8d-0002-0001-4164-647265737320' },
   ];
 
   for (const testCase of cases) {
@@ -1461,6 +1468,7 @@ describe('TrashApiDenmark', function () {
         cleanApiId: '',
         streetname: testCase.streetname,
         cityname: '',
+        countyId: testCase.countyId,
       };
 
       const result = await testAPI(apiSettings);

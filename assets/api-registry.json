@@ -59,5 +59,11 @@
   { "name": "Renovasjon Norway", "id": "reno", "country": "NO", "handler": "renovasjonNorway" },
   { "name": "RenoWeb Frederiksberg", "id": "rwdkfb", "country": "DK", "handler": "renoWebFrederiksberg" },
   { "name": "RenoWeb Rudersdal", "id": "rwdkrd", "country": "DK", "handler": "renoWebRudersdal" },
-  { "name": "Vestforbrænding", "id": "vfdk", "country": "DK", "handler": "vestforbraending" }
+  { "name": "Vestforbrænding", "id": "vfdk", "country": "DK", "handler": "vestforbraending" },
+  { "name": "RessourceIndsamling", "id": "ridk", "country": "DK", "handler": "ressourceIndsamling" },
+  { "name": "Odense Renovation (needs address number in County ID)", "id": "odk", "country": "DK", "handler": "odenseRenovation" },
+  { "name": "Renosyd (needs customer number in County ID)", "id": "rsdk", "country": "DK", "handler": "renosyd" },
+  { "name": "Reno Djurs (needs customer id in County ID)", "id": "rddk", "country": "DK", "handler": "renoDjurs" },
+  { "name": "Kalundborg Kommune (needs address id in County ID)", "id": "kbdk", "country": "DK", "handler": "kalundborg" },
+  { "name": "Kolding Kommune (needs address id in County ID)", "id": "kodk", "country": "DK", "handler": "kolding" }
 ]

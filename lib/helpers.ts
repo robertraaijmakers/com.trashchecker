@@ -103,6 +103,23 @@ export async function validateZipcode(apiSettings: ApiSettings) {
   return true;
 }
 
+export function filterFutureDates(dates: ActivityDates[]): ActivityDates[] {
+  const today = new Date();
+  today.setDate(today.getDate() - 7); // Include the last week
+  today.setHours(0, 0, 0, 0);
+
+  return dates
+    .map((activity) => ({
+      ...activity,
+      dates: activity.dates.filter((date) => {
+        const collectionDate = new Date(date);
+        collectionDate.setHours(0, 0, 0, 0);
+        return collectionDate >= today;
+      }),
+    }))
+    .filter((activity) => activity.dates.length > 0); // Remove activities with no future dates
+}
+
 export function addDate(activityDates: ActivityDates[], type: TrashType, date: Date, icon?: string, localText?: string, color?: string): void {
   const activityDate = activityDates.find((activity) => activity.type === type);
   if (activityDate) {
@@ -227,7 +244,8 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     description.indexOf('pd') !== -1 ||
     description.indexOf('metaal') !== -1 ||
     description.indexOf('drankkartons') !== -1 ||
-    description.indexOf('packages') !== -1
+    description.indexOf('packages') !== -1 ||
+    description.indexOf('emballage') !== -1
   ) {
     addDate(activityDates, TrashType.PMD, date, icon, localDescription, color);
     foundType = true;
