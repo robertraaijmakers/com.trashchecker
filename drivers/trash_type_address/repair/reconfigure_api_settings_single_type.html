@@ -68,39 +68,46 @@
     <select class="homey-form-select" id="api"></select>
   </div>
 
-  <div class="form-group">
-    <label class="homey-form-label" for="cleanApi">Cleaning API</label>
-    <select class="homey-form-select" id="cleanApi"></select>
-  </div>
+  <p class="hint hidden" id="providerInstructions"></p>
 
-  <div class="form-group">
-    <label class="homey-form-label" for="postcode">Zipcode / Postcode</label>
+  <div class="form-group" id="group_postcode">
+    <label class="homey-form-label" for="postcode" data-default-label="Zipcode / Postcode">Zipcode / Postcode</label>
     <input class="homey-form-input" id="postcode" type="text" />
   </div>
 
-  <div class="form-group">
-    <label class="homey-form-label" for="number">House Number</label>
+  <div class="form-group" id="group_number">
+    <label class="homey-form-label" for="number" data-default-label="House Number">House Number</label>
     <input class="homey-form-input" id="number" type="text" />
   </div>
 
-  <div class="form-group">
-    <label class="homey-form-label" for="streetname">Street Name</label>
+  <div class="form-group" id="group_streetname">
+    <label class="homey-form-label" for="streetname" data-default-label="Street Name">Street Name</label>
     <input class="homey-form-input" id="streetname" type="text" />
   </div>
 
-  <div class="form-group">
-    <label class="homey-form-label" for="cityname">City</label>
+  <div class="form-group" id="group_cityname">
+    <label class="homey-form-label" for="cityname" data-default-label="City">City</label>
     <input class="homey-form-input" id="cityname" type="text" />
   </div>
 
-  <div class="form-group">
-    <label class="homey-form-label" for="countyId">County ID (optional)</label>
+  <div class="form-group" id="group_externalId">
+    <label class="homey-form-label" for="externalId" data-default-label="ID">ID</label>
+    <input class="homey-form-input" id="externalId" type="text" />
+  </div>
+
+  <div class="form-group" id="group_countyId">
+    <label class="homey-form-label" for="countyId" data-default-label="County ID (optional)">County ID (optional)</label>
     <input class="homey-form-input" id="countyId" type="text" />
   </div>
 
-  <div class="form-group">
-    <label class="homey-form-label" for="apiKey">API Key (optional)</label>
+  <div class="form-group" id="group_apiKey">
+    <label class="homey-form-label" for="apiKey" data-default-label="API Key (optional)">API Key (optional)</label>
     <input class="homey-form-input" id="apiKey" type="text" />
+  </div>
+
+  <div class="form-group">
+    <label class="homey-form-label" for="cleanApi">Cleaning API</label>
+    <select class="homey-form-select" id="cleanApi"></select>
   </div>
 </div>
 
@@ -123,7 +130,9 @@
     number: document.getElementById('number'),
     streetname: document.getElementById('streetname'),
     cityname: document.getElementById('cityname'),
+    externalId: document.getElementById('externalId'),
     countyId: document.getElementById('countyId'),
+    instructions: document.getElementById('providerInstructions'),
     apiKey: document.getElementById('apiKey'),
     save: document.getElementById('save'),
     status: document.getElementById('status'),
@@ -171,6 +180,7 @@
     form.number.value = settings.housenumber || '';
     form.streetname.value = settings.streetname || '';
     form.cityname.value = settings.cityname || '';
+    form.externalId.value = settings.externalId || '';
     form.countyId.value = settings.countyId || '';
     form.apiKey.value = settings.apiKey || '';
   }
@@ -239,16 +249,49 @@
     updateModeUi();
   }
 
+  // Fields that are shown when no provider (or a provider without a field list) is selected.
+  const DEFAULT_FIELDS = ['postcode', 'number', 'streetname', 'cityname', 'countyId', 'apiKey'];
+  const ALL_FIELDS = ['postcode', 'number', 'streetname', 'cityname', 'externalId', 'countyId', 'apiKey'];
+
+  function getSelectedProvider() {
+    return registry.find((entry) => entry.id === form.api.value);
+  }
+
+  function getVisibleFields() {
+    const provider = getSelectedProvider();
+    return (provider && provider.fields) || DEFAULT_FIELDS;
+  }
+
+  function applyProviderFields() {
+    const provider = getSelectedProvider();
+    const visible = getVisibleFields();
+
+    ALL_FIELDS.forEach((name) => {
+      const group = document.getElementById('group_' + name);
+      const label = group.querySelector('label');
+      label.textContent = (provider && provider.fieldLabels && provider.fieldLabels[name]) || label.dataset.defaultLabel;
+      group.classList.toggle('hidden', !visible.includes(name));
+    });
+
+    const instructions = provider && provider.instructions;
+    form.instructions.textContent = instructions || '';
+    form.instructions.classList.toggle('hidden', !instructions);
+  }
+
   function getPayload() {
+    const visible = getVisibleFields();
+    const value = (name) => (visible.includes(name) ? form[name].value : '');
+
     return {
       country: form.country.value,
       apiId: form.api.value,
-      zipcode: form.postcode.value,
-      housenumber: form.number.value,
-      streetname: form.streetname.value,
-      cityname: form.cityname.value,
-      countyId: form.countyId.value,
-      apiKey: form.apiKey.value,
+      zipcode: value('postcode'),
+      housenumber: value('number'),
+      streetname: value('streetname'),
+      cityname: value('cityname'),
+      externalId: value('externalId'),
+      countyId: value('countyId'),
+      apiKey: value('apiKey'),
       cleanApiId: form.cleanApi.value,
     };
   }
@@ -265,10 +308,13 @@
       configuredAddresses = context.configuredAddresses || [];
       fillForm(context.apiSettings || {});
       renderApiOptions(form.country.value, (context.apiSettings || {}).apiId || '');
+      applyProviderFields();
       renderCleanApiOptions(form.country.value, (context.apiSettings || {}).cleanApiId || '');
       renderConfiguredAddresses(context.selectedAddressIndex);
     });
   }
+
+  form.api.addEventListener('change', applyProviderFields);
 
   form.country.addEventListener('change', function() {
     Homey.emit('get_api_registry', form.country.value, (error, result) => {
@@ -279,6 +325,7 @@
 
       registry = result || [];
       renderApiOptions(form.country.value, '');
+      applyProviderFields();
     });
 
     Homey.emit('get_clean_api_registry', form.country.value, (error, result) => {

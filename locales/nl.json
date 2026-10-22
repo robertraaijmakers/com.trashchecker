@@ -11,6 +11,7 @@
 		"api": "Bron",
 		"cleanApi": "Schoonmaakservice?",
 		"countyId": "Gemeente (ID)",
+		"externalId": "ID",
 		"apiKey": "API Sleutel",
 		"save": "Opslaan",
 		"fail": "Dit adres wordt niet ondersteund",

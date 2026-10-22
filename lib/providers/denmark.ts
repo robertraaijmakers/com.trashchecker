@@ -9,7 +9,7 @@ const BROWSER_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) 
 /**
  * Danish providers, ported from the Home Assistant waste_collection_schedule sources.
  *
- * Providers that cannot find a household from street + house number use `apiSettings.countyId`
+ * Providers that cannot find a household from street + house number use `apiSettings.externalId`
  * as the provider specific identifier (address number, customer number or location GUID).
  */
 export class DenmarkProviders {
@@ -223,7 +223,7 @@ export class DenmarkProviders {
 
     const response = await httpsPromise({
       hostname: 'mit.odenserenovation.dk',
-      path: `/api/Calendar/GetCalendarByAddress?addressNo=${encodeURIComponent(apiSettings.countyId!)}&startDate=${encodeURIComponent(start.toISOString())}&endDate=${encodeURIComponent(end.toISOString())}&noCache=false`,
+      path: `/api/Calendar/GetCalendarByAddress?addressNo=${encodeURIComponent(apiSettings.externalId!)}&startDate=${encodeURIComponent(start.toISOString())}&endDate=${encodeURIComponent(end.toISOString())}&noCache=false`,
       method: 'GET',
       headers: { 'User-Agent': 'Homey' },
     });
@@ -254,7 +254,7 @@ export class DenmarkProviders {
 
     const response = await httpsPromise({
       hostname: 'skoda-selvbetjeningsapi.renosyd.dk',
-      path: `/api/v1/toemmekalender?nummer=${encodeURIComponent(apiSettings.countyId!.padStart(6, '0'))}`,
+      path: `/api/v1/toemmekalender?nummer=${encodeURIComponent(apiSettings.externalId!.padStart(6, '0'))}`,
       method: 'GET',
       headers: { 'User-Agent': 'Homey' },
     });
@@ -290,7 +290,7 @@ export class DenmarkProviders {
 
     const response = await httpsPromise({
       hostname: 'minside.renodjurs.dk',
-      path: `/Ordninger.aspx?id=${encodeURIComponent(apiSettings.countyId!)}`,
+      path: `/Ordninger.aspx?id=${encodeURIComponent(apiSettings.externalId!)}`,
       method: 'GET',
       headers: { 'User-Agent': BROWSER_USER_AGENT },
     });
@@ -338,7 +338,7 @@ export class DenmarkProviders {
 
     const response = await httpsPromise({
       hostname,
-      path: `/api/publiccitizen/container/address/active/${encodeURIComponent(apiSettings.countyId!)}`,
+      path: `/api/publiccitizen/container/address/active/${encodeURIComponent(apiSettings.externalId!)}`,
       method: 'GET',
       headers: {
         accept: 'application/json, text/plain, */*',
@@ -375,8 +375,8 @@ export class DenmarkProviders {
   }
 
   private requireIdentifier(apiSettings: ApiSettings, description: string) {
-    if (!apiSettings.countyId || apiSettings.countyId.trim() === '') {
-      throw new Error(`This provider needs the ${description} in the "County ID" field.`);
+    if (!apiSettings.externalId || apiSettings.externalId.trim() === '') {
+      throw new Error(`This provider needs the ${description} to be filled in.`);
     }
   }
 }

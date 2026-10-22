@@ -29,11 +29,20 @@ export const TrashColors = {
 };
 
 export type Country = 'NL' | 'BE' | 'NO' | 'DK';
+// The address fields a provider can ask for in the pair, repair and settings screens.
+export type ApiField = 'postcode' | 'number' | 'streetname' | 'cityname' | 'externalId' | 'countyId' | 'apiKey';
+
 export interface ApiMeta {
   name: string;
   id: string;
   country: Country;
   handler: string;
+  // Fields to show when this provider is selected. Without it the default set of fields is shown.
+  fields?: ApiField[];
+  // Provider specific label overrides, e.g. { "externalId": "Address number" }.
+  fieldLabels?: Partial<Record<ApiField, string>>;
+  // Instructions shown to the user when this provider is selected.
+  instructions?: string;
 }
 
 export interface ManualSettings {
@@ -90,4 +99,6 @@ export interface ApiSettings {
   country: string;
   countyId?: string;
   apiKey?: string;
+  // Provider specific identifier for providers that can't find a household by address (e.g. a customer number).
+  externalId?: string;
 }

@@ -142,6 +142,7 @@
 			</select>
 			<datalist id="dl-api-list"></datalist>
         </div>
+        <p class="homey-text-small" id="providerInstructions" style="display:none;"></p>
         <div class="homey-form-group" id="postalcode_div">
             <label class="homey-form-label" for="postcode" data-i18n="settings.postcode"></label>
             <input class="homey-form-input" placeholder="1234AB" id="postcode" maxlength="6" type="text" value=""/>
@@ -150,7 +151,7 @@
             <label class="homey-form-label" for="streetname" data-i18n="settings.streetname"></label>
             <input class="homey-form-input" placeholder="Homeystreet" id="streetname" type="text" value=""/>
         </div>
-        <div class="homey-form-group">
+        <div class="homey-form-group" id="number_div">
             <label class="homey-form-label" for="number" data-i18n="settings.hnumber"></label>
             <input class="homey-form-input" placeholder="42" id="number" type="text" value=""/>
         </div>
@@ -158,6 +159,10 @@
             <label class="homey-form-label" for="cityname" data-i18n="settings.cityname"></label>
             <input class="homey-form-input" placeholder="Homeycity" id="cityname" type="text" value=""/>
         </div>		
+		<div class="homey-form-group" id="externalId_div">
+            <label class="homey-form-label" for="externalId" data-i18n="settings.externalId"></label>
+            <input class="homey-form-input" id="externalId" type="text" value=""/>
+        </div>
 		<div class="homey-form-group" id="countyId_div">
             <label class="homey-form-label" for="countyId" data-i18n="settings.countyId"></label>
             <input class="homey-form-input" placeholder="e.g., 0301" id="countyId" type="text" value=""/>

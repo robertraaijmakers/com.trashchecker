@@ -11,6 +11,7 @@
 		"api": "Kilde",
 		"cleanApi": "Rensetjeneste?",
 		"countyId": "Kommun-ID",
+		"externalId": "ID",
 		"apiKey": "API-nøkkel",
 		"save": "Lagre endringer",
 		"fail": "Denne adressen støttes ikke",

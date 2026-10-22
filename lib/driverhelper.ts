@@ -52,11 +52,12 @@ export function normalizeApiSettings(input: any, options?: NormalizeApiSettingsO
       .toUpperCase(),
     countyId: String(input?.countyId || '').trim() || undefined,
     apiKey: String(input?.apiKey || '').trim() || undefined,
+    externalId: String(input?.externalId || '').trim() || undefined,
   };
 }
 
 export function hasAddressInput(settings: ApiSettings): boolean {
-  return settings.zipcode.trim() !== '' || settings.housenumber.trim() !== '' || settings.streetname.trim() !== '' || settings.cityname.trim() !== '';
+  return settings.zipcode.trim() !== '' || settings.housenumber.trim() !== '' || settings.streetname.trim() !== '' || settings.cityname.trim() !== '' || (settings.externalId ?? '').trim() !== '';
 }
 
 export function createSignature(parts: Array<string | number | null | undefined>): string {
@@ -71,11 +72,11 @@ export function createSignature(parts: Array<string | number | null | undefined>
 }
 
 export function createAddressSignature(settings: ApiSettings): string {
-  return createSignature(['trash-address', settings.country, settings.zipcode, settings.housenumber, settings.streetname, settings.cityname]);
+  return createSignature(['trash-address', settings.country, settings.zipcode, settings.housenumber, settings.streetname, settings.cityname, settings.externalId]);
 }
 
 export function getAddressDisplayParts(settings: ApiSettings): string[] {
-  return [settings.zipcode, settings.housenumber, settings.cityname].filter((value) => value && value.trim() !== '');
+  return [settings.zipcode, settings.housenumber, settings.cityname, settings.externalId].filter((value): value is string => !!value && value.trim() !== '');
 }
 
 export function getDeviceAddressSignature(deviceLike: any, options?: NormalizeApiSettingsOptions): string {
@@ -93,7 +94,7 @@ export function getDeviceAddressSignature(deviceLike: any, options?: NormalizeAp
 }
 
 export function createSingleTypeDeviceId(settings: ApiSettings, trashType: TrashType): string {
-  return createSignature(['trash-type-address', settings.country, settings.zipcode, settings.housenumber, settings.streetname, settings.cityname, trashType]);
+  return createSignature(['trash-type-address', settings.country, settings.zipcode, settings.housenumber, settings.streetname, settings.cityname, settings.externalId, trashType]);
 }
 
 export function getRegistryByCountry(country: string, registry: ApiMeta[]): ApiMeta[] {
@@ -116,7 +117,7 @@ export function getConfiguredApiSettingsList(rawList: unknown, options?: Configu
 
 export function getConfiguredAddressOptions(settingsList: ApiSettings[]): ConfiguredAddressOption[] {
   return settingsList.map((apiSettings, index) => {
-    const parts = [apiSettings.zipcode, apiSettings.housenumber, apiSettings.streetname, apiSettings.cityname].filter((x) => x && x.trim() !== '');
+    const parts = [apiSettings.zipcode, apiSettings.housenumber, apiSettings.streetname, apiSettings.cityname, apiSettings.externalId].filter((x) => x && x.trim() !== '');
 
     return {
       index,

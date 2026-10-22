@@ -11,6 +11,7 @@
 		"api": "Källa",
 		"cleanApi": "Städservice?",
 		"countyId": "Kommun-ID",
+		"externalId": "ID",
 		"apiKey": "API-nyckel",
 		"save": "Spara ändringar",
 		"fail": "Den här adressen stöds inte",
