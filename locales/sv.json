@@ -78,6 +78,7 @@
 			"save": "Spara alla inställningar"
 		},
 		"startdate": "Startdatum",
+		"extradays": "även på",
 		"labeltitle": "Globala tag-inställningar",
 		"labeldescription": "Dessa värden sätts i den globala 'tagen' när en specifik typ av sopor hämtas idag/imorgon/i övermorgon.",
 		"labelgeneric": "Global 'tag-mening'",

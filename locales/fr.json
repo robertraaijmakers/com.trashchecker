@@ -74,6 +74,7 @@
 			"save": "Enregistrer tous les paramètres"
 		},
 		"startdate": "à partir du",
+		"extradays": "aussi le",
 		"labeltitle": "Personnalisation des noms de types de déchets",
 		"labeldescription": "Les valeurs ci-dessous sont utilisées pour personnaliser votre expérience. Elles sont utilisées dans les étiquettes globales disponibles dans vos flux, dans le widget et dans les étiquettes sur les cartes en flux avancés.",
 		"saveLabelInput": "Enregistrer les types de déchets",
