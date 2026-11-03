@@ -84,6 +84,7 @@
 			"save": "Sla alles op"
 		},
 		"startdate": "startend op",
+		"extradays": "ook op",
 		"labeltitle": "Afvaltype namen personaliseren",
 		"labeldescription": "Deze waarden worden ingesteld in de globale tag wanneer een specifiek type afval wordt opgehaald. Daarnaast worden deze waarden gebruikt in de widget en voor tags bij kaarten gebruikt in advanced flows.",
 		"saveLabelInput": "Afvaltype namen opslaan",

@@ -1,7 +1,8 @@
 'use strict';
 
 import assert from 'assert';
-import { addDate } from '../lib/helpers';
+import { addDate, formatDate, normalizeActivityDates } from '../lib/helpers';
+import { DateTimeHelper } from '../lib/datetimehelper';
 import { ActivityDates } from '../types/localTypes';
 import { TrashType } from '../assets/publicTypes';
 
@@ -430,6 +431,69 @@ describe('Manual Additions & Removals', function () {
       // Should remove both the original 2026-04-21 and the manually added 2026-04-28
       assert.equal(activityDates[0].dates.length, 1);
       assert.equal(activityDates[0].dates[0].toISOString().slice(0, 10), '2026-04-14');
+    });
+  });
+
+  describe('Manual - Extra collection days', function () {
+    // Local dates and formatDate, so the results don't depend on the timezone the tests run in
+    const startDate = new Date(2026, 0, 5); // Monday
+
+    it('should collect every week on Monday and Thursday', function () {
+      const dates = DateTimeHelper.everyNthWeekOnDays(1, 1, [4], startDate, new Date(2026, 3, 15));
+
+      assert.deepEqual(dates.map(formatDate), [
+        '2026-03-30',
+        '2026-04-06',
+        '2026-04-13',
+        '2026-04-20',
+        '2026-04-27',
+        '2026-04-02',
+        '2026-04-09',
+        '2026-04-16',
+        '2026-04-23',
+        '2026-04-30',
+      ]);
+    });
+
+    it('should collect every other week on Monday and Thursday in the same weeks', function () {
+      const activityDates: ActivityDates[] = [];
+      for (const date of DateTimeHelper.everyNthWeekOnDays(2, 1, [4], startDate, new Date(2026, 3, 22))) {
+        addDate(activityDates, 'REST' as TrashType, date);
+      }
+      normalizeActivityDates(activityDates);
+
+      assert.deepEqual(activityDates[0].dates.map(formatDate), [
+        '2026-03-16',
+        '2026-03-19',
+        '2026-03-30',
+        '2026-04-02',
+        '2026-04-13',
+        '2026-04-16',
+        '2026-04-27',
+        '2026-04-30',
+        '2026-05-11',
+        '2026-05-14',
+      ]);
+
+      // Next collection after Wednesday 22 April skips the off week
+      const next = activityDates[0].dates.find((date) => date >= new Date(2026, 3, 22));
+      assert.equal(formatDate(next!), '2026-04-27');
+    });
+
+    it('should give the same dates as before without extra days', function () {
+      const givenDate = new Date('2021-04-17');
+      const currentDate = new Date('2021-10-10');
+      const expected = [-2, -1, 0, 1, 2].map((delta) => DateTimeHelper.everyNthWeek(4, 3, givenDate, currentDate, delta).getTime());
+
+      assert.deepEqual(DateTimeHelper.everyNthWeekOnDays(4, 3, [], givenDate, currentDate).map((date) => date.getTime()), expected);
+    });
+
+    it('should not duplicate dates when an extra day equals the main day', function () {
+      const dates = DateTimeHelper.everyNthWeekOnDays(1, 1, [1], startDate, new Date(2026, 3, 15));
+      assert.deepEqual(dates.map(formatDate), ['2026-03-30', '2026-04-06', '2026-04-13', '2026-04-20', '2026-04-27']);
+
+      const withRepeatedExtraDay = DateTimeHelper.everyNthWeekOnDays(1, 1, [1, 4, 4], startDate, new Date(2026, 3, 15));
+      assert.equal(withRepeatedExtraDay.length, 10);
     });
   });
 });

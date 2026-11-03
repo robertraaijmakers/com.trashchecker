@@ -84,6 +84,7 @@
 			"save": "Lagre alle innstillinger"
 		},
 		"startdate": "starter på",
+		"extradays": "også på",
 		"labeltitle": "Lokale verdier for avfallstype",
 		"labeldescription": "Verdiene som angis nedenfor, brukes til å tilpasse avfallserfaringen din. Verdiene brukes i de globale taggene som er tilgjengelige i dine flyter, i widgeten og settes i etiketter på kort som er tilgjengelig i avanserte flyter.",
 		"saveLabelInput": "Lagre verdier for avfallstype",

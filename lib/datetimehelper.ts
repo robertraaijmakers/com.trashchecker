@@ -42,4 +42,18 @@ export class DateTimeHelper {
     // Return the adjusted date
     return DateTimeHelper.#addDays(currentDate, differenceWithCurrentDate);
   }
+
+  static everyNthWeekOnDays(n: number, d: number, extraDays: number[], givenDate: Date, currentDate: Date) {
+    // Extra days fall in the same collection weeks as the main day, so they keep its alignment with the start date
+    const days = [d, ...extraDays.filter((day, index) => Number(day) !== Number(d) && extraDays.indexOf(day) === index)];
+
+    const dates: Date[] = [];
+    for (const day of days) {
+      for (let delta = -2; delta <= 2; delta++) {
+        dates.push(DateTimeHelper.everyNthWeek(n, day, givenDate, currentDate, delta));
+      }
+    }
+
+    return dates;
+  }
 }

@@ -49,6 +49,8 @@ class SettingScript {
 
       document.getElementById(`${typeLower}_option`)?.addEventListener('change', () => this.toggleManualInputFields(AllTrashTypes[type] as TrashType));
       document.getElementById(`${typeLower}_option_extension`)?.addEventListener('change', () => this.toggleManualInputFields(AllTrashTypes[type] as TrashType));
+      document.getElementById(`${typeLower}_dayofweek`)?.addEventListener('change', () => this.toggleManualInputFields(AllTrashTypes[type] as TrashType));
+      this.renderExtraDays(typeLower);
 
       document.getElementById(`label${typeUFirst}`)?.addEventListener('change', () => this.renderGlobalLabel());
       document.getElementById(`labelSmall${typeUFirst}`)?.addEventListener('change', () => this.renderWidgetLabel(typeUFirst));
@@ -129,6 +131,7 @@ class SettingScript {
       this.setInputValue(`${trashType.toLowerCase()}_dayofweek`, values?.day);
       this.setInputValue(`${trashType.toLowerCase()}_option_extension`, values?.option_extension);
       this.setInputValue(`${trashType.toLowerCase()}_startdate`, values?.startdate?.substring(0, 10));
+      this.setExtraDays(trashType.toLowerCase(), values?.extra_days ?? []);
       this.toggleManualInputFields(trashType as TrashType);
     }
   }
@@ -320,6 +323,11 @@ class SettingScript {
       } else {
         data[trashType].option_extension = -1;
       }
+
+      const extraDays = this.getExtraDays(trashType.toLowerCase()).filter((day) => day !== Number(data[trashType].day));
+      if (data[trashType].option <= 8 && extraDays.length > 0) {
+        data[trashType].extra_days = extraDays;
+      }
     }
 
     console.log(data);
@@ -503,6 +511,66 @@ class SettingScript {
       document.getElementById(`${prefix}_startdate_div`)!.style.display = 'block';
       document.getElementById(`${prefix}_day_div`)!.style.display = 'block';
     }
+
+    // Extra days are only used for the every x weeks options, the main day can't be an extra day as well
+    const extraDaysDiv = document.getElementById(`${prefix}_extradays_div`);
+    if (extraDaysDiv) {
+      extraDaysDiv.style.display = value >= 1 && value <= 8 ? 'block' : 'none';
+      const dayOfWeek = this.getInputValue(`${prefix}_dayofweek`);
+      extraDaysDiv.querySelectorAll<HTMLInputElement>('input[type="checkbox"]').forEach((checkbox) => {
+        checkbox.disabled = checkbox.value === dayOfWeek;
+        if (checkbox.disabled) checkbox.checked = false;
+      });
+    }
+  }
+
+  renderExtraDays(prefix: string) {
+    const dayDiv = document.getElementById(`${prefix}_day_div`);
+    if (!dayDiv) return;
+
+    const extraDaysDiv = document.createElement('div');
+    extraDaysDiv.id = `${prefix}_extradays_div`;
+    extraDaysDiv.style.display = 'none';
+
+    const label = document.createElement('p');
+    label.style.cssText = 'display: inline; margin-left: 5px;';
+    label.textContent = this.homey.__('settings.extradays');
+    extraDaysDiv.appendChild(label);
+
+    // Same order as the day of week select, Monday first
+    const days = ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'];
+    for (const day of [1, 2, 3, 4, 5, 6, 0]) {
+      const checkbox = document.createElement('label');
+      checkbox.className = 'homey-form-checkbox';
+      checkbox.style.cssText = 'display: inline-block; margin-left: 5px;';
+      checkbox.innerHTML = `<input class="homey-form-checkbox-input" type="checkbox" id="${prefix}_extraday_${day}" value="${day}" />`;
+      checkbox.innerHTML += '<span class="homey-form-checkbox-checkmark"></span><span class="homey-form-checkbox-text"></span>';
+      checkbox.querySelector('.homey-form-checkbox-text')!.textContent = this.homey.__(`settings.dayofweek.${days[day]}`);
+      extraDaysDiv.appendChild(checkbox);
+    }
+
+    dayDiv.after(extraDaysDiv);
+  }
+
+  setExtraDays(prefix: string, extraDays: number[]) {
+    for (let day = 0; day <= 6; day++) {
+      const checkbox = document.getElementById(`${prefix}_extraday_${day}`) as HTMLInputElement;
+      if (checkbox) {
+        checkbox.checked = extraDays.map(Number).includes(day);
+      }
+    }
+  }
+
+  getExtraDays(prefix: string) {
+    const extraDays: number[] = [];
+    for (let day = 0; day <= 6; day++) {
+      const checkbox = document.getElementById(`${prefix}_extraday_${day}`) as HTMLInputElement;
+      if (checkbox?.checked) {
+        extraDays.push(day);
+      }
+    }
+
+    return extraDays;
   }
 
   // Fields shown when the selected provider doesn't define its own list (or no provider is selected).

@@ -84,6 +84,7 @@
 			"save": "Save All Settings"
 		},
 		"startdate": "starting on",
+		"extradays": "also on",
 		"labeltitle": "Local Trash Type Values",
 		"labeldescription": "The values entered below are used to customize your trash experience. The values are used in the global tags available in your flows, in the widget and set in labels on cards available in advanced flows.",
 		"saveLabelInput": "Save Trash Type Values",

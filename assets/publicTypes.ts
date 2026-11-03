@@ -63,6 +63,7 @@ export interface ManualSetting {
   option_extension?: number;
   startdate?: string;
   day: number;
+  extra_days?: number[];
 }
 
 export interface LabelSettings {
