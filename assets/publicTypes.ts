@@ -64,6 +64,11 @@ export interface ManualSetting {
   startdate?: string;
   day: number;
   extra_days?: number[];
+  season_option?: number;
+  season_start?: string;
+  season_end?: string;
+  pause_start?: string;
+  pause_end?: string;
 }
 
 export interface LabelSettings {

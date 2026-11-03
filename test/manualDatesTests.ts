@@ -496,4 +496,65 @@ describe('Manual Additions & Removals', function () {
       assert.equal(withRepeatedExtraDay.length, 10);
     });
   });
+
+  describe('Manual - Seasons and pauses', function () {
+    const startDate = new Date(2026, 0, 5); // Monday
+    const between = (dates: Date[], from: string, to: string) => dates.map(formatDate).filter((date) => date >= from && date <= to);
+
+    it('should check yearly periods, also when they run over new year', function () {
+      assert.equal(DateTimeHelper.isInPeriod(new Date(2026, 3, 1), '04-01', '09-30'), true);
+      assert.equal(DateTimeHelper.isInPeriod(new Date(2026, 8, 30), '04-01', '09-30'), true);
+      assert.equal(DateTimeHelper.isInPeriod(new Date(2026, 9, 1), '04-01', '09-30'), false);
+      assert.equal(DateTimeHelper.isInPeriod(new Date(2026, 11, 25), '11-01', '02-28'), true);
+      assert.equal(DateTimeHelper.isInPeriod(new Date(2027, 1, 10), '11-01', '02-28'), true);
+      assert.equal(DateTimeHelper.isInPeriod(new Date(2026, 5, 1), '11-01', '02-28'), false);
+      assert.equal(DateTimeHelper.isInPeriod(new Date(2026, 5, 1), undefined, undefined), false);
+    });
+
+    it('should collect every other week, but every week in summer', function () {
+      const activityDates: ActivityDates[] = [];
+      const manualSetting = {
+        option: 2,
+        day: 1,
+        startdate: '2026-01-05',
+        season_option: 1,
+        season_start: '04-01',
+        season_end: '09-30',
+      };
+      for (const date of DateTimeHelper.everyNthWeekWithPeriods(manualSetting, startDate, new Date(2026, 2, 25))) {
+        addDate(activityDates, 'GFT' as TrashType, date);
+      }
+      normalizeActivityDates(activityDates);
+
+      assert.deepEqual(between(activityDates[0].dates, '2026-03-01', '2026-04-30'), ['2026-03-02', '2026-03-16', '2026-03-30', '2026-04-06', '2026-04-13', '2026-04-20', '2026-04-27']);
+      assert.deepEqual(between(activityDates[0].dates, '2026-09-15', '2026-10-31'), ['2026-09-21', '2026-09-28', '2026-10-12', '2026-10-26']);
+    });
+
+    it('should skip the pause and know the first collection after it', function () {
+      const manualSetting = {
+        option: 2,
+        day: 1,
+        startdate: '2026-01-05',
+        pause_start: '12-01',
+        pause_end: '02-28',
+      };
+      const dates = DateTimeHelper.everyNthWeekWithPeriods(manualSetting, startDate, new Date(2026, 10, 20));
+      const upcoming = dates.map(formatDate).filter((date) => date >= '2026-11-20').sort();
+
+      assert.deepEqual(upcoming.slice(0, 2), ['2026-11-23', '2027-03-01']);
+      assert.deepEqual(between(dates, '2026-12-01', '2027-02-28'), []);
+    });
+
+    it('should give the same dates as before without a season or pause', function () {
+      const manualSetting = {
+        option: 2,
+        day: 1,
+        startdate: '2026-01-05',
+        extra_days: [4],
+      };
+      const expected = DateTimeHelper.everyNthWeekOnDays(2, 1, [4], startDate, new Date(2026, 3, 22));
+
+      assert.deepEqual(DateTimeHelper.everyNthWeekWithPeriods(manualSetting, startDate, new Date(2026, 3, 22)), expected);
+    });
+  });
 });

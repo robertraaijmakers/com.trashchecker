@@ -1,7 +1,7 @@
 'use strict';
 
 import type HomeySettings from 'homey/lib/HomeySettings.js';
-import { ApiField, ApiMeta, ApiSettings, LabelSettings, TrashType } from '../assets/publicTypes.js';
+import { ApiField, ApiMeta, ApiSettings, LabelSettings, ManualSetting, TrashType } from '../assets/publicTypes.js';
 import { AllTrashTypes, AllTrashTypesExtended, createManualAdditons, TrashColors } from './settingTypes.mjs';
 
 class SettingScript {
@@ -51,6 +51,7 @@ class SettingScript {
       document.getElementById(`${typeLower}_option_extension`)?.addEventListener('change', () => this.toggleManualInputFields(AllTrashTypes[type] as TrashType));
       document.getElementById(`${typeLower}_dayofweek`)?.addEventListener('change', () => this.toggleManualInputFields(AllTrashTypes[type] as TrashType));
       this.renderExtraDays(typeLower);
+      this.renderPeriods(typeLower);
 
       document.getElementById(`label${typeUFirst}`)?.addEventListener('change', () => this.renderGlobalLabel());
       document.getElementById(`labelSmall${typeUFirst}`)?.addEventListener('change', () => this.renderWidgetLabel(typeUFirst));
@@ -132,6 +133,7 @@ class SettingScript {
       this.setInputValue(`${trashType.toLowerCase()}_option_extension`, values?.option_extension);
       this.setInputValue(`${trashType.toLowerCase()}_startdate`, values?.startdate?.substring(0, 10));
       this.setExtraDays(trashType.toLowerCase(), values?.extra_days ?? []);
+      this.setPeriods(trashType.toLowerCase(), values);
       this.toggleManualInputFields(trashType as TrashType);
     }
   }
@@ -328,6 +330,10 @@ class SettingScript {
       if (data[trashType].option <= 8 && extraDays.length > 0) {
         data[trashType].extra_days = extraDays;
       }
+
+      if (data[trashType].option <= 8) {
+        Object.assign(data[trashType], this.getPeriods(trashType.toLowerCase()));
+      }
     }
 
     console.log(data);
@@ -522,6 +528,133 @@ class SettingScript {
         if (checkbox.disabled) checkbox.checked = false;
       });
     }
+
+    const periodsDiv = document.getElementById(`${prefix}_periods_div`);
+    if (periodsDiv) {
+      periodsDiv.style.display = value >= 1 && value <= 8 ? 'block' : 'none';
+      const days = ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'];
+      const dayOfWeek = Number(this.getInputValue(`${prefix}_dayofweek`));
+      document.getElementById(`${prefix}_season_day`)!.textContent = this.homey.__(`settings.dayofweek.${days[dayOfWeek]}`);
+    }
+  }
+
+  renderPeriods(prefix: string) {
+    const extraDaysDiv = document.getElementById(`${prefix}_extradays_div`);
+    if (!extraDaysDiv) return;
+
+    const periodsDiv = document.createElement('div');
+    periodsDiv.id = `${prefix}_periods_div`;
+    periodsDiv.style.display = 'none';
+
+    // A different frequency for part of the year, using the same every x weeks options
+    const seasonDiv = this.#createPeriodRow(`${prefix}_season`, 'settings.season');
+    const seasonOption = document.createElement('select');
+    seasonOption.className = 'homey-form-select';
+    seasonOption.style.cssText = 'display: inline; margin-left: 5px;';
+    seasonOption.id = `${prefix}_season_option`;
+    document.querySelectorAll<HTMLOptionElement>(`#${prefix}_option option`).forEach((option) => {
+      if (Number(option.value) >= 1 && Number(option.value) <= 8) {
+        seasonOption.add(new Option(this.homey.__(option.dataset.i18n ?? ''), option.value));
+      }
+    });
+    seasonDiv.appendChild(seasonOption);
+
+    // The option names end in 'on', so follow them with the main day
+    const seasonDay = document.createElement('p');
+    seasonDay.style.cssText = 'display: inline; margin-left: 5px;';
+    seasonDay.id = `${prefix}_season_day`;
+    seasonDiv.appendChild(seasonDay);
+    periodsDiv.appendChild(seasonDiv);
+
+    // No collections at all for part of the year, e.g. garden waste in winter
+    periodsDiv.appendChild(this.#createPeriodRow(`${prefix}_pause`, 'settings.pause'));
+
+    extraDaysDiv.after(periodsDiv);
+  }
+
+  #createPeriodRow(id: string, label: string) {
+    const row = document.createElement('div');
+
+    const checkbox = document.createElement('label');
+    checkbox.className = 'homey-form-checkbox';
+    checkbox.style.cssText = 'display: inline-block; margin-left: 5px;';
+    checkbox.innerHTML = `<input class="homey-form-checkbox-input" type="checkbox" id="${id}_enabled" />`;
+    checkbox.innerHTML += '<span class="homey-form-checkbox-checkmark"></span><span class="homey-form-checkbox-text"></span>';
+    checkbox.querySelector('.homey-form-checkbox-text')!.textContent = this.homey.__(label);
+    row.appendChild(checkbox);
+
+    row.appendChild(this.#createMonthDayPicker(`${id}_start`));
+    const to = document.createElement('p');
+    to.style.cssText = 'display: inline; margin-left: 5px;';
+    to.textContent = this.homey.__('settings.periodto');
+    row.appendChild(to);
+    row.appendChild(this.#createMonthDayPicker(`${id}_end`));
+
+    return row;
+  }
+
+  #createMonthDayPicker(id: string) {
+    const picker = document.createElement('span');
+
+    const day = document.createElement('select');
+    day.className = 'homey-form-select';
+    day.style.cssText = 'display: inline; width: auto; margin-left: 5px;';
+    day.id = `${id}_day`;
+    for (let i = 1; i <= 31; i++) {
+      day.add(new Option(`${i}`, String(i).padStart(2, '0')));
+    }
+
+    const month = document.createElement('select');
+    month.className = 'homey-form-select';
+    month.style.cssText = 'display: inline; width: auto; margin-left: 5px;';
+    month.id = `${id}_month`;
+    this.homey
+      .__('settings.months')
+      .split(',')
+      .forEach((name, i) => month.add(new Option(name, String(i + 1).padStart(2, '0'))));
+
+    picker.appendChild(day);
+    picker.appendChild(month);
+    return picker;
+  }
+
+  setPeriods(prefix: string, values: ManualSetting | undefined) {
+    for (const period of ['season', 'pause']) {
+      const start = period === 'season' ? values?.season_start : values?.pause_start;
+      const end = period === 'season' ? values?.season_end : values?.pause_end;
+      const checkbox = document.getElementById(`${prefix}_${period}_enabled`) as HTMLInputElement;
+      if (!checkbox) continue;
+
+      checkbox.checked = !!(start && end);
+      if (start && end) {
+        this.setInputValue(`${prefix}_${period}_start_month`, start.substring(0, 2));
+        this.setInputValue(`${prefix}_${period}_start_day`, start.substring(3, 5));
+        this.setInputValue(`${prefix}_${period}_end_month`, end.substring(0, 2));
+        this.setInputValue(`${prefix}_${period}_end_day`, end.substring(3, 5));
+      }
+    }
+
+    if (values?.season_option) {
+      this.setInputValue(`${prefix}_season_option`, values.season_option);
+    }
+  }
+
+  getPeriods(prefix: string) {
+    const periods: { [key: string]: string | number } = {};
+    const monthDay = (id: string) => `${this.getInputValue(`${id}_month`)}-${this.getInputValue(`${id}_day`)}`;
+
+    if ((document.getElementById(`${prefix}_season_enabled`) as HTMLInputElement)?.checked) {
+      periods.season_option = Number(this.getInputValue(`${prefix}_season_option`));
+      periods.season_start = monthDay(`${prefix}_season_start`);
+      periods.season_end = monthDay(`${prefix}_season_end`);
+    }
+
+    if ((document.getElementById(`${prefix}_pause_enabled`) as HTMLInputElement)?.checked) {
+      periods.pause_start = monthDay(`${prefix}_pause_start`);
+      periods.pause_end = monthDay(`${prefix}_pause_end`);
+    }
+
+    return periods;
   }
 
   renderExtraDays(prefix: string) {

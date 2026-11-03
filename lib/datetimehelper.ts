@@ -1,5 +1,7 @@
 'use strict';
 
+import { ManualSetting } from '../assets/publicTypes';
+
 export class DateTimeHelper {
   static #addDays(date: Date, days: number) {
     const result = new Date(date);
@@ -43,15 +45,50 @@ export class DateTimeHelper {
     return DateTimeHelper.#addDays(currentDate, differenceWithCurrentDate);
   }
 
-  static everyNthWeekOnDays(n: number, d: number, extraDays: number[], givenDate: Date, currentDate: Date) {
+  static everyNthWeekOnDays(n: number, d: number, extraDays: number[], givenDate: Date, currentDate: Date, deltaAhead = 2) {
     // Extra days fall in the same collection weeks as the main day, so they keep its alignment with the start date
     const days = [d, ...extraDays.filter((day, index) => Number(day) !== Number(d) && extraDays.indexOf(day) === index)];
 
     const dates: Date[] = [];
     for (const day of days) {
-      for (let delta = -2; delta <= 2; delta++) {
+      for (let delta = -2; delta <= deltaAhead; delta++) {
         dates.push(DateTimeHelper.everyNthWeek(n, day, givenDate, currentDate, delta));
       }
+    }
+
+    return dates;
+  }
+
+  static isInPeriod(date: Date, start?: string, end?: string) {
+    // Periods are month-day ranges (MM-DD) that repeat every year and may run over new year, e.g. 11-01 to 02-28
+    if (!start || !end) return false;
+
+    const monthDay = `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    return start <= end ? monthDay >= start && monthDay <= end : monthDay >= start || monthDay <= end;
+  }
+
+  static everyNthWeekWithPeriods(manualSetting: ManualSetting, givenDate: Date, currentDate: Date) {
+    const extraDays = manualSetting.extra_days ?? [];
+    const hasSeason = !!(manualSetting.season_option && manualSetting.season_start && manualSetting.season_end);
+    const hasPause = !!(manualSetting.pause_start && manualSetting.pause_end);
+
+    if (!hasSeason && !hasPause) {
+      return DateTimeHelper.everyNthWeekOnDays(manualSetting.option, manualSetting.day, extraDays, givenDate, currentDate);
+    }
+
+    // Look a year ahead, so the first collection after a pause or a change of season is known
+    const deltaAhead = (n: number) => Math.ceil(53 / n);
+    const inSeason = (date: Date) => hasSeason && DateTimeHelper.isInPeriod(date, manualSetting.season_start, manualSetting.season_end);
+
+    // Both frequencies keep the alignment with the start date, each one is only used in its own part of the year
+    let dates = DateTimeHelper.everyNthWeekOnDays(manualSetting.option, manualSetting.day, extraDays, givenDate, currentDate, deltaAhead(manualSetting.option)).filter((date) => !inSeason(date));
+    if (hasSeason) {
+      const seasonOption = manualSetting.season_option as number;
+      dates = dates.concat(DateTimeHelper.everyNthWeekOnDays(seasonOption, manualSetting.day, extraDays, givenDate, currentDate, deltaAhead(seasonOption)).filter(inSeason));
+    }
+
+    if (hasPause) {
+      dates = dates.filter((date) => !DateTimeHelper.isInPeriod(date, manualSetting.pause_start, manualSetting.pause_end));
     }
 
     return dates;
