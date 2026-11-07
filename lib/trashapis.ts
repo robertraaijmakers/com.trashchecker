@@ -725,9 +725,7 @@ export class TrashApis {
     var getTrashRequest = await httpsPromise({
       hostname: hostName,
       method: 'GET',
-      path: `${basePath}/collections?size=100&untilDate=${formatDate(endDate)}&fromDate=${formatDate(startDate)}&houseNumber=${
-        apiSettings.housenumber
-      }&streetId=${streetId}&zipcodeId=${zipcodeId}`,
+      path: `${basePath}/collections?size=100&untilDate=${formatDate(endDate)}&fromDate=${formatDate(startDate)}&houseNumber=${apiSettings.housenumber}&streetId=${streetId}&zipcodeId=${zipcodeId}`,
       headers: requestHeaders,
       family: 4,
       rejectUnauthorized: false,
@@ -804,7 +802,10 @@ export class TrashApis {
     if (!houseNumberMatch) {
       throw new Error('Invalid house number');
     }
-    const addition = `${apiSettings.housenumber}`.replace(/^\D*\d+/, '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    const addition = `${apiSettings.housenumber}`
+      .replace(/^\D*\d+/, '')
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .toUpperCase();
 
     // Retrieve address ID
     const addressIdRequest = await httpsPromise({
@@ -1836,6 +1837,53 @@ export class TrashApis {
       if (Number.isNaN(dt.getTime())) continue;
 
       verifyByName(fDates, '', type, dt);
+    }
+
+    return this.filterFutureDates(fDates);
+  }
+
+  private async gemeenteBreda(apiSettings: ApiSettings) {
+    this.log('Checking Gemeente Breda');
+
+    await validateCountry(apiSettings, 'NL');
+    await validateZipcode(apiSettings);
+    await validateHousenumber(apiSettings);
+
+    // Breda left Mijn Afvalwijzer for its own afvalkalender, which offers an iCal download per address (house letter as an extra path part).
+    const houseNumber = `${apiSettings.housenumber}`.match(/\d+/)?.[0] ?? '';
+    const houseLetter = `${apiSettings.housenumber}`
+      .replace(/^\D*\d+/, '')
+      .replace(/[^a-zA-Z]/g, '')
+      .toLowerCase();
+    const zipcode = `${apiSettings.zipcode}`.replace(/\s/g, '').toUpperCase();
+
+    const response = await httpsPromise({
+      hostname: 'www.breda.nl',
+      path: `/trash-calendar/download/${zipcode}/${houseNumber}${houseLetter ? `/${houseLetter}` : ''}?year`,
+      method: 'GET',
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; TrashChecker Homey)' },
+      family: 4,
+    });
+
+    const fDates: ActivityDates[] = [];
+    const body = `${response.body}`.replace(/\r?\n[ \t]/g, ''); // unfold continued iCal lines
+
+    for (const event of body.split('BEGIN:VEVENT').slice(1)) {
+      const dateMatch = event.match(/DTSTART[^:\r\n]*:(\d{4})(\d{2})(\d{2})/);
+      const summary = event.match(/SUMMARY[^:\r\n]*:(.*)/)?.[1]?.trim() ?? '';
+      if (!dateMatch || summary === '') continue;
+
+      const date = new Date(Number(dateMatch[1]), Number(dateMatch[2]) - 1, Number(dateMatch[3]));
+      const description = summary.toLowerCase();
+
+      // Map Breda's names explicitly: the generic matcher would also count "tuinafval" as SNOEI and "plastic verpakkingen, blik en drinkpakken" as PLASTIC.
+      if (description.includes('groente') || description.includes('etensresten') || description.includes('gft')) {
+        addDate(fDates, TrashType.GFT, date);
+      } else if (description.includes('plastic') || description.includes('blik') || description.includes('drinkpak') || description.includes('pmd')) {
+        addDate(fDates, TrashType.PMD, date);
+      } else {
+        verifyByName(fDates, '', summary, date);
+      }
     }
 
     return this.filterFutureDates(fDates);

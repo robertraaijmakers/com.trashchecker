@@ -1429,6 +1429,24 @@ describe('TrashApiBurgerportaalUtrecht', function () {
   });
 });
 
+describe('TrashApiGemeenteBreda', function () {
+  it('API - Gemeente Breda', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '4834TJ',
+      housenumber: '306',
+      country: 'NL',
+      apiId: 'akbr',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+
 describe('TrashApiDenmark', function () {
   const cases: { name: string; apiId: string; zipcode: string; housenumber: string; streetname: string; externalId?: string }[] = [
     { name: 'Vestforbrænding', apiId: 'vfdk', zipcode: '2740', housenumber: '61', streetname: 'Kløvertoften' },
