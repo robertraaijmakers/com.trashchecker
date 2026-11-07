@@ -1079,8 +1079,8 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       addDate(this.collectionDates, trashType, date2);
       addDate(this.collectionDates, trashType, date3);
     } else if (manualSetting.option <= 8) {
-      // per week, on the main day and any extra days in the same weeks
-      for (const date of DateTimeHelper.everyNthWeekOnDays(manualSetting.option, manualSetting.day, manualSetting.extra_days ?? [], startDate, currentDate)) {
+      // per week, on the main day and any extra days in the same weeks, with an optional season and pause
+      for (const date of DateTimeHelper.everyNthWeekWithPeriods(manualSetting, startDate, currentDate)) {
         addDate(this.collectionDates, trashType, date);
       }
     } else if (manualSetting.option >= 19 && manualSetting.option <= 20) {
