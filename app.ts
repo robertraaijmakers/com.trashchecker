@@ -401,6 +401,7 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       this.collectionDates = [];
 
       await this.calculateManualDays();
+      this.notifyDataChanged();
       return false;
     }
 
@@ -508,7 +509,14 @@ module.exports = class TrashCollectionReminder extends Homey.App {
       this.homey.settings.set('apiSettings', settingsList[0]);
     }
 
+    this.notifyDataChanged();
     return true;
+  }
+
+  // Widgets reload on 'settings_changed', but that event fires when a setting is written, before
+  // the data is rebuilt. Emit it again afterwards so they drop types the new provider no longer has.
+  private notifyDataChanged() {
+    this.homey.api.realtime('settings_changed', '{}');
   }
 
   private shouldRediscoverApiForError(error: unknown): boolean {
