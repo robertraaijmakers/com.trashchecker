@@ -258,7 +258,14 @@ export function verifyByName(activityDates: ActivityDates[], className: string, 
     foundType = true;
   }
 
-  if (description.indexOf('papier') !== -1 || description.indexOf('paper') !== -1 || description.indexOf('opk') !== -1 || description.indexOf('papir') !== -1 || description === 'pap') {
+  if (
+    description.indexOf('papier') !== -1 ||
+    description.indexOf('paper') !== -1 ||
+    description.indexOf('pk') !== -1 ||
+    description.indexOf('opk') !== -1 ||
+    description.indexOf('papir') !== -1 ||
+    description === 'pap'
+  ) {
     addDate(activityDates, TrashType.PAPIER, date, icon, localDescription, color);
     foundType = true;
   }

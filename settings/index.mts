@@ -177,18 +177,24 @@ class SettingScript {
     });
   }
 
-  private async updatePrimaryApiSettings(apiSettings: ApiSettings) {
+  // Resolves once apiSettingsList is persisted, so a recalculation afterwards uses the new provider.
+  private updatePrimaryApiSettings(apiSettings: ApiSettings): Promise<void> {
     this.homey.set('apiSettings', apiSettings, this.#onSettingsSet);
 
-    this.homey.get('apiSettingsList', (err: string, currentList: ApiSettings[]) => {
-      const list = Array.isArray(currentList) ? currentList : [];
-      if (list.length > 0) {
-        list[0] = apiSettings;
-      } else {
-        list.push(apiSettings);
-      }
+    return new Promise((resolve) => {
+      this.homey.get('apiSettingsList', (err: string, currentList: ApiSettings[]) => {
+        const list = Array.isArray(currentList) ? currentList : [];
+        if (list.length > 0) {
+          list[0] = apiSettings;
+        } else {
+          list.push(apiSettings);
+        }
 
-      this.homey.set('apiSettingsList', list, this.#onSettingsSet);
+        this.homey.set('apiSettingsList', list, (error: string, result: any) => {
+          this.#onSettingsSet(error, result);
+          resolve();
+        });
+      });
     });
   }
 
@@ -286,22 +292,22 @@ class SettingScript {
       this.setInputValue('dl-api-input', (document.getElementById('api') as HTMLSelectElement).selectedOptions[0]?.text || '');
 
       apiSettings.apiId = trashResult.id;
-      this.updatePrimaryApiSettings(apiSettings as ApiSettings);
-      this.retrieveCollectionDaysDebug(false);
 
-      this.homey.api('POST', '/clean', apiSettings, (cleanError: string, cleanResult: any) => {
+      this.homey.api('POST', '/clean', apiSettings, async (cleanError: string, cleanResult: any) => {
         if (cleanError) {
-          return console.log(cleanError);
-        }
-
-        if (cleanResult.id === '') {
+          console.log(cleanError);
+        } else if (cleanResult.id === '') {
           apiSettings.cleanApiId = 'not-applicable';
         } else {
           apiSettings.cleanApiId = cleanResult.id;
         }
 
         this.setInputValue('cleanApi', apiSettings.cleanApiId || 'not-applicable');
-        this.updatePrimaryApiSettings(apiSettings as ApiSettings);
+        await this.updatePrimaryApiSettings(apiSettings as ApiSettings);
+
+        // Rebuild the app's in-memory dates from the new provider; otherwise the previous
+        // provider's types stay in tokens, flows, devices and widgets until the next 48h refresh.
+        this.retrieveCollectionDaysDebug(true);
       });
     });
   }

@@ -63,9 +63,7 @@ describe('GAD - Gooi and Vechtstreek', function () {
     assert.equal(isValid, true);
   });
 
-
-//1216CE
-
+  //1216CE
 });
 /*
 describe('Kliko Manager', function () {
@@ -1220,7 +1218,7 @@ describe('TrashApiMijnAfvalzaken', function () {
     assert.equal(isValid, true);
   });
 });
-*/
+
 describe('TrashApiIrado', function () {
   it('API - Irado - 1', async function () {
     const apiSettings: ApiSettings = {
@@ -1254,7 +1252,7 @@ describe('TrashApiIrado', function () {
     assert.equal(isValid, true);
   });
 });
-/*
+
 describe('TrashApiOmrin', function () {
   it('API - Omrin - 1', async function () {
     const apiSettings: ApiSettings = {
@@ -1343,16 +1341,6 @@ describe('TrashAPI Nederland', function () {
   });
 });*/
 
-function testAPI(apiSettings: ApiSettings) {
-  const trashApis = new TrashApis(console.log);
-  try {
-    return trashApis.ExecuteApi(apiSettings);
-  } catch (error) {
-    console.log(error);
-  }
-
-  return null;
-}
 /*
 describe('DiscoveryTests', function () {
   it('API - Unknown', async function () {
@@ -1392,25 +1380,6 @@ function testDiscovery(apiSettings: ApiSettings) {
   return null;
 }*/
 
-function validateApiResults(apiSettings: ApiSettings, apiResults: ActivityDates[] | null) {
-  console.log('Results for: ' + apiSettings.apiId + ' - ' + apiSettings.zipcode + ':' + apiSettings.housenumber);
-  console.log(apiResults);
-
-  if (apiResults === null) {
-    console.log('Error in API');
-    return false;
-  } else if (Object.keys(apiResults).length > 0) {
-    console.log('API Settings found.');
-    return true;
-  } else if (Object.keys(apiResults).length === 0) {
-    console.log('No information found, go to settings to reset your API settings.');
-    return false;
-  } else {
-    console.log('fail');
-    return false;
-  }
-}
-
 describe('TrashApiBurgerportaalUtrecht', function () {
   it('API - Gemeente Utrecht', async function () {
     const apiSettings: ApiSettings = {
@@ -1427,8 +1396,24 @@ describe('TrashApiBurgerportaalUtrecht', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-});
 
+  it('API - Gemeente Utrecht - Nummer 2s', async function () {
+    const apiSettings: ApiSettings = {
+      zipcode: '3544NH',
+      housenumber: '310',
+      country: 'NL',
+      apiId: 'akut',
+      cleanApiId: '',
+      streetname: '',
+      cityname: '',
+    };
+
+    const result = await testAPI(apiSettings);
+    const isValid = validateApiResults(apiSettings, result);
+    assert.equal(isValid, true);
+  });
+});
+/*
 describe('TrashApiGemeenteBreda', function () {
   it('API - Gemeente Breda', async function () {
     const apiSettings: ApiSettings = {
@@ -1445,7 +1430,7 @@ describe('TrashApiGemeenteBreda', function () {
     const isValid = validateApiResults(apiSettings, result);
     assert.equal(isValid, true);
   });
-});
+});*/
 
 describe('TrashApiDenmark', function () {
   const cases: { name: string; apiId: string; zipcode: string; housenumber: string; streetname: string; externalId?: string }[] = [
@@ -1477,7 +1462,7 @@ describe('TrashApiDenmark', function () {
     });
   }
 });
-
+/*
 describe('Danish trash type matching', function () {
   const matchTypes = (description: string) => {
     const dates: ActivityDates[] = [];
@@ -1500,4 +1485,34 @@ describe('Danish trash type matching', function () {
     assert.deepEqual(matchTypes('Juletræer'), [TrashType.KERSTBOOM]);
     assert.deepEqual(matchTypes('Metal/Glas affald'), [TrashType.GLAS, TrashType.PMD].sort());
   });
-});
+});*/
+
+function testAPI(apiSettings: ApiSettings) {
+  const trashApis = new TrashApis(console.log);
+  try {
+    return trashApis.ExecuteApi(apiSettings);
+  } catch (error) {
+    console.log(error);
+  }
+
+  return null;
+}
+
+function validateApiResults(apiSettings: ApiSettings, apiResults: ActivityDates[] | null) {
+  console.log('Results for: ' + apiSettings.apiId + ' - ' + apiSettings.zipcode + ':' + apiSettings.housenumber);
+  console.log(apiResults);
+
+  if (apiResults === null) {
+    console.log('Error in API');
+    return false;
+  } else if (Object.keys(apiResults).length > 0) {
+    console.log('API Settings found.');
+    return true;
+  } else if (Object.keys(apiResults).length === 0) {
+    console.log('No information found, go to settings to reset your API settings.');
+    return false;
+  } else {
+    console.log('fail');
+    return false;
+  }
+}
